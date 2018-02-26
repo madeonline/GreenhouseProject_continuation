@@ -90,7 +90,7 @@ void Screen1::doSetup(TFTMenu* menu)
 
 	chart.setCoords(5, 120);
   // говорим, какое у нас кол-во точек по X и по Y
-  chart.setPoints(150,100);
+  chart.setPoints(CHART_POINTS_COUNT,100);
 	// добавляем наши тестовые графики, количеством 1
 
 	serie1 = chart.addSerie({ 255,0,0 });     // первый график - красного цвета
@@ -137,9 +137,63 @@ void Screen1::doUpdate(TFTMenu* menu)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::doPointsSynchronization(ChartSerie* serie,uint16_t* points, uint16_t pointsCount)
 {
-  //TODO: Тут синхронизируем график, ища нужную нам точку, с которой мы его выводим!!!
+  //Тут синхронизируем график, ища нужную нам точку, с которой мы его выводим
 
-  serie->setPoints(points, pointsCount);
+  if(pointsCount <= CHART_POINTS_COUNT)
+  {
+    // кол-во точек уже равно кол-ву точек на графике, синхронизировать начало - не получится
+    serie->setPoints(points, pointsCount);
+    return;
+  }
+  
+  // у нас условия - ищем первый 0, после него ищём первый 2048. Если наййдено за 30 первых точек - выводим следующие 150.
+  // если не найдено - просто выводим первые 150 точек
+  
+  const uint16_t lowBorder = 0; // нижняя граница, по которой ищем начало
+  const uint16_t wantedBorder = 2048; // граница синхронизации
+  const uint8_t maxPointToSeek = 30; // сколько точек просматриваем вперёд, для поиска значения синхронизации
+
+  uint8_t iterator = 0;
+  bool found = false;
+  for(; iterator < maxPointToSeek; iterator++)
+  {
+    if(points[iterator] <= lowBorder)
+    {
+      // нашли нижнюю границу
+      found = true;
+      break;
+    }
+  }
+
+  if(!found)
+  {
+    // нижняя граница не найдена, просто рисуем как есть
+    serie->setPoints(points, min(CHART_POINTS_COUNT,pointsCount));
+    return;
+  }
+
+  found = false;
+
+  // теперь ищем нужную границу для синхронизации
+  for(; iterator < maxPointToSeek; iterator++)
+  {
+    if(points[iterator] >= wantedBorder)
+    {
+      // нашли границу синхронизации
+      found = true;
+      break;
+    }
+  } // for
+
+  if(!found)
+  {
+    // за maxPointToSeek мы так и не нашли значение синхронизации, выводим как есть
+    serie->setPoints(points, min(CHART_POINTS_COUNT,pointsCount));
+    return;
+  }
+
+  // нужная граница синхронизации найдена - выводим график, начиная с этой точки
+  serie->setPoints(&(points[iterator]), min(CHART_POINTS_COUNT,( pointsCount - (&(points[iterator]) - points) ) ));
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::addPoints(uint8_t serieNumber, uint16_t* points, uint16_t pointsCount)
