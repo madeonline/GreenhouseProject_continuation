@@ -43,6 +43,8 @@ private:
 	  ChartSerie* serie1;
 	  ChartSerie* serie2;
 	  ChartSerie* serie3;
+
+   void doPointsSynchronization(ChartSerie* serie,uint16_t* points, uint16_t pointsCount);
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

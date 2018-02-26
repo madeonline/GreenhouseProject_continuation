@@ -135,6 +135,13 @@ void Screen1::doUpdate(TFTMenu* menu)
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void Screen1::doPointsSynchronization(ChartSerie* serie,uint16_t* points, uint16_t pointsCount)
+{
+  //TODO: Тут синхронизируем график, ища нужную нам точку, с которой мы его выводим!!!
+
+  serie->setPoints(points, pointsCount);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::addPoints(uint8_t serieNumber, uint16_t* points, uint16_t pointsCount)
 {
   if(serieNumber > 2)
@@ -146,7 +153,7 @@ void Screen1::addPoints(uint8_t serieNumber, uint16_t* points, uint16_t pointsCo
     {
       delete [] points1;
       points1 = points;
-      serie1->setPoints(points, pointsCount);
+      doPointsSynchronization(serie1,points,pointsCount);
     }
     break;
     
@@ -154,7 +161,7 @@ void Screen1::addPoints(uint8_t serieNumber, uint16_t* points, uint16_t pointsCo
     {
       delete [] points2;
       points2 = points;
-      serie2->setPoints(points, pointsCount);
+      doPointsSynchronization(serie2,points,pointsCount);
     }
     break;
 
@@ -162,7 +169,7 @@ void Screen1::addPoints(uint8_t serieNumber, uint16_t* points, uint16_t pointsCo
     {
       delete [] points3;
       points3 = points;
-      serie3->setPoints(points, pointsCount);
+      doPointsSynchronization(serie3,points,pointsCount);
     }
     break;
     
@@ -191,55 +198,7 @@ void Screen1::DrawChart()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::doDraw(TFTMenu* menu)
 {
-
   drawTime(menu);
-  
- 
-
- // DS3231Temperature  temp_clock = RealtimeClock.getTemperature();
- //
- // dc->printNumI(temp_clock.Value, 120, 105);
- // dc->printNumI(temp_clock.Fract, 20, 105);
- // рисуем сетку
- /*
-  int gridX = 5; // начальная координата сетки по X
-  int gridY = 20; // начальная координата сетки по Y
-  int columnsCount = 6; // 5 столбцов
-  int rowsCount = 4; // 6 строк
-  int columnWidth = 25; // ширина столбца
-  int rowHeight = 25; // высота строки 
-  RGBColor gridColor = { 0,200,0 }; // цвет сетки
-									// вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
-  Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
-
-
-  RGBColorRound gridRound = { 255,255,255 };     // цвет рамки
-  RGBColorFill gridFill = { 255,0,0 };           // цвет заполнения
-  Drawing::DrawPin(160, 45, 30, 20, gridRound, gridFill);
-  Drawing::DrawPin(160, 73, 30, 20, gridRound, gridFill);
-  Drawing::DrawPin(160, 100, 30, 20, gridRound, gridFill);
-  dc->setColor(VGA_WHITE);
-  dc->setBackColor(VGA_BLACK);
-  dc->setFont(TFT_FONT);
-
-  // тут рисуем, что надо именно нам, кнопки прорисуются сами после того, как мы тут всё отрисуем
-  
-  menu->print("1", 195, 48);
-  menu->print("2", 195, 76);
-  menu->print("3", 195, 103);
-*/
-
- // DrawChart();   // рисуем графики
-/*
-  for (int i = 0; i<155; i++)
-  {
-	  //myGLCD.drawPixel(i, 88 + (sin(((i*6.65)*3.14) / 180) * 50));
-	  //test[i][0] = i;
-	  test[i][0] = 51 + (sin(((i*6.65)*3.14) / 180) * 50);
-	  test[i][1] = 51 + (sin(((i*4.65)*3.14) / 180) * 30);
-	  test[i][2] = 51 + (sin(((i*2.65)*3.14) / 180) * 40);
-  }
-*/
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::onButtonPressed(TFTMenu* menu, int pressedButton)
