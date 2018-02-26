@@ -90,8 +90,7 @@ void Screen1::doSetup(TFTMenu* menu)
 
 	chart.setCoords(5, 120);
   // говорим, какое у нас кол-во точек по X и по Y
-  int numPoints = BUFFER_SIZE/NUMBER_OF_BUFFERS;
-  chart.setPoints(numPoints,100);
+  chart.setPoints(150,100);
 	// добавляем наши тестовые графики, количеством 1
 
 	serie1 = chart.addSerie({ 255,0,0 });     // первый график - красного цвета
