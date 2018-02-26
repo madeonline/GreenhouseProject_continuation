@@ -14,12 +14,18 @@ CorePinScenario scene1;
 CorePinScenario scene2;
 CorePinScenario scene3;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#define PULSE_PIN A8 // номер пина для генерации тестовых импульсов
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CorePinScenario pulseScene;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup() 
 {
 
   pinMode(LINE1,OUTPUT);
   pinMode(LINE2,OUTPUT);
   pinMode(LINE3,OUTPUT);
+
+  pinMode(PULSE_PIN, OUTPUT);
 
   scene1.add({LINE1,HIGH,DURATION}); 
   scene1.add({LINE1,LOW,DURATION});
@@ -30,6 +36,24 @@ void setup()
 
   scene3.add({LINE3,HIGH,DURATION});
   scene3.add({LINE3,LOW,DURATION});
+
+  // добавляем тестовые импульсы
+
+  // сперва добавляем 10 импульсов по нарастанию, от 2 мс до 20 мс, с шагом 2 мс
+  unsigned long duration = 2;
+  uint8_t level = HIGH;
+  for(int i=0;i<10;i++, duration += 2)
+  {
+    pulseScene.add({PULSE_PIN,level,duration});
+    level = !level;
+  }
+
+  // затем добавляем 10 импульсов по убыванию
+  for(int i=0;i<10;i++, duration-=2)
+  {
+    pulseScene.add({PULSE_PIN,level,duration});
+    level = !level;    
+  }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void loop() 
@@ -49,6 +73,8 @@ void loop()
     scene1.update();
     scene2.update();
     scene3.update();
+
+    pulseScene.update();
   }
 
 }
