@@ -149,9 +149,9 @@ void Screen1::doPointsSynchronization(ChartSerie* serie,uint16_t* points, uint16
   // у нас условия - ищем первый 0, после него ищём первый 2048. Если найдено за 30 первых точек - выводим следующие 150.
   // если не найдено - просто выводим первые 150 точек
   
-  const uint16_t lowBorder = 0; // нижняя граница, по которой ищем начало
+  const uint16_t lowBorder = 100; // нижняя граница, по которой ищем начало
   const uint16_t wantedBorder = 2048; // граница синхронизации
-  const uint8_t maxPointToSeek = 30; // сколько точек просматриваем вперёд, для поиска значения синхронизации
+  const uint8_t maxPointToSeek = 48; // сколько точек просматриваем вперёд, для поиска значения синхронизации
 
   uint8_t iterator = 0;
   bool found = false;
