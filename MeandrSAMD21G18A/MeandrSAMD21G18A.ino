@@ -40,16 +40,16 @@ void setup()
   // добавляем тестовые импульсы
 
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
-  unsigned long duration = 20000;
+  unsigned long duration = 40000;
   uint8_t level = HIGH;
-  for(int i=0;i<10;i++, duration -= 2000)
+  for(int i=0;i<20;i++, duration -= 2000)
   {
     pulseScene.add({PULSE_PIN,level,duration});
     level = !level;
   }
 
   // затем добавляем 10 импульсов по возрастанию
-  for(int i=0;i<10;i++, duration += 2000)
+  for(int i=0;i<20;i++, duration += 2000)
   {
     pulseScene.add({PULSE_PIN,level,duration});
     level = !level;    
