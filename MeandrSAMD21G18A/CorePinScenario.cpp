@@ -58,7 +58,6 @@ void CorePinScenario::update()
         currentActionIndex = 0;
 
        action = &((*actions)[currentActionIndex]);
-       pinMode(action->pin,OUTPUT);
        digitalWrite(action->pin,action->level);
       
        timer = micros();
@@ -66,10 +65,3 @@ void CorePinScenario::update()
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-<<<<<<< HEAD
-
-=======
-
->>>>>>> 8ca68f1850c6547af1d1143cccd17b58163608e5
