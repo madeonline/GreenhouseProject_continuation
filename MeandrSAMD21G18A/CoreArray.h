@@ -82,4 +82,8 @@ private:
     };// Allocates double the old space
 };
 
+<<<<<<< HEAD
 #endif
+=======
+#endif
+>>>>>>> 8ca68f1850c6547af1d1143cccd17b58163608e5
