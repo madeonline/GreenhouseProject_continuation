@@ -142,6 +142,7 @@ uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
   if(pointsCount <= CHART_POINTS_COUNT || pointsCount <= maxPointToSeek)
   {
     // кол-во точек уже равно кол-ву точек на графике, синхронизировать начало - не получится
+   // Serial.println(F("Too many points!!!!"));
     return 0;
   }
   
@@ -164,6 +165,7 @@ uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
   if(!found)
   {
     // нижняя граница не найдена, просто рисуем как есть
+    //Serial.println(F("Low border not found!!!!"));
     return 0;
   }
 
@@ -183,14 +185,18 @@ uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
   if(!found)
   {
     // за maxPointToSeek мы так и не нашли значение синхронизации, выводим как есть
+    //Serial.println(F("High border not found!!!!"));
     return 0;
   }
 
+  //Serial.print(F("Found shift: "));
+  //Serial.println(pointsCount - (&(points[iterator]) - points));
+
   // нужная граница синхронизации найдена - выводим график, начиная с этой точки
- return ( pointsCount - (&(points[iterator]) - points) );  
+ return ( (&(points[iterator]) - points) );  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void Screen1::addPoints( uint16_t* _points1,   uint16_t* _points2,  uint16_t* _points3, uint16_t pointsCount)
+void Screen1::addPoints(uint16_t* _points1,   uint16_t* _points2,  uint16_t* _points3, uint16_t pointsCount)
 {
     delete [] points1;
     points1 = _points1;
