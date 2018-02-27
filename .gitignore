@@ -1,1 +1,6 @@
 /MAIN/libraries
+/MAIN/.vs
+/MAIN/__vm
+/MAIN/MAIN.sln
+/MAIN/MAIN.vcxproj
+/MAIN/MAIN.vcxproj.filters
