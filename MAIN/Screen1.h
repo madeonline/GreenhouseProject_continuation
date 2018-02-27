@@ -19,7 +19,7 @@ class Screen1 : public AbstractTFTScreen
   }
   
   void DrawChart(); // рисуем наши графики
-  void addPoints(uint8_t serieNumber, uint16_t* points, uint16_t pointsCount);
+  void addPoints( uint16_t* points1,   uint16_t* points2,  uint16_t* points3, uint16_t pointsCount);
 
 protected:
 
@@ -46,7 +46,7 @@ private:
 	  ChartSerie* serie2;
 	  ChartSerie* serie3;
 
-   void doPointsSynchronization(ChartSerie* serie,uint16_t* points, uint16_t pointsCount);
+   uint16_t getSynchroPoint(uint16_t* points, uint16_t pointsCount);
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

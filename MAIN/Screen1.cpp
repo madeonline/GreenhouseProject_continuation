@@ -46,10 +46,7 @@ void loopADC()
 
     if(mainScreen && mainScreen->isActive())
     {
-      mainScreen->addPoints(0,serie1,countOfPoints);
-      mainScreen->addPoints(1,serie2,countOfPoints);
-      mainScreen->addPoints(2,serie3,countOfPoints);
-      
+      mainScreen->addPoints(serie1, serie2, serie3, countOfPoints);      
       mainScreen->DrawChart();
     }
     else
@@ -135,23 +132,22 @@ void Screen1::doUpdate(TFTMenu* menu)
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void Screen1::doPointsSynchronization(ChartSerie* serie,uint16_t* points, uint16_t pointsCount)
+uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
 {
-  //Тут синхронизируем график, ища нужную нам точку, с которой мы его выводим
+ //Тут синхронизируем график, ища нужную нам точку, с которой мы его выводим
+  const uint16_t lowBorder = 100; // нижняя граница, по которой ищем начало
+  const uint16_t wantedBorder = 2048; // граница синхронизации
+  const uint8_t maxPointToSeek = 48; // сколько точек просматриваем вперёд, для поиска значения синхронизации
 
-  if(pointsCount <= CHART_POINTS_COUNT)
+  if(pointsCount <= CHART_POINTS_COUNT || pointsCount <= maxPointToSeek)
   {
     // кол-во точек уже равно кол-ву точек на графике, синхронизировать начало - не получится
-    serie->setPoints(points, pointsCount);
-    return;
+    return 0;
   }
   
   // у нас условия - ищем первый 0, после него ищём первый 2048. Если найдено за 30 первых точек - выводим следующие 150.
   // если не найдено - просто выводим первые 150 точек
   
-  const uint16_t lowBorder = 100; // нижняя граница, по которой ищем начало
-  const uint16_t wantedBorder = 2048; // граница синхронизации
-  const uint8_t maxPointToSeek = 48; // сколько точек просматриваем вперёд, для поиска значения синхронизации
 
   uint8_t iterator = 0;
   bool found = false;
@@ -168,8 +164,7 @@ void Screen1::doPointsSynchronization(ChartSerie* serie,uint16_t* points, uint16
   if(!found)
   {
     // нижняя граница не найдена, просто рисуем как есть
-    serie->setPoints(points, min(CHART_POINTS_COUNT,pointsCount));
-    return;
+    return 0;
   }
 
   found = false;
@@ -188,46 +183,33 @@ void Screen1::doPointsSynchronization(ChartSerie* serie,uint16_t* points, uint16
   if(!found)
   {
     // за maxPointToSeek мы так и не нашли значение синхронизации, выводим как есть
-    serie->setPoints(points, min(CHART_POINTS_COUNT,pointsCount));
-    return;
+    return 0;
   }
 
   // нужная граница синхронизации найдена - выводим график, начиная с этой точки
-  serie->setPoints(&(points[iterator]), min(CHART_POINTS_COUNT,( pointsCount - (&(points[iterator]) - points) ) ));
+ return ( pointsCount - (&(points[iterator]) - points) );  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void Screen1::addPoints(uint8_t serieNumber, uint16_t* points, uint16_t pointsCount)
+void Screen1::addPoints( uint16_t* _points1,   uint16_t* _points2,  uint16_t* _points3, uint16_t pointsCount)
 {
-  if(serieNumber > 2)
-    return;
+    delete [] points1;
+    points1 = _points1;
 
-  switch(serieNumber)
-  {
-    case 0:
-    {
-      delete [] points1;
-      points1 = points;
-      doPointsSynchronization(serie1,points,pointsCount);
-    }
-    break;
+    delete [] points2;
+    points2 = _points2;
     
-    case 1:
-    {
-      delete [] points2;
-      points2 = points;
-      doPointsSynchronization(serie2,points,pointsCount);
-    }
-    break;
+    delete [] points3;
+    points3 = _points3;
 
-    case 2:
-    {
-      delete [] points3;
-      points3 = points;
-      doPointsSynchronization(serie3,points,pointsCount);
-    }
-    break;
+
+    int shift = getSynchroPoint(points1,pointsCount);
+    int totalPoint = min(CHART_POINTS_COUNT, (pointsCount - shift));
+
+    serie1->setPoints(&(points1[shift]), totalPoint);
+    serie2->setPoints(&(points2[shift]), totalPoint);
+    serie3->setPoints(&(points3[shift]), totalPoint);
     
-  } // switch
+    
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::DrawChart()
