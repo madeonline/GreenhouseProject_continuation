@@ -190,7 +190,7 @@ uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
   }
 
   //Serial.print(F("Found shift: "));
-  //Serial.println(pointsCount - (&(points[iterator]) - points));
+  //Serial.println((&(points[iterator]) - points));
 
   // нужная граница синхронизации найдена - выводим график, начиная с этой точки
  return ( (&(points[iterator]) - points) );  
