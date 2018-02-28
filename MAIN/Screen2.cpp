@@ -2,6 +2,7 @@
 #include "Screen2.h"
 #include "FileUtils.h"
 #include "TinyVector.h"
+#include "CONFIG.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SDFilesScreen* FilesScreen = NULL;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -65,13 +66,7 @@ uint32_t FileEntry::getTimestamp()
     {
       dir_t d;
       file.dirEntry(&d);
-      result = (d.creationDate << 16) | d.creationTime;   
-/*
-      file.printFatDate(d.creationDate);
-      Serial.print(' ');
-      file.printFatTime(d.creationTime);
-      Serial.println();
-*/        
+      result = (d.creationDate << 16) | d.creationTime;      
       file.close();
     }
     root.close();
@@ -174,8 +169,6 @@ void SDFilesScreen::showPage(int step)
         FileEntry* entry = files[i];
         filesNames[buttonCounter] = entry->getName();
         
-//        Serial.println(entry->getTimestamp());
-
         filesButtons->relabelButton(buttonCounter,filesNames[buttonCounter].c_str());
         filesButtons->showButton(buttonCounter,isActive());
         
@@ -701,8 +694,8 @@ void SDFormatter::formatCard()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void SDFormatter::sdError(const char* msg)
 {
-  Serial.print("SD ERROR: ");
-  Serial.println(msg);
+  DBG(F("SD ERROR: "));
+  DBGLN(msg);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 bool SDFormatter::writeMbr()
@@ -1103,8 +1096,7 @@ void SDFormatter::eraseCard()
   uint32_t const ERASE_SIZE = 262144L;
   uint32_t firstBlock = 0;
   uint32_t lastBlock;
-  uint16_t n = 0;
-
+ 
   do 
   {
     lastBlock = firstBlock + ERASE_SIZE - 1;

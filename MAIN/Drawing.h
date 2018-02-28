@@ -9,6 +9,12 @@ typedef struct
 
 } RGBColor;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+typedef struct
+{
+  uint16_t X;
+  uint16_t Y;
+} Point;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 namespace Drawing
 {
   void DrawGrid(int startX, int startY, int columnsCount, int rowsCount, int columnWidth, int rowHeight, RGBColor gridColor);

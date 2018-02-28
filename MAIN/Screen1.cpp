@@ -3,6 +3,7 @@
 #include "DS3231.h"
 #include "ConfigPin.h"
 #include "ADCSampler.h"
+#include "CONFIG.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ADCSampler sampler;
 Screen1* mainScreen = NULL;        
@@ -33,15 +34,8 @@ void loopADC()
       serie1[serieWriteIterator] = cBuf[i];
       serie2[serieWriteIterator] = cBuf[i+1];
       serie3[serieWriteIterator] = cBuf[i+2];
-      /*
-      Serial.print(cBuf[i]);
-      Serial.print(",");
-      Serial.print(cBuf[i + 1]);
-      Serial.print(",");
-      Serial.println(cBuf[i + 2]);
-      */
+
     } // for
-    //Serial.println(" ----");
     sampler.readBufferDone();                                  // все данные переданы в ком
 
     if(mainScreen && mainScreen->isActive())
@@ -60,7 +54,6 @@ void loopADC()
 
     if (dataHigh_old != sampler.dataHigh)
     {
-      //Serial.println("Signal High*********************");
       dataHigh_old = sampler.dataHigh;
     }
    yield();
@@ -142,7 +135,7 @@ uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
   if(pointsCount <= CHART_POINTS_COUNT || pointsCount <= maxPointToSeek)
   {
     // кол-во точек уже равно кол-ву точек на графике, синхронизировать начало - не получится
-   // Serial.println(F("Too many points!!!!"));
+   // DBGLN(F("Too many points!!!!"));
     return 0;
   }
   
@@ -165,7 +158,7 @@ uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
   if(!found)
   {
     // нижняя граница не найдена, просто рисуем как есть
-    //Serial.println(F("Low border not found!!!!"));
+    //DBGLN(F("Low border not found!!!!"));
     return 0;
   }
 
@@ -185,12 +178,12 @@ uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
   if(!found)
   {
     // за maxPointToSeek мы так и не нашли значение синхронизации, выводим как есть
-    //Serial.println(F("High border not found!!!!"));
+    //DBGLN(F("High border not found!!!!"));
     return 0;
   }
 
-  //Serial.print(F("Found shift: "));
-  //Serial.println((&(points[iterator]) - points));
+  //DBGLN(F("Found shift: "));
+  //DBGLN((&(points[iterator]) - points));
 
   // нужная граница синхронизации найдена - выводим график, начиная с этой точки
  return ( (&(points[iterator]) - points) );  
