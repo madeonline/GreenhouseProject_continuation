@@ -1,9 +1,7 @@
 #include "InterruptHandler.h"
 #include "InterruptScreen.h"
-int pin = 13;
-volatile int state = LOW;
-
-
+#include "ConfigPin.h"
+#include "InfoDiodes.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -28,8 +26,6 @@ InterruptHandlerClass::InterruptHandlerClass()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
 {
-	pinMode(pin, OUTPUT);
-
   attachInterrupt(digitalPinToInterrupt(INTERRUPT1_PIN),Interrupt1Handler,RISING);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT2_PIN),Interrupt2Handler,RISING);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler,RISING);
@@ -45,6 +41,9 @@ void InterruptHandlerClass::update()
 
   if(handleResult > 0)
   {
+    // зажигаем светодиод "ТЕСТ"
+    InfoDiodes.test();
+    
     DBGLN(F("WANT TO SEE INTERRUPT SCREEN!!!"));
     // тут переключаемся на экран с графиками
     if(ScreenInterrupt)

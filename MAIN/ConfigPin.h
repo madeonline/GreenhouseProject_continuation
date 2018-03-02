@@ -36,15 +36,7 @@
 // RS485
 #define Upr_RS485  51                // Вход управлениея шиной RS485  
 
-#define led_ready  37                // Индикация светодиодом "Готов"
-#define led_failure  36              // Индикация светодиодом "Авария"
-#define led_test  38                 // Индикация светодиодом "Тест"
 
-
-#define button1  39                  // Кнопка №1
-#define button2  40                  // Кнопка №2
-#define button3  41                  // Кнопка №3
-#define button4  9                   // Кнопка №4
 
 #define SD_CS_PIN 10                 // пин CS для SD-карты
 

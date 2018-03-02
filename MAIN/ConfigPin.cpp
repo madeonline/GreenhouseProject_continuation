@@ -9,22 +9,7 @@ ConfigPin::ConfigPin()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ConfigPin::setup()
 {
-	pinMode(led_ready, OUTPUT);                         // Индикация светодиодом "Готов"
-	digitalWrite(led_ready, LOW);                       // Индикация светодиодом "Готов"
-	pinMode(led_failure, OUTPUT);                       // Индикация светодиодом "Авария"
-	digitalWrite(led_failure, LOW);                     // Индикация светодиодом "Авария"
-	pinMode(led_test, OUTPUT);                          // Индикация светодиодом "Тест"
-	digitalWrite(led_test, LOW);                        // Индикация светодиодом "Тест"
-
-	pinMode(button1, INPUT);                            // Кнопка №1
-	digitalWrite(button1, INPUT_PULLUP);                // Кнопка №1  подключить резисторы
-	pinMode(button2, INPUT);                            // Кнопка №2
-	digitalWrite(button2, INPUT_PULLUP);                // Кнопка №2  подключить резисторы
-	pinMode(button3, INPUT);                            // Кнопка №3
-	digitalWrite(button3, INPUT_PULLUP);                // Кнопка №3  подключить резисторы
-	pinMode(button4, INPUT);                            // Кнопка №4
-	digitalWrite(button4, INPUT_PULLUP);                // Кнопка №4  подключить резисторы
-
+  
 	pinMode(relay_protection1, INPUT);                  // Вход "Релейная защита N1"
 	digitalWrite(relay_protection1, INPUT_PULLUP);      // Вход "Релейная защита N1", подключить резисторы
 	pinMode(relay_protection2, INPUT);                  // Вход "Релейная защита N2"
