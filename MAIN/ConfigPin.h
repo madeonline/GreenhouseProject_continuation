@@ -2,53 +2,53 @@
 #define _CONFIGPIN_H
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// ����� �����������
-#define relay_protection1 11          //���� "�������� ������ N1"
-#define relay_protection2 12          //���� "�������� ������ N2"
-#define inductive_sensor1 A6          //���� ������������ ������� �1  (60)
-#define inductive_sensor2 A7          //���� ������������ ������� �2  (61)
-#define inductive_sensor3 A8          //���� ������������ ������� �3  (62)
+// Входа контроллера
+#define relay_protection1 11          //Вход "Релейная защита N1"
+#define relay_protection2 12          //Вход "Релейная защита N2"
+#define inductive_sensor1 A6          //Вход индуктивного датчика №1  (60)
+#define inductive_sensor2 A7          //Вход индуктивного датчика №2  (61)
+#define inductive_sensor3 A8          //Вход индуктивного датчика №3  (62)
 
-// ����� �� ��� ��
-#define out_asu_tp1 42                //����� �� ��� �� �1
-#define out_asu_tp2 43                //����� �� ��� �� �2
-#define out_asu_tp3 44                //����� �� ��� �� �3
-#define out_asu_tp4 50                //����� �� ��� �� �4
+// Выход на АСУ ТП
+#define out_asu_tp1 42                //Выход на АСУ ТП №1
+#define out_asu_tp2 43                //Выход на АСУ ТП №2
+#define out_asu_tp3 44                //Выход на АСУ ТП №3
+#define out_asu_tp4 50                //Выход на АСУ ТП №4
 
-// ���� �������� ��������������
-/*
-#define current_transformer  A5      // ���� �������� �������������� �1
-#define current_transformer  A4      // ���� �������� �������������� �1
-#define current_transformer  A3      // ���� �������� �������������� �1
-*/
+// Вход токового трансформатора
+#define current_transformer  A5      // Вход токового трансформатора №1
+#define current_transformer  A4      // Вход токового трансформатора №1
+#define current_transformer  A3      // Вход токового трансформатора №1
 
-// CAN ����
+// CAN шина
 #define ID0_Out 45                   //         
 #define ID1_Out 46                   //
 #define IDE0_In 47                   //
 #define IDE1_In 48                   //
 #define PPS_Out 49                   //
 
-//// �������� ���������� �������
-//#define power_200  A9                // �������� ��������� ������� 200�
-//#define power_3V3  A10               // �������� ��������� ������� +3.3�
-//#define power_5V0  A11               // �������� ��������� ������� +5.0�
+// Контроль источников питания
+#define power_200  A9                // Контроль источника питания 200в
+#define power_3V3  A10               // Контроль источника питания +3.3в
+#define power_5V0  A11               // Контроль источника питания +5.0в
 
 
 // RS485
-#define Upr_RS485  51                // ���� ����������� ����� RS485  
+#define Upr_RS485  51                // Вход управлениея шиной RS485  
 
-#define led_ready  37                // ��������� ����������� "�����"
-#define led_failure  36              // ��������� ����������� "������"
-#define led_test  38                 // ��������� ����������� "����"
+#define led_ready  37                // Индикация светодиодом "Готов"
+#define led_failure  36              // Индикация светодиодом "Авария"
+#define led_test  38                 // Индикация светодиодом "Тест"
 
 
-#define button1  39                  // ������ �1
-#define button2  40                  // ������ �2
-#define button3  41                  // ������ �3
-#define button4  9                   // ������ �4
+#define button1  39                  // Кнопка №1
+#define button2  40                  // Кнопка №2
+#define button3  41                  // Кнопка №3
+#define button4  9                   // Кнопка №4
 
-#define SD_CS_PIN 10  // пин CS для SD-карты
+#define SD_CS_PIN 10                 // пин CS для SD-карты
+
+#define TFT_reset 34                 // Назначение pin сброса TFT дисплея.
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
