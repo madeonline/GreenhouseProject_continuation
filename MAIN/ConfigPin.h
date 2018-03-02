@@ -16,9 +16,9 @@
 #define out_asu_tp4 50                //Выход на АСУ ТП №4
 
 // Вход токового трансформатора
-#define current_transformer  A5      // Вход токового трансформатора №1
-#define current_transformer  A4      // Вход токового трансформатора №1
-#define current_transformer  A3      // Вход токового трансформатора №1
+#define current_transformer1  A5      // Вход токового трансформатора №1
+#define current_transformer2  A4      // Вход токового трансформатора №2
+#define current_transformer3  A3      // Вход токового трансформатора №3
 
 // CAN шина
 #define ID0_Out 45                   //         

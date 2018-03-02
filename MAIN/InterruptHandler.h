@@ -4,7 +4,7 @@
 #include "CONFIG.h"
 #include "TinyVector.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
-typedef Vector<unsigned long> InterruptTimeList;
+typedef Vector<uint32_t> InterruptTimeList;
 //--------------------------------------------------------------------------------------------------------------------------------------
 class InterruptHandlerClass
 {

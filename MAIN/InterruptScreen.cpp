@@ -109,7 +109,7 @@ void InterruptScreen::computeSerie(InterruptTimeList& timeList,Points& serie, ui
     return;
 
   // получаем максимальное время импульса - это будет 100% по оси Y
-  uint16_t maxPulseTime = 0;
+  uint32_t maxPulseTime = 0;
   for(size_t i=1;i<timeList.size();i++)
   {
     maxPulseTime = max(maxPulseTime,(timeList[i] - timeList[i-1]));
@@ -120,7 +120,7 @@ void InterruptScreen::computeSerie(InterruptTimeList& timeList,Points& serie, ui
   uint16_t xStep = pointsAvailable/(totalPulses-1);
 
   // сначала добавляем первую точку, у неё координаты по X - это 0, по Y - та же длительность импульса, что будет во второй точке
-  uint16_t firstPulseTime = timeList[1] - timeList[0];
+  uint32_t firstPulseTime = timeList[1] - timeList[0];
   uint16_t firstPointPercents = (firstPulseTime*100)/maxPulseTime;
 
   // получили значение в процентах от максимального значения Y для первой точки. Инвертируем это значение
@@ -152,7 +152,7 @@ void InterruptScreen::computeSerie(InterruptTimeList& timeList,Points& serie, ui
   // теперь считаем все остальные точки
   for(size_t i=1;i<timeList.size();i++)
   {
-    uint16_t pulseTime = timeList[i] - timeList[i-1];
+    uint32_t pulseTime = timeList[i] - timeList[i-1];
     uint16_t pulseTimePercents = (pulseTime*100)/maxPulseTime;
     pulseTimePercents = 100 - pulseTimePercents;
 
@@ -169,7 +169,6 @@ void InterruptScreen::computeSerie(InterruptTimeList& timeList,Points& serie, ui
 
     DBG("yCoord=");
     DBGLN(yCoord);
-
 
     Point ptNext = {xCoord,yCoord};
     serie.push_back(ptNext);

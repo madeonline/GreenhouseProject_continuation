@@ -105,7 +105,7 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
   }
   
   // в списке есть записи, проверяем - давно ли туда поступало последнее значение?
-  unsigned long lastDataAt = (*list)[list->size()-1];
+  uint32_t lastDataAt = (*list)[list->size()-1];
   interrupts();
 
   uint8_t result = 0;
