@@ -93,6 +93,7 @@ void InterruptScreen::drawSerie(Points& serie,RGBColor color)
         Point ptStart = serie[i-1];
         Point ptEnd = serie[i];
         dc->drawLine(ptStart.X , ptStart.Y, ptEnd.X , ptEnd.Y);
+        yield();
     }
     
       dc->setColor(oldColor);        
@@ -228,8 +229,11 @@ void InterruptScreen::drawChart()
   Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
 
   drawSerie(serie1,{ 255,0,0 });
+  yield();
   drawSerie(serie2,{ 0,0,255 });
+  yield();
   drawSerie(serie3,{ 255,255,0 });
+  yield();
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

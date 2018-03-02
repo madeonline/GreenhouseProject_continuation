@@ -37,11 +37,13 @@ namespace Drawing
     {
         int colX = startX + col*columnWidth;
         dc->drawLine(colX , startY, colX , startY + rowHeight*rowsCount);
+        yield();
     }
     for (int row = 0; row <= rowsCount; row++)
     {
         int rowY = startY + row*rowHeight;
         dc->drawLine(startX, rowY,  startX + columnWidth*columnsCount, rowY);
+        yield();
     }
     
       dc->setColor(color);    
@@ -116,6 +118,7 @@ void ChartSerie::drawLine(uint16_t xPoint)
 
 
   dc->setColor(initialColor);
+  yield();
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -138,6 +141,7 @@ void ChartSerie::clearLine(uint16_t xPoint)
 
 
   dc->setColor(initialColor);
+  yield();
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

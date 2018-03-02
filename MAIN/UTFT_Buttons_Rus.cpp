@@ -131,6 +131,9 @@ void UTFT_Buttons_Rus::drawButtons(DrawButtonsUpdateFunc func)
 			drawButton(i);
       if(func)
         func();
+
+     yield();
+     
     }
 	}
 }
