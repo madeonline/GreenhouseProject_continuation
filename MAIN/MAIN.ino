@@ -1,18 +1,18 @@
 #include <Arduino.h>
 #include "CONFIG.h"
 #include "UTFTMenu.h"
-#include "DS3231.h"       // подключаем часы
+#include "DS3231.h"               // подключаем часы
 #include "ConfigPin.h"
 #include "AT24CX.h"
 #include "InterruptHandler.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // подключаем наши экраны
-#include "Screen1.h"      // Главный экран
-#include "Screen2.h"      // Вызов меню настроек
-#include "Screen3.h"      //
-#include "Screen4.h"      // Вызов меню установки времени и даты
-#include "Screen5.h"      // Вызов установки времени
-#include "Screen6.h"      // Вызов установки даты
+#include "Screen1.h"              // Главный экран
+#include "Screen2.h"              // Вызов меню настроек
+#include "Screen3.h"              //
+#include "Screen4.h"              // Вызов меню установки времени и даты
+#include "Screen5.h"              // Вызов установки времени
+#include "Screen6.h"              // Вызов установки даты
 #include "InterruptScreen.h"      // экран с графиком прерывания
 
 
