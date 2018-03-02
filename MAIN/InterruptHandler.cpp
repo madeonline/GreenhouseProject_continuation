@@ -24,9 +24,9 @@ InterruptHandlerClass::InterruptHandlerClass()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
 {
-  attachInterrupt(digitalPinToInterrupt(INTERRUPT1_PIN),Interrupt1Handler,RISING);
-  attachInterrupt(digitalPinToInterrupt(INTERRUPT2_PIN),Interrupt2Handler,RISING);
-  attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler,RISING);
+ // attachInterrupt(digitalPinToInterrupt(INTERRUPT1_PIN),Interrupt1Handler,RISING);
+ //attachInterrupt(digitalPinToInterrupt(INTERRUPT2_PIN),Interrupt2Handler,RISING);
+ attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler,RISING);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::update()

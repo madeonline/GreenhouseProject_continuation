@@ -9,7 +9,7 @@
 #define INTERRUPT3_PIN 35
 
 #define INTERRUPT_MAX_IDLE_TIME 50000 // время, в микросекундах, после получения последнего импульса и до момента, когда будет принято решение, что импульсы на входе закончились
-#define INTERRUPT_SCREEN_SEE_TIME 30000 // сколько миллисекунд демонстрировать экран с графиками прерываний?
+#define INTERRUPT_SCREEN_SEE_TIME 3000 // сколько миллисекунд демонстрировать экран с графиками прерываний?
 #define INTERRUPT_CHART_X_POINTS 150 // кол-во точек по X на графике прерываний
 #define INTERRUPT_CHART_Y_POINTS 100 // кол-во точек по Y на графике прерываний
 #define INTERRUPT_CHART_X_COORD 5 // Х-координата графика прерываний на экране
