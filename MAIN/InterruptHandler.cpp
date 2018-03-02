@@ -1,5 +1,9 @@
 #include "InterruptHandler.h"
 #include "InterruptScreen.h"
+int pin = 13;
+volatile int state = LOW;
+
+
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -15,7 +19,7 @@ void Interrupt2Handler()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt3Handler()
 {
-  InterruptHandler.handleInterrupt(3);
+  InterruptHandler.handleInterrupt(2);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
@@ -24,9 +28,11 @@ InterruptHandlerClass::InterruptHandlerClass()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
 {
- // attachInterrupt(digitalPinToInterrupt(INTERRUPT1_PIN),Interrupt1Handler,RISING);
- //attachInterrupt(digitalPinToInterrupt(INTERRUPT2_PIN),Interrupt2Handler,RISING);
- attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler,RISING);
+	pinMode(pin, OUTPUT);
+
+  attachInterrupt(digitalPinToInterrupt(INTERRUPT1_PIN),Interrupt1Handler,RISING);
+  attachInterrupt(digitalPinToInterrupt(INTERRUPT2_PIN),Interrupt2Handler,RISING);
+  attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler,RISING);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::update()
