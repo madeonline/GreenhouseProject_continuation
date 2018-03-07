@@ -23,69 +23,69 @@ CorePinScenario pulseScene1;
 CorePinScenario pulseScene2;
 CorePinScenario pulseScene3;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void setup() 
+void setup()
 {
 
-  pinMode(LINE1,OUTPUT);
-  pinMode(LINE2,OUTPUT);
-  pinMode(LINE3,OUTPUT);
+  pinMode(LINE1, OUTPUT);
+  pinMode(LINE2, OUTPUT);
+  pinMode(LINE3, OUTPUT);
 
   pinMode(PULSE_PIN1, OUTPUT);
   pinMode(PULSE_PIN2, OUTPUT);
   pinMode(PULSE_PIN3, OUTPUT);
 
-   digitalWrite(PULSE_PIN3,LOW);
-  
+  digitalWrite(PULSE_PIN3, LOW);
 
-  scene1.add({LINE1,HIGH,DURATION}); 
-  scene1.add({LINE1,LOW,DURATION});
- 
 
-  scene2.add({LINE2,HIGH,DURATION});
-  scene2.add({LINE2,LOW,DURATION});
+  scene1.add({LINE1, HIGH, DURATION});
+  scene1.add({LINE1, LOW, DURATION});
 
-  scene3.add({LINE3,HIGH,DURATION});
-  scene3.add({LINE3,LOW,DURATION});
+
+  scene2.add({LINE2, HIGH, DURATION});
+  scene2.add({LINE2, LOW, DURATION});
+
+  scene3.add({LINE3, HIGH, DURATION});
+  scene3.add({LINE3, LOW, DURATION});
 
   // добавляем тестовые импульсы
 
- 
+
   unsigned long duration = 40000;
   uint8_t level = HIGH;
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
-  
-  for(int i=0;i<10;i++, duration -= 2000)
+
+  for (int i = 0; i < 10; i++, duration -= 2000)
   {
-    pulseScene1.add({PULSE_PIN1,level,duration});
+    pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
     //20000
   }
-   for(int i=0;i<10;i++, duration -= 1000)
+  for (int i = 0; i < 10; i++, duration -= 1000)
   {
-    pulseScene1.add({PULSE_PIN1,level,duration});
+    pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
     //20000-10000 = 10000
   }
 
-     for(int i=0;i<5;i++)
+  for (int i = 0; i < 5; i++)
   {
-    pulseScene1.add({PULSE_PIN1,level,duration});
+    pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
     //10 000
   }
 
   // затем добавляем 15 импульсов по возрастанию
-  for(int i=0;i<15;i++, duration += 1000)
+  for (int i = 0; i < 15; i++, duration += 1000)
   {
-    pulseScene1.add({PULSE_PIN1,level,duration});
-    level = !level; 
+    pulseScene1.add({PULSE_PIN1, level, duration});
+    level = !level;
     //10 000 + 15 000 = 25000
   }
-    // затем добавляем 5 импульсов по возрастанию
-  for(int i=0;i<5;i++, duration += 3000)
+  // затем добавляем 5 импульсов по возрастанию
+  for (int i = 0; i < 5; i++, duration += 3000)
   {
-    pulseScene1.add({PULSE_PIN1,level,duration});
-    level = !level; 
+    pulseScene1.add({PULSE_PIN1, level, duration});
+    level = !level;
     //   25000+15000=40000
   }
 
@@ -93,51 +93,81 @@ void setup()
   duration = 40000;
   level = HIGH;
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
-  
-  for(int i=0;i<10;i++, duration -= 1500)
+
+  for (int i = 0; i < 10; i++, duration -= 1500)
   {
-    pulseScene2.add({PULSE_PIN2,level,duration});
+    pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
-   for(int i=0;i<10;i++, duration -= 1200)
+  for (int i = 0; i < 10; i++, duration -= 1200)
   {
-    pulseScene2.add({PULSE_PIN2,level,duration});
+    pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
 
-     for(int i=0;i<5;i++)
+  for (int i = 0; i < 5; i++)
   {
-    pulseScene2.add({PULSE_PIN2,level,duration});
+    pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
 
   // затем добавляем 15 импульсов по возрастанию
-  for(int i=0;i<15;i++, duration += 1000)
+  for (int i = 0; i < 15; i++, duration += 1000)
   {
-    pulseScene2.add({PULSE_PIN2,level,duration});
-    level = !level;    
+    pulseScene2.add({PULSE_PIN2, level, duration});
+    level = !level;
   }
-    // затем добавляем 5 импульсов по возрастанию
-  for(int i=0;i<5;i++, duration += 2000)
+  // затем добавляем 5 импульсов по возрастанию
+  for (int i = 0; i < 5; i++, duration += 2000)
   {
-    pulseScene2.add({PULSE_PIN2,level,duration});
-    level = !level;    
+    pulseScene2.add({PULSE_PIN2, level, duration});
+    level = !level;
   }
 
 
+  duration = 40000;
+  level = HIGH;
+  // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
+
+  for (int i = 0; i < 10; i++, duration -= 1800)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+  for (int i = 0; i < 10; i++, duration -= 1500)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+
+  for (int i = 0; i < 5; i++)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+
+  // затем добавляем 15 импульсов по возрастанию
+  for (int i = 0; i < 15; i++, duration += 1000)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+  // затем добавляем 5 импульсов по возрастанию
+  for (int i = 0; i < 5; i++, duration += 2300)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
 
 
-
-
-
-  
 
   // добавляем паузу в 5 секунд
-  pulseScene1.add({PULSE_PIN1,LOW,10000000});
-  pulseScene2.add({PULSE_PIN2,LOW,10000000});
+  pulseScene1.add({PULSE_PIN1, LOW, 10000000});
+  pulseScene2.add({PULSE_PIN2, LOW, 10000000});
+  pulseScene3.add({PULSE_PIN3, LOW, 10000000});
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void loop() 
+void loop()
 {
 
   // сдвигаем фазы при старте
@@ -148,8 +178,8 @@ void loop()
   scene2.update();
   delayMicroseconds(PHASE_SHIFT);
   scene3.update();
-  
-  while(1)
+
+  while (1)
   {
     scene1.update();
     scene2.update();
@@ -157,6 +187,7 @@ void loop()
 
     pulseScene1.update();
     pulseScene2.update();
+    pulseScene3.update();
   }
 
 }
