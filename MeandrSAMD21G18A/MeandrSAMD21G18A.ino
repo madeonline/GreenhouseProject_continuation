@@ -34,8 +34,6 @@ void setup()
   pinMode(PULSE_PIN2, OUTPUT);
   pinMode(PULSE_PIN3, OUTPUT);
 
-  digitalWrite(PULSE_PIN3, LOW);
-
 
   scene1.add({LINE1, HIGH, DURATION});
   scene1.add({LINE1, LOW, DURATION});
@@ -58,35 +56,30 @@ void setup()
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
-    //20000
   }
   for (int i = 0; i < 10; i++, duration -= 1000)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
-    //20000-10000 = 10000
   }
 
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 15; i++)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
-    //10 000
   }
 
   // затем добавляем 15 импульсов по возрастанию
-  for (int i = 0; i < 15; i++, duration += 1000)
+  for (int i = 0; i < 14; i++, duration += 1000)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
-    //10 000 + 15 000 = 25000
   }
-  // затем добавляем 5 импульсов по возрастанию
-  for (int i = 0; i < 5; i++, duration += 3000)
+  // затем добавляем 16 импульсов по возрастанию
+  for (int i = 0; i < 15; i++, duration += 1600)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
-    //   25000+15000=40000
   }
 
 
@@ -99,13 +92,13 @@ void setup()
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
-  for (int i = 0; i < 10; i++, duration -= 1200)
+  for (int i = 0; i < 15; i++, duration -= 1200)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
 
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 10; i++)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
@@ -118,13 +111,52 @@ void setup()
     level = !level;
   }
   // затем добавляем 5 импульсов по возрастанию
-  for (int i = 0; i < 5; i++, duration += 2000)
+  for (int i = 0; i < 15; i++, duration += 1600)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
 
 
+
+  duration = 40000;
+  level = HIGH;
+  // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
+
+  for (int i = 0; i < 10; i++, duration -= 1500)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+  for (int i = 0; i < 15; i++, duration -= 1200)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+
+  for (int i = 0; i < 10; i++)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+
+  // затем добавляем 15 импульсов по возрастанию
+  for (int i = 0; i < 15; i++, duration += 1000)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+  // затем добавляем 5 импульсов по возрастанию
+  for (int i = 0; i < 15; i++, duration += 1600)
+  {
+    pulseScene3.add({PULSE_PIN3, level, duration});
+    level = !level;
+  }
+
+
+
+
+/*
   duration = 40000;
   level = HIGH;
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
@@ -134,13 +166,13 @@ void setup()
     pulseScene3.add({PULSE_PIN3, level, duration});
     level = !level;
   }
-  for (int i = 0; i < 10; i++, duration -= 1500)
+  for (int i = 0; i < 15; i++, duration -= 1500)
   {
     pulseScene3.add({PULSE_PIN3, level, duration});
     level = !level;
   }
 
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 15; i++)
   {
     pulseScene3.add({PULSE_PIN3, level, duration});
     level = !level;
@@ -153,18 +185,18 @@ void setup()
     level = !level;
   }
   // затем добавляем 5 импульсов по возрастанию
-  for (int i = 0; i < 5; i++, duration += 2300)
+  for (int i = 0; i < 10; i++, duration += 1800)
   {
     pulseScene3.add({PULSE_PIN3, level, duration});
     level = !level;
   }
 
-
+*/
 
   // добавляем паузу в 5 секунд
-  pulseScene1.add({PULSE_PIN1, LOW, 10000000});
-  pulseScene2.add({PULSE_PIN2, LOW, 10000000});
-  pulseScene3.add({PULSE_PIN3, LOW, 10000000});
+  pulseScene1.add({PULSE_PIN1, LOW, 5000000});
+  pulseScene2.add({PULSE_PIN2, LOW, 5000000});
+  pulseScene3.add({PULSE_PIN3, LOW, 5000000});
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void loop()
