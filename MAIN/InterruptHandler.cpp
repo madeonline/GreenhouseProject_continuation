@@ -35,6 +35,8 @@ void InterruptHandlerClass::update()
 {
   // обновляем статус прерываний. По условиям - если данные есть, и после последнего получения данных прошло N времени - нам надо показать экран
   // с графиком прерываний, сохранить график сработавшего прерывания, и очистить это дело.
+
+
   uint8_t handleResult = handleList(0);
   handleResult += handleList(1);
   handleResult += handleList(2);
@@ -43,9 +45,10 @@ void InterruptHandlerClass::update()
   {
     // зажигаем светодиод "ТЕСТ"
     InfoDiodes.test();
-    
+
     DBGLN(F("WANT TO SEE INTERRUPT SCREEN!!!"));
     // тут переключаемся на экран с графиками
+	
     if(ScreenInterrupt)
       ScreenInterrupt->showChart();
   }
@@ -67,7 +70,7 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
 
   InterruptTimeList* list = NULL;
   uint8_t listNum = 0;
-  
+  delayMicroseconds(50000);
   switch(interruptNumber)
   {
     case 0:
@@ -110,6 +113,7 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
   uint8_t result = 0;
   if(micros() - lastDataAt > INTERRUPT_MAX_IDLE_TIME)
   {
+
     // импульсы на входе закончились, надо список импульсов отправить в экран, а локальный - почистить.
     // для этого делаем копию импульсов
     noInterrupts();

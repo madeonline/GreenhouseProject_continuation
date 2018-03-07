@@ -87,31 +87,26 @@ void setup()
   level = HIGH;
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
 
-  for (int i = 0; i < 10; i++, duration -= 1500)
-  {
-    pulseScene2.add({PULSE_PIN2, level, duration});
-    level = !level;
-  }
-  for (int i = 0; i < 15; i++, duration -= 1200)
+  for (int i = 0; i < 20; i++, duration -= 1500)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
 
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 16; i++, duration -= 625)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
 
   // затем добавляем 15 импульсов по возрастанию
-  for (int i = 0; i < 15; i++, duration += 1000)
+  for (int i = 0; i < 10; i++, duration += 400)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
   // затем добавляем 5 импульсов по возрастанию
-  for (int i = 0; i < 15; i++, duration += 1600)
+  for (int i = 0; i < 14; i++, duration += 2800)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
