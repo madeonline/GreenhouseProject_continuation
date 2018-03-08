@@ -23,6 +23,10 @@ private:
   InterruptTimeList list2;
   InterruptTimeList list3;
 
+  bool interrupt1Raised;
+  bool interrupt2Raised;
+  bool interrupt3Raised;
+
   uint8_t handleList(uint8_t interruptNumber);
   void sendToInterruptScreen(const InterruptTimeList& list, uint8_t listNumber);
 

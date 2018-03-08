@@ -22,6 +22,9 @@ void Interrupt3Handler()
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
 {
+  interrupt1Raised = false;
+  interrupt2Raised = false;
+  interrupt3Raised = false;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
@@ -35,6 +38,24 @@ void InterruptHandlerClass::update()
 {
   // обновляем статус прерываний. По условиям - если данные есть, и после последнего получения данных прошло N времени - нам надо показать экран
   // с графиком прерываний, сохранить график сработавшего прерывания, и очистить это дело.
+
+  if(interrupt1Raised)
+  {
+    interrupt1Raised = false;
+    list1.push_back(micros());
+  }
+
+  if(interrupt2Raised)
+  {
+    interrupt2Raised = false;
+    list2.push_back(micros());
+  }
+
+  if(interrupt3Raised)
+  {
+    interrupt3Raised = false;
+    list3.push_back(micros());
+  }
 
 
   uint8_t handleResult = handleList(0);
@@ -136,18 +157,21 @@ void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
   {
     case 0:
     {
-      list1.push_back(micros());
+      //list1.push_back(micros());
+      interrupt1Raised = true;
     }
     break;
     
     case 1:
     {
-      list2.push_back(micros());
+      //list2.push_back(micros());
+      interrupt2Raised = true;
     }
     break;
     case 2:
     {
-      list3.push_back(micros());
+      //list3.push_back(micros());
+      interrupt3Raised = true;
     }
     break;
   } // switch
