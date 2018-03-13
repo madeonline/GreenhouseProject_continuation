@@ -53,7 +53,7 @@ public:
       d_size = 0;
     }
 
-    void Clear() //here
+    void clear() //here
     {
         if(d_data)
           memset(d_data, 0, d_size);
