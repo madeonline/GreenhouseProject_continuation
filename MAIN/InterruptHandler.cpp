@@ -175,7 +175,7 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
 void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
 {
 
-  if(bPaused) // на паузе
+  if(bPaused || !handler) // на паузе или нет подписчика
     return;
   
   // запоминаем время, когда произошло прерывание, в нужный список
