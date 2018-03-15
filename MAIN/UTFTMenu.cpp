@@ -118,16 +118,19 @@ void TFTMenu::switchToScreen(AbstractTFTScreen* screen)
   {
      AbstractTFTScreen* si = screens[currentScreenIndex];
      si->setActive(false);
+     si->onDeactivate();
   }
   
   for(size_t i=0;i<screens.size();i++)
   {
     if(screens[i] == screen)
     {
-      screen->setActive(true);
       currentScreenIndex = i;
       tftDC->setBackColor(TFT_BACK_COLOR);
       tftDC->fillScr(TFT_BACK_COLOR); // clear screen first
+      
+      screen->setActive(true);
+      screen->onActivate();
       screen->update(this);
       screen->draw(this);
       break;

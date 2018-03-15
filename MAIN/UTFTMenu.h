@@ -30,8 +30,15 @@ class AbstractTFTScreen
     AbstractTFTScreen(const char* name);
     virtual ~AbstractTFTScreen();
 
+    // вызывается, когда переключаются на экран
+    virtual void onActivate(){}
+
+    // вызывается, когда экран становится неактивным
+    virtual void onDeactivate() {}
+
   protected:
 
+    
     virtual void doSetup(TFTMenu* menu) = 0;
     virtual void doUpdate(TFTMenu* menu) = 0;
     virtual void doDraw(TFTMenu* menu) = 0;

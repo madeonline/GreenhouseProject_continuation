@@ -8,14 +8,14 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef Vector<Point> Points;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class InterruptScreen : public AbstractTFTScreen
+class InterruptScreen : public AbstractTFTScreen, public InterruptEventHandler
 {
   public:
 
   static AbstractTFTScreen* create();  
 
-  void setList(const InterruptTimeList& list, uint8_t listNum);
-  void showChart();
+  void OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum);
+  void OnHaveInterruptData();
     
 protected:
 
@@ -42,6 +42,7 @@ private:
 
     void computeSerie(InterruptTimeList& timeList,Points& serie, uint16_t xOffset, uint16_t yOffset);
     void drawSerie(Points& serie,RGBColor color);
+
   
   
 };

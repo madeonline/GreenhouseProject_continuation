@@ -1,7 +1,6 @@
 #include "InterruptHandler.h"
 #include "InterruptScreen.h"
 #include "ConfigPin.h"
-#include "InfoDiodes.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -25,6 +24,9 @@ InterruptHandlerClass::InterruptHandlerClass()
   interrupt1Raised = false;
   interrupt2Raised = false;
   interrupt3Raised = false;
+
+  bPaused = false;
+  handler = NULL;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
@@ -38,6 +40,9 @@ void InterruptHandlerClass::update()
 {
   // обновляем статус прерываний. По условиям - если данные есть, и после последнего получения данных прошло N времени - нам надо показать экран
   // с графиком прерываний, сохранить график сработавшего прерывания, и очистить это дело.
+
+  // поскольку мы перешли на интерфейсы, нас не волнует, какой экран и чего там запросил - мы просто передаём результаты обработчику, который
+  // подписался на события вызовом нашего метода setHandler.
 
   if(interrupt1Raised)
   {
@@ -64,25 +69,39 @@ void InterruptHandlerClass::update()
 
   if(handleResult > 0)
   {
-    // зажигаем светодиод "ТЕСТ"
-    InfoDiodes.test();
 
-    DBGLN(F("WANT TO SEE INTERRUPT SCREEN!!!"));
-    // тут переключаемся на экран с графиками
-	
-    if(ScreenInterrupt)
-      ScreenInterrupt->showChart();
+    DBGLN(F("InterruptHandler: NOTIFY HANDLER WITH EVENT..."));
+    
+    // сообщаем обработчику результатов, что какие-то результаты есть
+    if(handler)
+      handler->OnHaveInterruptData();
   }
 
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::sendToInterruptScreen(const InterruptTimeList& list, uint8_t listNumber)
+void InterruptHandlerClass::setHandler(InterruptEventHandler* h)
 {
-  DBG(F("Want to send interrupt data to screen, list number="));
+  // устанавливаем обработчика результатов прерываний.
+  // при этом очищаем локальные списки, т.к. будет установлен новый обработчик.
+  pause();
+
+  handler = h;
+  list1.clear();
+  list2.clear();
+  list3.clear();
+
+  resume();
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+void InterruptHandlerClass::sendDataToHandler(const InterruptTimeList& list, uint8_t listNumber)
+{
+  DBG(F("InterruptHandler, list done="));
   DBGLN(listNumber);
 
-  if(ScreenInterrupt)
-    ScreenInterrupt->setList(list,listNumber);
+  if(!handler)
+    return;
+
+  handler->OnInterruptRaised(list, listNumber);
 
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -91,7 +110,10 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
 
   InterruptTimeList* list = NULL;
   uint8_t listNum = 0;
-  delayMicroseconds(50000);
+
+  // ВОТ ЭТО ТУТ ЗАЧЕМ?
+  //delayMicroseconds(50000);
+  
   switch(interruptNumber)
   {
     case 0:
@@ -139,12 +161,12 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
     // для этого делаем копию импульсов
     noInterrupts();
     InterruptTimeList copyList = *list;
-    list->empty();
+    list->clear();
     interrupts();
 
     result = 1;
     // здесь можем безопасно отправлять на экран
-    sendToInterruptScreen(copyList, listNum);
+    sendDataToHandler(copyList, listNum);
   }
 
   return result;
@@ -152,25 +174,26 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
 {
+
+  if(bPaused || !handler) // на паузе или нет подписчика
+    return;
+  
   // запоминаем время, когда произошло прерывание, в нужный список
   switch(interruptNumber)
   {
     case 0:
     {
-      //list1.push_back(micros());
       interrupt1Raised = true;
     }
     break;
     
     case 1:
     {
-      //list2.push_back(micros());
       interrupt2Raised = true;
     }
     break;
     case 2:
     {
-      //list3.push_back(micros());
       interrupt3Raised = true;
     }
     break;

@@ -21,8 +21,13 @@ class Screen1 : public AbstractTFTScreen
   void DrawChart(); // рисуем наши графики
   void addPoints( uint16_t* points1,   uint16_t* points2,  uint16_t* points3, uint16_t pointsCount);
 
+   virtual void onActivate();
+   virtual void onDeactivate();
+
+
 protected:
 
+    
     virtual void doSetup(TFTMenu* menu);
     virtual void doUpdate(TFTMenu* menu);
     virtual void doDraw(TFTMenu* menu);
