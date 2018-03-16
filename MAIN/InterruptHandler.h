@@ -44,10 +44,6 @@ private:
   InterruptTimeList list2;
   InterruptTimeList list3;
 
-  bool interrupt1Raised;
-  bool interrupt2Raised;
-  bool interrupt3Raised;
-
   bool bPaused;
 
   InterruptEventHandler* handler;

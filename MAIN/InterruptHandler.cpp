@@ -11,20 +11,16 @@ void Interrupt1Handler()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt2Handler()
 {
-  InterruptHandler.handleInterrupt(1);
+//  InterruptHandler.handleInterrupt(1);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt3Handler()
 {
-  InterruptHandler.handleInterrupt(2);
+//  InterruptHandler.handleInterrupt(2);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
 {
-  interrupt1Raised = false;
-  interrupt2Raised = false;
-  interrupt3Raised = false;
-
   bPaused = false;
   handler = NULL;
 }
@@ -44,32 +40,12 @@ void InterruptHandlerClass::update()
   // поскольку мы перешли на интерфейсы, нас не волнует, какой экран и чего там запросил - мы просто передаём результаты обработчику, который
   // подписался на события вызовом нашего метода setHandler.
 
-  if(interrupt1Raised)
-  {
-    interrupt1Raised = false;
-    list1.push_back(micros());
-  }
-
-  if(interrupt2Raised)
-  {
-    interrupt2Raised = false;
-    list2.push_back(micros());
-  }
-
-  if(interrupt3Raised)
-  {
-    interrupt3Raised = false;
-    list3.push_back(micros());
-  }
-
-
   uint8_t handleResult = handleList(0);
   handleResult += handleList(1);
   handleResult += handleList(2);
 
   if(handleResult > 0)
   {
-
     DBGLN(F("InterruptHandler: NOTIFY HANDLER WITH EVENT..."));
     
     // сообщаем обработчику результатов, что какие-то результаты есть
@@ -175,7 +151,7 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
 void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
 {
 
-  if(bPaused || !handler) // на паузе или нет подписчика
+  if(bPaused) // на паузе
     return;
   
   // запоминаем время, когда произошло прерывание, в нужный список
@@ -183,18 +159,18 @@ void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
   {
     case 0:
     {
-      interrupt1Raised = true;
+      list1.push_back(micros());
     }
     break;
     
     case 1:
     {
-      interrupt2Raised = true;
+      list2.push_back(micros());
     }
     break;
     case 2:
     {
-      interrupt3Raised = true;
+      list3.push_back(micros());
     }
     break;
   } // switch
