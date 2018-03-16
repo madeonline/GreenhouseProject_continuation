@@ -119,7 +119,10 @@ void InterruptScreen::computeSerie(InterruptTimeList& timeList,Points& serie, ui
   size_t totalPulses = timeList.size();
 
   if(totalPulses < 2) // нет ничего к отрисовке, т.к. для графика нужны хотя бы две точки
+  {
+    DBGLN(F("NOT ENOUGH POINTS TO DRAW!"));
     return;
+  }
 
   // получаем максимальное время импульса - это будет 100% по оси Y
   uint32_t maxPulseTime = 0;
