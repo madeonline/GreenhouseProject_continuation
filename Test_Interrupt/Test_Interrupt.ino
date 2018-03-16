@@ -37,11 +37,8 @@ void loop()
     interrupts();
     
   //  delay(5);
-<<<<<<< HEAD
    // delayMicroseconds(20000);
-=======
-//    delayMicroseconds(20000);
->>>>>>> a8dd23b9c3f7aff9ffe7655ebc4eedc04ba95f0a
+
 
     uint32_t last = micros();                                     // Получить текущее время. !!! Что то не так фиксируется текущее время
     if ((micros() - list_time[thisCount - 1]) > time_x )              // Проверим не превышен ли предел ожидания импульса. Импульсы закончились?
