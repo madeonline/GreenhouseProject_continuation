@@ -31,18 +31,23 @@ void loop()
   digitalWrite(pin, state);                                       // Отобразим факт прерывания светодиодом
   if (interrupt_on)                                               // Проверяем было ли прерывание
   {
+
+    noInterrupts();
+    int thisCount = count;
+    interrupts();
+    
   //  delay(5);
-    delayMicroseconds(20000);
+//    delayMicroseconds(20000);
 
     uint32_t last = micros();                                     // Получить текущее время. !!! Что то не так фиксируется текущее время
-    if ((micros() - list_time[count - 1]) > time_x )              // Проверим не превышен ли предел ожидания импульса. Импульсы закончились?
+    if ((micros() - list_time[thisCount - 1]) > time_x )              // Проверим не превышен ли предел ожидания импульса. Импульсы закончились?
     {
       interrupt_on = false;                                       //  Данные получены, ожидаем новые
       Serial.println(last);
-      Serial.println(list_time[count - 1]);
-      Serial.println(last - list_time[count - 1]);
-      Serial.println(count);
-      for (int i = 0; i < count - 2; i++)
+      Serial.println(list_time[thisCount - 1]);
+      Serial.println(last - list_time[thisCount - 1]);
+      Serial.println(thisCount);
+      for (int i = 0; i < thisCount - 2; i++)
       {
         Serial.print(i + 1);
         Serial.print(" - ");
@@ -50,7 +55,7 @@ void loop()
       }
       Serial.println("*************");
      // interrupt_on = false;                                         // Данные получены, ожидаем новые. Вывод текущих данных блокируем. Флаг прерывания в исходное положение.
-      count = 0;                                                    // Счетчик импульсов в исходное состояние
+//      count = 0;                                                    // Счетчик импульсов в исходное состояние
      }
   }
 }
