@@ -24,7 +24,31 @@ protected:
 private:
       Screen2();
 
-      int backButton, sdFormatButton, sdInfoButton, filesButton;
+      int backButton, sdFormatButton, sdInfoButton, filesButton, ethalonButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class EthalonScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new EthalonScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      EthalonScreen();
+
+      int backButton, recordButton;
   
   
 };

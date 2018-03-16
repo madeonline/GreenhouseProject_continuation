@@ -256,7 +256,7 @@ void Screen1::onButtonPressed(TFTMenu* menu, int pressedButton)
   // обработчик нажатия на кнопку. Номера кнопок начинаются с 0 и идут в том порядке, в котором мы их добавляли
 	if (pressedButton == 0)
 	{
-		menu->switchToScreen("SD"); // переключаемся на экран работы с SD
+		menu->switchToScreen("Settings"); // переключаемся на экран работы с SD
   }
 	else if (pressedButton == 1)
 	{
