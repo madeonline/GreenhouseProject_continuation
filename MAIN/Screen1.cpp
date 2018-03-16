@@ -43,7 +43,7 @@ void loopADC()
     if(mainScreen && mainScreen->isActive())
     {
       mainScreen->addPoints(serie1, serie2, serie3, countOfPoints);      
-      mainScreen->DrawChart();
+      //mainScreen->DrawChart();
     }
     else
     {

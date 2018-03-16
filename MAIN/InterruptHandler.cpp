@@ -88,7 +88,7 @@ uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
   uint8_t listNum = 0;
 
   // ВОТ ЭТО ТУТ ЗАЧЕМ?
-  //delayMicroseconds(50000);
+ // delayMicroseconds(5000);
   
   switch(interruptNumber)
   {

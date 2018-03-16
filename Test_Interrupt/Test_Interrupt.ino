@@ -32,7 +32,7 @@ void loop()
   if (interrupt_on)                                               // Проверяем было ли прерывание
   {
   //  delay(5);
-    delayMicroseconds(20000);
+   // delayMicroseconds(20000);
 
     uint32_t last = micros();                                     // Получить текущее время. !!! Что то не так фиксируется текущее время
     if ((micros() - list_time[count - 1]) > time_x )              // Проверим не превышен ли предел ожидания импульса. Импульсы закончились?
