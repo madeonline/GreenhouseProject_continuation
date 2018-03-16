@@ -6,7 +6,7 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SDFilesScreen* FilesScreen = NULL;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Screen2::Screen2() : AbstractTFTScreen("SD")
+Screen2::Screen2() : AbstractTFTScreen("Settings")
 {
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -16,13 +16,14 @@ void Screen2::doSetup(TFTMenu* menu)
   filesButton = screenButtons->addButton(5, 2, 210, 30, "Файлы");
   sdInfoButton = screenButtons->addButton(5, 37, 210, 30, "SD-инфо");
   sdFormatButton = screenButtons->addButton( 5, 72, 210, 30, "Формат SD");
-  //screenButtons->addButton(5, 107, 210, 30, "4");
+  ethalonButton = screenButtons->addButton(5, 107, 210, 30, "Эталоны");
   backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
 
   // добавляем подэкраны работы с SD
   Screen.addScreen(SDInfoScreen::create());
   Screen.addScreen(SDFormatScreen::create());
   Screen.addScreen(SDFilesScreen::create());
+  Screen.addScreen(EthalonScreen::create());
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen2::doUpdate(TFTMenu* menu)
@@ -49,6 +50,40 @@ void Screen2::onButtonPressed(TFTMenu* menu, int pressedButton)
     FilesScreen->rescanFiles();
     menu->switchToScreen(FilesScreen); // переключаемся на экран форматирования SD
   }
+  else
+  if(pressedButton == ethalonButton)
+    menu->switchToScreen("Ethalon"); // переключаемся на экран работы с эталонами
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// EthalonScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EthalonScreen::EthalonScreen() : AbstractTFTScreen("Ethalon")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonScreen::doSetup(TFTMenu* menu)
+{
+
+  recordButton = screenButtons->addButton(5, 2, 210, 30, "Нов. эталон");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("Settings"); // переключаемся на экран работы с SD
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // FileEntry
@@ -359,7 +394,7 @@ void SDFilesScreen::doDraw(TFTMenu* menu)
 void SDFilesScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("SD"); // переключаемся на экран работы с SD  
+    menu->switchToScreen("Settings"); // переключаемся на экран работы с SD  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SDInfoScreen
@@ -433,7 +468,7 @@ void SDInfoScreen::doDraw(TFTMenu* menu)
 void SDInfoScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("SD"); // переключаемся на экран работы с SD
+    menu->switchToScreen("Settings"); // переключаемся на экран работы с SD
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void SDInfoScreen::collectSDInfo()
@@ -534,7 +569,7 @@ void SDFormatScreen::doDraw(TFTMenu* menu)
 void SDFormatScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("SD"); // переключаемся на экран работы с SD
+    menu->switchToScreen("Settings"); // переключаемся на экран работы с SD
   else
   if(pressedButton == formatButton)
   {
