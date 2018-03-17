@@ -20,6 +20,13 @@ AbstractTFTScreen* InterruptScreen::create()
 InterruptScreen::InterruptScreen() : AbstractTFTScreen("INTERRUPT")
 {
   startSeenTime = 0;
+  canAcceptInterruptData = true;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InterruptScreen::onDeactivate()
+{
+    // после деактивирования нашего экрана мы опять можем принимать данные прерываний, чтобы показать новые графики
+    canAcceptInterruptData = true;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::OnHaveInterruptData()
@@ -30,6 +37,16 @@ void InterruptScreen::OnHaveInterruptData()
   
   // зажигаем светодиод "ТЕСТ"
   InfoDiodes.test();
+
+  // принимать данные с прерываний мы можем только тогда, когда уже показали текущие прерывания на экране и переключились на главный экран
+  if(!canAcceptInterruptData)
+  {
+    DBGLN("InterruptScreen::OnHaveInterruptData - CAN'T ACCEPT INTERRUPT DATA!");    
+    return;
+  }
+
+  // говорим, что до нового цикла мы не можем больше ничего принимать.
+  canAcceptInterruptData = false;
 
   // сначала делаем пересчёт точек на график, т.к. у нас ограниченное кол-во точек - это раз.
   // два - когда в списках прерываний точек заведомо меньше, чем точек на графике (например, 20 вместо 150) - без пересчёта получим
@@ -43,6 +60,15 @@ void InterruptScreen::OnHaveInterruptData()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum)
 {
+
+  if(!canAcceptInterruptData)
+  {
+    DBGLN("InterruptScreen::OnInterruptRaised - CAN'T ACCEPT INTERRUPT DATA!");
+    return;
+  }
+
+  // пришли результаты серии прерываний с одного из списков.
+  // мы запоминаем результаты в локальный список.
 
   switch(listNum)
   {

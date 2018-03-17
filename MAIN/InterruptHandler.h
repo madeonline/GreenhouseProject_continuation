@@ -29,10 +29,6 @@ class InterruptHandlerClass
    void begin();
    void update();
 
-   void pause() {bPaused = true;}
-   void resume() {bPaused = false;}
-   bool paused() {return bPaused;}
-
    void setHandler(InterruptEventHandler* h);
 
    void handleInterrupt(uint8_t interruptNumber);
@@ -44,12 +40,11 @@ private:
   InterruptTimeList list2;
   InterruptTimeList list3;
 
-  bool bPaused;
+  uint32_t list1LastDataAt;
+  uint32_t list2LastDataAt;
+  uint32_t list3LastDataAt;
 
   InterruptEventHandler* handler;
-
-  uint8_t handleList(uint8_t interruptNumber);
-  void sendDataToHandler(const InterruptTimeList& list, uint8_t listNumber);
 
 };
 //--------------------------------------------------------------------------------------------------------------------------------------

@@ -24,15 +24,18 @@ protected:
     virtual void doDraw(TFTMenu* menu);
     virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
 
+    virtual void onDeactivate();
+
 private:
-      InterruptScreen();
+    InterruptScreen();
 
-      InterruptTimeList list1;
-      InterruptTimeList list2;
-      InterruptTimeList list3;
+    InterruptTimeList list1;
+    InterruptTimeList list2;
+    InterruptTimeList list3;
 
-      unsigned long startSeenTime;
+    unsigned long startSeenTime;
 
+    bool canAcceptInterruptData;
     void drawChart(); // рисуем график
     void computeChart(); // пересчитываем график
 

@@ -21,8 +21,10 @@ void Interrupt3Handler()
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
 {
-  bPaused = false;
   handler = NULL;
+  list1LastDataAt = 0;
+  list2LastDataAt = 0;
+  list3LastDataAt = 0;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
@@ -34,23 +36,84 @@ void InterruptHandlerClass::begin()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::update()
 {
-  // обновляем статус прерываний. По условиям - если данные есть, и после последнего получения данных прошло N времени - нам надо показать экран
-  // с графиком прерываний, сохранить график сработавшего прерывания, и очистить это дело.
+  
+  uint32_t now = micros();
 
-  // поскольку мы перешли на интерфейсы, нас не волнует, какой экран и чего там запросил - мы просто передаём результаты обработчику, который
-  // подписался на события вызовом нашего метода setHandler.
+  // ситуация следующая - если у нас взведён хотя бы один флаг ожидания окончания списка - мы ждём, пока этот список не заполнится.
+  // если у нас ни одного флага уже не взведено, списки заполнены по принципу давности прихода последнего значения,
+  // и хотя бы в одном списке есть данные - мы отправляем все три списка обработчику, и чистим их локально.
+  // по другому мы сделать не можем, т.к. работаем по прерываниям, и всегда может быть ситуация, когда заполняется какой-то список.
+  // при этом нам надо быть уверенными в целостности данных, т.е. мы не можем отправлять обработчику данные, когда нам заблагорассудится,
+  // поскольку он там с ними может что-то делать (например, мееедленно отрисовывать просчитанные ранее точки).
+  // однако, по факту заполнения любого одного списка мы должны немедленно прореагировать на это дело, например, записать на SD, и 
+  // после всего этого - почистить локальный список, чтобы он был готов к принятию новой порции данных.
 
-  uint8_t handleResult = handleList(0);
-  handleResult += handleList(1);
-  handleResult += handleList(2);
+  // резюмируем: вызывать OnHaveInterruptData у обработчика можно ТОЛЬКО тогда, когда все три списка не изменяются длительное время - это раз.
+  // два: вызывать sendDataToHandler можно СРАЗУ по факту заполнения списка, здесь же - можно обрабатывать факт срабатывания.
+  // три: по факту мы должны дождаться заполнения всех трёх списков прежде, чем вызывать OnHaveInterruptData.
 
-  if(handleResult > 0)
+
+  // если во всех трёх списках давно не было данных - считаем, что сбор данных закончен.
+  if( (now - list1LastDataAt) > INTERRUPT_MAX_IDLE_TIME &&
+      (now - list2LastDataAt) > INTERRUPT_MAX_IDLE_TIME &&
+      (now - list3LastDataAt) > INTERRUPT_MAX_IDLE_TIME
+  )
   {
-    DBGLN(F("InterruptHandler: NOTIFY HANDLER WITH EVENT..."));
+    noInterrupts();
+
+      // здесь обновляем время "сработки" списков, чтобы часто не дёргать эту проверку в случае, когда долго не срабатывают прерывания
+      list1LastDataAt = now;
+      list2LastDataAt = now;
+      list3LastDataAt = now;
     
-    // сообщаем обработчику результатов, что какие-то результаты есть
-    if(handler)
-      handler->OnHaveInterruptData();
+      InterruptTimeList copyList1 = list1;
+      list1.clear();
+  
+      InterruptTimeList copyList2 = list2;
+      list2.clear();
+  
+      InterruptTimeList copyList3 = list3;
+      list3.clear();
+
+    interrupts();
+
+    // теперь смотрим - надо ли нам самим чего-то обрабатывать?
+    if(copyList1.size())
+    {
+      DBGLN("INTERRUPT #1 HAS SERIES OF DATA!");
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+    
+    if(copyList2.size())
+    {
+      DBGLN("INTERRUPT #2 HAS SERIES OF DATA!");
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+    
+    if(copyList3.size())
+    {
+      DBGLN("INTERRUPT #3 HAS SERIES OF DATA!");
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+    
+
+    // если в каком-то из списков есть данные - значит, одно из прерываний сработало,
+    // в этом случае мы должны сообщить обработчику, что данные есть. При этом мы
+    // не в ответе за то, что делает сейчас обработчик - пускай сам правильно разруливает ситуацию.
+
+    bool wantToInformHandler = handler && (copyList1.size() || copyList2.size() || copyList3.size());
+
+    if(wantToInformHandler)
+    {
+      handler->OnInterruptRaised(copyList1, 0);
+      handler->OnInterruptRaised(copyList2, 1);
+      handler->OnInterruptRaised(copyList3, 2);
+      
+       // сообщаем обработчику, что данные в каком-то из списков есть
+       handler->OnHaveInterruptData();
+      
+    }    
+      
   }
 
 }
@@ -58,119 +121,34 @@ void InterruptHandlerClass::update()
 void InterruptHandlerClass::setHandler(InterruptEventHandler* h)
 {
   // устанавливаем обработчика результатов прерываний.
-  // при этом очищаем локальные списки, т.к. будет установлен новый обработчик.
-  pause();
-
   handler = h;
-  list1.clear();
-  list2.clear();
-  list3.clear();
-
-  resume();
-}
-//--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::sendDataToHandler(const InterruptTimeList& list, uint8_t listNumber)
-{
-  DBG(F("InterruptHandler, list done="));
-  DBGLN(listNumber);
-
-  if(!handler)
-    return;
-
-  handler->OnInterruptRaised(list, listNumber);
-
-}
-//--------------------------------------------------------------------------------------------------------------------------------------
-uint8_t InterruptHandlerClass::handleList(uint8_t interruptNumber)
-{
-
-  InterruptTimeList* list = NULL;
-  uint8_t listNum = 0;
-
-  // ВОТ ЭТО ТУТ ЗАЧЕМ?
- // delayMicroseconds(5000);
-  
-  switch(interruptNumber)
-  {
-    case 0:
-    {
-      list = &list1;
-      listNum = 0;
-    }
-    break;
-    
-    case 1:
-    {
-      list = &list2;
-      listNum = 1;
-    }
-    break;
-    case 2:
-    {
-      list = &list3;
-      listNum = 2;
-    }
-    break;
-  } // switch
-
-  if(!list)
-    return 0;
-
-
-  noInterrupts();
-
-  if(!list->size())
-  {
-    interrupts();
-    return 0;
-  }
-  
-  // в списке есть записи, проверяем - давно ли туда поступало последнее значение?
-  uint32_t lastDataAt = (*list)[list->size()-1];
-  interrupts();
-
-  uint8_t result = 0;
-  if(micros() - lastDataAt > INTERRUPT_MAX_IDLE_TIME)
-  {
-
-    // импульсы на входе закончились, надо список импульсов отправить в экран, а локальный - почистить.
-    // для этого делаем копию импульсов
-    noInterrupts();
-    InterruptTimeList copyList = *list;
-    list->clear();
-    interrupts();
-
-    result = 1;
-    // здесь можем безопасно отправлять на экран
-    sendDataToHandler(copyList, listNum);
-  }
-
-  return result;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
 {
-
-  if(bPaused) // на паузе
-    return;
   
   // запоминаем время, когда произошло прерывание, в нужный список
+  uint32_t now = micros();
+  
   switch(interruptNumber)
   {
     case 0:
     {
-      list1.push_back(micros());
+      list1.push_back(now);
+      list1LastDataAt = now;
     }
     break;
     
     case 1:
     {
-      list2.push_back(micros());
+      list2.push_back(now);
+      list2LastDataAt = now;
     }
     break;
     case 2:
     {
-      list3.push_back(micros());
+      list3.push_back(now);
+      list3LastDataAt = now;
     }
     break;
   } // switch
