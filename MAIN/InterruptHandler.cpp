@@ -78,19 +78,19 @@ void InterruptHandlerClass::update()
     interrupts();
 
     // теперь смотрим - надо ли нам самим чего-то обрабатывать?
-    if(copyList1.size())
+    if(copyList1.size() > 1)
     {
       DBGLN("INTERRUPT #1 HAS SERIES OF DATA!");
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
     }
     
-    if(copyList2.size())
+    if(copyList2.size() > 1)
     {
       DBGLN("INTERRUPT #2 HAS SERIES OF DATA!");
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
     }
     
-    if(copyList3.size())
+    if(copyList3.size() > 1)
     {
       DBGLN("INTERRUPT #3 HAS SERIES OF DATA!");
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
@@ -101,7 +101,7 @@ void InterruptHandlerClass::update()
     // в этом случае мы должны сообщить обработчику, что данные есть. При этом мы
     // не в ответе за то, что делает сейчас обработчик - пускай сам правильно разруливает ситуацию.
 
-    bool wantToInformHandler = handler && (copyList1.size() || copyList2.size() || copyList3.size());
+    bool wantToInformHandler = handler && ( (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
 
     if(wantToInformHandler)
     {

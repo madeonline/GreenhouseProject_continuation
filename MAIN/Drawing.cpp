@@ -177,16 +177,24 @@ Chart::~Chart()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Chart::draw()
 {
+  stopped = false;
+    
   for(int i=0;i<xPoints;i++)
   {
     for(size_t k=0;k<series.size();k++)
     {
       series[k]->clearLine(i);
+      
+      if(stopped)
+        return;
     }
     
     for(size_t k=0;k<series.size();k++)
     {
       series[k]->drawLine(i);
+      
+      if(stopped)
+        return;
     }
     
   }

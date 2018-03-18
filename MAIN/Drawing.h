@@ -98,6 +98,9 @@ class Chart
       // рисует все серии
       void draw();
 
+     // прекращает отрисовку
+     void stopDraw() { stopped = true; }
+
     protected:
     
       friend class ChartSerie;
@@ -115,6 +118,8 @@ class Chart
 
 
     private:
+
+    bool stopped;
 
     uint16_t xPoints, yPoints;
     byte* pixelsHits;

@@ -22,7 +22,7 @@ void loopADC()
   if (sampler.available()) 
   {
     int bufferLength = 0;
-    uint16_t* cBuf = sampler.getFilledBuffer(&bufferLength);    // Получить буффер с данными
+    uint16_t* cBuf = sampler.getFilledBuffer(&bufferLength);    // Получить буфер с данными
     
     uint16_t countOfPoints = bufferLength/3;
     uint16_t* serie1 = new uint16_t[countOfPoints];
@@ -43,7 +43,7 @@ void loopADC()
     if(mainScreen && mainScreen->isActive())
     {
       mainScreen->addPoints(serie1, serie2, serie3, countOfPoints);      
-      //mainScreen->DrawChart();
+      mainScreen->DrawChart();
     }
     else
     {
@@ -72,6 +72,10 @@ Screen1::Screen1() : AbstractTFTScreen("Main")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::onDeactivate()
 {
+  // прекращаем отрисовку графика
+  DBGLN(F("Main screen: STOP draw chart!"));
+  chart.stopDraw();
+  
   // станем неактивными, надо выключить обработчика результатов прерываний
   InterruptHandler.setHandler(NULL);
 }

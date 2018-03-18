@@ -7,7 +7,7 @@ ButtonsList Buttons;
 //--------------------------------------------------------------------------------------------------
 ButtonsList::ButtonsList()
 {
-  
+  inited = false;
 }
 //--------------------------------------------------------------------------------------------------
 void ButtonsList::begin()
@@ -16,10 +16,15 @@ void ButtonsList::begin()
   blue1Button.begin(BUTTON_BLUE1);
   blue2Button.begin(BUTTON_BLUE2);
   yellowButton.begin(BUTTON_YELLOW);
+
+  inited = true;
 }
 //--------------------------------------------------------------------------------------------------
 void ButtonsList::update()
 {
+  if(!inited)
+    return;
+    
   redButton.update();
   blue1Button.update();
   blue2Button.update();

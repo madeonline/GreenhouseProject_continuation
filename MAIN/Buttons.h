@@ -16,6 +16,8 @@ class ButtonsList
     Button blue1Button;
     Button blue2Button;
     Button yellowButton;
+
+    bool inited;
     
 };
 //--------------------------------------------------------------------------------------------------

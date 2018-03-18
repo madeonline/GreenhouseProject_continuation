@@ -70,66 +70,6 @@ void setup()
   Buttons.begin();
 
 
-  ////////////////////////////////////////////////////////////////////////////////
-  //// ТЕСТОВЫЙ КОД ПРОВЕРКИ ГРАФИКОВ ПРЕРЫВАНИЙ
-  ////////////////////////////////////////////////////////////////////////////////
-  //InterruptTimeList it1;
-  //it1.push_back(10);
-  //it1.push_back(40);
-  //it1.push_back(50);
-  //it1.push_back(80);
-  //it1.push_back(100);
-  //it1.push_back(150);
-  //it1.push_back(220);
-  //it1.push_back(260);
-  //it1.push_back(300);
-  //it1.push_back(320);
-  //it1.push_back(330);
-  //it1.push_back(335);
-  //it1.push_back(350);
-  //it1.push_back(400);
-  //it1.push_back(420);
-  //it1.push_back(480);
-  //it1.push_back(560);
-  //it1.push_back(800);
-  //it1.push_back(850);
-  //it1.push_back(1000);
-  //it1.push_back(1200);
-  //it1.push_back(1250);
-  //it1.push_back(1400);
-  //it1.push_back(1440);
-  //it1.push_back(1725);
-  //it1.push_back(1800);
-  //it1.push_back(2091);
-  //it1.push_back(2222);
-  //it1.push_back(2453);
-  //it1.push_back(2921);
-
-  //InterruptTimeList it2;
-  //it2.push_back(30);
-  //it2.push_back(200);
-  //it2.push_back(300);
-  //it2.push_back(350);
-  //it2.push_back(380);
-
-
-  //InterruptTimeList it3;
-  //it3.push_back(5);
-  //it3.push_back(15);
-  //it3.push_back(48);
-  //it3.push_back(60);
-  //it3.push_back(120);
-  //it3.push_back(232);
-  //it3.push_back(500);
-
-  //ScreenInterrupt->setList(it1,0);
-  //ScreenInterrupt->setList(it2,1);
-  //ScreenInterrupt->setList(it3,2);
-  //ScreenInterrupt->showChart();
-  //////////////////////////////////////////////////////////////////////////////
-  // ЗАКОНЧЕН
-  //////////////////////////////////////////////////////////////////////////////
-
   DBGLN(F("Inited."));
 
 }
