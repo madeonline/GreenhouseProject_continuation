@@ -8,12 +8,12 @@
 #define INTERRUPT2_PIN 8
 #define INTERRUPT3_PIN 35
 
-#define INTERRUPT_MAX_IDLE_TIME 50000 // время, в микросекундах, после получения последнего импульса и до момента, когда будет принято решение, что импульсы на входе закончились
-#define INTERRUPT_SCREEN_SEE_TIME 2000 // сколько миллисекунд демонстрировать экран с графиками прерываний?
-#define INTERRUPT_CHART_X_POINTS 150 // кол-во точек по X на графике прерываний
-#define INTERRUPT_CHART_Y_POINTS 100 // кол-во точек по Y на графике прерываний
-#define INTERRUPT_CHART_X_COORD 5 // Х-координата графика прерываний на экране
-#define INTERRUPT_CHART_Y_COORD 120 // стартовая Y-координата графика прерываний на экране
+#define INTERRUPT_MAX_IDLE_TIME 1500000    // время, в микросекундах, после получения последнего импульса и до момента, когда будет принято решение, что импульсы на входе закончились
+#define INTERRUPT_SCREEN_SEE_TIME 2000    // сколько миллисекунд демонстрировать экран с графиками прерываний?
+#define INTERRUPT_CHART_X_POINTS 150      // кол-во точек по X на графике прерываний
+#define INTERRUPT_CHART_Y_POINTS 100      // кол-во точек по Y на графике прерываний
+#define INTERRUPT_CHART_X_COORD 5         // Х-координата графика прерываний на экране
+#define INTERRUPT_CHART_Y_COORD 120       // стартовая Y-координата графика прерываний на экране
 
 // стартовые координаты верхнего/левого угла сетки
 #define INTERRUPT_CHART_GRID_X_START 5 
