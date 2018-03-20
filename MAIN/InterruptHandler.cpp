@@ -1,6 +1,7 @@
 #include "InterruptHandler.h"
 #include "InterruptScreen.h"
 #include "ConfigPin.h"
+#include "InfoDiodes.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -81,18 +82,30 @@ void InterruptHandlerClass::update()
     if(copyList1.size() > 1)
     {
       DBGLN("INTERRUPT #1 HAS SERIES OF DATA!");
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+        
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
     }
     
     if(copyList2.size() > 1)
     {
       DBGLN("INTERRUPT #2 HAS SERIES OF DATA!");
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+       
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
     }
     
     if(copyList3.size() > 1)
     {
       DBGLN("INTERRUPT #3 HAS SERIES OF DATA!");
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+       
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
     }
     
