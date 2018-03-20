@@ -118,9 +118,18 @@ void InterruptHandlerClass::update()
 
     if(wantToInformHandler)
     {
+      DBGLN(F("InterruptHandlerClass - wantToInformHandler"));
+      
+      DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 0"));
       handler->OnInterruptRaised(copyList1, 0);
+
+      DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 1"));
       handler->OnInterruptRaised(copyList2, 1);
+      
+      DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 2"));
       handler->OnInterruptRaised(copyList3, 2);
+
+      DBGLN(F("InterruptHandlerClass - call OnHaveInterruptData"));
       
        // сообщаем обработчику, что данные в каком-то из списков есть
        handler->OnHaveInterruptData();
@@ -133,6 +142,8 @@ void InterruptHandlerClass::update()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::setHandler(InterruptEventHandler* h)
 {
+  DBGLN(F("InterruptHandlerClass::setHandler"));
+  
   // устанавливаем обработчика результатов прерываний.
   handler = h;
 }

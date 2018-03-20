@@ -24,12 +24,14 @@ InterruptScreen::InterruptScreen() : AbstractTFTScreen("INTERRUPT")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::onDeactivate()
 {
+  DBGLN(F("InterruptScreen::onDeactivate"));
     // после деактивирования нашего экрана мы опять можем принимать данные прерываний, чтобы показать новые графики
     canAcceptInterruptData = true;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::OnHaveInterruptData()
 {
+  DBGLN(F("InterruptScreen::OnHaveInterruptData"));
   // пришло событие, что хотя бы одно из прерываний заполнено серией измерений.
   // в этом случае, раз мы являемся активным подписчиком класса обработки прерываний - 
   // мы должны показать график на экране.
@@ -56,6 +58,7 @@ void InterruptScreen::OnHaveInterruptData()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum)
 {
+  DBGLN(F("InterruptScreen::OnInterruptRaised"));
 
   if(!canAcceptInterruptData)
   {
@@ -114,6 +117,8 @@ void InterruptScreen::doUpdate(TFTMenu* menu)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::drawSerie(Points& serie,RGBColor color)
 {
+  DBGLN(F("InterruptScreen::drawSerie"));
+  
   if(serie.size() < 2 || !isActive()) // низзя рисовать
     return;
    
@@ -135,6 +140,7 @@ void InterruptScreen::drawSerie(Points& serie,RGBColor color)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::computeSerie(InterruptTimeList& timeList,Points& serie, uint16_t xOffset, uint16_t yOffset)
 {
+  DBGLN(F("InterruptScreen::computeSerie"));
   // освобождаем серию
   serie.empty();
 
@@ -222,7 +228,7 @@ void InterruptScreen::computeSerie(InterruptTimeList& timeList,Points& serie, ui
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::computeChart()
 {
-
+  DBGLN(F("InterruptScreen::computeChart"));
  /*
   Формируем график
   Ось X время регистрации всех импульсов (общее время хода линейки, перемещения траверсы).
@@ -252,6 +258,7 @@ void InterruptScreen::computeChart()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::drawChart()
 {
+  DBGLN(F("InterruptScreen::drawChart"));
   // рисуем сетку
   int gridX = INTERRUPT_CHART_GRID_X_START; // начальная координата сетки по X
   int gridY = INTERRUPT_CHART_GRID_Y_START; // начальная координата сетки по Y
