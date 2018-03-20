@@ -43,7 +43,7 @@ void loopADC()
     if(mainScreen && mainScreen->isActive())
     {
       mainScreen->addPoints(serie1, serie2, serie3, countOfPoints);      
-     // mainScreen->DrawChart();
+      mainScreen->DrawChart();
     }
     else
     {
@@ -73,10 +73,7 @@ Screen1::Screen1() : AbstractTFTScreen("Main")
 void Screen1::onDeactivate()
 {
   // прекращаем отрисовку графика
-  DBGLN(F("Main screen: STOP draw chart!"));
   chart.stopDraw();
-
-  DBGLN(F("Screen1 - call InterruptHandler.setHandler(NULL)"));
   
   // станем неактивными, надо выключить обработчика результатов прерываний
   InterruptHandler.setHandler(NULL);
@@ -84,7 +81,6 @@ void Screen1::onDeactivate()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::onActivate()
 {
-  DBGLN(F("Screen1 - call InterruptHandler.setHandler(ScreenInterrupt)"));
   // мы активизируемся, назначаем обработчика результатов прерываний
   InterruptHandler.setHandler(ScreenInterrupt);
   

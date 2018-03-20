@@ -141,9 +141,7 @@ void InterruptHandlerClass::update()
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::setHandler(InterruptEventHandler* h)
-{
-  DBGLN(F("InterruptHandlerClass::setHandler"));
-  
+{  
   // устанавливаем обработчика результатов прерываний.
   handler = h;
 }

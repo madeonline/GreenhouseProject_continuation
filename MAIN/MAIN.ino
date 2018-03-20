@@ -28,8 +28,6 @@ void setup()
   RealtimeClock.begin(1);           // запускаем их на шине I2C 1 (SDA1, SCL1);
  // RealtimeClock.setTime(0,1,11,1,7,2,2018);
 
-  Screen.setup();
-
 
   DBGLN(F("Init screen..."));
   Screen.setup();
@@ -38,7 +36,6 @@ void setup()
 
   Screen.addScreen(Screen1::create());           // первый экран покажется по умолчанию
   DBGLN(F("Add screen2..."));
-
   // добавляем второй экран
   Screen.addScreen(Screen2::create());
   DBGLN(F("Add screen3..."));
@@ -60,14 +57,14 @@ void setup()
   // переключаемся на первый экран
   Screen.switchToScreen("Main");
 
-  // поднимаем наши прерывания - РАСКОММЕНТИРОВАТЬ И ЗАКОММЕНТИРОВАТЬ ТЕСТОВЫЙ КОД НИЖЕ!!!
-  InterruptHandler.begin();
-
   // настраиваем информационные диоды
   InfoDiodes.begin();
 
   // настраиваем железные кнопки
   Buttons.begin();
+
+  // поднимаем наши прерывания
+  InterruptHandler.begin();
 
 
   DBGLN(F("Inited."));
@@ -89,6 +86,7 @@ void yield()
 {
    // обновляем прерывания
    InterruptHandler.update();
+   
    Buttons.update();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

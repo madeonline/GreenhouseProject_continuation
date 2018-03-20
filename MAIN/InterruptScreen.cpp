@@ -24,7 +24,6 @@ InterruptScreen::InterruptScreen() : AbstractTFTScreen("INTERRUPT")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::onDeactivate()
 {
-  DBGLN(F("InterruptScreen::onDeactivate"));
     // после деактивирования нашего экрана мы опять можем принимать данные прерываний, чтобы показать новые графики
     canAcceptInterruptData = true;
 }
@@ -87,12 +86,15 @@ void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t l
   
   // для теста - печатаем в Serial
   #ifdef _DEBUG
-  
-    DBGLN("INTERRUPT DATA >>");
-    
-    for(size_t i=0;i<list.size();i++)
+
+    if(list.size() > 1)
     {
-      DBGLN(list[i]);
+      DBGLN("INTERRUPT DATA >>");
+      
+      for(size_t i=0;i<list.size();i++)
+      {
+        DBGLN(list[i]);
+      }
     }
 
     DBGLN("<< END OF INTERRUPT DATA");
@@ -284,14 +286,7 @@ void InterruptScreen::drawChart()
 void InterruptScreen::doDraw(TFTMenu* menu)
 {
   drawChart();
-  /*
-  UTFT* dc = menu->getDC();
-  dc->setColor(VGA_MAROON);
-  //dc->setBackColor(VGA_WHITE);
-  dc->setBackColor(VGA_BLACK);
-   // тут рисуем, что надо именно нам, кнопки прорисуются сами после того, как мы тут всё отрисуем
- // menu->print("Экран номер 2", 10, 0);
- */
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
