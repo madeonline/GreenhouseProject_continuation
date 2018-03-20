@@ -22,7 +22,7 @@ void Interrupt3Handler()
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
 {
-  handler = NULL;
+  subscriber = NULL;
   list1LastDataAt = 0;
   list2LastDataAt = 0;
   list3LastDataAt = 0;
@@ -114,25 +114,25 @@ void InterruptHandlerClass::update()
     // в этом случае мы должны сообщить обработчику, что данные есть. При этом мы
     // не в ответе за то, что делает сейчас обработчик - пускай сам правильно разруливает ситуацию.
 
-    bool wantToInformHandler = handler && ( (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
+    bool wantToInformSubscriber = subscriber && ( (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
 
-    if(wantToInformHandler)
+    if(wantToInformSubscriber)
     {
       DBGLN(F("InterruptHandlerClass - wantToInformHandler"));
       
       DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 0"));
-      handler->OnInterruptRaised(copyList1, 0);
+      subscriber->OnInterruptRaised(copyList1, 0);
 
       DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 1"));
-      handler->OnInterruptRaised(copyList2, 1);
+      subscriber->OnInterruptRaised(copyList2, 1);
       
       DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 2"));
-      handler->OnInterruptRaised(copyList3, 2);
+      subscriber->OnInterruptRaised(copyList3, 2);
 
       DBGLN(F("InterruptHandlerClass - call OnHaveInterruptData"));
       
        // сообщаем обработчику, что данные в каком-то из списков есть
-       handler->OnHaveInterruptData();
+       subscriber->OnHaveInterruptData();
       
     }    
       
@@ -140,10 +140,10 @@ void InterruptHandlerClass::update()
 
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::setHandler(InterruptEventHandler* h)
+void InterruptHandlerClass::setSubscriber(InterruptEventSubscriber* h)
 {  
-  // устанавливаем обработчика результатов прерываний.
-  handler = h;
+  // устанавливаем подписчика результатов прерываний.
+  subscriber = h;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)

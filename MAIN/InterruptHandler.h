@@ -12,7 +12,7 @@ typedef Vector<uint32_t> InterruptTimeList;
 // серий прерываний, и что-то там с ними делает; по выходу с экрана обработчиком результатов прерываний опять назначается экран с 
 // графиками. Т.е. имеем гибкий инструмент, кмк.
 //--------------------------------------------------------------------------------------------------------------------------------------
-struct InterruptEventHandler
+struct InterruptEventSubscriber
 {
   // вызывается, когда прерывания на нужном номере завершены, и накоплена статистика
   virtual void OnInterruptRaised(const InterruptTimeList& list, uint8_t interruptNumber) = 0;
@@ -29,7 +29,7 @@ class InterruptHandlerClass
    void begin();
    void update();
 
-   void setHandler(InterruptEventHandler* h);
+   void setSubscriber(InterruptEventSubscriber* h);
 
    void handleInterrupt(uint8_t interruptNumber);
 
@@ -44,7 +44,7 @@ private:
   uint32_t list2LastDataAt;
   uint32_t list3LastDataAt;
 
-  InterruptEventHandler* handler;
+  InterruptEventSubscriber* subscriber;
 
 };
 //--------------------------------------------------------------------------------------------------------------------------------------

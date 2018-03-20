@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef Vector<Point> Points;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class InterruptScreen : public AbstractTFTScreen, public InterruptEventHandler
+class InterruptScreen : public AbstractTFTScreen, public InterruptEventSubscriber
 {
   public:
 
