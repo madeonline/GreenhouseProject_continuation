@@ -42,8 +42,7 @@ void loopADC()
 
     if(mainScreen && mainScreen->isActive())
     {
-      mainScreen->addPoints(serie1, serie2, serie3, countOfPoints);      
-      mainScreen->DrawChart();
+      mainScreen->requestToDrawChart(serie1, serie2, serie3, countOfPoints);      
     }
     else
     {
@@ -68,6 +67,8 @@ Screen1::Screen1() : AbstractTFTScreen("Main")
   points1 = NULL;
   points2 = NULL;
   points3 = NULL;
+  canDrawChart = false;
+  inDrawingChart = false;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::onDeactivate()
@@ -138,6 +139,8 @@ void Screen1::doUpdate(TFTMenu* menu)
 {
 	
   drawTime(menu);
+  drawChart();
+
   loopADC();
 	// тут обновляем внутреннее состояние
 }
@@ -207,33 +210,42 @@ uint16_t Screen1::getSynchroPoint(uint16_t* points, uint16_t pointsCount)
  return ( (&(points[iterator]) - points) );  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void Screen1::addPoints(uint16_t* _points1,   uint16_t* _points2,  uint16_t* _points3, uint16_t pointsCount)
+void Screen1::requestToDrawChart(uint16_t* _points1,   uint16_t* _points2,  uint16_t* _points3, uint16_t pointsCount)
 {
-    delete [] points1;
-    points1 = _points1;
+  if(inDrawingChart)
+  {
+    chart.stopDraw();
+  }
 
-    delete [] points2;
-    points2 = _points2;
-    
-    delete [] points3;
-    points3 = _points3;
+  canDrawChart = true;
+  inDrawingChart = false;
+  
+  delete [] points1;
+  points1 = _points1;
+
+  delete [] points2;
+  points2 = _points2;
+  
+  delete [] points3;
+  points3 = _points3;
 
 
-    int shift = getSynchroPoint(points1,pointsCount);
-    int totalPoint = min(CHART_POINTS_COUNT, (pointsCount - shift));
+  int shift = getSynchroPoint(points1,pointsCount);
+  int totalPoint = min(CHART_POINTS_COUNT, (pointsCount - shift));
 
-    serie1->setPoints(&(points1[shift]), totalPoint);
-    serie2->setPoints(&(points2[shift]), totalPoint);
-    serie3->setPoints(&(points3[shift]), totalPoint);
+  serie1->setPoints(&(points1[shift]), totalPoint);
+  serie2->setPoints(&(points2[shift]), totalPoint);
+  serie3->setPoints(&(points3[shift]), totalPoint);
     
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void Screen1::DrawChart()
+void Screen1::drawChart()
 {
-  if(!isActive())
+  if(!isActive() || !canDrawChart)
     return;
-    
+
+  inDrawingChart = true;    
 	// рисуем сетку
 	int gridX = 5; // начальная координата сетки по X
 	int gridY = 20; // начальная координата сетки по Y
@@ -247,7 +259,10 @@ void Screen1::DrawChart()
 	// вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
 	Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
 
-	chart.draw();// просим график отрисовать наши серии  
+	chart.draw();// просим график отрисовать наши серии
+
+  inDrawingChart = false;
+  canDrawChart = false;
 
 }
 

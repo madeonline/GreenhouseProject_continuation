@@ -18,8 +18,7 @@ class Screen1 : public AbstractTFTScreen
     return new Screen1();
   }
   
-  void DrawChart(); // рисуем наши графики
-  void addPoints( uint16_t* points1,   uint16_t* points2,  uint16_t* points3, uint16_t pointsCount);
+  void requestToDrawChart( uint16_t* points1,   uint16_t* points2,  uint16_t* points3, uint16_t pointsCount);
 
    virtual void onActivate();
    virtual void onDeactivate();
@@ -35,6 +34,10 @@ protected:
 
 private:
     Screen1();
+
+    void drawChart(); // рисуем наши графики
+    bool canDrawChart;
+    bool inDrawingChart;
     
 	  int getFreeMemory();
 	  int oldsecond;

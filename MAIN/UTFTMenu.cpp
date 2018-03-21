@@ -53,6 +53,8 @@ void AbstractTFTScreen::draw(TFTMenu* menu)
 TFTMenu::TFTMenu()
 {
   currentScreenIndex = -1;
+  requestedToActiveScreen = NULL;
+  requestedToActiveScreenIndex = -1;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void TFTMenu::addScreen(AbstractTFTScreen* screen)
@@ -97,6 +99,27 @@ int TFTMenu::print(const char* str,int x, int y, int deg, bool computeStringLeng
 void TFTMenu::update()
 {
 
+  if(requestedToActiveScreen != NULL)
+  {
+    // попросили сделать экран активным
+    AbstractTFTScreen* screen = requestedToActiveScreen;
+    currentScreenIndex = requestedToActiveScreenIndex;
+    
+    requestedToActiveScreen = NULL;
+    
+    screen->setActive(true);
+    screen->onActivate();
+
+    tftDC->setBackColor(TFT_BACK_COLOR);
+    tftDC->fillScr(TFT_BACK_COLOR); // clear screen first
+
+    screen->update(this);
+    screen->draw(this);
+    
+    return;
+    
+  } // if(requestedToActiveScreen != NULL)
+
   if(currentScreenIndex == -1) // ни разу не рисовали ещё ничего, исправляемся
   {
     if(screens.size())
@@ -115,6 +138,10 @@ void TFTMenu::update()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void TFTMenu::switchToScreen(AbstractTFTScreen* screen)
 {
+
+  if(requestedToActiveScreen != NULL) // ждём переключения на новый экран
+    return;
+  
   if(currentScreenIndex > -1 && screens.size())
   {
      AbstractTFTScreen* si = screens[currentScreenIndex];
@@ -126,6 +153,9 @@ void TFTMenu::switchToScreen(AbstractTFTScreen* screen)
   {
     if(screens[i] == screen)
     {
+      requestedToActiveScreen = screen;
+      requestedToActiveScreenIndex = i;
+      /*
       currentScreenIndex = i;
 
       screen->setActive(true);
@@ -136,6 +166,7 @@ void TFTMenu::switchToScreen(AbstractTFTScreen* screen)
 
       screen->update(this);
       screen->draw(this);
+      */
       break;
     }
   }  

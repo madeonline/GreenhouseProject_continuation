@@ -80,6 +80,9 @@ public:
 
 private:
 
+  AbstractTFTScreen* requestedToActiveScreen;
+  int requestedToActiveScreenIndex;
+  
   TFTScreensList screens;
   UTFT* tftDC;
   URTouch* tftTouch;
