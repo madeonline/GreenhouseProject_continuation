@@ -35,6 +35,23 @@ void InterruptHandlerClass::begin()
   attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler,RISING);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
+void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
+{
+  if(list.size() < 2)
+    return;
+
+  // нормализуем список, переводя из сохранённых micros в интервалы между импульсами
+  uint32_t saved = list[0];
+  list[0] = 0;
+
+  for(size_t i=1;i<list.size();i++)
+  {
+    uint32_t thisSaved = list[i];
+    list[i] = (list[i] - saved);
+    saved = thisSaved;
+  }
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::update()
 {
   
@@ -75,6 +92,10 @@ void InterruptHandlerClass::update()
   
       InterruptTimeList copyList3 = list3;
       list3.clear();
+
+      normalizeList(copyList1);
+      normalizeList(copyList2);
+      normalizeList(copyList3);
 
     interrupts();
 

@@ -46,6 +46,8 @@ private:
 
   InterruptEventSubscriber* subscriber;
 
+  void normalizeList(InterruptTimeList& list);
+
 };
 //--------------------------------------------------------------------------------------------------------------------------------------
 extern InterruptHandlerClass InterruptHandler;
