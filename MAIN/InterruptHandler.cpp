@@ -40,15 +40,13 @@ void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
   if(list.size() < 2)
     return;
 
-  // нормализуем список, переводя из сохранённых micros в интервалы между импульсами
-  uint32_t saved = list[0];
+  // нормализуем список относительно первого значения
+  uint32_t first = list[0];
   list[0] = 0;
 
   for(size_t i=1;i<list.size();i++)
   {
-    uint32_t thisSaved = list[i];
-    list[i] = (list[i] - saved);
-    saved = thisSaved;
+    list[i] = (list[i] - first);
   }
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
