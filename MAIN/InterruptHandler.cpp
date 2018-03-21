@@ -12,12 +12,12 @@ void Interrupt1Handler()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt2Handler()
 {
- // InterruptHandler.handleInterrupt(1);
+  InterruptHandler.handleInterrupt(1);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt3Handler()
 {
- // InterruptHandler.handleInterrupt(2);
+  InterruptHandler.handleInterrupt(2);
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
