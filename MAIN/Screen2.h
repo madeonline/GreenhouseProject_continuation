@@ -24,7 +24,223 @@ protected:
 private:
       Screen2();
 
-      int backButton, sdFormatButton, sdInfoButton, filesButton, ethalonButton;
+      int backButton, /*sdFormatButton, sdInfoButton, filesButton, ethalonButton*/ filesButton, sdScreenButton, systemScreenButton, paramsScreenButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class FilesScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new FilesScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      FilesScreen();
+
+      int filesListButton, ethalonScreenButton, viewLogButton, clearDataButton, backButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class FilesListScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new FilesListScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      FilesListScreen();
+
+      int viewChartsButton, backButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class ClearDataScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new ClearDataScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      ClearDataScreen();
+
+      int clearDataButton, backButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class SDScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new SDScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      SDScreen();
+
+      int sdInfoButton, formatSDButton, backButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class SystemScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new SystemScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      SystemScreen();
+
+      int communicateButton, backButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class CommunicateScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new CommunicateScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      CommunicateScreen();
+
+      int rs485Button, wiFiButton, backButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class ParamsScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new ParamsScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      ParamsScreen();
+
+      int inductiveSensorButton, transformerButton, backButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class InductiveSensorScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new InductiveSensorScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      InductiveSensorScreen();
+
+      int pulsesCountButton, pulseDeltaButton, motoresourceButton, backButton;
+  
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class TransformerScreen : public AbstractTFTScreen
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new TransformerScreen();
+  }
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      TransformerScreen();
+
+      int borderMaxButton, borderMinButton, backButton;
   
   
 };
@@ -48,7 +264,7 @@ protected:
 private:
       EthalonScreen();
 
-      int backButton, recordButton;
+      int viewEthalonButton, createEthalonButton, singleButton, ethalonFlagButton, backButton;
   
   
 };
@@ -210,7 +426,7 @@ struct FileEntry
 #define SCREEN_FILES_COUNT 5 // кол-во файлов на одном экране
 #define LOGS_DIRECTORY "/LOGS" // папка, в которой лежат логи
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class SDFilesScreen : public AbstractTFTScreen
+class ViewLogScreen : public AbstractTFTScreen
 {
   public:
 
@@ -226,8 +442,8 @@ protected:
     virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
 
 private:
-      SDFilesScreen();
-      ~SDFilesScreen();
+      ViewLogScreen();
+      ~ViewLogScreen();
 
       int backButton;
       bool hasSD;

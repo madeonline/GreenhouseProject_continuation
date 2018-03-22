@@ -4,7 +4,7 @@
 #include "TinyVector.h"
 #include "CONFIG.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SDFilesScreen* FilesScreen = NULL;
+ViewLogScreen* ViewLogScreenInstance = NULL;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Screen2::Screen2() : AbstractTFTScreen("Settings")
 {
@@ -14,16 +14,26 @@ void Screen2::doSetup(TFTMenu* menu)
 {
   // тут настраиваемся, например, можем добавлять кнопки
   filesButton = screenButtons->addButton(5, 2, 210, 30, "Файлы");
-  sdInfoButton = screenButtons->addButton(5, 37, 210, 30, "SD-инфо");
-  sdFormatButton = screenButtons->addButton( 5, 72, 210, 30, "Формат SD");
-  ethalonButton = screenButtons->addButton(5, 107, 210, 30, "Эталоны");
+  sdScreenButton = screenButtons->addButton(5, 37, 210, 30, "SD");
+  systemScreenButton = screenButtons->addButton( 5, 72, 210, 30, "Система");
+  paramsScreenButton = screenButtons->addButton(5, 107, 210, 30, "Параметры");
   backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
 
-  // добавляем подэкраны работы с SD
+
+  // добавляем разные подэкраны
+  Screen.addScreen(SDScreen::create());
   Screen.addScreen(SDInfoScreen::create());
   Screen.addScreen(SDFormatScreen::create());
-  Screen.addScreen(SDFilesScreen::create());
+  Screen.addScreen(ViewLogScreen::create());
   Screen.addScreen(EthalonScreen::create());
+  Screen.addScreen(FilesScreen::create());
+  Screen.addScreen(FilesListScreen::create());
+  Screen.addScreen(ClearDataScreen::create());
+  Screen.addScreen(SystemScreen::create());
+  Screen.addScreen(CommunicateScreen::create());
+  Screen.addScreen(ParamsScreen::create());
+  Screen.addScreen(InductiveSensorScreen::create());
+  Screen.addScreen(TransformerScreen::create());
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen2::doUpdate(TFTMenu* menu)
@@ -39,25 +49,377 @@ void Screen2::onButtonPressed(TFTMenu* menu, int pressedButton)
   if(pressedButton == backButton)
     menu->switchToScreen("Main"); // переключаемся на главный экран
   else 
-  if(pressedButton == sdInfoButton)
-    menu->switchToScreen("SDInfo"); // переключаемся на экран информации о SD
+  if(pressedButton == sdScreenButton)
+    menu->switchToScreen("SDScreen"); // переключаемся на экран работы с SD
   else 
-  if(pressedButton == sdFormatButton)
-    menu->switchToScreen("SDFormat"); // переключаемся на экран форматирования SD
+  if(pressedButton == systemScreenButton)
+    menu->switchToScreen("SystemScreen"); // переключаемся на экран "Система"
   else 
   if(pressedButton == filesButton)
+     menu->switchToScreen("FilesScreen"); // переключаемся на экран "Файлы"
+  else 
+  if(pressedButton == paramsScreenButton)
+    menu->switchToScreen("ParamsScreen"); // переключаемся на экран "Параметры"
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// FilesScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FilesScreen::FilesScreen() : AbstractTFTScreen("FilesScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FilesScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  filesListButton = screenButtons->addButton(5, 2, 210, 30, "Список");
+  ethalonScreenButton = screenButtons->addButton(5, 37, 210, 30, "Эталоны");
+  viewLogButton = screenButtons->addButton( 5, 72, 210, 30, "Логи");
+  clearDataButton = screenButtons->addButton(5, 107, 210, 30, "Очистка");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FilesScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FilesScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FilesScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("Settings"); // переключаемся на экран настроек
+  else if(pressedButton == filesListButton)
+    menu->switchToScreen("FilesListScreen");
+  else if(pressedButton == ethalonScreenButton)
+    menu->switchToScreen("EthalonScreen");
+  else if(pressedButton == viewLogButton)
   {
-    FilesScreen->rescanFiles();
-    menu->switchToScreen(FilesScreen); // переключаемся на экран форматирования SD
+    ViewLogScreenInstance->rescanFiles();
+    menu->switchToScreen(ViewLogScreenInstance); // переключаемся на экран просмотра логов
   }
-  else
-  if(pressedButton == ethalonButton)
-    menu->switchToScreen("Ethalon"); // переключаемся на экран работы с эталонами
+  else if(pressedButton == clearDataButton)
+    menu->switchToScreen("ClearDataScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ClearDataScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ClearDataScreen::ClearDataScreen() : AbstractTFTScreen("ClearDataScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ClearDataScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  clearDataButton = screenButtons->addButton(5, 2, 210, 30, "Очистить");
+//  reserved = screenButtons->addButton(5, 37, 210, 30, "reserved");
+//  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ClearDataScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ClearDataScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ClearDataScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("FilesScreen"); // переключаемся на экран настроек
+  else if(pressedButton == clearDataButton)
+    menu->switchToScreen("StartClearDataScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// SDScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SDScreen::SDScreen() : AbstractTFTScreen("SDScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SDScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  sdInfoButton = screenButtons->addButton(5, 2, 210, 30, "SD-инфо");
+  formatSDButton = screenButtons->addButton(5, 37, 210, 30, "Формат SD");
+//  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SDScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SDScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SDScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("Settings"); // переключаемся на экран настроек
+  else if(pressedButton == sdInfoButton)
+    menu->switchToScreen("SDInfoScreen");
+  else if(pressedButton == formatSDButton)
+    menu->switchToScreen("FormatSDScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// SystemScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SystemScreen::SystemScreen() : AbstractTFTScreen("SystemScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SystemScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  communicateButton = screenButtons->addButton(5, 2, 210, 30, "Коммуникатор");
+//  reserved = screenButtons->addButton(5, 37, 210, 30, "reserved");
+//  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SystemScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SystemScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SystemScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("Settings"); // переключаемся на экран настроек
+  else if(pressedButton == communicateButton)
+    menu->switchToScreen("CommunicateScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// CommunicateScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CommunicateScreen::CommunicateScreen() : AbstractTFTScreen("CommunicateScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void CommunicateScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  rs485Button = screenButtons->addButton(5, 2, 210, 30, "RS485");
+  wiFiButton = screenButtons->addButton(5, 37, 210, 30, "WiFi");
+//  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void CommunicateScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void CommunicateScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void CommunicateScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("SystemScreen");
+  else if(pressedButton == rs485Button)
+    menu->switchToScreen("RS485Screen");
+  else if(pressedButton == wiFiButton)
+    menu->switchToScreen("WiFiScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ParamsScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ParamsScreen::ParamsScreen() : AbstractTFTScreen("ParamsScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ParamsScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  inductiveSensorButton = screenButtons->addButton(5, 2, 210, 30, "Инд. датчик");
+  transformerButton = screenButtons->addButton(5, 37, 210, 30, "Ток. транс.");
+//  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ParamsScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ParamsScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ParamsScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("Settings");
+  else if(pressedButton == inductiveSensorButton)
+    menu->switchToScreen("InductiveSensorScreen");
+  else if(pressedButton == transformerButton)
+    menu->switchToScreen("TransformerScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// InductiveSensorScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+InductiveSensorScreen::InductiveSensorScreen() : AbstractTFTScreen("InductiveSensorScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InductiveSensorScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  pulsesCountButton = screenButtons->addButton(5, 2, 210, 30, "Импульсы");
+  pulseDeltaButton = screenButtons->addButton(5, 37, 210, 30, "Дельта");
+  motoresourceButton = screenButtons->addButton( 5, 72, 210, 30, "Наработка");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InductiveSensorScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InductiveSensorScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InductiveSensorScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("ParamsScreen");
+  else if(pressedButton == pulsesCountButton)
+    menu->switchToScreen("PulsesCountScreen");
+  else if(pressedButton == pulseDeltaButton)
+    menu->switchToScreen("PulseDeltaScreenScreen");
+  else if(pressedButton == motoresourceButton)
+    menu->switchToScreen("MotoresourceScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// TransformerScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TransformerScreen::TransformerScreen() : AbstractTFTScreen("TransformerScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void TransformerScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  borderMaxButton = screenButtons->addButton(5, 2, 210, 30, "Порог мах.");
+  borderMinButton = screenButtons->addButton(5, 37, 210, 30, "Порог мин.");
+//  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void TransformerScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void TransformerScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void TransformerScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("ParamsScreen");
+  else if(pressedButton == borderMaxButton)
+    menu->switchToScreen("BorderMaxScreen");
+  else if(pressedButton == borderMinButton)
+    menu->switchToScreen("BorderMinScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// FilesListScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FilesListScreen::FilesListScreen() : AbstractTFTScreen("FilesListScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FilesListScreen::doSetup(TFTMenu* menu)
+{
+  // тут настраиваемся, например, можем добавлять кнопки
+  viewChartsButton = screenButtons->addButton(5, 2, 210, 30, "Графики");
+//  reserved = screenButtons->addButton(5, 37, 210, 30, "reserved");
+//  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FilesListScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FilesListScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FilesListScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("FilesScreen"); // переключаемся на экран настроек
+  else if(pressedButton == viewChartsButton)
+    menu->switchToScreen("ViewChartsScreen");
+    
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EthalonScreen
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-EthalonScreen::EthalonScreen() : AbstractTFTScreen("Ethalon")
+EthalonScreen::EthalonScreen() : AbstractTFTScreen("EthalonScreen")
 {
 
 }
@@ -65,7 +427,10 @@ EthalonScreen::EthalonScreen() : AbstractTFTScreen("Ethalon")
 void EthalonScreen::doSetup(TFTMenu* menu)
 {
 
-  recordButton = screenButtons->addButton(5, 2, 210, 30, "Нов. эталон");
+  viewEthalonButton = screenButtons->addButton(5, 2, 210, 30, "Просмотр");
+  createEthalonButton = screenButtons->addButton(5, 37, 210, 30, "Создание");
+  singleButton = screenButtons->addButton( 5, 72, 210, 30, "Однократный");
+  ethalonFlagButton = screenButtons->addButton(5, 107, 210, 30, "Флаг эталон");
   backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
 
 }
@@ -83,7 +448,15 @@ void EthalonScreen::doDraw(TFTMenu* menu)
 void EthalonScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("Settings"); // переключаемся на экран работы с SD
+    menu->switchToScreen("FilesScreen"); // переключаемся на экран работы с SD
+  else if(pressedButton == viewEthalonButton)
+    menu->switchToScreen("ViewEthalonScreen");    
+  else if(pressedButton == createEthalonButton)
+    menu->switchToScreen("CreateEthalonScreen");    
+  else if(pressedButton == singleButton)
+    menu->switchToScreen("SingleScreen");    
+  else if(pressedButton == ethalonFlagButton)
+    menu->switchToScreen("EthalonFlagScreen");    
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // FileEntry
@@ -133,18 +506,18 @@ String FileEntry::getName()
   return result;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// SDFilesScreen
+// ViewLogScreen
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-AbstractTFTScreen* SDFilesScreen::create()
+AbstractTFTScreen* ViewLogScreen::create()
 {
-  if(FilesScreen)
-    return FilesScreen;
+  if(ViewLogScreenInstance)
+    return ViewLogScreenInstance;
     
-  FilesScreen =  new SDFilesScreen();  
-  return FilesScreen;
+  ViewLogScreenInstance =  new ViewLogScreen();  
+  return ViewLogScreenInstance;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SDFilesScreen::SDFilesScreen() : AbstractTFTScreen("SDFiles")
+ViewLogScreen::ViewLogScreen() : AbstractTFTScreen("ViewLogScreen")
 {
   filesButtons = NULL;
   totalFilesCount = 0;
@@ -155,12 +528,12 @@ SDFilesScreen::SDFilesScreen() : AbstractTFTScreen("SDFiles")
   files = NULL;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SDFilesScreen::~SDFilesScreen()
+ViewLogScreen::~ViewLogScreen()
 {
   delete filesButtons;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::clearFiles()
+void ViewLogScreen::clearFiles()
 {
   if(!files)
     return;
@@ -172,7 +545,7 @@ void SDFilesScreen::clearFiles()
   files = NULL;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::sortFiles()
+void ViewLogScreen::sortFiles()
 {
   if(!files)
     return;
@@ -180,7 +553,7 @@ void SDFilesScreen::sortFiles()
   //TODO: Тут сортировка файлов!!!  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::showPage(int step)
+void ViewLogScreen::showPage(int step)
 {
   if(!files || !filesButtons)
     return;
@@ -218,7 +591,7 @@ void SDFilesScreen::showPage(int step)
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::rescanFiles()
+void ViewLogScreen::rescanFiles()
 {
   if(!hasSD)
     return;
@@ -277,7 +650,7 @@ void SDFilesScreen::rescanFiles()
    } // if(lastFilesCount != totalFilesCount)
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::drawCurrentPageNumber()
+void ViewLogScreen::drawCurrentPageNumber()
 {
   if(!isActive() || ! filesButtons || currentPageButton == -1)
     return;
@@ -290,7 +663,7 @@ void SDFilesScreen::drawCurrentPageNumber()
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::doSetup(TFTMenu* menu)
+void ViewLogScreen::doSetup(TFTMenu* menu)
 {
   // инициализируем SD
   hasSD = SDInit::InitSD();
@@ -333,7 +706,7 @@ void SDFilesScreen::doSetup(TFTMenu* menu)
   } // hasSD
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::doUpdate(TFTMenu* menu)
+void ViewLogScreen::doUpdate(TFTMenu* menu)
 {
   if(filesButtons)
   {
@@ -364,7 +737,7 @@ void SDFilesScreen::doUpdate(TFTMenu* menu)
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::doDraw(TFTMenu* menu)
+void ViewLogScreen::doDraw(TFTMenu* menu)
 {
   UTFT* dc = menu->getDC();
   uint8_t* oldFont = dc->getFont();
@@ -391,15 +764,15 @@ void SDFilesScreen::doDraw(TFTMenu* menu)
   dc->setFont(oldFont);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SDFilesScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+void ViewLogScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("Settings"); // переключаемся на экран работы с SD  
+    menu->switchToScreen("FilesScreen"); // переключаемся на экран "Файлы"
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SDInfoScreen
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SDInfoScreen::SDInfoScreen() : AbstractTFTScreen("SDInfo")
+SDInfoScreen::SDInfoScreen() : AbstractTFTScreen("SDInfoScreen")
 {
   cardSize = 0;
   fatType = 0;
@@ -468,7 +841,7 @@ void SDInfoScreen::doDraw(TFTMenu* menu)
 void SDInfoScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("Settings"); // переключаемся на экран работы с SD
+    menu->switchToScreen("SDScreen"); // переключаемся на экран работы с SD
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void SDInfoScreen::collectSDInfo()
@@ -521,7 +894,7 @@ String SDInfoScreen::formatSize(uint32_t sz)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SDFormatScreen
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SDFormatScreen::SDFormatScreen() : AbstractTFTScreen("SDFormat")
+SDFormatScreen::SDFormatScreen() : AbstractTFTScreen("FormatSDScreen")
 {
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -569,14 +942,14 @@ void SDFormatScreen::doDraw(TFTMenu* menu)
 void SDFormatScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("Settings"); // переключаемся на экран работы с SD
+    menu->switchToScreen("SDScreen"); // переключаемся на экран работы с SD
   else
   if(pressedButton == formatButton)
   {
     Vector<const char*> lines;
     lines.push_back("Начать");
     lines.push_back("формат?");    
-    MessageBox->confirm(lines,"SDFormatter","SDFormat");
+    MessageBox->confirm(lines,"SDFormatterScreen","FormatSDScreen");
   }
   else
   if(pressedButton == clearFatButton)
@@ -584,14 +957,14 @@ void SDFormatScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
     Vector<const char*> lines;
     lines.push_back("Начать");
     lines.push_back("очистку?");    
-    MessageBox->confirm(lines,"SDEraser","SDFormat");
+    MessageBox->confirm(lines,"SDEraserScreen","FormatSDScreen");
   }
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SDFormatterScreen
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SDFormatterScreen::SDFormatterScreen() : AbstractTFTScreen("SDFormatter")
+SDFormatterScreen::SDFormatterScreen() : AbstractTFTScreen("SDFormatterScreen")
 {
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -637,7 +1010,7 @@ void SDFormatterScreen::doUpdate(TFTMenu* menu)
     Vector<const char*> lines;
     lines.push_back("Формат");
     lines.push_back("завершён.");    
-    MessageBox->show(lines,"SDFormat");
+    MessageBox->show(lines,"FormatSDScreen");
 
 
 }
@@ -652,7 +1025,7 @@ void SDFormatterScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SDEraserScreen
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-SDEraserScreen::SDEraserScreen() : AbstractTFTScreen("SDEraser")
+SDEraserScreen::SDEraserScreen() : AbstractTFTScreen("SDEraserScreen")
 {
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -697,7 +1070,7 @@ void SDEraserScreen::doUpdate(TFTMenu* menu)
     Vector<const char*> lines;
     lines.push_back("Очистка");
     lines.push_back("завершена.");    
-    MessageBox->show(lines,"SDFormat");
+    MessageBox->show(lines,"FormatSDScreen");
 
 
 }
