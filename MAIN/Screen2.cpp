@@ -72,6 +72,8 @@ FilesScreen::FilesScreen() : AbstractTFTScreen("FilesScreen")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void FilesScreen::doSetup(TFTMenu* menu)
 {
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+  
   // тут настраиваемся, например, можем добавлять кнопки
   filesListButton = screenButtons->addButton(5, 2, 210, 30, "Список");
   ethalonScreenButton = screenButtons->addButton(5, 37, 210, 30, "Эталоны");
