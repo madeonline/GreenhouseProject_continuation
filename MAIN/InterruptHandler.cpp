@@ -77,14 +77,24 @@ void InterruptHandlerClass::writeToLog()
 
   logFileName += F(".LOG");
 
+  DBG(F("WRITE INTERRUPT INFO TO: "));
+  DBGLN(logFileName);
+
   SdFile file;
-  if(file.open(logFileName.c_str(),O_APPEND))
+  file.open(logFileName.c_str(),FILE_WRITE);
+  
+  if(file.isOpen())
   {
+    DBGLN(F("FILE OPENED!"));
+    
     String line;
     line = F("[INTERRUPT]");
     line += RealtimeClock.getDateStr(tm);
     line += ' ';
     line += RealtimeClock.getTimeStr(tm);
+
+    DBG(F("WRITE LINE TO FILE: "));
+    DBGLN(line);
     
     file.println(line);
     file.close();
