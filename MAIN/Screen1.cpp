@@ -69,6 +69,95 @@ Screen1::Screen1() : AbstractTFTScreen("Main")
   points3 = NULL;
   canDrawChart = false;
   inDrawingChart = false;
+  powerLastMeasureTime = VOLTAGE_MEASURE_THRESHOLD;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void Screen1::measurePower(TFTMenu* menu)
+{
+  if(!isActive())
+    return;
+
+  uint32_t now = millis();
+  if(now - powerLastMeasureTime < VOLTAGE_MEASURE_THRESHOLD)
+    return;
+
+
+  powerLastMeasureTime = now;
+
+
+  int m_power = 0;
+
+  m_power = 100;//analogRead(power_3V3);             // Контроль источника питания +3.3в
+  float currentVoltage = m_power *(2.4 / 1024*2);          // Получить напряжение в вольтах
+
+  float threshold = (3.3/100)*VOLTAGE_THRESHOLD;
+  float lowBorder = 3.3 - threshold;
+  float highBorder = 3.3 + threshold;
+
+  word color = VGA_RED;
+
+  if(currentVoltage >= lowBorder && currentVoltage <= highBorder)
+    color = VGA_GREEN;
+
+  UTFT* dc = menu->getDC();
+
+  word oldColor = dc->getColor();
+  
+  dc->setColor(color);
+  dc->setBackColor(VGA_BLACK);
+  dc->setFont(SmallRusFont);
+
+  uint8_t fontHeight = dc->getFontYsize();
+
+  char buff[20] = {0};
+
+  sprintf(buff,"%.02f",currentVoltage);
+
+  uint16_t curX = 170;
+  uint16_t curY = 20;
+
+  dc->print(buff,curX,curY);
+  curY += fontHeight + 2;
+  
+  
+  m_power = 200;//analogRead(power_5V0);             // Контроль источника питания +5.0в
+  currentVoltage = m_power *(2.4 / 1024 * 2);        // Получить напряжение в вольтах
+
+  threshold = (5.0/100)*VOLTAGE_THRESHOLD;
+  lowBorder = 5.0 - threshold;
+  highBorder = 5.0 + threshold;
+
+  color = VGA_RED;
+
+  if(currentVoltage >= lowBorder && currentVoltage <= highBorder)
+    color = VGA_GREEN;
+
+  sprintf(buff,"%.02f",currentVoltage);
+
+  dc->setColor(color);  
+  dc->print(buff,curX,curY);
+  curY += fontHeight + 2;
+
+  
+  m_power = 300;//analogRead(power_200);             // Контроль источника питания 200в
+  currentVoltage = m_power *(2.4 / 1024 * 100);      // Получить напряжение в вольтах
+
+  threshold = (200.0/100)*VOLTAGE_THRESHOLD;
+  lowBorder = 200.0 - threshold;
+  highBorder = 200.0 + threshold;
+
+  color = VGA_RED;
+
+  if(currentVoltage >= lowBorder && currentVoltage <= highBorder)
+    color = VGA_GREEN;
+
+  sprintf(buff,"%.02f",currentVoltage);
+
+  dc->setColor(color);  
+  dc->print(buff,curX,curY);
+
+  dc->setColor(oldColor);
+   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::onDeactivate()
@@ -139,6 +228,7 @@ void Screen1::doUpdate(TFTMenu* menu)
 {
 	
   drawTime(menu);
+  measurePower(menu);
   drawChart();
 
   loopADC();

@@ -29,6 +29,8 @@ protected:
 private:
     InterruptScreen();
 
+    void drawTime(TFTMenu* menu);    
+
     InterruptTimeList list1;
     InterruptTimeList list2;
     InterruptTimeList list3;

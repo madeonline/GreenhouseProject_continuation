@@ -1,5 +1,6 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #include "InterruptScreen.h"
+#include "DS3231.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 InterruptScreen* ScreenInterrupt = NULL;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -100,6 +101,24 @@ void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t l
     DBGLN("<< END OF INTERRUPT DATA");
     
   #endif // _DEBUG  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InterruptScreen::drawTime(TFTMenu* menu)
+{
+    DS3231Time tm = RealtimeClock.getTime();
+
+    // получаем компоненты даты в виде строк
+    UTFT* dc = menu->getDC();
+    dc->setColor(VGA_WHITE);
+    dc->setBackColor(VGA_BLACK);
+    dc->setFont(SmallRusFont);
+    String strDate = RealtimeClock.getDateStr(tm);
+    String strTime = RealtimeClock.getTimeStr(tm);
+
+    // печатаем их
+    dc->print(strDate, 5, 1);
+    dc->print(strTime, 90, 1);
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::doSetup(TFTMenu* menu)
@@ -280,7 +299,7 @@ void InterruptScreen::drawChart()
   // вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
   Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
 
-  drawSerie(serie1,{ 255,0,0 });
+  drawSerie(serie1,{ 255,255,255 });
   yield();
   drawSerie(serie2,{ 0,0,255 });
   yield();
@@ -291,8 +310,8 @@ void InterruptScreen::drawChart()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::doDraw(TFTMenu* menu)
 {
+  drawTime(menu);
   drawChart();
-
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::onButtonPressed(TFTMenu* menu, int pressedButton)

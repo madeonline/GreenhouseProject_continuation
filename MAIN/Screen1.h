@@ -35,6 +35,9 @@ protected:
 private:
     Screen1();
 
+    uint32_t powerLastMeasureTime;
+    void measurePower(TFTMenu* menu);
+
     void drawChart(); // рисуем наши графики
     bool canDrawChart;
     bool inDrawingChart;

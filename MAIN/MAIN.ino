@@ -16,6 +16,7 @@
 #include "InterruptScreen.h"      // экран с графиком прерывания
 #include "Buttons.h"              // наши железные кнопки
 #include "InfoDiodes.h"           // информационные диоды
+#include "FileUtils.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup() 
 {
@@ -28,6 +29,9 @@ void setup()
   RealtimeClock.begin(1);           // запускаем их на шине I2C 1 (SDA1, SCL1);
  // RealtimeClock.setTime(0,1,11,1,7,2,2018);
 
+  DBGLN(F("INIT SD..."));
+  SDInit::InitSD();
+  DBGLN(F("SD inited."));
 
   DBGLN(F("Init screen..."));
   Screen.setup();
