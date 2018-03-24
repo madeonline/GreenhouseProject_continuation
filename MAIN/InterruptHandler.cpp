@@ -2,6 +2,8 @@
 #include "InterruptScreen.h"
 #include "ConfigPin.h"
 #include "InfoDiodes.h"
+#include "DS3231.h"
+#include "FileUtils.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -48,6 +50,46 @@ void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
   {
     list[i] = (list[i] - first);
   }
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+void InterruptHandlerClass::writeToLog()
+{
+  // пишем в лог-файл дату/время срабатывания системы
+  SD.mkdir(LOGS_DIRECTORY);
+
+  DS3231Time tm = RealtimeClock.getTime();
+
+  // формируем имя файла ггггммдд,log. (год,месяц,день)
+  String logFileName;
+  
+  logFileName = LOGS_DIRECTORY;
+  if(!logFileName.endsWith("/"))
+    logFileName += "/";
+  
+  logFileName += tm.year;
+  if(tm.month < 10)
+    logFileName += '0';
+  logFileName += tm.month;
+
+ if(tm.dayOfMonth < 10)
+  logFileName += '0';
+ logFileName += tm.dayOfMonth;
+
+  logFileName += F(".LOG");
+
+  SdFile file;
+  if(file.open(logFileName.c_str(),O_APPEND))
+  {
+    String line;
+    line = F("[INTERRUPT]");
+    line += RealtimeClock.getDateStr(tm);
+    line += ' ';
+    line += RealtimeClock.getTimeStr(tm);
+    
+    file.println(line);
+    file.close();
+  }
+  
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::update()
@@ -97,6 +139,8 @@ void InterruptHandlerClass::update()
 
     interrupts();
 
+    bool needToLog = false;
+
     // теперь смотрим - надо ли нам самим чего-то обрабатывать?
     if(copyList1.size() > 1)
     {
@@ -104,6 +148,8 @@ void InterruptHandlerClass::update()
 
       // зажигаем светодиод "ТЕСТ"
       InfoDiodes.test();
+
+      needToLog = true;
         
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
     }
@@ -114,6 +160,8 @@ void InterruptHandlerClass::update()
 
       // зажигаем светодиод "ТЕСТ"
       InfoDiodes.test();
+
+      needToLog = true;
        
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
     }
@@ -124,9 +172,18 @@ void InterruptHandlerClass::update()
 
       // зажигаем светодиод "ТЕСТ"
       InfoDiodes.test();
+
+      needToLog = true;
        
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
     }
+
+    if(needToLog)
+    {
+      // надо записать в лог дату срабатывания системы
+      writeToLog();
+      
+    } // needToLog
     
 
     // если в каком-то из списков есть данные - значит, одно из прерываний сработало,

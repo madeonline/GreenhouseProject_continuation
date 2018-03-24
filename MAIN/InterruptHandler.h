@@ -48,6 +48,8 @@ private:
 
   void normalizeList(InterruptTimeList& list);
 
+  void writeToLog();
+
 };
 //--------------------------------------------------------------------------------------------------------------------------------------
 extern InterruptHandlerClass InterruptHandler;
