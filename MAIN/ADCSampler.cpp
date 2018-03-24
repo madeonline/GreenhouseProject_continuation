@@ -38,7 +38,7 @@ void ADCSampler::begin(unsigned int samplingRate)
   ADC->ADC_MR |= ADC_MR_TRGSEL_ADC_TRIG1;                 // selecting TIOA0 as trigger.
   //ADC->ADC_ACR |= ADC_ACR_TSON;                         // Включить датчик температуры    
   ADC->ADC_CHER = ADC_CHANNELS;                           // Записать контролируемые входа
-  ADC->ADC_EMR = ADC_EMR_CMPMODE_IN                     // Генерирует событие, когда преобразованные данные пересекают окно сравнения.
+  ADC->ADC_EMR = ADC_EMR_CMPMODE_IN                       // Генерирует событие, когда преобразованные данные пересекают окно сравнения.
 	//  | ADC_EMR_CMPSEL(4)                               // Compare channel 4 = A3
 	  | ADC_EMR_CMPALL                                    // Compare ALL channel
 	  | ADC_EMR_CMPFILTER(0);                             // Количество последовательных событий сравнения, необходимых для повышения флага = CMPFILTER + 1
