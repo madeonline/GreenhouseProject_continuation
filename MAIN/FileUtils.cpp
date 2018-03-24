@@ -27,6 +27,10 @@ int FileUtils::CountFiles(const String& dirName)
     return 0;
 
   int result = 0;
+
+  if(!SD.exists(dirName.c_str()))
+    return result;
+  
   SD.chdir(dirName);
   
   SdFile file;

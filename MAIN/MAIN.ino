@@ -17,6 +17,7 @@
 #include "Buttons.h"              // наши железные кнопки
 #include "InfoDiodes.h"           // информационные диоды
 #include "FileUtils.h"
+#include "Settings.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup() 
 {
@@ -32,6 +33,11 @@ void setup()
   DBGLN(F("INIT SD..."));
   SDInit::InitSD();
   DBGLN(F("SD inited."));
+
+  DBGLN(F("INIT settings..."));
+  Settings.begin();
+  DBGLN(F("Settings inited."));
+  
 
   DBGLN(F("Init screen..."));
   Screen.setup();
