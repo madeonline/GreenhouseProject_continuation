@@ -157,6 +157,8 @@ SDScreen::SDScreen() : AbstractTFTScreen("SDScreen")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void SDScreen::doSetup(TFTMenu* menu)
 {
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+
   // тут настраиваемся, например, можем добавлять кнопки
   sdInfoButton = screenButtons->addButton(5, 2, 210, 30, "SD-инфо");
   formatSDButton = screenButtons->addButton(5, 37, 210, 30, "Формат SD");
@@ -196,6 +198,8 @@ SystemScreen::SystemScreen() : AbstractTFTScreen("SystemScreen")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void SystemScreen::doSetup(TFTMenu* menu)
 {
+   screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+
   // тут настраиваемся, например, можем добавлять кнопки
   communicateButton = screenButtons->addButton(5, 2, 210, 30, "Коммуникатор");
 //  reserved = screenButtons->addButton(5, 37, 210, 30, "reserved");
@@ -233,6 +237,7 @@ CommunicateScreen::CommunicateScreen() : AbstractTFTScreen("CommunicateScreen")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void CommunicateScreen::doSetup(TFTMenu* menu)
 {
+  
   // тут настраиваемся, например, можем добавлять кнопки
   rs485Button = screenButtons->addButton(5, 2, 210, 30, "RS485");
   wiFiButton = screenButtons->addButton(5, 37, 210, 30, "WiFi");
@@ -272,6 +277,8 @@ ParamsScreen::ParamsScreen() : AbstractTFTScreen("ParamsScreen")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ParamsScreen::doSetup(TFTMenu* menu)
 {
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+  
   // тут настраиваемся, например, можем добавлять кнопки
   inductiveSensorButton = screenButtons->addButton(5, 2, 210, 30, "Инд. датчик");
   transformerButton = screenButtons->addButton(5, 37, 210, 30, "Ток. транс.");
@@ -601,6 +608,9 @@ void ViewLogScreen::rescanFiles()
    int lastFilesCount = totalFilesCount;
    totalFilesCount = FileUtils::CountFiles(LOGS_DIRECTORY);
 
+   DBG(F("COUNT OF FILES IN LOG DIRECTORY: "));
+   DBGLN(totalFilesCount);
+
    if(lastFilesCount != totalFilesCount)
    {
     clearFiles();
@@ -658,6 +668,9 @@ void ViewLogScreen::drawCurrentPageNumber()
     return;
 
     currentPageCaption = (currentPageNum + 1);
+    if(!totalPages)
+      currentPageCaption = '0';
+      
     currentPageCaption += '/';
     currentPageCaption += totalPages;
 
