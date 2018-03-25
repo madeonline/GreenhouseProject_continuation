@@ -14,7 +14,7 @@ extern uint8_t Various_Symbols_32x32[];    // какой шрифт исполь
 #define TFT_FONT BigRusFont // тут подставляем имя шрифта, который используем
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #define TFT_BUTTON_COLORS VGA_WHITE, VGA_GRAY, VGA_WHITE, VGA_RED, VGA_BLUE // цвета для кнопок
-#define TFT_BUTTON_COLORS2 VGA_WHITE, VGA_GRAY, VGA_WHITE, VGA_RED, 0x13D5 // цвета для кнопок
+#define TFT_BUTTON_COLORS2 VGA_WHITE, VGA_GRAY, VGA_WHITE, VGA_RED, 0x4DC9 // цвета для кнопок
 #define TFT_BACK_COLOR VGA_BLACK // цвет заливки экрана
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // TFT model

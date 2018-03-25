@@ -25,8 +25,7 @@ class Screen1 : public AbstractTFTScreen
 
 
 protected:
-
-    
+  
     virtual void doSetup(TFTMenu* menu);
     virtual void doUpdate(TFTMenu* menu);
     virtual void doDraw(TFTMenu* menu);
@@ -35,8 +34,8 @@ protected:
 private:
     Screen1();
 
-    uint32_t powerLastMeasureTime;
-    void measurePower(TFTMenu* menu);
+    int last3V3Voltage, last5Vvoltage, last200Vvoltage;
+    void drawVoltage(TFTMenu* menu);
 
     void drawChart(); // рисуем наши графики
     bool canDrawChart;

@@ -4,6 +4,8 @@
 #include "InfoDiodes.h"
 #include "DS3231.h"
 #include "FileUtils.h"
+#include "Logger.h"
+#include "Settings.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -52,53 +54,72 @@ void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
   }
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::writeToLog()
+void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3)
 {
-  // пишем в лог-файл дату/время срабатывания системы
-  SD.mkdir(LOGS_DIRECTORY);
 
+  // пишем время срабатывания прерывания
   DS3231Time tm = RealtimeClock.getTime();
+  String line;
+  line = F("[INTERRUPT]");
+  line += RealtimeClock.getDateStr(tm);
+  line += ' ';
+  line += RealtimeClock.getTimeStr(tm);
 
-  // формируем имя файла ггггммдд,log. (год,месяц,день)
-  String logFileName;
-  
-  logFileName = LOGS_DIRECTORY;
-  if(!logFileName.endsWith("/"))
-    logFileName += "/";
-  
-  logFileName += tm.year;
-  if(tm.month < 10)
-    logFileName += '0';
-  logFileName += tm.month;
+  Logger.writeLine(line);
 
- if(tm.dayOfMonth < 10)
-  logFileName += '0';
- logFileName += tm.dayOfMonth;
+  // пишем температуру системы
+  DS3231Temperature temp = Settings.getTemperature();
 
-  logFileName += F(".LOG");
+  line = "[TEMP]";
+  line += temp.Value;
+  line += '.';
 
-  DBG(F("WRITE INTERRUPT INFO TO: "));
-  DBGLN(logFileName);
+  if(temp.Fract < 10)
+    line += '0';
 
-  SdFile file;
-  file.open(logFileName.c_str(),FILE_WRITE);
-  
-  if(file.isOpen())
+  line += temp.Fract;
+
+  Logger.writeLine(line);
+
+  // пишем кол-во срабатываний системы
+  uint32_t motoresource = Settings.getMotoresource();
+  motoresource++;
+  Settings.setMotoresource(motoresource);
+
+  line = "[MOTORESOURCE]";
+  line += motoresource;
+
+  Logger.writeLine(line);
+
+
+  // теперь смотрим, в каких списках есть данные, подсчитываем общее время движения планки, в микросекундах, и пишем в файл
+  if(lst1.size() > 1)
   {
-    DBGLN(F("FILE OPENED!"));
-    
-    String line;
-    line = F("[INTERRUPT]");
-    line += RealtimeClock.getDateStr(tm);
-    line += ' ';
-    line += RealtimeClock.getTimeStr(tm);
+    line = "[LINE_MOVE_TIME_1]";
+    uint32_t moveTime = lst1[lst1.size()-1] - lst1[0];
+    line += moveTime;
 
-    DBG(F("WRITE LINE TO FILE: "));
-    DBGLN(line);
-    
-    file.println(line);
-    file.close();
-  }
+    Logger.writeLine(line);
+  } // if
+
+  if(lst2.size() > 1)
+  {
+    line = "[LINE_MOVE_TIME_2]";
+    uint32_t moveTime = lst2[lst2.size()-1] - lst2[0];
+    line += moveTime;
+
+    Logger.writeLine(line);
+  } // if
+
+  if(lst3.size() > 1)
+  {
+    line = "[LINE_MOVE_TIME_3]";
+    uint32_t moveTime = lst3[lst3.size()-1] - lst3[0];
+    line += moveTime;
+
+    Logger.writeLine(line);
+  } // if
+  
   
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -191,7 +212,7 @@ void InterruptHandlerClass::update()
     if(needToLog)
     {
       // надо записать в лог дату срабатывания системы
-      writeToLog();
+      writeToLog(copyList1, copyList2, copyList3);
       
     } // needToLog
     

@@ -31,13 +31,16 @@ int FileUtils::CountFiles(const String& dirName)
   if(!SD.exists(dirName.c_str()))
     return result;
   
-  SD.chdir(dirName);
-  
+  SD.chdir(dirName.c_str());
+  SD.vwd()->rewind();
+   
   SdFile file;
-  
-  while (file.openNext(SD.vwd(), O_READ)) 
+
+  while(file.openNext(SD.vwd(), O_READ)) 
   {
-    result++;
+    if(!file.isHidden())
+      result++;
+
     file.close();
   }  
 

@@ -48,7 +48,7 @@ private:
 
   void normalizeList(InterruptTimeList& list);
 
-  void writeToLog();
+  void writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3);
 
 };
 //--------------------------------------------------------------------------------------------------------------------------------------
