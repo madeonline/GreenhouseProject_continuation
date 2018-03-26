@@ -18,12 +18,13 @@ ch11:A9 Измерение =200В
 ch12:A10 Измерение 3V3
 ch13:A11 Измерение +5V
 */
-#define ADC_CHANNELS ADC_CHER_CH4 | ADC_CHER_CH3 | ADC_CHER_CH2  // Определить входа (A3, A4, A5)
+#define ADC_CHANNELS ADC_CHER_CH4 | ADC_CHER_CH3 | ADC_CHER_CH2 // Определить входа (A3, A4, A5)
+//#define ADC_CHANNELS ADC_CHER_CH4 | ADC_CHER_CH3 | ADC_CHER_CH2 | ADC_CHER_CH7 | ADC_CHER_CH6 | ADC_CHER_CH5| ADC_CHER_CH11 | ADC_CHER_CH12 | ADC_CHER_CH13// Определить входа (A3, A4, A5)
 #define BUFFER_SIZE 200*NUM_CHANNELS                             // Определить размер буфера хранения измеряемого сигнала     
 #define NUMBER_OF_BUFFERS 3                                      // Установить количество буферов
-#define VOLT_REF        (3300)      // Величина опорного напряжения
+#define VOLT_REF        (2400)      // Величина опорного напряжения
 /* The maximal digital value */
-#define MAX_DIGITAL     (4095)      // Разрядность АЦП (максимальная для DUE)
+#define MAX_DIGITAL     (4096)      // Разрядность АЦП (максимальная для DUE)
 
 class ADCSampler {
   public:
@@ -37,7 +38,7 @@ class ADCSampler {
     uint16_t* getFilledBuffer(int *bufferLength);
     void readBufferDone();
 	volatile bool dataHigh;                                    // Признак превышения порога компаратора АЦП
-	unsigned int samplingRate = 3000;                          // Частота вызова (стробирования) АЦП 50мс
+	//unsigned int samplingRate = 3000;                          // Частота вызова (стробирования) АЦП 50мс
   private:
     unsigned int sampleingRate;
     volatile bool dataReady;

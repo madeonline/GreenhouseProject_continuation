@@ -39,6 +39,7 @@ void loopADC()
       serie3[serieWriteIterator] = cBuf[i+2];
 
     } // for
+//	Serial.println(bufferLength);
     sampler.readBufferDone();                                  // все данные переданы в ком
 
     if(mainScreen && mainScreen->isActive())
@@ -102,7 +103,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
       color = VGA_LIME;
   
-    String data = String(vData.voltage,2);
+    String data = String(vData.voltage,1);
     while(data.length() < 6)
       data += ' ';
     
@@ -128,7 +129,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
       color = VGA_LIME;
   
-    String data = String(vData.voltage,2);
+    String data = String(vData.voltage,1);
     while(data.length() < 6)
       data += ' ';
   
