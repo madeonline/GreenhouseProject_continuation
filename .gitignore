@@ -1,4 +1,3 @@
-/MAIN/libraries
 /MAIN/.vs
 /MAIN/__vm
 /MAIN/MAIN.sln
@@ -8,3 +7,7 @@
 /DOC/Схемы модуля/UROV_Base4_1R.pdsprj.DECIMA.moseichuk.workspace
 /DOC/Схемы модуля/UROV_display_ LGDP4524_1R.pdsprj.DECIMA.moseichuk.workspace
 /DOC/Схемы модуля/UROV_4_2R.pdsprj.DECIMA.moseichuk.workspace
+/MAIN/libraries/DueTimer
+/MAIN/libraries/OneWire
+/MAIN/libraries/SdFat
+/MAIN/libraries/SdFatTestSuite
