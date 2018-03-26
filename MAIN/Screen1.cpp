@@ -25,13 +25,13 @@ void loopADC()
     int bufferLength = 0;
     uint16_t* cBuf = sampler.getFilledBuffer(&bufferLength);    // Получить буфер с данными
     
-    uint16_t countOfPoints = bufferLength/3;
+    uint16_t countOfPoints = bufferLength/9;
     uint16_t* serie1 = new uint16_t[countOfPoints];
     uint16_t* serie2 = new uint16_t[countOfPoints];
     uint16_t* serie3 = new uint16_t[countOfPoints];
     uint16_t serieWriteIterator = 0;
     
-    for (int i = 0; i < bufferLength; i = i + 3, serieWriteIterator++)                // получить результат измерения поканально, с интервалом 3
+    for (int i = 0; i < bufferLength; i = i + 9, serieWriteIterator++)                // получить результат измерения поканально, с интервалом 3
     {
    // if (sampler.dataHigh == true) break; // sampler.dataHigh == false;      // Если поступил сигнал превышения порога - прекратить вывод !! Не работает
       serie1[serieWriteIterator] = cBuf[i];
