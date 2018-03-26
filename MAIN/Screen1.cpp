@@ -25,26 +25,22 @@ void loopADC()
     int bufferLength = 0;
     uint16_t* cBuf = sampler.getFilledBuffer(&bufferLength);    // Получить буфер с данными
     
-    uint16_t countOfPoints = bufferLength/9;
+    uint16_t countOfPoints = bufferLength/6;
     uint16_t* serie1 = new uint16_t[countOfPoints];
     uint16_t* serie2 = new uint16_t[countOfPoints];
     uint16_t* serie3 = new uint16_t[countOfPoints];
     uint16_t serieWriteIterator = 0;
     
-    for (int i = 0; i < bufferLength; i = i + 9, serieWriteIterator++)                // получить результат измерения поканально, с интервалом 3
+    for (int i = 0; i < bufferLength; i = i + 6, serieWriteIterator++)                // получить результат измерения поканально, с интервалом 3
     {
    // if (sampler.dataHigh == true) break; // sampler.dataHigh == false;      // Если поступил сигнал превышения порога - прекратить вывод !! Не работает
       serie1[serieWriteIterator] = cBuf[i];          // Данные 1 графика
       serie2[serieWriteIterator] = cBuf[i+1];        // Данные 2 графика
       serie3[serieWriteIterator] = cBuf[i+2];        // Данные 3 графика
-	                          // = cBuf[i+3];        // Данные со входа индуктивного датчика №3 тест исправности датчика
-	                          // = cBuf[i+4];        // Данные со входа индуктивного датчика №2 тест исправности датчика.(Пока вход отключен)  
-	                          // = cBuf[i+5];        // Данные со входа индуктивного датчика №1 тест исправности датчика.(Пока вход отключен)  
-	                          // = cBuf[i+6];        // Данные Измерение =200В
-	                          // = cBuf[i+7];        // Данные Измерение 3V3
-	                    	  // = cBuf[i+8];        // Данные Измерение +5V
-    } // for
-//	Serial.println(bufferLength);
+	                            // = cBuf[i+3];        // Данные Измерение =200В
+	                            // = cBuf[i+4];        // Данные Измерение 3V3 
+	                            // = cBuf[i+5];        // Данные Измерение +5V 
+	     } // for
     sampler.readBufferDone();                                  // все данные переданы в ком
 
     if(mainScreen && mainScreen->isActive())
