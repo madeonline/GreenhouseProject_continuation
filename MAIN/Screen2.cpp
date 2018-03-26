@@ -534,6 +534,7 @@ ViewLogScreen::ViewLogScreen() : AbstractTFTScreen("ViewLogScreen")
   currentPageNum = 0;
   isFirstScan = true;
   currentPageButton = -1;
+  lastSelectedLogFileIndex = -1;
   files = NULL;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -597,6 +598,14 @@ void ViewLogScreen::showPage(int step)
     {
       filesButtons->hideButton(i,isActive());
     }
+
+    if(lastSelectedLogFileIndex != -1)
+    {
+      filesButtons->selectButton(lastSelectedLogFileIndex,false,true);
+      lastSelectedLogFileIndex = -1;
+    }
+
+    screenButtons->disableButton(viewLogButton,true);
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -682,8 +691,10 @@ void ViewLogScreen::doSetup(TFTMenu* menu)
 {
   // инициализируем SD
   hasSD = SDInit::InitSD();
-    
+
+  screenButtons->setSymbolFont(Various_Symbols_32x32);
   backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+  viewLogButton = screenButtons->addButton(130, 2, 85, 50, "|", BUTTON_SYMBOL);
 
   UTFT* dc = menu->getDC();
   int screenWidth = dc->getDisplayXSize();
@@ -743,7 +754,23 @@ void ViewLogScreen::doUpdate(TFTMenu* menu)
     }
     else
     {
-      //TODO: тут работаем с выбранным файлом!!!
+      if(checkedFilesButton > -1)
+      {
+        DBG(F("SELECTED FILE: "));
+        DBGLN(filesNames[checkedFilesButton]);
+
+        if(lastSelectedLogFileIndex != -1)
+        {
+          filesButtons->selectButton(lastSelectedLogFileIndex,false,true);
+        }
+
+        lastSelectedLogFileIndex = checkedFilesButton;
+        filesButtons->selectButton(lastSelectedLogFileIndex,true,true);
+
+        screenButtons->enableButton(viewLogButton,true);
+        
+        //TODO: тут работаем с выбранным файлом!!!
+      } // if
       
     }
     
@@ -783,6 +810,16 @@ void ViewLogScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
     menu->switchToScreen("FilesScreen"); // переключаемся на экран "Файлы"
+  else
+  if(pressedButton == viewLogButton)
+  {
+    if(lastSelectedLogFileIndex != -1)
+    {
+        DBG(F("VIEW FILE: "));
+        DBGLN(filesNames[lastSelectedLogFileIndex]);      
+      //TODO: ТУТ ПРОСМОТР ФАЙЛА!!!
+    }
+  }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SDInfoScreen

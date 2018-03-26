@@ -53,7 +53,7 @@
 #define BUTTON_HAS_BACK_COLOR 0x0020
 #define BUTTON_HAS_FONT_COLOR 0x0040
 #define BUTTON_VISIBLE 0x0080
-
+#define BUTTON_SELECTED 0x0100
 
 typedef struct
 {
@@ -86,6 +86,7 @@ class UTFT_Buttons_Rus
 		void	setTextFont(uint8_t* font);
 		void	setSymbolFont(uint8_t* font);
 		void	setButtonColors(word atxt, word iatxt, word brd, word brdhi, word back);
+    void selectButton(int buttonID, bool selected, boolean redraw=false);
 		void 	setButtonBackColor(int buttonID, word color);
 		void 	setButtonFontColor(int buttonID, word color);
     void showButton(int buttonID, boolean redraw=false);

@@ -48,6 +48,19 @@ void UTFT_Buttons_Rus::setButtonBackColor(int buttonID, word color)
     buttons[buttonID].flags |= BUTTON_HAS_BACK_COLOR;
     
 }
+void UTFT_Buttons_Rus::selectButton(int buttonID, bool selected, boolean redraw)
+{
+   if(buttonID < 0)
+    return;
+
+    if(selected)
+      buttons[buttonID].flags |= BUTTON_SELECTED;
+    else
+      buttons[buttonID].flags &= ~BUTTON_SELECTED;
+
+    if (redraw)
+      drawButton(buttonID);
+}
 void UTFT_Buttons_Rus::setButtonFontColor(int buttonID, word color)
 {
    if(buttonID < 0)
@@ -162,7 +175,12 @@ void UTFT_Buttons_Rus::drawButton(int buttonID)
 			if ((buttons[buttonID].flags & BUTTON_DISABLED))
 				_UTFT->setColor(_color_text_inactive);
 			else
+      {
+        if(buttons[buttonID].flags & BUTTON_SELECTED)
+          _UTFT->setColor(_color_hilite);
+        else
 				_UTFT->setColor(_color_border);
+      }
 			_UTFT->drawRect(buttons[buttonID].pos_x, buttons[buttonID].pos_y, buttons[buttonID].pos_x+buttons[buttonID].width, buttons[buttonID].pos_y+buttons[buttonID].height);
      yield();
 		}
@@ -176,7 +194,12 @@ void UTFT_Buttons_Rus::drawButton(int buttonID)
      
 		_UTFT->fillRoundRect(buttons[buttonID].pos_x, buttons[buttonID].pos_y, buttons[buttonID].pos_x+buttons[buttonID].width, buttons[buttonID].pos_y+buttons[buttonID].height);
     yield();
-		_UTFT->setColor(_color_border);
+    
+    if(buttons[buttonID].flags & BUTTON_SELECTED)
+      _UTFT->setColor(_color_hilite);
+    else
+  		_UTFT->setColor(_color_border);
+     
 		_UTFT->drawRoundRect(buttons[buttonID].pos_x, buttons[buttonID].pos_y, buttons[buttonID].pos_x+buttons[buttonID].width, buttons[buttonID].pos_y+buttons[buttonID].height);
     yield();
     
@@ -314,6 +337,7 @@ int UTFT_Buttons_Rus::checkButtons(OnCheckButtonsFunc func)
 			if (!(buttons[result].flags & BUTTON_NO_BORDER))
 			{
 				_UTFT->setColor(_color_hilite);
+       
 				if (buttons[result].flags & BUTTON_BITMAP)
 					_UTFT->drawRect(buttons[result].pos_x, buttons[result].pos_y, buttons[result].pos_x+buttons[result].width, buttons[result].pos_y+buttons[result].height);
 				else
@@ -326,11 +350,15 @@ int UTFT_Buttons_Rus::checkButtons(OnCheckButtonsFunc func)
    
 		if (result != -1)
 		{
-      while (_URTouch->dataAvailable() == true) { yield(); };
+      while (_URTouch->dataAvailable() == true) { yield(); }
 
 			if (!(buttons[result].flags & BUTTON_NO_BORDER))
 			{
-				_UTFT->setColor(_color_border);
+				if(buttons[result].flags & BUTTON_SELECTED)
+          _UTFT->setColor(_color_hilite);
+				else
+				  _UTFT->setColor(_color_border);
+         
 				if (buttons[result].flags & BUTTON_BITMAP)
 					_UTFT->drawRect(buttons[result].pos_x, buttons[result].pos_y, buttons[result].pos_x+buttons[result].width, buttons[result].pos_y+buttons[result].height);
 				else

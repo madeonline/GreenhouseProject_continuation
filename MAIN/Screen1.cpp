@@ -30,6 +30,10 @@ void loopADC()
     uint16_t* serie2 = new uint16_t[countOfPoints];
     uint16_t* serie3 = new uint16_t[countOfPoints];
     uint16_t serieWriteIterator = 0;
+
+    uint32_t raw200V = 0;
+    uint32_t raw5V = 0;
+    uint32_t raw3V3 = 0;
     
     for (int i = 0; i < bufferLength; i = i + 6, serieWriteIterator++)                // получить результат измерения поканально, с интервалом 3
     {
@@ -37,10 +41,21 @@ void loopADC()
       serie1[serieWriteIterator] = cBuf[i];          // Данные 1 графика
       serie2[serieWriteIterator] = cBuf[i+1];        // Данные 2 графика
       serie3[serieWriteIterator] = cBuf[i+2];        // Данные 3 графика
-	                            // = cBuf[i+3];        // Данные Измерение =200В
-	                            // = cBuf[i+4];        // Данные Измерение 3V3 
-	                            // = cBuf[i+5];        // Данные Измерение +5V 
-	     } // for
+
+      raw200V += cBuf[i+3];        // Данные Измерение =200В
+      raw3V3 += cBuf[i+4];         // Данные Измерение 3V3 
+      raw5V += cBuf[i+3];        // Данные Измерение +5V 
+      
+	  } // for
+
+    raw200V /= bufferLength;
+    raw3V3 /= bufferLength;
+    raw5V /= bufferLength;
+
+    Settings.set3V3RawVoltage(raw3V3);
+    Settings.set5VRawVoltage(raw5V);
+    Settings.set200VRawVoltage(raw200V);
+      
     sampler.readBufferDone();                                  // все данные переданы в ком
 
     if(mainScreen && mainScreen->isActive())
@@ -156,8 +171,8 @@ void Screen1::drawVoltage(TFTMenu* menu)
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
       color = VGA_LIME;
   
-    String data = String(vData.voltage,0);
-    while(data.length() < 6)
+    String data = String((uint16_t)vData.voltage);
+    while(data.length() < 3)
       data += ' ';
   
     dc->setColor(color);  
@@ -171,6 +186,8 @@ void Screen1::drawVoltage(TFTMenu* menu)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::onDeactivate()
 {
+  last3V3Voltage = last5Vvoltage = last200Vvoltage = -1;
+  
   // прекращаем отрисовку графика
   chart.stopDraw();
   

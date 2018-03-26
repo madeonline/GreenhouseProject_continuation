@@ -32,6 +32,10 @@ class SettingsClass
 
     DS3231Temperature getTemperature() { return coreTemp; }
 
+    void set3V3RawVoltage(uint16_t raw);
+    void set5VRawVoltage(uint16_t raw);
+    void set200VRawVoltage(uint16_t raw);
+
     VoltageData get3V3Voltage() { return voltage3V3; }
     VoltageData get5Vvoltage() { return voltage5V; }
     VoltageData get200Vvoltage() {return voltage200V; }

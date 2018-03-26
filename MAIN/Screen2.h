@@ -444,8 +444,10 @@ private:
       ViewLogScreen();
       ~ViewLogScreen();
 
-      int backButton;
+      int backButton, viewLogButton;
       bool hasSD;
+
+      int lastSelectedLogFileIndex;
 
       int totalFilesCount;
       int totalPages;
