@@ -154,7 +154,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
       color = VGA_GREEN;
   
-    String data = String(vData.voltage,2);
+    String data = String(vData.voltage,0);
     while(data.length() < 6)
       data += ' ';
   
@@ -382,7 +382,7 @@ void Screen1::doDraw(TFTMenu* menu)
   int strW = strL*fw;
 
   int top = 1;
-  int left = w - strW - 2;
+  int left = w - strW - 3;
 
   menu->print(str.c_str(),left,top);
     
