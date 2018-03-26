@@ -100,7 +100,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     float highBorder = 3.3 + threshold;
   
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
-      color = VGA_GREEN;
+      color = VGA_LIME;
   
     String data = String(vData.voltage,2);
     while(data.length() < 6)
@@ -126,7 +126,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     color = VGA_RED;
   
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
-      color = VGA_GREEN;
+      color = VGA_LIME;
   
     String data = String(vData.voltage,2);
     while(data.length() < 6)
@@ -152,7 +152,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     color = VGA_RED;
   
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
-      color = VGA_GREEN;
+      color = VGA_LIME;
   
     String data = String(vData.voltage,0);
     while(data.length() < 6)

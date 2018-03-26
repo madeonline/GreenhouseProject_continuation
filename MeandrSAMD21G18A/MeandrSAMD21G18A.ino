@@ -150,9 +150,9 @@ void setup()
 
 
   // добавляем паузу в 5 секунд
-  pulseScene1.add({PULSE_PIN1, LOW, 10000000});
-  pulseScene2.add({PULSE_PIN2, LOW, 10000000});
-  pulseScene3.add({PULSE_PIN3, LOW, 10000000});
+  pulseScene1.add({PULSE_PIN1, LOW, 20000000});
+  pulseScene2.add({PULSE_PIN2, LOW, 20000000});
+  pulseScene3.add({PULSE_PIN3, LOW, 20000000});
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void loop()

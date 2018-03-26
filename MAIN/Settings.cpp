@@ -28,13 +28,13 @@ void SettingsClass::update()
   coreTemp = RealtimeClock.getTemperature();
 
   //TODO: РАЗОБРАТЬСЯ С analogRead !!!!
-  voltage3V3.raw = random(0,1024); // analogRead(power_3V3);
-  voltage5V.raw = random(0,1024); // analogRead(power_5V0);
-  voltage200V.raw = random(0,1024); // analogRead(power_200);
+  voltage3V3.raw = random(2800,2900); // analogRead(power_3V3);
+  voltage5V.raw = random(3900,4000); // analogRead(power_5V0);
+  voltage200V.raw = random(3500,3600); // analogRead(power_200);
 
-  voltage3V3.voltage = voltage3V3.raw*(2.4 / 1024 * 2);
-  voltage5V.voltage = voltage5V.raw*(2.4 / 1024 * 2);
-  voltage200V.voltage = voltage200V.raw*(2.4 / 1024 * 100);
+  voltage3V3.voltage = voltage3V3.raw*(2.4 / 4096 * 2);
+  voltage5V.voltage = voltage5V.raw*(2.4 / 4096 * 2);
+  voltage200V.voltage = voltage200V.raw*(2.4 / 4096 * 100);
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
