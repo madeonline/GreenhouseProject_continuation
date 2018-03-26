@@ -34,10 +34,15 @@ void loopADC()
     for (int i = 0; i < bufferLength; i = i + 9, serieWriteIterator++)                // получить результат измерения поканально, с интервалом 3
     {
    // if (sampler.dataHigh == true) break; // sampler.dataHigh == false;      // Если поступил сигнал превышения порога - прекратить вывод !! Не работает
-      serie1[serieWriteIterator] = cBuf[i];
-      serie2[serieWriteIterator] = cBuf[i+1];
-      serie3[serieWriteIterator] = cBuf[i+2];
-
+      serie1[serieWriteIterator] = cBuf[i];          // Данные 1 графика
+      serie2[serieWriteIterator] = cBuf[i+1];        // Данные 2 графика
+      serie3[serieWriteIterator] = cBuf[i+2];        // Данные 3 графика
+	                          // = cBuf[i+3];        // Данные со входа индуктивного датчика №3 тест исправности датчика
+	                          // = cBuf[i+4];        // Данные со входа индуктивного датчика №2 тест исправности датчика.(Пока вход отключен)  
+	                          // = cBuf[i+5];        // Данные со входа индуктивного датчика №1 тест исправности датчика.(Пока вход отключен)  
+	                          // = cBuf[i+6];        // Данные Измерение =200В
+	                          // = cBuf[i+7];        // Данные Измерение 3V3
+	                    	  // = cBuf[i+8];        // Данные Измерение +5V
     } // for
 //	Serial.println(bufferLength);
     sampler.readBufferDone();                                  // все данные переданы в ком
