@@ -19,13 +19,13 @@ ch12:A10 Измерение 3V3
 ch13:A11 Измерение +5V
 */
 
-#define ADC_CHANNELS ADC_CHER_CH4 | ADC_CHER_CH3 | ADC_CHER_CH2 | ADC_CHER_CH11 | ADC_CHER_CH12 | ADC_CHER_CH13// 
+#define ADC_CHANNELS ADC_CHER_CH2 | ADC_CHER_CH3 | ADC_CHER_CH4 | ADC_CHER_CH11 | ADC_CHER_CH12 | ADC_CHER_CH13     // 
+#define ADC_CHANNELS_DIS  ADC_CHDR_CH0 | ADC_CHDR_CH1 | ADC_CHDR_CH10 | ADC_CHDR_CH5 | ADC_CHDR_CH6 | ADC_CHDR_CH7  // Отключить не используемые входа
 #define BUFFER_SIZE 200*NUM_CHANNELS                             // Определить размер буфера хранения измеряемого сигнала     
 #define NUMBER_OF_BUFFERS 6                                      // Установить количество буферов
-#define VOLT_REF        (2400)                                   // Величина опорного напряжения
+//#define VOLT_REF        (2400)                                   // Величина опорного напряжения
 /* The maximal digital value */
-#define MAX_DIGITAL     (4095)                                   // Разрядность АЦП (максимальная для DUE)
-
+//#define ADC_RESOLUTION		12                                // Разрядность АЦП (максимальная для DUE)
 class ADCSampler {
   public:
     ADCSampler();

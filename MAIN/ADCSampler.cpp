@@ -34,10 +34,13 @@ void ADCSampler::begin(unsigned int samplingRate)
   ADC->ADC_MR |= ADC_MR_STARTUP_SUT0;                    // What is this by the way?
   ADC->ADC_MR |= ADC_MR_TRACKTIM(15);
   ADC->ADC_MR |= ADC_MR_TRANSFER(1);
-  ADC->ADC_MR |= ADC_MR_TRGEN_EN;
+  ADC->ADC_MR |= ADC_MR_TRGEN_EN;                         // Hardware trigger selected by TRGSEL field is enabled. Включен аппаратный триггер, выбранный по полю TRGSEL.
   ADC->ADC_MR |= ADC_MR_TRGSEL_ADC_TRIG1;                 // selecting TIOA0 as trigger.
+  ADC->ADC_MR |= ADC_MR_LOWRES_BITS_12;                   // brief (ADC_MR) 12-bit resolution 
   //ADC->ADC_ACR |= ADC_ACR_TSON;                         // Включить датчик температуры    
+ 
   ADC->ADC_CHER = ADC_CHANNELS;                           // Записать контролируемые входа
+  ADC->ADC_CHDR = ADC_CHANNELS_DIS;                       // Отключить не используемые входа
   ADC->ADC_EMR = ADC_EMR_CMPMODE_IN                       // Генерирует событие, когда преобразованные данные пересекают окно сравнения.
 	//  | ADC_EMR_CMPSEL(4)                               // Compare channel 4 = A3
 	  | ADC_EMR_CMPALL                                    // Compare ALL channel
@@ -51,8 +54,8 @@ void ADCSampler::begin(unsigned int samplingRate)
   ADC->ADC_IDR = ~ADC_IDR_ENDRX;                        // сбросить регистры прерывания по готовности данных.
   ADC->ADC_IDR = ~ADC_IDR_COMPE;                        // сбросить регистры копаратора.
   ADC->ADC_IER =  ADC_IER_ENDRX;                        // Включить прерывание по готовности данных.
-  ADC->ADC_IER =  ADC_IER_COMPE;                        // Прерывание по совпадению сравнения компаратором
-  ADC->ADC_ISR = ~ADC_ISR_COMPE;
+ // ADC->ADC_IER =  ADC_IER_COMPE;                        // Прерывание по совпадению сравнения компаратором
+  ADC->ADC_ISR = ~ADC_ISR_COMPE;                        // ADC Interrupt Status Register Обнулить ошибку сравнения с момента последнего чтения ADC_ISR.
   /* Waiting for ENDRX as end of the transfer is set
     when the current DMA transfer is done (RCR = 0), i.e. it doesn't include the
     next DMA transfer.
