@@ -419,13 +419,18 @@ void KeyboardScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
   } // else
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void KeyboardScreen::show(KeyboardType type, const String& initialValue, AbstractTFTScreen* _targetScreen, KeyboardInputTarget* _targetInput)
+void KeyboardScreen::show(KeyboardType type, const String& initialValue, AbstractTFTScreen* _targetScreen, KeyboardInputTarget* _targetInput, int maxLength)
 {
   targetScreen = _targetScreen;
   targetInput = _targetInput;
 
   input = initialValue;
-
+  
+  if(maxLength > 0)
+    input_maxlength = maxLength;
+  else
+    input_maxlength = 8;
+      
   //Тут проверяем на максимальную длину 
   if(input.length() > input_maxlength)
      input.remove(input_maxlength);

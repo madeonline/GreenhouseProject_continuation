@@ -150,7 +150,7 @@ class KeyboardScreen : public AbstractTFTScreen
 
   static AbstractTFTScreen* create();
 
-  void show(KeyboardType type, const String& initialValue, AbstractTFTScreen* targetScreen, KeyboardInputTarget* targetInput); 
+  void show(KeyboardType type, const String& initialValue, AbstractTFTScreen* targetScreen, KeyboardInputTarget* targetInput, int maxLength=-1); 
     
 protected:
 

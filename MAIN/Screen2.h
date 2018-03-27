@@ -221,6 +221,87 @@ private:
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class PulsesCountScreen : public AbstractTFTScreen, public KeyboardInputTarget
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new PulsesCountScreen();
+  }
+
+  virtual void onKeyboardInput(bool enterPressed, const String& enteredValue);
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      PulsesCountScreen();
+
+      int channel1Button, channel2Button, channel3Button, backButton;
+      String channel1PulsesVal, channel2PulsesVal, channel3PulsesVal;
+      int currentEditedButton;
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class PulsesDeltaScreen : public AbstractTFTScreen, public KeyboardInputTarget
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new PulsesDeltaScreen();
+  }
+
+  virtual void onKeyboardInput(bool enterPressed, const String& enteredValue);
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      PulsesDeltaScreen();
+
+      int channel1Button, channel2Button, channel3Button, backButton;
+      String channel1DeltaVal, channel2DeltaVal, channel3DeltaVal;
+      int currentEditedButton;
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class MotoresourceScreen : public AbstractTFTScreen, public KeyboardInputTarget
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new MotoresourceScreen();
+  }
+
+  virtual void onKeyboardInput(bool enterPressed, const String& enteredValue);
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      MotoresourceScreen();
+
+      int channel1Button, channel2Button, channel3Button, backButton;
+      String channel1MotoresourceVal, channel2MotoresourceVal, channel3MotoresourceVal;
+      int currentEditedButton;
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class TransformerScreen : public AbstractTFTScreen
 {
   public:

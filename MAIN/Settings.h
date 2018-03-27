@@ -26,9 +26,13 @@ class SettingsClass
     // сохраняет настройку кол-ва импульсов на канал
     void setChannelPulses(uint8_t channelNum, uint16_t val);
 
+    // работа с дельтами импульсов по каналам
+    uint8_t getChannelDelta(uint8_t channelNum);
+    void setChannelDelta(uint8_t channelNum, uint8_t val);
+
     // работа с моторесурсом системы
-    uint32_t getMotoresource();
-    void setMotoresource(uint32_t val);
+    uint32_t getMotoresource(uint8_t channelNum);
+    void setMotoresource(uint8_t channelNum, uint32_t val);
 
     DS3231Temperature getTemperature() { return coreTemp; }
 

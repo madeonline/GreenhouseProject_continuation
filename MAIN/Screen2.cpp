@@ -35,6 +35,10 @@ void Screen2::doSetup(TFTMenu* menu)
   Screen.addScreen(ParamsScreen::create());
   Screen.addScreen(InductiveSensorScreen::create());
   Screen.addScreen(TransformerScreen::create());
+  Screen.addScreen(PulsesCountScreen::create());
+  Screen.addScreen(PulsesDeltaScreen::create());
+  Screen.addScreen(MotoresourceScreen::create());
+  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen2::doUpdate(TFTMenu* menu)
@@ -345,14 +349,278 @@ void InductiveSensorScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
   else if(pressedButton == pulsesCountButton)
     menu->switchToScreen("PulsesCountScreen");
   else if(pressedButton == pulseDeltaButton)
-    menu->switchToScreen("PulseDeltaScreenScreen");
+    menu->switchToScreen("PulsesDeltaScreen");
   else if(pressedButton == motoresourceButton)
+    menu->switchToScreen("MotoresourceScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// PulsesCountScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PulsesCountScreen::PulsesCountScreen() : AbstractTFTScreen("PulsesCountScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesCountScreen::doSetup(TFTMenu* menu)
+{
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+  
+  currentEditedButton = -1;
+  channel1PulsesVal = Settings.getChannelPulses(0);
+  channel2PulsesVal = Settings.getChannelPulses(1);
+  channel3PulsesVal = Settings.getChannelPulses(2);
+  
+  // тут настраиваемся, например, можем добавлять кнопки
+  //reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
+  channel1Button = screenButtons->addButton(120, 30, 95, 30, channel1PulsesVal.c_str());
+  channel2Button = screenButtons->addButton(120, 65, 95, 30, channel2PulsesVal.c_str());
+  channel3Button = screenButtons->addButton(120, 100, 95, 30, channel3PulsesVal.c_str());
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+  screenButtons->setButtonBackColor(channel1Button,VGA_BLACK);
+  screenButtons->setButtonBackColor(channel2Button,VGA_BLACK);
+  screenButtons->setButtonBackColor(channel3Button,VGA_BLACK);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesCountScreen::onKeyboardInput(bool enterPressed, const String& enteredValue)
+{
+  if(!enterPressed)
+    return;
+
+    if(currentEditedButton == channel1Button)
+    {
+      channel1PulsesVal = enteredValue;
+      screenButtons->relabelButton(channel1Button,channel1PulsesVal.c_str());
+      Settings.setChannelPulses(0,channel1PulsesVal.toInt());
+    }
+    else if(currentEditedButton == channel2Button)
+    {
+      channel2PulsesVal = enteredValue;
+      screenButtons->relabelButton(channel2Button,channel2PulsesVal.c_str());
+      Settings.setChannelPulses(1,channel2PulsesVal.toInt());
+    }
+    else if(currentEditedButton == channel3Button)
+    {
+      channel3PulsesVal = enteredValue;
+      screenButtons->relabelButton(channel3Button,channel3PulsesVal.c_str());
+      Settings.setChannelPulses(2,channel3PulsesVal.toInt());
+    }
+
+  currentEditedButton = -1;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesCountScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesCountScreen::doDraw(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  uint8_t* oldFont = dc->getFont();
+
+  dc->setFont(BigRusFont);
+  dc->setColor(VGA_WHITE);
+
+  menu->print("Импульсы",2,2);
+  menu->print("Канал 1:", 2, 37);
+  menu->print("Канал 2:", 2, 72);
+  menu->print("Канал 3:", 2, 107);
+  
+  dc->setFont(oldFont);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesCountScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("InductiveSensorScreen");
+  else
   {
-    //TODO: ТЕСТ ЭКРАННОЙ КЛАВИАТУРЫ !!!!
-    String strVal = String(Settings.getMotoresource(),16);
-    strVal.toUpperCase();
-    ScreenKeyboard->show(ktHex,strVal,this,NULL);
-    //menu->switchToScreen("MotoresourceScreen");
+    currentEditedButton = pressedButton;
+    String strValToEdit = screenButtons->getLabel(currentEditedButton);
+    ScreenKeyboard->show(ktDigits,strValToEdit,this,this, 5);
+  }
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// PulsesDeltaScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PulsesDeltaScreen::PulsesDeltaScreen() : AbstractTFTScreen("PulsesDeltaScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesDeltaScreen::doSetup(TFTMenu* menu)
+{
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+  
+  currentEditedButton = -1;
+  channel1DeltaVal = Settings.getChannelDelta(0);
+  channel2DeltaVal = Settings.getChannelDelta(1);
+  channel3DeltaVal = Settings.getChannelDelta(2);
+  
+  // тут настраиваемся, например, можем добавлять кнопки
+  //reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
+  channel1Button = screenButtons->addButton(120, 30, 95, 30, channel1DeltaVal.c_str());
+  channel2Button = screenButtons->addButton(120, 65, 95, 30, channel2DeltaVal.c_str());
+  channel3Button = screenButtons->addButton(120, 100, 95, 30, channel3DeltaVal.c_str());
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+  screenButtons->setButtonBackColor(channel1Button,VGA_BLACK);
+  screenButtons->setButtonBackColor(channel2Button,VGA_BLACK);
+  screenButtons->setButtonBackColor(channel3Button,VGA_BLACK);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesDeltaScreen::onKeyboardInput(bool enterPressed, const String& enteredValue)
+{
+  if(!enterPressed)
+    return;
+
+    if(currentEditedButton == channel1Button)
+    {
+      channel1DeltaVal = enteredValue;
+      screenButtons->relabelButton(channel1Button,channel1DeltaVal.c_str());
+      Settings.setChannelDelta(0,channel1DeltaVal.toInt());
+    }
+    else if(currentEditedButton == channel2Button)
+    {
+      channel2DeltaVal = enteredValue;
+      screenButtons->relabelButton(channel2Button,channel2DeltaVal.c_str());
+      Settings.setChannelDelta(1,channel2DeltaVal.toInt());
+    }
+    else if(currentEditedButton == channel3Button)
+    {
+      channel3DeltaVal = enteredValue;
+      screenButtons->relabelButton(channel3Button,channel3DeltaVal.c_str());
+      Settings.setChannelDelta(2,channel3DeltaVal.toInt());
+    }
+
+  currentEditedButton = -1;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesDeltaScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesDeltaScreen::doDraw(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  uint8_t* oldFont = dc->getFont();
+
+  dc->setFont(BigRusFont);
+  dc->setColor(VGA_WHITE);
+
+  menu->print("Дельты",2,2);
+  menu->print("Канал 1:", 2, 37);
+  menu->print("Канал 2:", 2, 72);
+  menu->print("Канал 3:", 2, 107);
+  
+  dc->setFont(oldFont);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void PulsesDeltaScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("InductiveSensorScreen");
+  else
+  {
+    currentEditedButton = pressedButton;
+    String strValToEdit = screenButtons->getLabel(currentEditedButton);
+    ScreenKeyboard->show(ktDigits,strValToEdit,this,this, 3);
+  }
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// MotoresourceScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MotoresourceScreen::MotoresourceScreen() : AbstractTFTScreen("MotoresourceScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceScreen::doSetup(TFTMenu* menu)
+{
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+  
+  currentEditedButton = -1;
+  channel1MotoresourceVal = Settings.getMotoresource(0);
+  channel2MotoresourceVal = Settings.getMotoresource(1);
+  channel3MotoresourceVal = Settings.getMotoresource(2);
+  
+  // тут настраиваемся, например, можем добавлять кнопки
+  //reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
+  channel1Button = screenButtons->addButton(120, 30, 95, 30, channel1MotoresourceVal.c_str());
+  channel2Button = screenButtons->addButton(120, 65, 95, 30, channel2MotoresourceVal.c_str());
+  channel3Button = screenButtons->addButton(120, 100, 95, 30, channel3MotoresourceVal.c_str());
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+  screenButtons->setButtonBackColor(channel1Button,VGA_BLACK);
+  screenButtons->setButtonBackColor(channel2Button,VGA_BLACK);
+  screenButtons->setButtonBackColor(channel3Button,VGA_BLACK);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceScreen::onKeyboardInput(bool enterPressed, const String& enteredValue)
+{
+  if(!enterPressed)
+    return;
+
+    if(currentEditedButton == channel1Button)
+    {
+      channel1MotoresourceVal = enteredValue;
+      screenButtons->relabelButton(channel1Button,channel1MotoresourceVal.c_str());
+      Settings.setMotoresource(0,channel1MotoresourceVal.toInt());
+    }
+    else if(currentEditedButton == channel2Button)
+    {
+      channel2MotoresourceVal = enteredValue;
+      screenButtons->relabelButton(channel2Button,channel2MotoresourceVal.c_str());
+      Settings.setMotoresource(1,channel2MotoresourceVal.toInt());
+    }
+    else if(currentEditedButton == channel3Button)
+    {
+      channel3MotoresourceVal = enteredValue;
+      screenButtons->relabelButton(channel3Button,channel3MotoresourceVal.c_str());
+      Settings.setMotoresource(2,channel3MotoresourceVal.toInt());
+    }
+
+  currentEditedButton = -1;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceScreen::doDraw(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  uint8_t* oldFont = dc->getFont();
+
+  dc->setFont(BigRusFont);
+  dc->setColor(VGA_WHITE);
+
+  menu->print("Моторесурс",2,2);
+  menu->print("Канал 1:", 2, 37);
+  menu->print("Канал 2:", 2, 72);
+  menu->print("Канал 3:", 2, 107);
+  
+  dc->setFont(oldFont);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("InductiveSensorScreen");
+  else
+  {
+    currentEditedButton = pressedButton;
+    String strValToEdit = screenButtons->getLabel(currentEditedButton);
+    ScreenKeyboard->show(ktDigits,strValToEdit,this,this, 8);
   }
     
 }

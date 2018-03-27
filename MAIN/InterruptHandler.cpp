@@ -81,16 +81,6 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
 
   Logger.writeLine(line);
 
-  // пишем кол-во срабатываний системы
-  uint32_t motoresource = Settings.getMotoresource();
-  motoresource++;
-  Settings.setMotoresource(motoresource);
-
-  line = "[MOTORESOURCE]";
-  line += motoresource;
-
-  Logger.writeLine(line);
-
 
   // теперь смотрим, в каких списках есть данные, подсчитываем общее время движения планки, в микросекундах, и пишем в файл
   if(lst1.size() > 1)
@@ -100,6 +90,16 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
     line += moveTime;
 
     Logger.writeLine(line);
+
+    // пишем кол-во срабатываний системы
+    uint32_t motoresource = Settings.getMotoresource(0);
+    motoresource++;
+    Settings.setMotoresource(0,motoresource);
+  
+    line = "[MOTORESOURCE_1]";
+    line += motoresource;
+  
+    Logger.writeLine(line);    
   } // if
 
   if(lst2.size() > 1)
@@ -109,6 +109,16 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
     line += moveTime;
 
     Logger.writeLine(line);
+
+    // пишем кол-во срабатываний системы
+    uint32_t motoresource = Settings.getMotoresource(1);
+    motoresource++;
+    Settings.setMotoresource(1,motoresource);
+  
+    line = "[MOTORESOURCE_2]";
+    line += motoresource;
+  
+    Logger.writeLine(line);       
   } // if
 
   if(lst3.size() > 1)
@@ -118,6 +128,16 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
     line += moveTime;
 
     Logger.writeLine(line);
+
+    // пишем кол-во срабатываний системы
+    uint32_t motoresource = Settings.getMotoresource(2);
+    motoresource++;
+    Settings.setMotoresource(2,motoresource);
+  
+    line = "[MOTORESOURCE_3]";
+    line += motoresource;
+  
+    Logger.writeLine(line);       
   } // if
   
   

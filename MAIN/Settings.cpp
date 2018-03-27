@@ -47,25 +47,57 @@ void SettingsClass::update()
   coreTemp = RealtimeClock.getTemperature();  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-uint32_t SettingsClass::getMotoresource()
+uint32_t SettingsClass::getMotoresource(uint8_t channelNum)
 {
+  uint16_t addr = 0;
+  switch(channelNum)
+  {
+    case 0:
+    addr = MOTORESOURCE_STORE_ADDRESS1;
+    break;
+    
+    case 1:
+    addr = MOTORESOURCE_STORE_ADDRESS2;
+    break;
+    
+    case 2:
+    addr = MOTORESOURCE_STORE_ADDRESS3;
+    break;
+  }
+
   uint32_t result = 0;
   uint8_t* writePtr = (uint8_t*)&result;
-  eeprom->read(MOTORESOURCE_STORE_ADDRESS,writePtr,sizeof(uint32_t));
+  eeprom->read(addr,writePtr,sizeof(uint32_t));
 
   if(result == 0xFFFFFFFF)
   {
     result = 0;
-    setMotoresource(result);
+    setMotoresource(channelNum,result);
   }
 
   return result;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void SettingsClass::setMotoresource(uint32_t val)
+void SettingsClass::setMotoresource(uint8_t channelNum, uint32_t val)
 {
-  uint8_t* writePtr = (uint8_t*)&val;
-  eeprom->write(MOTORESOURCE_STORE_ADDRESS,writePtr,sizeof(uint32_t));  
+  uint16_t addr = 0;
+  switch(channelNum)
+  {
+    case 0:
+    addr = MOTORESOURCE_STORE_ADDRESS1;
+    break;
+    
+    case 1:
+    addr = MOTORESOURCE_STORE_ADDRESS2;
+    break;
+    
+    case 2:
+    addr = MOTORESOURCE_STORE_ADDRESS3;
+    break;
+  }
+
+    uint8_t* writePtr = (uint8_t*)&val;
+    eeprom->write(addr,writePtr,sizeof(uint32_t));
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 uint16_t SettingsClass::getChannelPulses(uint8_t channelNum)
@@ -119,6 +151,56 @@ void SettingsClass::setChannelPulses(uint8_t channelNum, uint16_t val)
 
     uint8_t* writePtr = (uint8_t*)&val;
     eeprom->write(addr,writePtr,sizeof(uint16_t));
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+uint8_t SettingsClass::getChannelDelta(uint8_t channelNum)
+{
+  uint16_t addr = 0;
+  switch(channelNum)
+  {
+    case 0:
+    addr = CHANNEL_PULSES_DELTA_ADDRESS1;
+    break;
+    
+    case 1:
+    addr = CHANNEL_PULSES_DELTA_ADDRESS2;
+    break;
+    
+    case 2:
+    addr = CHANNEL_PULSES_DELTA_ADDRESS3;
+    break;
+  }
+
+  uint8_t result = eeprom->read(addr);
+
+  if(result == 0xFF)
+  {
+    result = 0;
+    setChannelDelta(channelNum,result);
+  }
+
+  return result;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SettingsClass::setChannelDelta(uint8_t channelNum, uint8_t val)
+{
+  uint16_t addr = 0;
+  switch(channelNum)
+  {
+    case 0:
+    addr = CHANNEL_PULSES_DELTA_ADDRESS1;
+    break;
+    
+    case 1:
+    addr = CHANNEL_PULSES_DELTA_ADDRESS2;
+    break;
+    
+    case 2:
+    addr = CHANNEL_PULSES_DELTA_ADDRESS3;
+    break;
+  }
+
+  eeprom->write(addr,val);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

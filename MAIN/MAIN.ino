@@ -23,6 +23,10 @@ void setup()
 {
   Serial.begin(115200);
   while(!Serial);
+
+  DBGLN(F("INIT settings..."));
+  Settings.begin();
+  DBGLN(F("Settings inited."));
   
   ConfigPin::setup();
  
@@ -33,10 +37,6 @@ void setup()
   DBGLN(F("INIT SD..."));
   SDInit::InitSD();
   DBGLN(F("SD inited."));
-
-  DBGLN(F("INIT settings..."));
-  Settings.begin();
-  DBGLN(F("Settings inited."));
   
 
   DBGLN(F("Init screen..."));
