@@ -104,7 +104,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
   dc->setFont(SmallRusFont);
   uint8_t fontHeight = dc->getFontYsize();
   
-  uint16_t curX = 170;
+  uint16_t curX = 190;
   uint16_t curY = 20;
 
   VoltageData vData = Settings.get3V3Voltage();// Контроль источника питания +3.3в
@@ -120,7 +120,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
       color = VGA_LIME;
   
-    String data = String(vData.voltage,1);
+    String data = String(vData.voltage,1)+"V";
     while(data.length() < 6)
       data += ' ';
     
@@ -146,7 +146,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
       color = VGA_LIME;
   
-    String data = String(vData.voltage,1);
+    String data = String(vData.voltage,1) + "V";
     while(data.length() < 6)
       data += ' ';
   
@@ -172,7 +172,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
     if(vData.voltage >= lowBorder && vData.voltage <= highBorder)
       color = VGA_LIME;
   
-    String data = String((uint16_t)vData.voltage);
+    String data = String((uint16_t)vData.voltage) + "V";
     while(data.length() < 3)
       data += ' ';
   
