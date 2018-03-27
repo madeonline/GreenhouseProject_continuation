@@ -3,6 +3,7 @@
 #include "FileUtils.h"
 #include "TinyVector.h"
 #include "CONFIG.h"
+#include "Settings.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ViewLogScreen* ViewLogScreenInstance = NULL;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -346,7 +347,13 @@ void InductiveSensorScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
   else if(pressedButton == pulseDeltaButton)
     menu->switchToScreen("PulseDeltaScreenScreen");
   else if(pressedButton == motoresourceButton)
-    menu->switchToScreen("MotoresourceScreen");
+  {
+    //TODO: ТЕСТ ЭКРАННОЙ КЛАВИАТУРЫ !!!!
+    String strVal = String(Settings.getMotoresource(),16);
+    strVal.toUpperCase();
+    ScreenKeyboard->show(ktHex,strVal,this,NULL);
+    //menu->switchToScreen("MotoresourceScreen");
+  }
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

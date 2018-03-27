@@ -88,6 +88,10 @@ void TFTMenu::setup()
   // добавляем экран мессадж-бокса
   addScreen(MessageBoxScreen::create());
 
+  // добавляем экран экранной клавиатуры
+  addScreen(KeyboardScreen::create());
+  
+
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -285,6 +289,198 @@ AbstractTFTScreen* MessageBoxScreen::create()
 {
     MessageBox = new MessageBoxScreen();
     return MessageBox;  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// KeyboardScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+KeyboardScreen* ScreenKeyboard;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+AbstractTFTScreen* KeyboardScreen::create()
+{
+  ScreenKeyboard = new KeyboardScreen();
+  return ScreenKeyboard;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+KeyboardScreen::KeyboardScreen() : AbstractTFTScreen("KBD")
+{
+  targetInput = NULL;
+  targetScreen = NULL;
+
+  // максимум 8 символов в HEX-представлении
+  input_maxlength = 8;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void KeyboardScreen::doSetup(TFTMenu* menu)
+{
+  const char* capts[] = 
+  {
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"
+  };
+
+  const uint8_t buttons_in_row = 4;
+  const uint8_t total_rows = 4;
+  
+  const uint8_t btn_width = 50;
+  const uint8_t btn_height = 20;
+
+  int curTop = 30;
+  int btnCntr = 0;
+
+  int curLeft;
+
+  for(uint8_t i=0;i<total_rows;i++)
+  {
+    curLeft = 4;
+    for(uint8_t j=0;j<buttons_in_row;j++)
+    {
+      screenButtons->addButton(curLeft, curTop, btn_width, btn_height, capts[btnCntr]);
+      btnCntr++;
+      curLeft += btn_width + 2;
+    } // for
+    
+    curTop += btn_height + 2;
+  } // for
+
+  curLeft = 4;
+  curTop += 6;
+  
+  const uint8_t controlButtonWidth = 66;
+  const uint8_t controlButtonHeight = 50;
+  
+  clearButton = screenButtons->addButton(curLeft, curTop, controlButtonWidth, controlButtonHeight, "DEL");
+  curLeft += controlButtonWidth + 4;
+
+  exitButton = screenButtons->addButton(curLeft, curTop, controlButtonWidth, controlButtonHeight, "ОТМ");
+  curLeft += controlButtonWidth + 4;
+
+  enterButton = screenButtons->addButton(curLeft, curTop, controlButtonWidth, controlButtonHeight, "ДА");
+  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void KeyboardScreen::doUpdate(TFTMenu* menu)
+{
+  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void KeyboardScreen::doDraw(TFTMenu* menu)
+{
+  // сначала рисуем бокс для поля ввода
+  
+  UTFT* dc = menu->getDC();
+  int screenW = dc->getDisplayXSize();
+  int boxX = 4;
+  int boxY = 2;
+  int boxX2 = screenW - 8;
+  int boxY2 = boxY + 20;
+  
+  dc->setColor(VGA_WHITE);
+  dc->drawRoundRect(boxX,boxY,boxX2,boxY2);
+  
+  drawValue(menu);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void KeyboardScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton < 16)
+  {
+    // нажата одна из кнопок ввода значений
+    input += screenButtons->getLabel(pressedButton);
+
+    //Тут проверяем на максимальную длину    
+    if(input.length() > input_maxlength)
+      input.remove(input_maxlength);
+         
+    drawValue(menu);
+  }
+  else
+  {
+    // нажата одна из управляющих кнопок
+    if(pressedButton == exitButton)
+    {
+      if(targetInput)
+        targetInput->onKeyboardInput(false,"");
+
+      Screen.switchToScreen(targetScreen);
+    }
+    else
+    if(pressedButton == clearButton)
+    {
+      input = "";
+      drawValue(menu);
+    }
+    else
+    if(pressedButton == enterButton)
+    {
+      if(targetInput)
+        targetInput->onKeyboardInput(true,input);
+
+      Screen.switchToScreen(targetScreen);
+    }
+  } // else
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void KeyboardScreen::show(KeyboardType type, const String& initialValue, AbstractTFTScreen* _targetScreen, KeyboardInputTarget* _targetInput)
+{
+  targetScreen = _targetScreen;
+  targetInput = _targetInput;
+
+  input = initialValue;
+
+  //Тут проверяем на максимальную длину 
+  if(input.length() > input_maxlength)
+     input.remove(input_maxlength);
+        
+
+  //Тут убираем некоторые кнопки, если тип != ktHex
+  switch(type)
+  {
+    case ktDigits:
+    {
+      for(int i=10;i<16;i++)
+        screenButtons->hideButton(i);
+    }
+    break; // ktDigits
+
+    case ktHex:
+    {
+      for(int i=10;i<16;i++)
+        screenButtons->showButton(i);      
+    }
+    break; // ktHex
+    
+  } // switch
+
+  Screen.switchToScreen(this);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void KeyboardScreen::drawValue(TFTMenu* menu)
+{
+  //тут рисуем то, что введено
+ int textX = 6;
+ int textY = 4;
+
+ UTFT* dc = menu->getDC();
+
+ uint8_t* oldFont = dc->getFont();
+ dc->setFont(BigRusFont);
+ dc->setColor(VGA_WHITE);
+
+ int fontWidth = dc->getFontXsize();
+
+ int strLen = menu->print(input.c_str(),0,0,0,true);
+ menu->print(input.c_str(),textX,textY);
+
+ textX += strLen*fontWidth;
+
+ // забиваем пробелами оставшуюся часть
+ for(size_t i=strLen;i<input_maxlength;i++)
+ {
+   menu->print(" ",textX,textY);
+   textX += fontWidth;
+ }
+
+
+ dc->setFont(oldFont);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
