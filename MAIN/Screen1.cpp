@@ -44,13 +44,14 @@ void loopADC()
 
       raw200V += cBuf[i+3];        // Данные Измерение =200В
       raw3V3 += cBuf[i+4];         // Данные Измерение 3V3 
-      raw5V += cBuf[i+3];        // Данные Измерение +5V 
+      raw5V += cBuf[i+3];          // Данные Измерение +5V 
       
 	  } // for
-
-    raw200V /= bufferLength;
-    raw3V3 /= bufferLength;
-    raw5V /= bufferLength;
+	//Serial.print("raw - ");
+	//Serial.println(raw3V3);
+    raw200V /= countOfPoints;
+    raw3V3 /= countOfPoints;
+    raw5V /= countOfPoints;
 
     Settings.set3V3RawVoltage(raw3V3);
     Settings.set5VRawVoltage(raw5V);

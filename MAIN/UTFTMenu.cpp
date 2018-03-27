@@ -321,7 +321,7 @@ void KeyboardScreen::doSetup(TFTMenu* menu)
   const uint8_t total_rows = 4;
   
   const uint8_t btn_width = 50;
-  const uint8_t btn_height = 20;
+  const uint8_t btn_height = 25;
 
   int curTop = 30;
   int btnCntr = 0;
@@ -345,15 +345,15 @@ void KeyboardScreen::doSetup(TFTMenu* menu)
   curTop += 6;
   
   const uint8_t controlButtonWidth = 66;
-  const uint8_t controlButtonHeight = 50;
+  const uint8_t controlButtonHeight = 30;
   
   clearButton = screenButtons->addButton(curLeft, curTop, controlButtonWidth, controlButtonHeight, "DEL");
   curLeft += controlButtonWidth + 4;
 
-  exitButton = screenButtons->addButton(curLeft, curTop, controlButtonWidth, controlButtonHeight, "ОТМ");
+  exitButton = screenButtons->addButton(curLeft, curTop, controlButtonWidth, controlButtonHeight, "ВЫХ");
   curLeft += controlButtonWidth + 4;
 
-  enterButton = screenButtons->addButton(curLeft, curTop, controlButtonWidth, controlButtonHeight, "ДА");
+  enterButton = screenButtons->addButton(curLeft, curTop, controlButtonWidth, controlButtonHeight, "ВВОД");
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
