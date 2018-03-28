@@ -110,8 +110,8 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
   uint8_t boxSize = 20;   
 
   uint8_t curVal = Settings.getInductiveSensorState(0);
-  //if(inductiveSensorState1 != curVal)
-  //{
+  if(inductiveSensorState1 != curVal)
+  {
 
     inductiveSensorState1 = curVal;
     if(inductiveSensorState1)
@@ -125,7 +125,7 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
     dc->setColor(VGA_BLACK);
     dc->print("1", curX + 8, curY + 4);
 
- // }
+  }
 
   curY += boxSize + 4;
 
