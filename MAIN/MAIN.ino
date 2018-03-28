@@ -24,12 +24,12 @@ void setup()
   Serial.begin(115200);
   while(!Serial);
 
+  ConfigPin::setup();
+  
   DBGLN(F("INIT settings..."));
   Settings.begin();
   DBGLN(F("Settings inited."));
   
-  ConfigPin::setup();
- 
   DBGLN(F("Init ADC..."));
   RealtimeClock.begin(1);           // запускаем их на шине I2C 1 (SDA1, SCL1);
  // RealtimeClock.setTime(0,1,11,1,7,2,2018);
