@@ -286,7 +286,7 @@ void ParamsScreen::doSetup(TFTMenu* menu)
   
   // тут настраиваемся, например, можем добавлять кнопки
   inductiveSensorButton = screenButtons->addButton(5, 2, 210, 30, "Инд. датчик");
-  transformerButton = screenButtons->addButton(5, 37, 210, 30, "Ток. транс.");
+  transformerButton = screenButtons->addButton(5, 37, 210, 30, "Пороги транс.");
 //  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
 //  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
   backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");

@@ -47,8 +47,7 @@ void loopADC()
       raw5V += cBuf[i+5];          // Данные Измерение +5V 
       
 	  } // for
-	//Serial.print("raw - ");
-	//Serial.println(raw3V3);
+
     raw200V /= countOfPoints;
     raw3V3 /= countOfPoints;
     raw5V /= countOfPoints;
@@ -111,21 +110,22 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
   uint8_t boxSize = 20;   
 
   uint8_t curVal = Settings.getInductiveSensorState(0);
-  if(inductiveSensorState1 != curVal)
-  {
+  //if(inductiveSensorState1 != curVal)
+  //{
+
     inductiveSensorState1 = curVal;
     if(inductiveSensorState1)
-      color = VGA_GREEN;
+      color = VGA_LIME;
     else
       color = VGA_RED;
 
     dc->setColor(color);
     dc->setBackColor(color);
     dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
-    dc->setColor(VGA_WHITE);
+    dc->setColor(VGA_BLACK);
     dc->print("1", curX + 8, curY + 4);
 
-  }
+ // }
 
   curY += boxSize + 4;
 
@@ -134,14 +134,14 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
   {
     inductiveSensorState2 = curVal;
     if(inductiveSensorState2)
-      color = VGA_GREEN;
+      color = VGA_LIME;
     else
       color = VGA_RED;
 
     dc->setColor(color);
     dc->setBackColor(color);
     dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
-    dc->setColor(VGA_WHITE);
+    dc->setColor(VGA_BLACK);
     dc->print("2", curX + 8, curY + 4);
 
   }
@@ -153,14 +153,14 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
   {
     inductiveSensorState3 = curVal;
     if(inductiveSensorState3)
-      color = VGA_GREEN;
+      color = VGA_LIME;
     else
       color = VGA_RED;
 
     dc->setColor(color);
     dc->setBackColor(color);
     dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
-    dc->setColor(VGA_WHITE);
+    dc->setColor(VGA_BLACK);
     dc->print("3", curX + 8, curY + 4);
 
   }
