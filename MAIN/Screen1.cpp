@@ -104,6 +104,7 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
   word oldBackColor = dc->getBackColor();  
   word oldColor = dc->getColor();
   uint8_t* oldFont = dc->getFont();
+  dc->setFont(SmallRusFont);
 
   uint16_t curX = 162;
   uint16_t curY = 20; 
