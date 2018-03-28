@@ -135,6 +135,59 @@ void SettingsClass::setMotoresource(uint8_t channelNum, uint32_t val)
     eeprom->write(addr,writePtr,sizeof(uint32_t));
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+uint32_t SettingsClass::getMotoresourceMax(uint8_t channelNum)
+{
+  uint16_t addr = 0;
+  switch(channelNum)
+  {
+    case 0:
+    addr = MOTORESOURCE_MAX_STORE_ADDRESS1;
+    break;
+    
+    case 1:
+    addr = MOTORESOURCE_MAX_STORE_ADDRESS2;
+    break;
+    
+    case 2:
+    addr = MOTORESOURCE_MAX_STORE_ADDRESS3;
+    break;
+  }
+
+  uint32_t result = 0;
+  uint8_t* writePtr = (uint8_t*)&result;
+  eeprom->read(addr,writePtr,sizeof(uint32_t));
+
+  if(result == 0xFFFFFFFF)
+  {
+    result = 0;
+    setMotoresourceMax(channelNum,result);
+  }
+
+  return result;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SettingsClass::setMotoresourceMax(uint8_t channelNum, uint32_t val)
+{
+  uint16_t addr = 0;
+  switch(channelNum)
+  {
+    case 0:
+    addr = MOTORESOURCE_MAX_STORE_ADDRESS1;
+    break;
+    
+    case 1:
+    addr = MOTORESOURCE_MAX_STORE_ADDRESS2;
+    break;
+    
+    case 2:
+    addr = MOTORESOURCE_MAX_STORE_ADDRESS3;
+    break;
+  }
+
+    uint8_t* writePtr = (uint8_t*)&val;
+    eeprom->write(addr,writePtr,sizeof(uint32_t));
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 uint16_t SettingsClass::getChannelPulses(uint8_t channelNum)
 {
   uint16_t addr = 0;

@@ -38,6 +38,7 @@ void Screen2::doSetup(TFTMenu* menu)
   Screen.addScreen(PulsesCountScreen::create());
   Screen.addScreen(PulsesDeltaScreen::create());
   Screen.addScreen(MotoresourceScreen::create());
+  Screen.addScreen(MotoresourceMaxScreen::create());
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -325,9 +326,9 @@ void InductiveSensorScreen::doSetup(TFTMenu* menu)
 {
   // тут настраиваемся, например, можем добавлять кнопки
   pulsesCountButton = screenButtons->addButton(5, 2, 210, 30, "Импульсы");
-  pulseDeltaButton = screenButtons->addButton(5, 37, 210, 30, "Дельта");
-  motoresourceButton = screenButtons->addButton( 5, 72, 210, 30, "Наработка");
-//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  pulseDeltaButton = screenButtons->addButton(5, 37, 210, 30, "Дельты");
+  motoresourceButton = screenButtons->addButton( 5, 72, 210, 30, "Ресурс тек.");
+  motoresourceMaxButton = screenButtons->addButton(5, 107, 210, 30, "Ресурс макс.");
   backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
 
 }
@@ -352,6 +353,8 @@ void InductiveSensorScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
     menu->switchToScreen("PulsesDeltaScreen");
   else if(pressedButton == motoresourceButton)
     menu->switchToScreen("MotoresourceScreen");
+  else if(pressedButton == motoresourceMaxButton)
+    menu->switchToScreen("MotoresourceMaxScreen");
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -542,21 +545,27 @@ MotoresourceScreen::MotoresourceScreen() : AbstractTFTScreen("MotoresourceScreen
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceScreen::onActivate()
+{
+  channel1MotoresourceVal = Settings.getMotoresource(0);
+  channel2MotoresourceVal = Settings.getMotoresource(1);
+  channel3MotoresourceVal = Settings.getMotoresource(2);  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void MotoresourceScreen::doSetup(TFTMenu* menu)
 {
   screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
   
   currentEditedButton = -1;
-  channel1MotoresourceVal = Settings.getMotoresource(0);
-  channel2MotoresourceVal = Settings.getMotoresource(1);
-  channel3MotoresourceVal = Settings.getMotoresource(2);
+  onActivate();
   
   // тут настраиваемся, например, можем добавлять кнопки
   //reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
   channel1Button = screenButtons->addButton(120, 30, 95, 30, channel1MotoresourceVal.c_str());
   channel2Button = screenButtons->addButton(120, 65, 95, 30, channel2MotoresourceVal.c_str());
   channel3Button = screenButtons->addButton(120, 100, 95, 30, channel3MotoresourceVal.c_str());
-  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+  backButton = screenButtons->addButton(5, 142, 100, 30, "ВЫХОД");
+  resetButton = screenButtons->addButton(113, 142, 100, 30, "СБРОС");
 
   screenButtons->setButtonBackColor(channel1Button,VGA_BLACK);
   screenButtons->setButtonBackColor(channel2Button,VGA_BLACK);
@@ -604,7 +613,7 @@ void MotoresourceScreen::doDraw(TFTMenu* menu)
   dc->setFont(BigRusFont);
   dc->setColor(VGA_WHITE);
 
-  menu->print("Моторесурс",2,2);
+  menu->print("Ресурс тек.",2,2);
   menu->print("Канал 1:", 2, 37);
   menu->print("Канал 2:", 2, 72);
   menu->print("Канал 3:", 2, 107);
@@ -616,7 +625,130 @@ void MotoresourceScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
     menu->switchToScreen("InductiveSensorScreen");
+  else if(pressedButton == resetButton)
+  {
+      channel1MotoresourceVal = '0';
+      channel2MotoresourceVal = '0';
+      channel3MotoresourceVal = '0';
+      
+      screenButtons->relabelButton(channel1Button,channel1MotoresourceVal.c_str(),true);
+      screenButtons->relabelButton(channel2Button,channel2MotoresourceVal.c_str(),true);
+      screenButtons->relabelButton(channel3Button,channel3MotoresourceVal.c_str(),true);
+      
+      Settings.setMotoresource(0,channel1MotoresourceVal.toInt());    
+      Settings.setMotoresource(1,channel2MotoresourceVal.toInt());    
+      Settings.setMotoresource(2,channel3MotoresourceVal.toInt());    
+  }
   else
+  {
+    currentEditedButton = pressedButton;
+    String strValToEdit = screenButtons->getLabel(currentEditedButton);
+    ScreenKeyboard->show(ktDigits,strValToEdit,this,this, 8);
+  }
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// MotoresourceMaxScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MotoresourceMaxScreen::MotoresourceMaxScreen() : AbstractTFTScreen("MotoresourceMaxScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceMaxScreen::onActivate()
+{
+  channel1MotoresourceVal = Settings.getMotoresourceMax(0);
+  channel2MotoresourceVal = Settings.getMotoresourceMax(1);
+  channel3MotoresourceVal = Settings.getMotoresourceMax(2);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceMaxScreen::doSetup(TFTMenu* menu)
+{
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+  
+  currentEditedButton = -1;
+  onActivate();
+  
+  // тут настраиваемся, например, можем добавлять кнопки
+  //reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
+  channel1Button = screenButtons->addButton(120, 30, 95, 30, channel1MotoresourceVal.c_str());
+  channel2Button = screenButtons->addButton(120, 65, 95, 30, channel2MotoresourceVal.c_str());
+  channel3Button = screenButtons->addButton(120, 100, 95, 30, channel3MotoresourceVal.c_str());
+  backButton = screenButtons->addButton(5, 142, 100, 30, "ВЫХОД");
+  resetButton = screenButtons->addButton(113, 142, 100, 30, "СБРОС");
+
+  screenButtons->setButtonBackColor(channel1Button,VGA_BLACK);
+  screenButtons->setButtonBackColor(channel2Button,VGA_BLACK);
+  screenButtons->setButtonBackColor(channel3Button,VGA_BLACK);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceMaxScreen::onKeyboardInput(bool enterPressed, const String& enteredValue)
+{
+  if(!enterPressed)
+    return;
+
+    if(currentEditedButton == channel1Button)
+    {
+      channel1MotoresourceVal = enteredValue;
+      screenButtons->relabelButton(channel1Button,channel1MotoresourceVal.c_str());
+      Settings.setMotoresourceMax(0,channel1MotoresourceVal.toInt());
+    }
+    else if(currentEditedButton == channel2Button)
+    {
+      channel2MotoresourceVal = enteredValue;
+      screenButtons->relabelButton(channel2Button,channel2MotoresourceVal.c_str());
+      Settings.setMotoresourceMax(1,channel2MotoresourceVal.toInt());
+    }
+    else if(currentEditedButton == channel3Button)
+    {
+      channel3MotoresourceVal = enteredValue;
+      screenButtons->relabelButton(channel3Button,channel3MotoresourceVal.c_str());
+      Settings.setMotoresourceMax(2,channel3MotoresourceVal.toInt());
+    }
+
+  currentEditedButton = -1;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceMaxScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceMaxScreen::doDraw(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  uint8_t* oldFont = dc->getFont();
+
+  dc->setFont(BigRusFont);
+  dc->setColor(VGA_WHITE);
+
+  menu->print("Ресурс макс.",2,2);
+  menu->print("Канал 1:", 2, 37);
+  menu->print("Канал 2:", 2, 72);
+  menu->print("Канал 3:", 2, 107);
+  
+  dc->setFont(oldFont);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void MotoresourceMaxScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("InductiveSensorScreen");
+  else if(pressedButton == resetButton)
+  {
+      channel1MotoresourceVal = '0';
+      channel2MotoresourceVal = '0';
+      channel3MotoresourceVal = '0';
+      
+      screenButtons->relabelButton(channel1Button,channel1MotoresourceVal.c_str(),true);
+      screenButtons->relabelButton(channel2Button,channel2MotoresourceVal.c_str(),true);
+      screenButtons->relabelButton(channel3Button,channel3MotoresourceVal.c_str(),true);
+      
+      Settings.setMotoresourceMax(0,channel1MotoresourceVal.toInt());    
+      Settings.setMotoresourceMax(1,channel2MotoresourceVal.toInt());    
+      Settings.setMotoresourceMax(2,channel3MotoresourceVal.toInt());    
+  }  else
   {
     currentEditedButton = pressedButton;
     String strValToEdit = screenButtons->getLabel(currentEditedButton);
@@ -1012,6 +1144,12 @@ void ViewLogScreen::doUpdate(TFTMenu* menu)
   if(filesButtons)
   {
     int checkedFilesButton = filesButtons->checkButtons();
+
+    if(checkedFilesButton != -1)
+    {
+      menu->notifyAction(this);
+    }
+    
     if(checkedFilesButton == prevPageButton)
     {
       showPage(-1);

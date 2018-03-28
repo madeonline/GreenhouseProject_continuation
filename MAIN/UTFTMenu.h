@@ -55,6 +55,8 @@ typedef Vector<AbstractTFTScreen*> TFTScreensList; // список экрано�
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // класс-менеджер работы с TFT
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+typedef void (*OnScreenAction)(AbstractTFTScreen* screen);
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class TFTMenu
 {
 
@@ -66,6 +68,10 @@ public:
 
   void addScreen(AbstractTFTScreen* screen);
 
+  AbstractTFTScreen* getActiveScreen();
+  void onAction(OnScreenAction handler) {on_action = handler;}
+  void notifyAction(AbstractTFTScreen* screen);
+
   void switchToScreen(AbstractTFTScreen* screen);
   void switchToScreen(const char* screenName);
   void switchToScreen(unsigned int screenIndex);
@@ -76,12 +82,13 @@ public:
 
   int print(const char* str,int x, int y, int deg=0, bool computeStringLengthOnly=false);
 
- 
 
 private:
 
   AbstractTFTScreen* requestedToActiveScreen;
   int requestedToActiveScreenIndex;
+
+  OnScreenAction on_action;
   
   TFTScreensList screens;
   UTFT* tftDC;

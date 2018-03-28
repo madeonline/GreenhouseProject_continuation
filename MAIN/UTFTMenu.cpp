@@ -30,7 +30,10 @@ void AbstractTFTScreen::update(TFTMenu* menu)
   int pressedButton = screenButtons->checkButtons();
   
   if(pressedButton != -1)
+  {
+    menu->notifyAction(this);
     onButtonPressed(menu, pressedButton);
+  }
 
     if(isActive())
       doUpdate(menu);
@@ -55,6 +58,13 @@ TFTMenu::TFTMenu()
   currentScreenIndex = -1;
   requestedToActiveScreen = NULL;
   requestedToActiveScreenIndex = -1;
+  on_action = NULL;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void TFTMenu::notifyAction(AbstractTFTScreen* screen)
+{
+  if(on_action)
+    on_action(screen);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void TFTMenu::addScreen(AbstractTFTScreen* screen)
@@ -138,6 +148,14 @@ void TFTMenu::update()
   currentScreen->update(this);
   
   
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+AbstractTFTScreen* TFTMenu::getActiveScreen()
+{
+  if(currentScreenIndex < 0 || !screens.size())
+    return NULL;
+
+  return screens[currentScreenIndex];
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void TFTMenu::switchToScreen(AbstractTFTScreen* screen)

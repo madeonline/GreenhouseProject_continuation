@@ -216,7 +216,7 @@ protected:
 private:
       InductiveSensorScreen();
 
-      int pulsesCountButton, pulseDeltaButton, motoresourceButton, backButton;
+      int pulsesCountButton, pulseDeltaButton, motoresourceButton, motoresourceMaxButton, backButton;
   
   
 };
@@ -292,11 +292,40 @@ protected:
     virtual void doUpdate(TFTMenu* menu);
     virtual void doDraw(TFTMenu* menu);
     virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+    virtual void onActivate();
 
 private:
       MotoresourceScreen();
 
-      int channel1Button, channel2Button, channel3Button, backButton;
+      int channel1Button, channel2Button, channel3Button, backButton, resetButton;
+      String channel1MotoresourceVal, channel2MotoresourceVal, channel3MotoresourceVal;
+      int currentEditedButton;
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class MotoresourceMaxScreen : public AbstractTFTScreen, public KeyboardInputTarget
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new MotoresourceMaxScreen();
+  }
+
+  virtual void onKeyboardInput(bool enterPressed, const String& enteredValue);
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+    virtual void onActivate();
+
+private:
+      MotoresourceMaxScreen();
+
+      int channel1Button, channel2Button, channel3Button, backButton, resetButton;
       String channel1MotoresourceVal, channel2MotoresourceVal, channel3MotoresourceVal;
       int currentEditedButton;
   

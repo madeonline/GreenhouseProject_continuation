@@ -123,7 +123,7 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
     dc->setBackColor(color);
     dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
     dc->setColor(VGA_BLACK);
-    dc->print("1", curX + 8, curY + 4);
+    menu->print("1", curX + 8, curY + 4);
 
   }
 
@@ -142,7 +142,7 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
     dc->setBackColor(color);
     dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
     dc->setColor(VGA_BLACK);
-    dc->print("2", curX + 8, curY + 4);
+    menu->print("2", curX + 8, curY + 4);
 
   }
 
@@ -161,7 +161,7 @@ void Screen1::drawInductiveSensors(TFTMenu* menu)
     dc->setBackColor(color);
     dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
     dc->setColor(VGA_BLACK);
-    dc->print("3", curX + 8, curY + 4);
+    menu->print("3", curX + 8, curY + 4);
 
   }
 

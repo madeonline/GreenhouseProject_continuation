@@ -33,6 +33,9 @@ class SettingsClass
     // работа с моторесурсом системы
     uint32_t getMotoresource(uint8_t channelNum);
     void setMotoresource(uint8_t channelNum, uint32_t val);
+    
+    uint32_t getMotoresourceMax(uint8_t channelNum);
+    void setMotoresourceMax(uint8_t channelNum, uint32_t val);
 
     DS3231Temperature getTemperature() { return coreTemp; }
 
