@@ -268,6 +268,8 @@ void Screen1::drawVoltage(TFTMenu* menu)
 void Screen1::onDeactivate()
 {
   last3V3Voltage = last5Vvoltage = last200Vvoltage = -1;
+
+  inductiveSensorState1 = inductiveSensorState2 = inductiveSensorState3 = 0xFF;
   
   // прекращаем отрисовку графика
   chart.stopDraw();
