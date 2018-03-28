@@ -43,13 +43,18 @@ class SettingsClass
     VoltageData get3V3Voltage() { return voltage3V3; }
     VoltageData get5Vvoltage() { return voltage5V; }
     VoltageData get200Vvoltage() {return voltage200V; }
+
+    // состояние индуктивных датчиков
+    uint8_t getInductiveSensorState(uint8_t channelNum);
     
   private:
 
     AT24C64* eeprom;
     DS3231Temperature coreTemp;
-    uint32_t timer;
+    uint32_t timer, inductiveSensorsTimer;
 
+    void updateInductiveSensors();
+    uint8_t inductiveSensorState1, inductiveSensorState2, inductiveSensorState3;
 
     VoltageData voltage3V3, voltage5V, voltage200V;
   

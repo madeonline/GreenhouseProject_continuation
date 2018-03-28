@@ -37,6 +37,9 @@ private:
     int last3V3Voltage, last5Vvoltage, last200Vvoltage;
     void drawVoltage(TFTMenu* menu);
 
+    void drawInductiveSensors(TFTMenu* menu);
+    uint8_t inductiveSensorState1, inductiveSensorState2, inductiveSensorState3;
+
     void drawChart(); // рисуем наши графики
     bool canDrawChart;
     bool inDrawingChart;

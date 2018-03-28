@@ -89,6 +89,85 @@ Screen1::Screen1() : AbstractTFTScreen("Main")
   canDrawChart = false;
   inDrawingChart = false;
   last3V3Voltage = last5Vvoltage = last200Vvoltage = -1;
+
+  inductiveSensorState1 = inductiveSensorState2 = inductiveSensorState3 = 0xFF;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void Screen1::drawInductiveSensors(TFTMenu* menu)
+{
+  if(!isActive())
+    return; 
+
+  word color = VGA_RED;
+  UTFT* dc = menu->getDC();
+  
+  word oldBackColor = dc->getBackColor();  
+  word oldColor = dc->getColor();
+  uint8_t* oldFont = dc->getFont();
+
+  uint16_t curX = 162;
+  uint16_t curY = 20; 
+  uint8_t boxSize = 20;   
+
+  uint8_t curVal = Settings.getInductiveSensorState(0);
+  if(inductiveSensorState1 != curVal)
+  {
+    inductiveSensorState1 = curVal;
+    if(inductiveSensorState1)
+      color = VGA_GREEN;
+    else
+      color = VGA_RED;
+
+    dc->setColor(color);
+    dc->setBackColor(color);
+    dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
+    dc->setColor(VGA_WHITE);
+    dc->print("1", curX + 8, curY + 4);
+
+  }
+
+  curY += boxSize + 4;
+
+  curVal = Settings.getInductiveSensorState(1);
+  if(inductiveSensorState2 != curVal)
+  {
+    inductiveSensorState2 = curVal;
+    if(inductiveSensorState2)
+      color = VGA_GREEN;
+    else
+      color = VGA_RED;
+
+    dc->setColor(color);
+    dc->setBackColor(color);
+    dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
+    dc->setColor(VGA_WHITE);
+    dc->print("2", curX + 8, curY + 4);
+
+  }
+
+  curY += boxSize + 4;  
+
+  curVal = Settings.getInductiveSensorState(2);
+  if(inductiveSensorState3 != curVal)
+  {
+    inductiveSensorState3 = curVal;
+    if(inductiveSensorState3)
+      color = VGA_GREEN;
+    else
+      color = VGA_RED;
+
+    dc->setColor(color);
+    dc->setBackColor(color);
+    dc->fillRoundRect(curX, curY, curX + boxSize, curY + boxSize);
+    dc->setColor(VGA_WHITE);
+    dc->print("3", curX + 8, curY + 4);
+
+  }
+
+
+  dc->setBackColor(oldBackColor);
+  dc->setColor(oldColor);
+  dc->setFont(oldFont);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::drawVoltage(TFTMenu* menu)
@@ -121,7 +200,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
       color = VGA_LIME;
   
     String data = String(vData.voltage,1)+"V";
-    while(data.length() < 6)
+    while(data.length() < 4)
       data += ' ';
     
     dc->setColor(color);
@@ -147,7 +226,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
       color = VGA_LIME;
   
     String data = String(vData.voltage,1) + "V";
-    while(data.length() < 6)
+    while(data.length() < 4)
       data += ' ';
   
     dc->setColor(color);  
@@ -173,7 +252,7 @@ void Screen1::drawVoltage(TFTMenu* menu)
       color = VGA_LIME;
   
     String data = String((uint16_t)vData.voltage) + "V";
-    while(data.length() < 3)
+    while(data.length() < 4)
       data += ' ';
   
     dc->setColor(color);  
@@ -256,6 +335,7 @@ void Screen1::doUpdate(TFTMenu* menu)
 	
   drawTime(menu);
   drawVoltage(menu);
+  drawInductiveSensors(menu);
   drawChart();
 
   loopADC();

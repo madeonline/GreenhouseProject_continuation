@@ -9,8 +9,29 @@ SettingsClass::SettingsClass()
 {
   eeprom = NULL;
   timer = DATA_MEASURE_THRESHOLD;
+  inductiveSensorsTimer = INDUCTIVE_SENSORS_UPDATE_INTERVAL;
+  
   voltage3V3.raw = voltage5V.raw = voltage200V.raw = 0;
   voltage3V3.voltage = voltage5V.voltage = voltage200V.voltage = 0;
+
+  inductiveSensorState1 = inductiveSensorState2 = inductiveSensorState3 = HIGH;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+uint8_t SettingsClass::getInductiveSensorState(uint8_t channelNum)
+{
+  switch(channelNum)
+  {
+    case 0:
+      return inductiveSensorState1;
+    
+    case 1:
+      return inductiveSensorState2;
+
+    case 2:
+      return inductiveSensorState3;
+  }
+
+  return LOW;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void SettingsClass::begin()
@@ -40,11 +61,25 @@ void SettingsClass::set200VRawVoltage(uint16_t raw)
 void SettingsClass::update()
 {
   uint32_t now = millis();
-  if(now - timer < DATA_MEASURE_THRESHOLD)
-    return;
-
-  timer = now;
-  coreTemp = RealtimeClock.getTemperature();  
+  
+  if(now - timer > DATA_MEASURE_THRESHOLD)
+  {
+    timer = now;
+    coreTemp = RealtimeClock.getTemperature();  
+  }
+  
+  if(now - inductiveSensorsTimer > INDUCTIVE_SENSORS_UPDATE_INTERVAL)
+  {
+    timer = now;
+    updateInductiveSensors();
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SettingsClass::updateInductiveSensors()
+{
+  inductiveSensorState1 = digitalRead(inductive_sensor1);
+  inductiveSensorState2 = digitalRead(inductive_sensor2);
+  inductiveSensorState3 = digitalRead(inductive_sensor3);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 uint32_t SettingsClass::getMotoresource(uint8_t channelNum)
