@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #include "InterruptScreen.h"
 #include "DS3231.h"
+#include "Settings.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 InterruptScreen* ScreenInterrupt = NULL;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -308,10 +309,86 @@ void InterruptScreen::drawChart()
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InterruptScreen::drawMotoresource(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  uint8_t* oldFont = dc->getFont();
+  dc->setFont(SmallRusFont);
+
+  word oldColor = dc->getColor();
+  word oldBackColor = dc->getBackColor();
+  dc->setBackColor(VGA_BLACK);
+
+  // рисуем моторесурс системы по каналам
+  uint16_t curX = 5;
+  uint16_t curY = 130;
+  uint8_t fontHeight = dc->getFontYsize();
+
+  uint32_t channelResourceCurrent1 = Settings.getMotoresource(0);
+  uint32_t channelResourceMax1 = Settings.getMotoresourceMax(0);
+  uint32_t channelPercents1 = (channelResourceCurrent1*100)/channelResourceMax1;
+
+  dc->setColor(255,255,255);
+
+  String str = F("Ресурс 1: ");
+  str += channelResourceCurrent1;
+  str += F("/");
+  str += channelResourceMax1;
+  str += F(" (");
+  str += channelPercents1;
+  str += F("%)");
+
+  menu->print(str.c_str(),curX,curY);
+  curY += fontHeight + 4;
+
+
+  uint32_t channelResourceCurrent2 = Settings.getMotoresource(1);
+  uint32_t channelResourceMax2 = Settings.getMotoresourceMax(1);
+  uint32_t channelPercents2 = (channelResourceCurrent2*100)/channelResourceMax2;
+
+  dc->setColor(0,0,255);
+
+  str = F("Ресурс 2: ");
+  str += channelResourceCurrent2;
+  str += F("/");
+  str += channelResourceMax2;
+  str += F(" (");
+  str += channelPercents2;
+  str += F("%)");
+
+  menu->print(str.c_str(),curX,curY);
+  curY += fontHeight + 4;  
+
+
+  uint32_t channelResourceCurrent3 = Settings.getMotoresource(2);
+  uint32_t channelResourceMax3 = Settings.getMotoresourceMax(2);
+  uint32_t channelPercents3 = (channelResourceCurrent3*100)/channelResourceMax3;
+
+  dc->setColor(255,255,0);
+
+  str = F("Ресурс 3: ");
+  str += channelResourceCurrent3;
+  str += F("/");
+  str += channelResourceMax3;
+  str += F(" (");
+  str += channelPercents3;
+  str += F("%)");
+
+  menu->print(str.c_str(),curX,curY);
+  curY += fontHeight + 4;  
+  
+
+
+  dc->setFont(oldFont);
+  dc->setColor(oldColor);
+  dc->setBackColor(oldBackColor);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::doDraw(TFTMenu* menu)
 {
   drawTime(menu);
   drawChart();
+  drawMotoresource(menu);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
