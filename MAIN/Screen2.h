@@ -2,6 +2,8 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #include "UTFTMenu.h"
 #include <SdFat.h>
+#include "InterruptHandler.h"
+#include "Drawing.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // экран номер 2
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -376,6 +378,58 @@ private:
 
       int viewEthalonButton, createEthalonButton, singleButton, ethalonFlagButton, backButton;
   
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  recStarted,
+  recDone
+  
+} EthalonRecordState;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class EthalonRecordScreen : public AbstractTFTScreen, public InterruptEventSubscriber
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new EthalonRecordScreen();
+  }
+
+  void OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum);
+  void OnHaveInterruptData();  
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+    virtual void onActivate();
+    virtual void onDeactivate();
+
+private:
+      EthalonRecordScreen();
+
+      EthalonRecordState state;
+
+      void drawWelcome(TFTMenu* menu);
+
+//      int backButton;
+
+    InterruptTimeList list1;
+    InterruptTimeList list2;
+    InterruptTimeList list3;
+
+    void drawChart(); // рисуем график
+    void computeChart(); // пересчитываем график
+
+    Points serie1;
+    Points serie2;
+    Points serie3;
+
+    void computeSerie(InterruptTimeList& timeList,Points& serie, uint16_t xOffset, uint16_t yOffset);
+    void drawSerie(Points& serie,RGBColor color);  
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

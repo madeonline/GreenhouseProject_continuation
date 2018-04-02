@@ -27,6 +27,7 @@ void Screen2::doSetup(TFTMenu* menu)
   Screen.addScreen(SDFormatScreen::create());
   Screen.addScreen(ViewLogScreen::create());
   Screen.addScreen(EthalonScreen::create());
+  Screen.addScreen(EthalonRecordScreen::create());
   Screen.addScreen(FilesScreen::create());
   Screen.addScreen(FilesListScreen::create());
   Screen.addScreen(ClearDataScreen::create());
@@ -868,11 +869,338 @@ void EthalonScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
   else if(pressedButton == viewEthalonButton)
     menu->switchToScreen("ViewEthalonScreen");    
   else if(pressedButton == createEthalonButton)
-    menu->switchToScreen("CreateEthalonScreen");    
+  {
+    Vector<const char*> lines;
+    lines.push_back("Начать");
+    lines.push_back("запись");
+    lines.push_back("эталона?");    
+    MessageBox->confirm(lines,"EthalonRecordScreen","EthalonScreen");   
+  }
   else if(pressedButton == singleButton)
     menu->switchToScreen("SingleScreen");    
   else if(pressedButton == ethalonFlagButton)
     menu->switchToScreen("EthalonFlagScreen");    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// EthalonRecordScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EthalonRecordScreen::EthalonRecordScreen() : AbstractTFTScreen("EthalonRecordScreen")
+{
+  state = recStarted;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::doSetup(TFTMenu* menu)
+{
+
+//  reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 37, 210, 30, "reserved");
+//  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+//  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+//  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::doDraw(TFTMenu* menu)
+{
+  if(state == recStarted)
+    drawWelcome(menu);
+  else
+  if(state == recDone)
+  {
+    computeChart();
+    drawChart();
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::drawWelcome(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  dc->fillScr(TFT_BACK_COLOR);
+  
+  uint8_t* oldFont = dc->getFont();
+
+  dc->setFont(SmallRusFont);
+
+  Vector<const char*> lines;
+  lines.push_back("Для записи эталона");
+  lines.push_back("необходимо привести");
+  lines.push_back("одну из штанг");
+  lines.push_back("в движение.");
+  lines.push_back("");
+  lines.push_back("Приведите одну из");
+  lines.push_back("штанг в движение");
+  lines.push_back("и ждите результата");
+  lines.push_back("записи...");
+  
+   int fontHeight = dc->getFontYsize();
+   int fontWidth = dc->getFontXsize();
+   int displayWidth = dc->getDisplayXSize();
+   int lineSpacing = 2;  
+
+   int curX = 0;
+   int curY = 10;
+
+    for(size_t i=0;i<lines.size();i++)
+    {
+      int lineLength = menu->print(lines[i],curX,curY,0,true);
+      curX = (displayWidth - lineLength*fontWidth)/2;    
+      menu->print(lines[i],curX,curY);
+      curY += fontHeight + lineSpacing;
+    }
+  
+
+  dc->setFont(oldFont);
+   
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::onActivate()
+{
+  state = recStarted;
+  list1.clear();
+  list2.clear();
+  list3.clear();
+  InterruptHandler.setSubscriber(this);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::onDeactivate()
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::OnHaveInterruptData()
+{
+  DBGLN(F("EthalonRecordScreen::OnHaveInterruptData"));
+
+  // сбрасываем подписчика
+  InterruptHandler.setSubscriber(NULL);
+  
+  state = recDone;
+  computeChart();
+  drawChart();
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum)
+{
+  DBGLN(F("EthalonRecordScreen::OnInterruptRaised"));
+
+  // пришли результаты серии прерываний с одного из списков.
+  // мы запоминаем результаты в локальный список.
+
+  switch(listNum)
+  {
+    case 0:
+      list1 = list;
+    break;      
+
+    case 1:
+      list2 = list;
+    break;      
+
+    case 2:
+      list3 = list;
+    break;      
+    
+  } // switch
+  
+  // для теста - печатаем в Serial
+  #ifdef _DEBUG
+
+    if(list.size() > 1)
+    {
+      DBGLN("INTERRUPT DATA >>");
+      
+      for(size_t i=0;i<list.size();i++)
+      {
+        DBGLN(list[i]);
+      }
+    }
+
+    DBGLN("<< END OF INTERRUPT DATA");
+    
+  #endif // _DEBUG  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::drawSerie(Points& serie,RGBColor color)
+{
+  DBGLN(F("EthalonRecordScreen::drawSerie"));
+  
+  if(serie.size() < 2 || !isActive()) // низзя рисовать
+    return;
+   
+    UTFT* dc = Screen.getDC();
+    word oldColor = dc->getColor();  
+  
+    dc->setColor(color.R, color.G, color.B);
+      
+    for (size_t i=1;i<serie.size();i++)
+    {
+        Point ptStart = serie[i-1];
+        Point ptEnd = serie[i];
+        dc->drawLine(ptStart.X , ptStart.Y, ptEnd.X , ptEnd.Y);
+        yield();
+    }
+    
+      dc->setColor(oldColor);        
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::computeSerie(InterruptTimeList& timeList,Points& serie, uint16_t xOffset, uint16_t yOffset)
+{
+  DBGLN(F("EthalonRecordScreen::computeSerie"));
+  // освобождаем серию
+  serie.empty();
+
+  size_t totalPulses = timeList.size();
+
+  if(totalPulses < 2) // нет ничего к отрисовке, т.к. для графика нужны хотя бы две точки
+  {
+    DBGLN(F("NOT ENOUGH POINTS TO DRAW!"));
+    return;
+  }
+
+  // получаем максимальное время импульса - это будет 100% по оси Y
+  uint32_t maxPulseTime = 0;
+  for(size_t i=1;i<timeList.size();i++)
+  {
+    maxPulseTime = max(maxPulseTime,(timeList[i] - timeList[i-1]));
+  }
+
+  DBG("MAX PULSE TIME=");
+  DBGLN(maxPulseTime);  
+
+  // теперь вычисляем положение по X для каждой точки импульсов
+  uint16_t pointsAvailable = INTERRUPT_CHART_X_POINTS - xOffset;
+  uint16_t xStep = pointsAvailable/(totalPulses-1);
+
+  // сначала добавляем первую точку, у неё координаты по X - это 0, по Y - та же длительность импульса, что будет во второй точке
+  uint32_t firstPulseTime = timeList[1] - timeList[0];
+  firstPulseTime *= 100;
+  uint16_t firstPointPercents = firstPulseTime/maxPulseTime;
+
+  // получили значение в процентах от максимального значения Y для первой точки. Инвертируем это значение
+  firstPointPercents = 100 - firstPointPercents;
+
+  DBG("firstPointPercents=");
+  DBGLN(firstPointPercents);
+
+  // теперь можем высчитать абсолютное значение по Y для первой точки  
+  uint16_t yCoord = INTERRUPT_CHART_Y_COORD - (firstPointPercents*(INTERRUPT_CHART_Y_POINTS-yOffset))/100;
+  // здесь мы получили значение в пикселях, соответствующее проценту от максимального значения Y.
+  // от этого значения надо отнять сдвиг по Y
+  yCoord -= yOffset;
+
+  // чтобы за сетку не вылазило
+  if(yCoord < INTERRUPT_CHART_GRID_Y_START)
+    yCoord = INTERRUPT_CHART_GRID_Y_START;
+
+  DBG("yCoord=");
+  DBGLN(yCoord);
+
+  // добавляем первую точку
+  uint16_t xCoord = INTERRUPT_CHART_X_COORD;
+  Point pt = {xCoord,yCoord};
+  serie.push_back(pt);
+
+  xCoord += xOffset;
+
+  // теперь считаем все остальные точки
+  for(size_t i=1;i<timeList.size();i++)
+  {
+    uint32_t pulseTime = timeList[i] - timeList[i-1];
+    pulseTime *= 100;
+    
+    uint16_t pulseTimePercents = pulseTime/maxPulseTime;
+    pulseTimePercents = 100 - pulseTimePercents;
+
+    DBG("pulseTimePercents=");
+    DBGLN(pulseTimePercents);
+
+
+    yCoord = INTERRUPT_CHART_Y_COORD - (pulseTimePercents*(INTERRUPT_CHART_Y_POINTS-yOffset))/100;
+    yCoord -= yOffset;
+
+  // чтобы за сетку не вылазило
+  if(yCoord < INTERRUPT_CHART_GRID_Y_START)
+    yCoord = INTERRUPT_CHART_GRID_Y_START;
+
+    DBG("yCoord=");
+    DBGLN(yCoord);
+
+    Point ptNext = {xCoord,yCoord};
+    serie.push_back(ptNext);
+    
+    xCoord += xStep;
+    
+  } // for
+
+  // подсчёты завершены
+  DBGLN("");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::computeChart()
+{
+  DBGLN(F("EthalonRecordScreen::computeChart"));
+ /*
+  Формируем график
+  Ось X время регистрации всех импульсов (общее время хода линейки, перемещения траверсы).
+  Ось Y длительность импульсов.
+  
+  При этом максимальная длительность сформированных импульсов (в начале и конце движения) равна минимальным значениям по оси Y 
+  Минимальная длительность сформированных импульсов (в середине хода линейки) соответствует максимальным значениям по оси Y. 
+  */
+
+  uint16_t yOffset = 0; // первоначальный сдвиг графиков по Y
+  uint16_t yOffsetStep = 5; // шаг сдвига графиков по Y, чтобы не пересекались
+
+  uint16_t xOffset = 5; // первоначальный сдвиг графиков по X, чтобы первый пик начинался не с начала координат
+  uint16_t xOffsetStep = 5; // шаг сдвига графиков по X, чтобы не пересекались
+  
+  computeSerie(list1,serie1,xOffset, yOffset);
+  yOffset += yOffsetStep;
+  xOffset += xOffsetStep;
+
+  computeSerie(list2,serie2,xOffset, yOffset);
+  yOffset += yOffsetStep;
+  xOffset += xOffsetStep;
+
+  computeSerie(list3,serie3,xOffset, yOffset);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::drawChart()
+{
+  DBGLN(F("EthalonRecordScreen::drawChart"));
+  Screen.getDC()->fillScr(TFT_BACK_COLOR);
+  // рисуем сетку
+  int gridX = INTERRUPT_CHART_GRID_X_START; // начальная координата сетки по X
+  int gridY = INTERRUPT_CHART_GRID_Y_START; // начальная координата сетки по Y
+  int columnsCount = 6; // 5 столбцов
+  int rowsCount = 4; // 4 строки
+  int columnWidth = INTERRUPT_CHART_X_POINTS/columnsCount; // ширина столбца
+  int rowHeight = INTERRUPT_CHART_Y_POINTS/rowsCount; // высота строки 
+  RGBColor gridColor = { 0,200,0 }; // цвет сетки
+
+
+  // вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
+  Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
+
+  drawSerie(serie1,{ 255,255,255 });
+  yield();
+  drawSerie(serie2,{ 0,0,255 });
+  yield();
+  drawSerie(serie3,{ 255,255,0 });
+  yield();
+  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // FileEntry
