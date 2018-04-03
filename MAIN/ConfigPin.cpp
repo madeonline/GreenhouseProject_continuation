@@ -1,4 +1,4 @@
-﻿#include "ConfigPin.h"
+#include "ConfigPin.h"
 #include <Arduino.h>
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ConfigPin::ConfigPin()
@@ -7,13 +7,19 @@ ConfigPin::ConfigPin()
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+bool ConfigPin::isRodInUpPosition()
+{
+  return (digitalRead(ROD_POSITION_PIN) == ROD_UP_POSITION);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ConfigPin::setup()
 {
   
 	pinMode(relay_protection1, INPUT);                  // Вход "Релейная защита N1"
 	digitalWrite(relay_protection1, INPUT_PULLUP);      // Вход "Релейная защита N1", подключить резисторы
-	pinMode(relay_protection2, INPUT);                  // Вход "Релейная защита N2"
-	digitalWrite(relay_protection2, INPUT_PULLUP);      // Вход "Релейная защита N2", подключить резисторы
+  
+	pinMode(ROD_POSITION_PIN, INPUT);                  // Вход "Релейная защита N2"
+	digitalWrite(ROD_POSITION_PIN, INPUT_PULLUP);      // Вход "Релейная защита N2", подключить резисторы
 
 	pinMode(inductive_sensor1, INPUT);                  // Вход индуктивного датчика №1
 	digitalWrite(inductive_sensor1, INPUT_PULLUP);      // Вход индуктивного датчика №1, подключить резисторы

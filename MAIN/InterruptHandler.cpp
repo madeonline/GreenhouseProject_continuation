@@ -82,6 +82,16 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
   Logger.writeLine(line);
 
 
+  // пишем положение штанги
+  bool isRodUp = ConfigPin::isRodInUpPosition();
+  line = "[ROD]";
+  if(isRodUp)
+    line += "UP";
+  else
+    line += "DOWN";
+
+  Logger.writeLine(line);
+
   // теперь смотрим, в каких списках есть данные, подсчитываем общее время движения планки, в микросекундах, и пишем в файл
   if(lst1.size() > 1)
   {
