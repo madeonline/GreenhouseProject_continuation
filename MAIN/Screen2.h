@@ -387,6 +387,12 @@ typedef enum
   
 } EthalonRecordState;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  dirUp,
+  dirDown
+} EthalonDirection;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class EthalonRecordScreen : public AbstractTFTScreen, public InterruptEventSubscriber
 {
   public:
@@ -413,23 +419,36 @@ private:
 
       EthalonRecordState state;
 
+      int8_t currentDrawState;
+      void drawState(TFTMenu* menu);
+
       void drawWelcome(TFTMenu* menu);
 
-//      int backButton;
+      void resetButtons();
 
-    InterruptTimeList list1;
-    InterruptTimeList list2;
-    InterruptTimeList list3;
+      EthalonDirection direction;
+      void saveEthalons();
+      void saveEthalon(int selChannel, int saveChannel);
 
-    void drawChart(); // рисуем график
-    void computeChart(); // пересчитываем график
-
-    Points serie1;
-    Points serie2;
-    Points serie3;
-
-    void computeSerie(InterruptTimeList& timeList,Points& serie, uint16_t xOffset, uint16_t yOffset);
-    void drawSerie(Points& serie,RGBColor color);  
+      int backButton, saveButton, channel1Button, channel2Button, channel3Button, channel1SaveButton, channel2SaveButton, channel3SaveButton, directionButton;
+      int channel1SelectedChannel, channel2SelectedChannel, channel3SelectedChannel;
+      int channel1SaveChannel, channel2SaveChannel, channel3SaveChannel;
+      void rotateSelectedChannel(int button, int& val);
+      void showButtons(bool bShow);
+  
+      InterruptTimeList list1;
+      InterruptTimeList list2;
+      InterruptTimeList list3;
+  
+      void drawChart(); // рисуем график
+      void computeChart(); // пересчитываем график
+  
+      Points serie1;
+      Points serie2;
+      Points serie3;
+  
+      void computeSerie(InterruptTimeList& timeList,Points& serie, uint16_t xOffset, uint16_t yOffset);
+      void drawSerie(Points& serie,RGBColor color);  
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

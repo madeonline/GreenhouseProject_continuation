@@ -19,11 +19,11 @@
   The license applies to all part of the library including the 
   examples and tools supplied with the library.
 */
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 #include "UTFT_Buttons_Rus.h"
 #include <UTFT.h>
 #include <URTouch.h>
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 UTFT_Buttons_Rus::UTFT_Buttons_Rus(UTFT *ptrUTFT, URTouch *ptrURTouch, UTFTRus* pTFTRus)
 {
 	_UTFT = ptrUTFT;
@@ -39,6 +39,7 @@ UTFT_Buttons_Rus::UTFT_Buttons_Rus(UTFT *ptrUTFT, URTouch *ptrURTouch, UTFTRus* 
 	_font_text				= NULL;
 	_font_symbol			= NULL;
 }
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::setButtonBackColor(int buttonID, word color)
 {
    if(buttonID < 0)
@@ -48,6 +49,7 @@ void UTFT_Buttons_Rus::setButtonBackColor(int buttonID, word color)
     buttons[buttonID].flags |= BUTTON_HAS_BACK_COLOR;
     
 }
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::selectButton(int buttonID, bool selected, boolean redraw)
 {
    if(buttonID < 0)
@@ -61,6 +63,7 @@ void UTFT_Buttons_Rus::selectButton(int buttonID, bool selected, boolean redraw)
     if (redraw)
       drawButton(buttonID);
 }
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::setButtonFontColor(int buttonID, word color)
 {
    if(buttonID < 0)
@@ -70,6 +73,7 @@ void UTFT_Buttons_Rus::setButtonFontColor(int buttonID, word color)
     buttons[buttonID].flags |= BUTTON_HAS_FONT_COLOR;
     
 }
+//--------------------------------------------------------------------------------------------------------------------------------------
 int UTFT_Buttons_Rus::addButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const char *label, uint16_t flags)
 {
 	int btcnt = 0;
@@ -91,7 +95,7 @@ int UTFT_Buttons_Rus::addButton(uint16_t x, uint16_t y, uint16_t width, uint16_t
 		return btcnt;
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::hideButton(int buttonID, boolean redraw)
 {
 if (!(buttons[buttonID].flags & BUTTON_UNUSED))
@@ -101,7 +105,7 @@ if (!(buttons[buttonID].flags & BUTTON_UNUSED))
       drawButton(buttonID);
   }  
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::showButton(int buttonID, boolean redraw)
 {
 if (!(buttons[buttonID].flags & BUTTON_UNUSED))
@@ -111,7 +115,7 @@ if (!(buttons[buttonID].flags & BUTTON_UNUSED))
       drawButton(buttonID);
   }  
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 int UTFT_Buttons_Rus::addButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height, bitmapdatatype data, uint16_t flags)
 {
 	int btcnt = 0;
@@ -133,8 +137,7 @@ int UTFT_Buttons_Rus::addButton(uint16_t x, uint16_t y, uint16_t width, uint16_t
 		return btcnt;
 	}
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::drawButtons(DrawButtonsUpdateFunc func)
 {
 	for (int i=0;i<MAX_BUTTONS;i++)
@@ -150,7 +153,7 @@ void UTFT_Buttons_Rus::drawButtons(DrawButtonsUpdateFunc func)
     }
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::drawButton(int buttonID)
 {  
   
@@ -250,7 +253,7 @@ void UTFT_Buttons_Rus::drawButton(int buttonID)
 	_UTFT->setColor(_current_color);
 	_UTFT->setBackColor(_current_back);
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::enableButton(int buttonID, boolean redraw)
 {
 	if (!(buttons[buttonID].flags & BUTTON_UNUSED))
@@ -260,7 +263,7 @@ void UTFT_Buttons_Rus::enableButton(int buttonID, boolean redraw)
 			drawButton(buttonID);
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::disableButton(int buttonID, boolean redraw)
 {
 	if (!(buttons[buttonID].flags & BUTTON_UNUSED))
@@ -270,7 +273,7 @@ void UTFT_Buttons_Rus::disableButton(int buttonID, boolean redraw)
 			drawButton(buttonID);
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 const char* UTFT_Buttons_Rus::getLabel(int buttonID)
 {
   if (!(buttons[buttonID].flags & BUTTON_UNUSED))
@@ -279,7 +282,7 @@ const char* UTFT_Buttons_Rus::getLabel(int buttonID)
   }  
   return "";
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::relabelButton(int buttonID, const char *label, boolean redraw)
 {
 	if (!(buttons[buttonID].flags & BUTTON_UNUSED))
@@ -289,18 +292,18 @@ void UTFT_Buttons_Rus::relabelButton(int buttonID, const char *label, boolean re
 			drawButton(buttonID);
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 boolean UTFT_Buttons_Rus::buttonEnabled(int buttonID)
 {
 	return !(buttons[buttonID].flags & BUTTON_DISABLED);
 }
-    
+//-------------------------------------------------------------------------------------------------------------------------------------- 
 void UTFT_Buttons_Rus::deleteButton(int buttonID)
 {
 	if (!(buttons[buttonID].flags & BUTTON_UNUSED))
 		buttons[buttonID].flags = BUTTON_UNUSED;
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::deleteAllButtons()
 {
 	for (int i=0;i<MAX_BUTTONS;i++)
@@ -313,7 +316,7 @@ void UTFT_Buttons_Rus::deleteAllButtons()
 		buttons[i].label="";
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 int UTFT_Buttons_Rus::checkButtons(OnCheckButtonsFunc func)
 {
     if (_URTouch->dataAvailable() == true)
@@ -374,17 +377,17 @@ int UTFT_Buttons_Rus::checkButtons(OnCheckButtonsFunc func)
 	else
 		return -1;
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::setTextFont(uint8_t* font)
 {
 	_font_text = font;
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::setSymbolFont(uint8_t* font)
 {
 	_font_symbol = font;
 }
-
+//--------------------------------------------------------------------------------------------------------------------------------------
 void UTFT_Buttons_Rus::setButtonColors(word atxt, word iatxt, word brd, word brdhi, word back)
 {
 	_color_text				= atxt;
@@ -393,3 +396,5 @@ void UTFT_Buttons_Rus::setButtonColors(word atxt, word iatxt, word brd, word brd
 	_color_border			= brd;
 	_color_hilite			= brdhi;
 }
+//--------------------------------------------------------------------------------------------------------------------------------------
+

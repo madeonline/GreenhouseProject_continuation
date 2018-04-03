@@ -887,26 +887,104 @@ void EthalonScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 EthalonRecordScreen::EthalonRecordScreen() : AbstractTFTScreen("EthalonRecordScreen")
 {
   state = recStarted;
+  direction = dirUp;
+  channel1Button = channel2Button = channel3Button = channel1SaveButton = channel2SaveButton = channel3SaveButton = directionButton -1;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void EthalonRecordScreen::doSetup(TFTMenu* menu)
 {
 
+  screenButtons->setSymbolFont(Various_Symbols_32x32);
+  channel1SelectedChannel = channel2SelectedChannel = channel3SelectedChannel = -1;
+  channel1SaveChannel = channel2SaveChannel = channel3SaveChannel = -1;
+  currentDrawState = 0;
+
 //  reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
 //  reserved = screenButtons->addButton(5, 37, 210, 30, "reserved");
 //  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
 //  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
-//  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+  backButton = screenButtons->addButton(5, 142, 100, 30, "ВЫХОД");
+  saveButton = screenButtons->addButton(113, 142, 94, 30, "СОХР");
 
+  uint16_t curX = 162;
+  uint16_t curY = 20; 
+  uint8_t boxSize = 20;
+  uint8_t buttonSpacing = 4;
+
+  channel1Button  = screenButtons->addButton(curX, curY, boxSize, boxSize, "-");
+  screenButtons->setButtonBackColor(channel1Button,VGA_BLACK);
+  screenButtons->setButtonFontColor(channel1Button,VGA_WHITE);
+
+  channel1SaveButton = screenButtons->addButton(curX + boxSize + buttonSpacing*2, curY, boxSize, boxSize, "-");
+  screenButtons->setButtonBackColor(channel1SaveButton,VGA_BLACK);
+  screenButtons->setButtonFontColor(channel1SaveButton,VGA_WHITE);
+  
+  curY += boxSize + buttonSpacing;
+
+  channel2Button  = screenButtons->addButton(curX, curY, boxSize, boxSize, "-");
+  screenButtons->setButtonBackColor(channel2Button,VGA_BLACK);
+  screenButtons->setButtonFontColor(channel2Button,VGA_WHITE);
+
+  channel2SaveButton = screenButtons->addButton(curX + boxSize + buttonSpacing*2, curY, boxSize, boxSize, "-");
+  screenButtons->setButtonBackColor(channel2SaveButton,VGA_BLACK);
+  screenButtons->setButtonFontColor(channel2SaveButton,VGA_WHITE);
+  
+  curY += boxSize + buttonSpacing;
+
+  channel3Button  = screenButtons->addButton(curX, curY, boxSize, boxSize, "-");
+  screenButtons->setButtonBackColor(channel3Button,VGA_BLACK);
+  screenButtons->setButtonFontColor(channel3Button,VGA_WHITE);
+
+  channel3SaveButton = screenButtons->addButton(curX + boxSize + buttonSpacing*2, curY, boxSize, boxSize, "-");
+  screenButtons->setButtonBackColor(channel3SaveButton,VGA_BLACK);
+  screenButtons->setButtonFontColor(channel3SaveButton,VGA_WHITE);
+
+  curY += boxSize + buttonSpacing;
+
+  directionButton = screenButtons->addButton(curX, curY, boxSize*2 + buttonSpacing*2, 34, "c",BUTTON_SYMBOL);
+
+  showButtons(false);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::resetButtons()
+{
+  int arr[] = {channel1Button, channel2Button, channel3Button, channel1SaveButton, channel2SaveButton, channel3SaveButton, -100};
+  int cntr = 0;
+  while(arr[cntr] != -100)
+  {
+    if(arr[cntr] > -1)
+    {
+      screenButtons->setButtonBackColor(arr[cntr],VGA_BLACK);
+      screenButtons->setButtonFontColor(arr[cntr],VGA_WHITE);
+      screenButtons->relabelButton(arr[cntr],"-");     
+    }
+    cntr++;
+  }
+
+  screenButtons->relabelButton(directionButton,"c");
+  direction = dirUp;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void EthalonRecordScreen::doUpdate(TFTMenu* menu)
 {
     // тут обновляем внутреннее состояние
+    drawState(menu);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void EthalonRecordScreen::doDraw(TFTMenu* menu)
+void EthalonRecordScreen::drawState(TFTMenu* menu)
 {
+  currentDrawState++;
+
+  if(currentDrawState < 2)
+    return;
+  
+  if(currentDrawState > 2)
+  {
+    currentDrawState = 2;
+    return;
+  }
+
   if(state == recStarted)
     drawWelcome(menu);
   else
@@ -914,17 +992,220 @@ void EthalonRecordScreen::doDraw(TFTMenu* menu)
   {
     computeChart();
     drawChart();
+  }    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::doDraw(TFTMenu* menu)
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::rotateSelectedChannel(int button, int& val)
+{
+  val++;
+  
+  if(val > 2)
+     val = -1;
+
+  word color = VGA_BLACK;
+  word fontColor = VGA_WHITE;
+  const char* capt = "-";
+  switch(val)
+  {
+    case -1:
+      color = VGA_BLACK;
+      capt = "-";
+    break;
+
+    case 0:
+      color = VGA_RED;
+      capt = "1";
+    break;
+    
+    case 1:
+      color = VGA_BLUE;
+      capt = "2";
+    break;
+    
+    case 2:
+      color = VGA_YELLOW;
+      fontColor = VGA_BLACK;
+      capt = "3";
+    break;
   }
+
+  screenButtons->setButtonBackColor(button,color);
+  screenButtons->setButtonFontColor(button,fontColor);
+  screenButtons->relabelButton(button, capt,true);
+  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::saveEthalon(int selChannel, int saveChannel)
+{
+  if(saveChannel == -1) // не выбрано, для какого канала сохранять
+    return;
+
+  InterruptTimeList fakeList;
+  InterruptTimeList* selectedList = &fakeList;
+
+  switch(selChannel)
+  {
+    case 0:
+      selectedList = &list1;
+    break;
+    
+    case 1:
+      selectedList = &list2;
+    break;
+    
+    case 2:
+      selectedList = &list3;
+    break;
+
+    default:
+      selectedList = &fakeList;
+    break;
+  }
+
+  String fileName = F("/et");
+  fileName += saveChannel;
+  if(direction == dirUp)
+    fileName += F("up");
+  else
+    fileName += F("dwn");
+
+  fileName += F(".etl");
+
+  DBG(F("WRITE ETHALON TO FILE "));
+  DBGLN(fileName);
+
+  SdFile file;
+  file.open(fileName.c_str(),FILE_WRITE | O_CREAT | O_TRUNC);
+  
+  if(file.isOpen())
+  {
+    DBG(F("WRITE ETHALON DATA, RECORDS COUNT: "));
+    DBGLN(selectedList->size());
+
+    for(size_t i=0;i<selectedList->size();i++)
+    {
+      uint32_t val = (*selectedList)[i];
+      file.write(&val,sizeof(val));
+    }
+
+    file.flush();
+    file.close();
+  }
+ 
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::saveEthalons()
+{
+  DBGLN(F("SAVE ETHALONS!"));
+  
+  // тут сохранение эталонов. Если не выбран график, но выбран канал - создаём пустой файл. Если не выбран канал, но выбран график - ничего не делаем.
+  // если выбрано и то, и то - пишем данные в файл.
+
+  saveEthalon(channel1SelectedChannel,channel1SaveChannel);
+  saveEthalon(channel2SelectedChannel,channel2SaveChannel);
+  saveEthalon(channel3SelectedChannel,channel3SaveChannel);
+
+  Vector<const char*> lines;
+  lines.push_back("Эталоны");
+  lines.push_back("сохранены.");    
+  MessageBox->show(lines,"EthalonScreen");
+  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void EthalonRecordScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
+  if(pressedButton == backButton)
+  {
+    menu->switchToScreen("EthalonScreen");
+  }
+  else if(pressedButton == channel1Button)
+  {
+    rotateSelectedChannel(pressedButton, channel1SelectedChannel);
+  }
+  else if(pressedButton == channel2Button)
+  {
+    rotateSelectedChannel(pressedButton, channel2SelectedChannel);
+  }
+  else if(pressedButton == channel3Button)
+  {
+    rotateSelectedChannel(pressedButton, channel3SelectedChannel);
+  }
+  else if(pressedButton == channel1SaveButton)
+  {
+    rotateSelectedChannel(pressedButton, channel1SaveChannel);
+  }
+  else if(pressedButton == channel2SaveButton)
+  {
+    rotateSelectedChannel(pressedButton, channel2SaveChannel);
+  }
+  else if(pressedButton == channel3SaveButton)
+  {
+    rotateSelectedChannel(pressedButton, channel3SaveChannel);
+  }
+  else if(pressedButton == directionButton)
+  {
+    if(direction == dirUp)
+    {
+      direction = dirDown;
+      screenButtons->relabelButton(directionButton,"d",true);
+    }
+    else if(direction == dirDown)
+    {
+      direction = dirUp;
+      screenButtons->relabelButton(directionButton,"c",true);
+    }
+  }
+  else if(pressedButton == saveButton)
+  {
+    saveEthalons();
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonRecordScreen::showButtons(bool bShow)
+{
+  if(bShow)
+  {
+    screenButtons->showButton(backButton,true);
+    
+    screenButtons->showButton(channel1Button,true);
+    screenButtons->showButton(channel2Button,true);
+    screenButtons->showButton(channel3Button,true);
+    
+    screenButtons->showButton(channel1SaveButton,true);
+    screenButtons->showButton(channel2SaveButton,true);
+    screenButtons->showButton(channel3SaveButton,true);
+    
+    screenButtons->showButton(directionButton,true);
+    screenButtons->showButton(saveButton,true); 
+  }
+  else
+  {
+    screenButtons->hideButton(backButton);
+    
+    screenButtons->hideButton(channel1Button);
+    screenButtons->hideButton(channel2Button);
+    screenButtons->hideButton(channel3Button);
 
+    screenButtons->hideButton(channel1SaveButton);
+    screenButtons->hideButton(channel2SaveButton);
+    screenButtons->hideButton(channel3SaveButton);
+
+    screenButtons->hideButton(directionButton);
+    screenButtons->hideButton(saveButton);
+  }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void EthalonRecordScreen::drawWelcome(TFTMenu* menu)
 {
   UTFT* dc = menu->getDC();
+  
+  showButtons(false);
+  
   dc->fillScr(TFT_BACK_COLOR);
   
   uint8_t* oldFont = dc->getFont();
@@ -940,7 +1221,7 @@ void EthalonRecordScreen::drawWelcome(TFTMenu* menu)
   lines.push_back("Приведите одну из");
   lines.push_back("штанг в движение");
   lines.push_back("и ждите результата");
-  lines.push_back("записи...");
+  lines.push_back("записи.");
   
    int fontHeight = dc->getFontYsize();
    int fontWidth = dc->getFontXsize();
@@ -966,6 +1247,12 @@ void EthalonRecordScreen::drawWelcome(TFTMenu* menu)
 void EthalonRecordScreen::onActivate()
 {
   state = recStarted;
+  channel1SelectedChannel = channel2SelectedChannel = channel3SelectedChannel = -1;
+  channel1SaveChannel = channel2SaveChannel = channel3SaveChannel = -1;
+  currentDrawState = 0;
+  resetButtons();
+  showButtons(false);
+  
   list1.clear();
   list2.clear();
   list3.clear();
@@ -1180,7 +1467,11 @@ void EthalonRecordScreen::computeChart()
 void EthalonRecordScreen::drawChart()
 {
   DBGLN(F("EthalonRecordScreen::drawChart"));
+  
   Screen.getDC()->fillScr(TFT_BACK_COLOR);
+
+  showButtons(true);
+  
   // рисуем сетку
   int gridX = INTERRUPT_CHART_GRID_X_START; // начальная координата сетки по X
   int gridY = INTERRUPT_CHART_GRID_Y_START; // начальная координата сетки по Y
@@ -1194,7 +1485,7 @@ void EthalonRecordScreen::drawChart()
   // вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
   Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
 
-  drawSerie(serie1,{ 255,255,255 });
+  drawSerie(serie1,{ 255,0,0 });
   yield();
   drawSerie(serie2,{ 0,0,255 });
   yield();
