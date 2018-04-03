@@ -1266,11 +1266,32 @@ void EthalonRecordScreen::onDeactivate()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void EthalonRecordScreen::OnHaveInterruptData()
 {
-  DBGLN(F("EthalonRecordScreen::OnHaveInterruptData"));
-
   // сбрасываем подписчика
   InterruptHandler.setSubscriber(NULL);
-  
+
+  DBGLN(F("EthalonRecordScreen::OnHaveInterruptData"));
+
+  // смотрим, в каком листе есть данные, и устанавливаем кнопки выбора графика на первый список с данными
+
+  InterruptTimeList* lists[] = {&list1, &list2, &list3};
+
+  for(int i=0;i<3;i++)
+  {
+    if(lists[i]->size())
+    {
+      channel1SelectedChannel = i-1;
+      channel2SelectedChannel = i-1;
+      channel3SelectedChannel = i-1;
+
+      rotateSelectedChannel(channel1Button,channel1SelectedChannel);
+      rotateSelectedChannel(channel2Button,channel2SelectedChannel);
+      rotateSelectedChannel(channel3Button,channel3SelectedChannel);
+      
+      break;
+    }
+  } // for
+
+
   state = recDone;
   computeChart();
   drawChart();
