@@ -83,12 +83,25 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
 
 
   // пишем положение штанги
-  bool isRodUp = ConfigPin::isRodInUpPosition();
+  RodPosition rodPos = ConfigPin::getRodPosition();
   line = "[ROD]";
-  if(isRodUp)
-    line += "UP";
-  else
-    line += "DOWN";
+
+  switch(rodPos)
+  {
+    case rpBroken:
+      line += "BROKEN";
+    break;
+    
+    case rpUp:
+      line += "UP";
+    break;
+
+    case rpDown:
+      line += "DOWN";
+    break;
+
+  }
+
 
   Logger.writeLine(line);
 

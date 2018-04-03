@@ -7,19 +7,31 @@ ConfigPin::ConfigPin()
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-bool ConfigPin::isRodInUpPosition()
+RodPosition ConfigPin::getRodPosition()
 {
-  return (digitalRead(ROD_POSITION_PIN) == ROD_UP_POSITION);
+  uint8_t rodPinState1 = digitalRead(ROD_POSITION_PIN1);
+  uint8_t rodPinState2 = digitalRead(ROD_POSITION_PIN2);
+
+  // если на обеих датчиках одинаковое состояние - поломка штанги
+  if(rodPinState1 == rodPinState2)
+    return rpBroken;
+
+  // если сработал датчик на пине 11 и не сработал на пине 12 - штанга вверху
+  if(ROD_POSITION_TRIGGERED == rodPinState1 && ROD_POSITION_TRIGGERED == !rodPinState2)
+    return rpUp;
+
+  // иначе - штанга внизу
+  return rpDown;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ConfigPin::setup()
 {
   
-	pinMode(relay_protection1, INPUT);                  // Вход "Релейная защита N1"
-	digitalWrite(relay_protection1, INPUT_PULLUP);      // Вход "Релейная защита N1", подключить резисторы
+	pinMode(ROD_POSITION_PIN1, INPUT);                  // Вход "Релейная защита N1"
+	digitalWrite(ROD_POSITION_PIN1, INPUT_PULLUP);      // Вход "Релейная защита N1", подключить резисторы
   
-	pinMode(ROD_POSITION_PIN, INPUT);                  // Вход "Релейная защита N2"
-	digitalWrite(ROD_POSITION_PIN, INPUT_PULLUP);      // Вход "Релейная защита N2", подключить резисторы
+	pinMode(ROD_POSITION_PIN2, INPUT);                  // Вход "Релейная защита N2"
+	digitalWrite(ROD_POSITION_PIN2, INPUT_PULLUP);      // Вход "Релейная защита N2", подключить резисторы
 
 	pinMode(inductive_sensor1, INPUT);                  // Вход индуктивного датчика №1
 	digitalWrite(inductive_sensor1, INPUT_PULLUP);      // Вход индуктивного датчика №1, подключить резисторы
