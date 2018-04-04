@@ -275,9 +275,9 @@ void InterruptScreen::computeMotoresource()
   motoresourceLastFontColor2 = channelMotoresourcePercents2 < (100 - MOTORESOURCE_BLINK_PERCENTS) ? VGA_BLUE : VGA_RED;
   motoresourceLastFontColor3 = channelMotoresourcePercents3 < (100 - MOTORESOURCE_BLINK_PERCENTS) ? VGA_YELLOW : VGA_RED;
 
-  motoresourceBlinkTimer1 = 0;
-  motoresourceBlinkTimer2 = MOTORESOURCE_BLINK_DURATION/3;
-  motoresourceBlinkTimer3 = motoresourceBlinkTimer2*2;
+  motoresourceBlinkTimer1 = millis();
+  motoresourceBlinkTimer2 = millis() + MOTORESOURCE_BLINK_DURATION/3;
+  motoresourceBlinkTimer3 = millis() + (MOTORESOURCE_BLINK_DURATION/3)*2;
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
