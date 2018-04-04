@@ -141,7 +141,7 @@ void InterruptScreen::doUpdate(TFTMenu* menu)
 
     bool canRedrawMotoresource = false;
 
-    if(channelMotoresourcePercents1 >= 100)
+    if(channelMotoresourcePercents1 >= (100 - MOTORESOURCE_BLINK_PERCENTS) )
     {
       // ресурс по системе на канале 1 исчерпан, надо мигать надписью
       if(millis() - motoresourceBlinkTimer1 > MOTORESOURCE_BLINK_DURATION)
@@ -156,7 +156,7 @@ void InterruptScreen::doUpdate(TFTMenu* menu)
       }
     }
 
-    if(channelMotoresourcePercents2 >= 100)
+    if(channelMotoresourcePercents2 >= (100 - MOTORESOURCE_BLINK_PERCENTS) )
     {
       // ресурс по системе на канале 2 исчерпан, надо мигать надписью
       if(millis() - motoresourceBlinkTimer2 > MOTORESOURCE_BLINK_DURATION)
@@ -171,7 +171,7 @@ void InterruptScreen::doUpdate(TFTMenu* menu)
       }
     }
 
-    if(channelMotoresourcePercents3 >= 100)
+    if(channelMotoresourcePercents3 >= (100 - MOTORESOURCE_BLINK_PERCENTS) )
     {
       // ресурс по системе на канале 3 исчерпан, надо мигать надписью
       if(millis() - motoresourceBlinkTimer3 > MOTORESOURCE_BLINK_DURATION)
@@ -271,9 +271,9 @@ void InterruptScreen::computeMotoresource()
   uint32_t channelResourceMax3 = Settings.getMotoresourceMax(2);
   channelMotoresourcePercents3 = (channelResourceCurrent3*100)/channelResourceMax3;
 
-  motoresourceLastFontColor1 = channelMotoresourcePercents1 < 100 ? VGA_WHITE : VGA_RED;
-  motoresourceLastFontColor2 = channelMotoresourcePercents2 < 100 ? VGA_BLUE : VGA_RED;
-  motoresourceLastFontColor3 = channelMotoresourcePercents3 < 100 ? VGA_YELLOW : VGA_RED;
+  motoresourceLastFontColor1 = channelMotoresourcePercents1 < (100 - MOTORESOURCE_BLINK_PERCENTS) ? VGA_WHITE : VGA_RED;
+  motoresourceLastFontColor2 = channelMotoresourcePercents2 < (100 - MOTORESOURCE_BLINK_PERCENTS) ? VGA_BLUE : VGA_RED;
+  motoresourceLastFontColor3 = channelMotoresourcePercents3 < (100 - MOTORESOURCE_BLINK_PERCENTS) ? VGA_YELLOW : VGA_RED;
 
   motoresourceBlinkTimer1 = 0;
   motoresourceBlinkTimer2 = MOTORESOURCE_BLINK_DURATION/3;
