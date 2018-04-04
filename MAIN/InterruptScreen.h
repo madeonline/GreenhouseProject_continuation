@@ -37,15 +37,15 @@ private:
     unsigned long startSeenTime;
 
     bool canAcceptInterruptData;
-    void drawChart(); // рисуем график
-    void computeChart(); // пересчитываем график
+  //  void drawChart(); // рисуем график
+ //   void computeChart(); // пересчитываем график
 
     Points serie1;
     Points serie2;
     Points serie3;
 
-    void computeSerie(InterruptTimeList& timeList,Points& serie, uint16_t xOffset, uint16_t yOffset);
-    void drawSerie(Points& serie,RGBColor color);
+//    void computeSerie(InterruptTimeList& timeList,Points& serie, uint16_t xOffset, uint16_t yOffset);
+//    void drawSerie(Points& serie,RGBColor color);
 
   
   
