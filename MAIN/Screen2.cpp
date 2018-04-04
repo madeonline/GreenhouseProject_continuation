@@ -1149,14 +1149,14 @@ void EthalonRecordScreen::saveEthalon(int selChannel, int saveChannel)
   SD.mkdir(ETHALONS_DIRECTORY);
 
   String fileName = ETHALONS_DIRECTORY;
-  fileName += F("/et");
+  fileName += ETHALON_NAME_PREFIX;
   fileName += saveChannel;
   if(direction == dirUp)
-    fileName += F("up");
+    fileName += ETHALON_UP_POSTFIX;
   else
-    fileName += F("dwn");
+    fileName += ETHALON_DOWN_POSTFIX;
 
-  fileName += F(".etl");
+  fileName += ETHALON_FILE_EXT;
 
   DBG(F("WRITE ETHALON TO FILE "));
   DBGLN(fileName);
