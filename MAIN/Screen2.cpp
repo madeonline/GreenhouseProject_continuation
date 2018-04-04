@@ -5,7 +5,8 @@
 #include "CONFIG.h"
 #include "Settings.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-ViewLogScreen* ViewLogScreenInstance = NULL;
+ListFilesScreen* listLogFilesScreen = NULL;
+ListFilesScreen* listEthalonsFilesScreen = NULL;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Screen2::Screen2() : AbstractTFTScreen("Settings")
 {
@@ -25,7 +26,13 @@ void Screen2::doSetup(TFTMenu* menu)
   Screen.addScreen(SDScreen::create());
   Screen.addScreen(SDInfoScreen::create());
   Screen.addScreen(SDFormatScreen::create());
-  Screen.addScreen(ViewLogScreen::create());
+
+  listLogFilesScreen = ListFilesScreen::create(vtLogsListing);
+  listEthalonsFilesScreen = ListFilesScreen::create(vtEthalonsListing);
+  
+  Screen.addScreen(listLogFilesScreen);
+  Screen.addScreen(listEthalonsFilesScreen);
+  
   Screen.addScreen(EthalonScreen::create());
   Screen.addScreen(EthalonRecordScreen::create());
   Screen.addScreen(FilesScreen::create());
@@ -110,8 +117,8 @@ void FilesScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
     menu->switchToScreen("EthalonScreen");
   else if(pressedButton == viewLogButton)
   {
-    ViewLogScreenInstance->rescanFiles();
-    menu->switchToScreen(ViewLogScreenInstance); // переключаемся на экран просмотра логов
+    listLogFilesScreen->rescanFiles();
+    menu->switchToScreen(listLogFilesScreen); // переключаемся на экран просмотра логов
   }
   else if(pressedButton == clearDataButton)
     menu->switchToScreen("ClearDataScreen");
@@ -867,7 +874,10 @@ void EthalonScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
   if(pressedButton == backButton)
     menu->switchToScreen("FilesScreen"); // переключаемся на экран работы с SD
   else if(pressedButton == viewEthalonButton)
-    menu->switchToScreen("ViewEthalonScreen");    
+  {
+    listEthalonsFilesScreen->rescanFiles();
+    menu->switchToScreen(listEthalonsFilesScreen); // переключаемся на экран просмотра эталонов
+  }
   else if(pressedButton == createEthalonButton)
   {
     Vector<const char*> lines;
@@ -1067,7 +1077,10 @@ void EthalonRecordScreen::saveEthalon(int selChannel, int saveChannel)
     break;
   }
 
-  String fileName = F("/et");
+  SD.mkdir(ETHALONS_DIRECTORY);
+
+  String fileName = ETHALONS_DIRECTORY;
+  fileName += F("/et");
   fileName += saveChannel;
   if(direction == dirUp)
     fileName += F("up");
@@ -1517,12 +1530,12 @@ void EthalonRecordScreen::drawChart()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // FileEntry
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-uint32_t FileEntry::getTimestamp()
+uint32_t FileEntry::getTimestamp(const char* fileRootDir)
 {
   uint32_t result = 0;
 
   SdFile root, file;
-  root.open(LOGS_DIRECTORY,O_READ);
+  root.open(fileRootDir,O_READ);
   if(root.isOpen())
   {
     file.open(&root,dirIndex,O_READ);
@@ -1539,12 +1552,12 @@ uint32_t FileEntry::getTimestamp()
   return result;  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-String FileEntry::getName()
+String FileEntry::getName(const char* fileRootDir)
 {
   String result;
 
   SdFile root, file;
-  root.open(LOGS_DIRECTORY,O_READ);
+  root.open(fileRootDir,O_READ);
   if(root.isOpen())
   {
     file.open(&root,dirIndex,O_READ);
@@ -1562,35 +1575,37 @@ String FileEntry::getName()
   return result;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// ViewLogScreen
+// ListFilesScreen
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-AbstractTFTScreen* ViewLogScreen::create()
+ListFilesScreen* ListFilesScreen::create(ListFilesType vt)
 {
-  if(ViewLogScreenInstance)
-    return ViewLogScreenInstance;
-    
-  ViewLogScreenInstance =  new ViewLogScreen();  
-  return ViewLogScreenInstance;
+  if(vt == vtLogsListing)
+    return new ListFilesScreen(vt, "ListLogsScreen");  
+  else if(vt == vtEthalonsListing)
+    return new ListFilesScreen(vt, "ListEthalonsScreen");
+
+  return NULL;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-ViewLogScreen::ViewLogScreen() : AbstractTFTScreen("ViewLogScreen")
+ListFilesScreen::ListFilesScreen(ListFilesType vt, const char* name) : AbstractTFTScreen(name)
 {
+  viewType = vt;
   filesButtons = NULL;
   totalFilesCount = 0;
   totalPages = 0;
   currentPageNum = 0;
   isFirstScan = true;
   currentPageButton = -1;
-  lastSelectedLogFileIndex = -1;
+  lastSelectedFileIndex = -1;
   files = NULL;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-ViewLogScreen::~ViewLogScreen()
+ListFilesScreen::~ListFilesScreen()
 {
   delete filesButtons;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::clearFiles()
+void ListFilesScreen::clearFiles()
 {
   if(!files)
     return;
@@ -1602,7 +1617,7 @@ void ViewLogScreen::clearFiles()
   files = NULL;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::sortFiles()
+void ListFilesScreen::sortFiles()
 {
   if(!files)
     return;
@@ -1610,7 +1625,7 @@ void ViewLogScreen::sortFiles()
   //TODO: Тут сортировка файлов!!!  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::showPage(int step)
+void ListFilesScreen::showPage(int step)
 {
   if(!files || !filesButtons)
     return;
@@ -1629,10 +1644,13 @@ void ViewLogScreen::showPage(int step)
       endIndex = totalFilesCount;
 
     int buttonCounter = 0;
+    
+    const char* linkedDir = getDirName();
+    
     for(int i=startIndex;i<endIndex;i++)
     {
         FileEntry* entry = files[i];
-        filesNames[buttonCounter] = entry->getName();
+        filesNames[buttonCounter] = entry->getName(linkedDir);
         
         filesButtons->relabelButton(buttonCounter,filesNames[buttonCounter].c_str());
         filesButtons->showButton(buttonCounter,isActive());
@@ -1646,25 +1664,40 @@ void ViewLogScreen::showPage(int step)
       filesButtons->hideButton(i,isActive());
     }
 
-    if(lastSelectedLogFileIndex != -1)
+    if(lastSelectedFileIndex != -1)
     {
-      filesButtons->selectButton(lastSelectedLogFileIndex,false,true);
-      lastSelectedLogFileIndex = -1;
+      filesButtons->selectButton(lastSelectedFileIndex,false,true);
+      lastSelectedFileIndex = -1;
     }
 
-    screenButtons->disableButton(viewLogButton,true);
+    screenButtons->disableButton(viewFileButton,true);
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::rescanFiles()
+const char* ListFilesScreen::getDirName()
+{
+   if(viewType == vtLogsListing)
+     return LOGS_DIRECTORY;
+  else if(viewType == vtEthalonsListing)
+     return ETHALONS_DIRECTORY;  
+
+  return "";
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void ListFilesScreen::rescanFiles()
 {
   if(!hasSD)
     return;
 
    int lastFilesCount = totalFilesCount;
-   totalFilesCount = FileUtils::CountFiles(LOGS_DIRECTORY);
 
-   DBG(F("COUNT OF FILES IN LOG DIRECTORY: "));
+   String dirName = getDirName();
+
+   totalFilesCount = FileUtils::CountFiles(dirName);
+
+   DBG(F("COUNT OF FILES IN \""));
+   DBG(dirName);
+   DBG(F("\" DIRECTORY: "));
    DBGLN(totalFilesCount);
 
    if(lastFilesCount != totalFilesCount)
@@ -1680,7 +1713,7 @@ void ViewLogScreen::rescanFiles()
       files[i] = new  FileEntry;
     } // for
 
-    root.open(LOGS_DIRECTORY,O_READ);
+    root.open(dirName.c_str(),O_READ);
 
     int cntr = 0;
     while (file.openNext(&root, O_READ)) 
@@ -1718,7 +1751,7 @@ void ViewLogScreen::rescanFiles()
    } // if(lastFilesCount != totalFilesCount)
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::drawCurrentPageNumber()
+void ListFilesScreen::drawCurrentPageNumber()
 {
   if(!isActive() || ! filesButtons || currentPageButton == -1)
     return;
@@ -1734,14 +1767,14 @@ void ViewLogScreen::drawCurrentPageNumber()
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::doSetup(TFTMenu* menu)
+void ListFilesScreen::doSetup(TFTMenu* menu)
 {
   // инициализируем SD
   hasSD = SDInit::InitSD();
 
   screenButtons->setSymbolFont(Various_Symbols_32x32);
   backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
-  viewLogButton = screenButtons->addButton(130, 2, 85, 50, "|", BUTTON_SYMBOL);
+  viewFileButton = screenButtons->addButton(130, 2, 85, 50, "|", BUTTON_SYMBOL);
 
   UTFT* dc = menu->getDC();
   int screenWidth = dc->getDisplayXSize();
@@ -1779,7 +1812,7 @@ void ViewLogScreen::doSetup(TFTMenu* menu)
   } // hasSD
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::doUpdate(TFTMenu* menu)
+void ListFilesScreen::doUpdate(TFTMenu* menu)
 {
   if(filesButtons)
   {
@@ -1812,17 +1845,15 @@ void ViewLogScreen::doUpdate(TFTMenu* menu)
         DBG(F("SELECTED FILE: "));
         DBGLN(filesNames[checkedFilesButton]);
 
-        if(lastSelectedLogFileIndex != -1)
+        if(lastSelectedFileIndex != -1)
         {
-          filesButtons->selectButton(lastSelectedLogFileIndex,false,true);
+          filesButtons->selectButton(lastSelectedFileIndex,false,true);
         }
 
-        lastSelectedLogFileIndex = checkedFilesButton;
-        filesButtons->selectButton(lastSelectedLogFileIndex,true,true);
+        lastSelectedFileIndex = checkedFilesButton;
+        filesButtons->selectButton(lastSelectedFileIndex,true,true);
 
-        screenButtons->enableButton(viewLogButton,true);
-        
-        //TODO: тут работаем с выбранным файлом!!!
+        screenButtons->enableButton(viewFileButton,true);
       } // if
       
     }
@@ -1832,7 +1863,7 @@ void ViewLogScreen::doUpdate(TFTMenu* menu)
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::doDraw(TFTMenu* menu)
+void ListFilesScreen::doDraw(TFTMenu* menu)
 {
   UTFT* dc = menu->getDC();
   uint8_t* oldFont = dc->getFont();
@@ -1859,18 +1890,25 @@ void ViewLogScreen::doDraw(TFTMenu* menu)
   dc->setFont(oldFont);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ViewLogScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+void ListFilesScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("FilesScreen"); // переключаемся на экран "Файлы"
-  else
-  if(pressedButton == viewLogButton)
   {
-    if(lastSelectedLogFileIndex != -1)
+    if(viewType == vtLogsListing)
+      menu->switchToScreen("FilesScreen"); // переключаемся на экран "Файлы"
+    else if(viewType == vtEthalonsListing)
+      menu->switchToScreen("EthalonScreen"); // переключаемся на экран "Эталоны"
+    
+  }
+  else
+  if(pressedButton == viewFileButton)
+  {
+    if(lastSelectedFileIndex != -1)
     {
         DBG(F("VIEW FILE: "));
-        DBGLN(filesNames[lastSelectedLogFileIndex]);      
-      //TODO: ТУТ ПРОСМОТР ФАЙЛА!!!
+        DBGLN(filesNames[lastSelectedFileIndex]);      
+        
+      //TODO: ТУТ ПРОСМОТР ВЫБРАННОГО ФАЙЛА!!!
     }
   }
 }

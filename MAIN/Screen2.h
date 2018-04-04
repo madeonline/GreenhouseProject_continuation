@@ -601,18 +601,25 @@ private:
 struct FileEntry
 {
   uint16_t dirIndex;
-  String getName();
-  uint32_t getTimestamp();
+  String getName(const char* fileRootDir);
+  uint32_t getTimestamp(const char* fileRootDir);
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #define SCREEN_FILES_COUNT 5 // кол-во файлов на одном экране
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class ViewLogScreen : public AbstractTFTScreen
+typedef enum 
+{
+  vtLogsListing,
+  vtEthalonsListing
+  
+} ListFilesType;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class ListFilesScreen : public AbstractTFTScreen
 {
   public:
 
-  static AbstractTFTScreen* create();
+  static ListFilesScreen* create(ListFilesType vt);
 
   void rescanFiles();
     
@@ -624,13 +631,16 @@ protected:
     virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
 
 private:
-      ViewLogScreen();
-      ~ViewLogScreen();
+      ListFilesScreen(ListFilesType vt, const char* name);
+      ~ListFilesScreen();
 
-      int backButton, viewLogButton;
+      ListFilesType viewType;
+      const char* getDirName();
+
+      int backButton, viewFileButton;
       bool hasSD;
 
-      int lastSelectedLogFileIndex;
+      int lastSelectedFileIndex;
 
       int totalFilesCount;
       int totalPages;
