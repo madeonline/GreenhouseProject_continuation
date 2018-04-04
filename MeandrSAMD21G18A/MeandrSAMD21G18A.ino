@@ -18,11 +18,16 @@ CorePinScenario scene3;
 #define PULSE_PIN2 A0 // номер пина для генерации тестовых импульсов индуктивного датчика №2
 #define PULSE_PIN3 A5 // номер пина для генерации тестовых импульсов индуктивного датчика №3
 
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CorePinScenario pulseScene1;
 CorePinScenario pulseScene2;
 CorePinScenario pulseScene3;
+CorePinScenario pulseSceneLed;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+const int ledPin = LED_BUILTIN;    // the number of the LED pin
+
 void setup()
 {
 
@@ -33,6 +38,8 @@ void setup()
   pinMode(PULSE_PIN1, OUTPUT);
   pinMode(PULSE_PIN2, OUTPUT);
   pinMode(PULSE_PIN3, OUTPUT);
+
+  pinMode(ledPin, OUTPUT);
 
 
   scene1.add({LINE1, HIGH, DURATION});
@@ -148,17 +155,23 @@ void setup()
     level = !level;
   }
 
+  duration = 500000;
+  level = HIGH;
+  pulseSceneLed.add({ledPin, level, duration });
+ 
 
-  // добавляем паузу в 5 секунд
+  // добавляем паузу в 20 секунд
   pulseScene1.add({PULSE_PIN1, LOW, 20000000});
   pulseScene2.add({PULSE_PIN2, LOW, 20000000});
   pulseScene3.add({PULSE_PIN3, LOW, 20000000});
+  pulseSceneLed.add({ledPin, LOW, 20000000 });
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void loop()
 {
 
   // сдвигаем фазы при старте
+
 
   delay(1);
   scene1.update();
@@ -176,7 +189,7 @@ void loop()
     pulseScene1.update();
     pulseScene2.update();
     pulseScene3.update();
+	pulseSceneLed.update();
   }
-
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
