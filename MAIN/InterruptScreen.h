@@ -28,6 +28,11 @@ private:
     InterruptScreen();
 
     void drawTime(TFTMenu* menu);
+
+    uint32_t channelMotoresourcePercents1, channelMotoresourcePercents2, channelMotoresourcePercents3;
+    word motoresourceLastFontColor1, motoresourceLastFontColor2, motoresourceLastFontColor3;
+    uint32_t motoresourceBlinkTimer1, motoresourceBlinkTimer2, motoresourceBlinkTimer3;
+    void computeMotoresource();
     void drawMotoresource(TFTMenu* menu);
 
     InterruptTimeList list1;

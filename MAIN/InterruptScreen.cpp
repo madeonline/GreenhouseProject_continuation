@@ -51,6 +51,9 @@ void InterruptScreen::OnHaveInterruptData()
   // два - когда в списках прерываний точек заведомо меньше, чем точек на графике (например, 20 вместо 150) - без пересчёта получим
   // куцый график, в этом случае нам надо его растянуть по-максимуму.
   Drawing::ComputeChart(list1, serie1, list2, serie2, list3, serie3);
+
+  // вычисляем моторесурс
+  computeMotoresource();
   
   // запоминаем время начала показа и переключаемся на экран
   startSeenTime = millis();
@@ -135,6 +138,56 @@ void InterruptScreen::doUpdate(TFTMenu* menu)
       startSeenTime = 0;
       Screen.switchToScreen("Main");
     }
+
+    bool canRedrawMotoresource = false;
+
+    if(channelMotoresourcePercents1 >= 100)
+    {
+      // ресурс по системе на канале 1 исчерпан, надо мигать надписью
+      if(millis() - motoresourceBlinkTimer1 > MOTORESOURCE_BLINK_DURATION)
+      {
+        motoresourceBlinkTimer1 = millis();
+        if(motoresourceLastFontColor1 == VGA_RED)
+          motoresourceLastFontColor1 = VGA_BLACK;
+        else
+          motoresourceLastFontColor1 = VGA_RED;
+
+          canRedrawMotoresource = true;
+      }
+    }
+
+    if(channelMotoresourcePercents2 >= 100)
+    {
+      // ресурс по системе на канале 2 исчерпан, надо мигать надписью
+      if(millis() - motoresourceBlinkTimer2 > MOTORESOURCE_BLINK_DURATION)
+      {
+        motoresourceBlinkTimer2 = millis();
+        if(motoresourceLastFontColor2 == VGA_RED)
+          motoresourceLastFontColor2 = VGA_BLACK;
+        else
+          motoresourceLastFontColor2 = VGA_RED;
+
+          canRedrawMotoresource = true;
+      }
+    }
+
+    if(channelMotoresourcePercents3 >= 100)
+    {
+      // ресурс по системе на канале 3 исчерпан, надо мигать надписью
+      if(millis() - motoresourceBlinkTimer3 > MOTORESOURCE_BLINK_DURATION)
+      {
+        motoresourceBlinkTimer3 = millis();
+        if(motoresourceLastFontColor3 == VGA_RED)
+          motoresourceLastFontColor3 = VGA_BLACK;
+        else
+          motoresourceLastFontColor3 = VGA_RED;
+
+          canRedrawMotoresource = true;
+      }
+    }
+
+    if(canRedrawMotoresource)
+      drawMotoresource(menu);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::drawMotoresource(TFTMenu* menu)
@@ -147,69 +200,85 @@ void InterruptScreen::drawMotoresource(TFTMenu* menu)
   word oldBackColor = dc->getBackColor();
   dc->setBackColor(VGA_BLACK);
 
+  uint32_t channelResourceCurrent1 = Settings.getMotoresource(0);
+  uint32_t channelResourceCurrent2 = Settings.getMotoresource(1);
+  uint32_t channelResourceCurrent3 = Settings.getMotoresource(2);
+
+  uint32_t channelResourceMax1 = Settings.getMotoresourceMax(0);
+  uint32_t channelResourceMax2 = Settings.getMotoresourceMax(1);
+  uint32_t channelResourceMax3 = Settings.getMotoresourceMax(2);
+
   // рисуем моторесурс системы по каналам
   uint16_t curX = 5;
   uint16_t curY = 130;
   uint8_t fontHeight = dc->getFontYsize();
 
-  uint32_t channelResourceCurrent1 = Settings.getMotoresource(0);
-  uint32_t channelResourceMax1 = Settings.getMotoresourceMax(0);
-  uint32_t channelPercents1 = (channelResourceCurrent1*100)/channelResourceMax1;
-
-  dc->setColor(255,255,255);
+  dc->setColor(motoresourceLastFontColor1);
 
   String str = F("Ресурс 1: ");
   str += channelResourceCurrent1;
   str += F("/");
   str += channelResourceMax1;
   str += F(" (");
-  str += channelPercents1;
+  str += channelMotoresourcePercents1;
   str += F("%)");
 
   menu->print(str.c_str(),curX,curY);
   curY += fontHeight + 4;
 
-
-  uint32_t channelResourceCurrent2 = Settings.getMotoresource(1);
-  uint32_t channelResourceMax2 = Settings.getMotoresourceMax(1);
-  uint32_t channelPercents2 = (channelResourceCurrent2*100)/channelResourceMax2;
-
-  dc->setColor(0,0,255);
+  dc->setColor(motoresourceLastFontColor2);
 
   str = F("Ресурс 2: ");
   str += channelResourceCurrent2;
   str += F("/");
   str += channelResourceMax2;
   str += F(" (");
-  str += channelPercents2;
+  str += channelMotoresourcePercents2;
   str += F("%)");
 
   menu->print(str.c_str(),curX,curY);
   curY += fontHeight + 4;  
 
-
-  uint32_t channelResourceCurrent3 = Settings.getMotoresource(2);
-  uint32_t channelResourceMax3 = Settings.getMotoresourceMax(2);
-  uint32_t channelPercents3 = (channelResourceCurrent3*100)/channelResourceMax3;
-
-  dc->setColor(255,255,0);
+  dc->setColor(motoresourceLastFontColor3);
 
   str = F("Ресурс 3: ");
   str += channelResourceCurrent3;
   str += F("/");
   str += channelResourceMax3;
   str += F(" (");
-  str += channelPercents3;
+  str += channelMotoresourcePercents3;
   str += F("%)");
 
   menu->print(str.c_str(),curX,curY);
   curY += fontHeight + 4;  
   
-
-
   dc->setFont(oldFont);
   dc->setColor(oldColor);
   dc->setBackColor(oldBackColor);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InterruptScreen::computeMotoresource()
+{
+  uint32_t channelResourceCurrent1 = Settings.getMotoresource(0);
+  uint32_t channelResourceMax1 = Settings.getMotoresourceMax(0);
+  channelMotoresourcePercents1 = (channelResourceCurrent1*100)/channelResourceMax1;
+
+  uint32_t channelResourceCurrent2 = Settings.getMotoresource(1);
+  uint32_t channelResourceMax2 = Settings.getMotoresourceMax(1);
+  channelMotoresourcePercents2 = (channelResourceCurrent2*100)/channelResourceMax2;
+
+  uint32_t channelResourceCurrent3 = Settings.getMotoresource(2);
+  uint32_t channelResourceMax3 = Settings.getMotoresourceMax(2);
+  channelMotoresourcePercents3 = (channelResourceCurrent3*100)/channelResourceMax3;
+
+  motoresourceLastFontColor1 = channelMotoresourcePercents1 < 100 ? VGA_WHITE : VGA_RED;
+  motoresourceLastFontColor2 = channelMotoresourcePercents2 < 100 ? VGA_BLUE : VGA_RED;
+  motoresourceLastFontColor3 = channelMotoresourcePercents3 < 100 ? VGA_YELLOW : VGA_RED;
+
+  motoresourceBlinkTimer1 = 0;
+  motoresourceBlinkTimer2 = MOTORESOURCE_BLINK_DURATION/3;
+  motoresourceBlinkTimer3 = motoresourceBlinkTimer2*2;
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::doDraw(TFTMenu* menu)
