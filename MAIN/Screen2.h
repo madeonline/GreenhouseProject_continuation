@@ -447,6 +447,33 @@ private:
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class EthalonChartScreen : public AbstractTFTScreen
+{
+  public:
+
+  static EthalonChartScreen* create()
+  {
+    return new EthalonChartScreen();
+  }
+
+  void show(const String& fName);
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+
+private:
+      EthalonChartScreen();
+
+      int backButton;
+      String fileName;
+      Points serie;
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class SDInfoScreen : public AbstractTFTScreen
 {
   public:

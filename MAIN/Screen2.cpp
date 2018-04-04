@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ListFilesScreen* listLogFilesScreen = NULL;
 ListFilesScreen* listEthalonsFilesScreen = NULL;
+EthalonChartScreen* ethalonChartScreen = NULL;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Screen2::Screen2() : AbstractTFTScreen("Settings")
 {
@@ -29,9 +30,11 @@ void Screen2::doSetup(TFTMenu* menu)
 
   listLogFilesScreen = ListFilesScreen::create(vtLogsListing);
   listEthalonsFilesScreen = ListFilesScreen::create(vtEthalonsListing);
+  ethalonChartScreen = EthalonChartScreen::create();
   
   Screen.addScreen(listLogFilesScreen);
   Screen.addScreen(listEthalonsFilesScreen);
+  Screen.addScreen(ethalonChartScreen);
   
   Screen.addScreen(EthalonScreen::create());
   Screen.addScreen(EthalonRecordScreen::create());
@@ -872,7 +875,7 @@ void EthalonScreen::doDraw(TFTMenu* menu)
 void EthalonScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
 {
   if(pressedButton == backButton)
-    menu->switchToScreen("FilesScreen"); // переключаемся на экран работы с SD
+    menu->switchToScreen("FilesScreen"); // переключаемся на экран работы с файлами
   else if(pressedButton == viewEthalonButton)
   {
     listEthalonsFilesScreen->rescanFiles();
@@ -890,6 +893,68 @@ void EthalonScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
     menu->switchToScreen("SingleScreen");    
   else if(pressedButton == ethalonFlagButton)
     menu->switchToScreen("EthalonFlagScreen");    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// EthalonChartScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EthalonChartScreen::EthalonChartScreen() : AbstractTFTScreen("EthalonChartScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonChartScreen::doSetup(TFTMenu* menu)
+{
+
+  //reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
+  //reserved = screenButtons->addButton(5, 37, 210, 30, "reserved");
+  //reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
+  //reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
+  backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonChartScreen::show(const String& fName)
+{
+    fileName = fName;
+    serie.clear();
+    InterruptTimeList lst, emptyLst;
+    Points emptySerie;
+
+    SdFile file;
+    file.open(fileName.c_str(),FILE_READ);
+    if(file.isOpen())
+    {
+      uint32_t curRec;
+      while(1)
+      {
+        int readResult = file.read(&curRec,sizeof(curRec));
+        if(readResult == -1 || size_t(readResult) < sizeof(curRec))
+          break;
+  
+          lst.push_back(curRec);
+      }
+      file.close();
+    }
+
+    Drawing::ComputeChart(lst, serie, emptyLst, emptySerie, emptyLst, emptySerie);
+    Screen.switchToScreen(this);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonChartScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonChartScreen::doDraw(TFTMenu* menu)
+{
+  Points emptySerie;
+  Drawing::DrawChart(this,serie, emptySerie, emptySerie);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void EthalonChartScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen(listEthalonsFilesScreen); // переключаемся на экран работы со списком эталонов
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // EthalonRecordScreen
@@ -1571,8 +1636,6 @@ void ListFilesScreen::rescanFiles()
         currentPageNum = totalPages-1;
       }
       
-    //TODO: Тут перевычисление кол-ва страниц и вывод их в бокс, плюс - перерисовка экрана, если что-то изменилось
-
       if(filesButtons)
       {
         drawCurrentPageNumber();
@@ -1736,9 +1799,22 @@ void ListFilesScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
     if(lastSelectedFileIndex != -1)
     {
         DBG(F("VIEW FILE: "));
-        DBGLN(filesNames[lastSelectedFileIndex]);      
+        DBGLN(filesNames[lastSelectedFileIndex]);
         
-      //TODO: ТУТ ПРОСМОТР ВЫБРАННОГО ФАЙЛА!!!
+      // ПРОСМОТР ВЫБРАННОГО ФАЙЛА
+      String fileName = getDirName();
+      fileName += "/";
+      fileName += filesNames[lastSelectedFileIndex];
+
+        if(viewType == vtEthalonsListing)
+        {
+          ethalonChartScreen->show(fileName);
+        }
+        else if(viewType == vtLogsListing)
+        {
+          //TODO: ТУТ ПРОСМОТР ЛОГ-ФАЙЛА !!!
+        }
+      
     }
   }
 }
