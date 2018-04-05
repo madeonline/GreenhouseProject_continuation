@@ -34,6 +34,11 @@ InterruptHandlerClass::InterruptHandlerClass()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
 {
+  // резервируем память
+  list1.reserve(INTERRUPT_RESERVE_RECORDS);
+  list2.reserve(INTERRUPT_RESERVE_RECORDS);
+  list3.reserve(INTERRUPT_RESERVE_RECORDS);
+  
   attachInterrupt(digitalPinToInterrupt(INTERRUPT1_PIN),Interrupt1Handler,RISING);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT2_PIN),Interrupt2Handler,RISING);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler,RISING);
@@ -199,13 +204,19 @@ void InterruptHandlerClass::update()
       list3LastDataAt = now;
     
       InterruptTimeList copyList1 = list1;
-      list1.clear();
+
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list1.empty();
   
       InterruptTimeList copyList2 = list2;
-      list2.clear();
+      
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list2.empty();
   
       InterruptTimeList copyList3 = list3;
-      list3.clear();
+      
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list3.empty();
 
       normalizeList(copyList1);
       normalizeList(copyList2);
@@ -262,7 +273,8 @@ void InterruptHandlerClass::update()
 
     // если в каком-то из списков есть данные - значит, одно из прерываний сработало,
     // в этом случае мы должны сообщить обработчику, что данные есть. При этом мы
-    // не в ответе за то, что делает сейчас обработчик - пускай сам правильно разруливает ситуацию.
+    // не в ответе за то, что делает сейчас обработчик - пускай сам разруливает ситуацию
+    // так, как нужно ему.
 
     bool wantToInformSubscriber = subscriber && ( (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
 
@@ -270,16 +282,9 @@ void InterruptHandlerClass::update()
     {
       DBGLN(F("InterruptHandlerClass - wantToInformHandler"));
       
-      DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 0"));
       subscriber->OnInterruptRaised(copyList1, 0);
-
-      DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 1"));
-      subscriber->OnInterruptRaised(copyList2, 1);
-      
-      DBGLN(F("InterruptHandlerClass - call OnInterruptRaised 2"));
+      subscriber->OnInterruptRaised(copyList2, 1);      
       subscriber->OnInterruptRaised(copyList3, 2);
-
-      DBGLN(F("InterruptHandlerClass - call OnHaveInterruptData"));
       
        // сообщаем обработчику, что данные в каком-то из списков есть
        subscriber->OnHaveInterruptData();
@@ -302,28 +307,22 @@ void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
   // запоминаем время, когда произошло прерывание, в нужный список
   uint32_t now = micros();
   
-  switch(interruptNumber)
+  if(interruptNumber == 0)
   {
-    case 0:
-    {
-      list1.push_back(now);
-      list1LastDataAt = now;
-    }
-    break;
-    
-    case 1:
-    {
-      list2.push_back(now);
-      list2LastDataAt = now;
-    }
-    break;
-    case 2:
-    {
-      list3.push_back(now);
-      list3LastDataAt = now;
-    }
-    break;
-  } // switch
+    list1.push_back(now);
+    list1LastDataAt = now;
+  }
+  else if(interruptNumber == 1) 
+  {
+    list2.push_back(now);
+    list2LastDataAt = now;
+  }
+  else if(interruptNumber == 2)
+  {
+    list3.push_back(now);
+    list3LastDataAt = now;
+  }
+  
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 

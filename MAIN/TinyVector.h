@@ -34,6 +34,20 @@ public:
         return *this;
     }; // Needed for memory management
 
+    // резервируем память для нужного кол-ва записей
+    void reserve(size_t count)
+    {
+      if(count <= d_capacity) // уже есть буфер нужного размера
+        return;
+
+        d_capacity = count;
+
+        Data *newdata = (Data *)malloc(d_capacity*sizeof(Data)); //allocates new memory
+        memcpy(newdata, d_data, d_size * sizeof(Data));  //copies all the old memory over
+        free(d_data);                                          //free old
+        d_data = newdata;        
+    }
+
     void push_back(Data const &x)
     {
         if (d_capacity == d_size) //when he pushes data onto the heap, he checks to see if the storage is full
