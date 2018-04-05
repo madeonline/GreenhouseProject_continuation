@@ -202,26 +202,34 @@ DS3231Temperature DS3231Clock::getTemperature()
 //--------------------------------------------------------------------------------------------------------------------------------------
 DS3231Time DS3231Clock::getTime()
 {
-  DS3231Time t = {0};
+  static DS3231Time t = {0};
+  static uint32_t timeMillis = 0;
+  static bool first = true;
 
-  wire->beginTransmission(DS3231Address);
-  wire->write(0); // говорим, что мы собираемся читать с регистра 0
-  
-  if(wire->endTransmission() != 0) // ошибка
-    return t;
-  
-  if(wire->requestFrom(DS3231Address, 7) == 7) // читаем 7 байт, начиная с регистра 0
+  // чтобы часто не дёргать I2C
+  if(first || (millis() - timeMillis > 1000))
   {
-      t.second = bcd2dec(wire->read() & 0x7F);
-      t.minute = bcd2dec(wire->read());
-      t.hour = bcd2dec(wire->read() & 0x3F);
-      t.dayOfWeek = bcd2dec(wire->read());
-      t.dayOfMonth = bcd2dec(wire->read());
-      t.month = bcd2dec(wire->read());
-      t.year = bcd2dec(wire->read());     
-      t.year += 2000; // приводим время к нормальному формату
-  } // if
-  
+    first = false;
+    timeMillis = millis();
+    
+    wire->beginTransmission(DS3231Address);
+    wire->write(0); // говорим, что мы собираемся читать с регистра 0
+    
+    if(wire->endTransmission() != 0) // ошибка
+      return t;
+    
+    if(wire->requestFrom(DS3231Address, 7) == 7) // читаем 7 байт, начиная с регистра 0
+    {
+        t.second = bcd2dec(wire->read() & 0x7F);
+        t.minute = bcd2dec(wire->read());
+        t.hour = bcd2dec(wire->read() & 0x3F);
+        t.dayOfWeek = bcd2dec(wire->read());
+        t.dayOfMonth = bcd2dec(wire->read());
+        t.month = bcd2dec(wire->read());
+        t.year = bcd2dec(wire->read());     
+        t.year += 2000; // приводим время к нормальному формату
+    } // if
+  }
   return t;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------

@@ -340,27 +340,28 @@ void Screen1::doSetup(TFTMenu* menu)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::drawTime(TFTMenu* menu)
 {
-  DS3231Time tm = RealtimeClock.getTime();
-  if (oldsecond != tm.second)
-  {
-      oldsecond = tm.second;
-    // получаем компоненты даты в виде строк
-    UTFT* dc = menu->getDC();
-    dc->setColor(VGA_WHITE);
-    dc->setBackColor(VGA_BLACK);
-    dc->setFont(SmallRusFont);
-    String strDate = RealtimeClock.getDateStr(tm);
-    String strTime = RealtimeClock.getTimeStr(tm);
 
-    // печатаем их
-    dc->print(strDate, 5, 1);
-    dc->print(strTime, 90, 1);
-
-    String str = "RAM: ";
-    str += getFreeMemory();
-    Screen.print(str.c_str(), 10,123);
-    
-  }  
+    DS3231Time tm = RealtimeClock.getTime();
+    if (oldsecond != tm.second)
+    {
+        oldsecond = tm.second;
+      // получаем компоненты даты в виде строк
+      UTFT* dc = menu->getDC();
+      dc->setColor(VGA_WHITE);
+      dc->setBackColor(VGA_BLACK);
+      dc->setFont(SmallRusFont);
+      String strDate = RealtimeClock.getDateStr(tm);
+      String strTime = RealtimeClock.getTimeStr(tm);
+  
+      // печатаем их
+      dc->print(strDate, 5, 1);
+      dc->print(strTime, 90, 1);
+  
+      String str = "RAM: ";
+      str += getFreeMemory();
+      Screen.print(str.c_str(), 10,123);
+      
+    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::doUpdate(TFTMenu* menu)
@@ -451,22 +452,16 @@ void Screen1::requestToDrawChart(uint16_t* _points1,   uint16_t* _points2,  uint
   canDrawChart = true;
   inDrawingChart = false;
   
- // delete [] points1;
   points1 = _points1;
-
-//  delete [] points2;
   points2 = _points2;
-  
- // delete [] points3;
   points3 = _points3;
 
-
   int shift = getSynchroPoint(points1,pointsCount);
-  int totalPoint = min(CHART_POINTS_COUNT, (pointsCount - shift));
+  int totalPoints = min(CHART_POINTS_COUNT, (pointsCount - shift));
 
-  serie1->setPoints(&(points1[shift]), totalPoint);
-  serie2->setPoints(&(points2[shift]), totalPoint);
-  serie3->setPoints(&(points3[shift]), totalPoint);
+  serie1->setPoints(&(points1[shift]), totalPoints);
+  serie2->setPoints(&(points2[shift]), totalPoints);
+  serie3->setPoints(&(points3[shift]), totalPoints);
     
     
 }
@@ -495,7 +490,6 @@ void Screen1::drawChart()
   	// вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
   	Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
   
-    chart.stopDraw();
   	chart.draw();// просим график отрисовать наши серии
 
    fpsMillis = millis();
