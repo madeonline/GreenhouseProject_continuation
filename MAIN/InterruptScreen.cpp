@@ -33,7 +33,6 @@ void InterruptScreen::onDeactivate()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::OnHaveInterruptData()
 {
-  DBGLN(F("InterruptScreen::OnHaveInterruptData"));
   // пришло событие, что хотя бы одно из прерываний заполнено серией измерений.
   // в этом случае, раз мы являемся активным подписчиком класса обработки прерываний - 
   // мы должны показать график на экране.
@@ -63,7 +62,6 @@ void InterruptScreen::OnHaveInterruptData()
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum)
 {
-  DBGLN(F("InterruptScreen::OnInterruptRaised"));
 
   if(!canAcceptInterruptData)
   {

@@ -8,44 +8,62 @@
 #include "Settings.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
+//--------------------------------------------------------------------------------------------------------------------------------------
 // списки времён срабатываний прерываний на наших портах
 InterruptTimeList list1;
 InterruptTimeList list2;
 InterruptTimeList list3;
+//--------------------------------------------------------------------------------------------------------------------------------------
+volatile bool onTimer = false;
+volatile uint32_t lastInterruptTime = 0;
+//--------------------------------------------------------------------------------------------------------------------------------------
 
+/*
 volatile uint32_t list1LastDataAt = 0;
 volatile uint32_t list2LastDataAt = 0;
 volatile uint32_t list3LastDataAt = 0;
-
+*/
+//--------------------------------------------------------------------------------------------------------------------------------------
 InterruptEventSubscriber* subscriber = NULL;
+//--------------------------------------------------------------------------------------------------------------------------------------
+void setInterruptFlag()
+{
+  onTimer = true;
+  lastInterruptTime = micros();
+}
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt1Handler()
 {
     uint32_t now = micros();
     list1.push_back(now);
-    list1LastDataAt = now;
+    setInterruptFlag();
+    //list1LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt2Handler()
 {
     uint32_t now = micros();
     list2.push_back(now);
-    list2LastDataAt = now;
+    setInterruptFlag();
+    //list2LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt3Handler()
 {
     uint32_t now = micros();
     list3.push_back(now);
-    list3LastDataAt = now;
+    setInterruptFlag();
+   // list3LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
 {
   subscriber = NULL;
+  /*
   list1LastDataAt = 0;
   list2LastDataAt = 0;
   list3LastDataAt = 0;
+  */
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
@@ -191,7 +209,118 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::update()
 {
+
+  static bool inProcess = false;
+
+  noInterrupts();
+    bool thisOnTimer = onTimer;
+    uint32_t lastTime = lastInterruptTime;
+  interrupts();
+
+
+  if(!thisOnTimer || inProcess)
+    return;
+
+    if(!(micros() - lastTime > INTERRUPT_MAX_IDLE_TIME))
+    {
+      return;
+    }
+
+    noInterrupts();
+
+      inProcess = true;
+      onTimer = false;
+      
+      InterruptTimeList copyList1 = list1;
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list1.empty();
   
+      InterruptTimeList copyList2 = list2;      
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list2.empty();
+      
+      InterruptTimeList copyList3 = list3;      
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list3.empty();
+          
+    interrupts();
+
+     InterruptHandlerClass::normalizeList(copyList1);
+     InterruptHandlerClass::normalizeList(copyList2);
+     InterruptHandlerClass::normalizeList(copyList3);
+
+    bool needToLog = false;
+
+    // теперь смотрим - надо ли нам самим чего-то обрабатывать?
+    if(copyList1.size() > 1)
+    {
+      DBG("INTERRUPT #1 HAS SERIES OF DATA: ");
+      DBGLN(copyList1.size());
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+
+      needToLog = true;
+        
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+    
+    if(copyList2.size() > 1)
+    {
+      DBG("INTERRUPT #2 HAS SERIES OF DATA: ");
+      DBGLN(copyList2.size());
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+
+      needToLog = true;
+       
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+    
+    if(copyList3.size() > 1)
+    {
+      DBG("INTERRUPT #3 HAS SERIES OF DATA: ");
+      DBGLN(copyList3.size());
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+
+      needToLog = true;
+       
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+
+    if(needToLog)
+    {
+      // надо записать в лог дату срабатывания системы
+      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3);     
+    } // needToLog
+    
+
+    // если в каком-то из списков есть данные - значит, одно из прерываний сработало,
+    // в этом случае мы должны сообщить обработчику, что данные есть. При этом мы
+    // не в ответе за то, что делает сейчас обработчик - пускай сам разруливает ситуацию
+    // так, как нужно ему.
+
+    bool wantToInformSubscriber = subscriber && ( (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
+
+
+    if(wantToInformSubscriber)
+    {
+      
+      subscriber->OnInterruptRaised(copyList1, 0);
+      subscriber->OnInterruptRaised(copyList2, 1);      
+      subscriber->OnInterruptRaised(copyList3, 2);
+      
+       // сообщаем обработчику, что данные в каком-то из списков есть
+       subscriber->OnHaveInterruptData();
+      
+    }    
+
+    inProcess = false;
+
+  /*
   uint32_t now = micros();
 
   // ситуация следующая - если у нас взведён хотя бы один флаг ожидания окончания списка - мы ждём, пока этот список не заполнится.
@@ -319,6 +448,7 @@ void InterruptHandlerClass::update()
     
       
   } // if(isCatched)
+  */
 
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
