@@ -8,20 +8,36 @@
 #include "Settings.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
+// списки времён срабатываний прерываний на наших портах
+InterruptTimeList list1;
+InterruptTimeList list2;
+InterruptTimeList list3;
+
+volatile uint32_t list1LastDataAt = 0;
+volatile uint32_t list2LastDataAt = 0;
+volatile uint32_t list3LastDataAt = 0;
+
+InterruptEventSubscriber* subscriber = NULL;
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt1Handler()
 {
-  InterruptHandler.handleInterrupt(0);
+    uint32_t now = micros();
+    list1.push_back(now);
+    list1LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt2Handler()
 {
-  InterruptHandler.handleInterrupt(1);
+    uint32_t now = micros();
+    list2.push_back(now);
+    list2LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt3Handler()
 {
-  InterruptHandler.handleInterrupt(2);
+    uint32_t now = micros();
+    list3.push_back(now);
+    list3LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
@@ -46,14 +62,16 @@ void InterruptHandlerClass::begin()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
 {
-  if(list.size() < 2)
+  size_t sz = list.size();
+  
+  if(sz < 2)
     return;
 
   // нормализуем список относительно первого значения
   uint32_t first = list[0];
   list[0] = 0;
 
-  for(size_t i=1;i<list.size();i++)
+  for(size_t i=1;i<sz;i++)
   {
     list[i] = (list[i] - first);
   }
@@ -189,20 +207,23 @@ void InterruptHandlerClass::update()
   // два: вызывать sendDataToHandler можно СРАЗУ по факту заполнения списка, здесь же - можно обрабатывать факт срабатывания.
   // три: по факту мы должны дождаться заполнения всех трёх списков прежде, чем вызывать OnHaveInterruptData.
 
+  bool isCatched = false;
 
-  // если во всех трёх списках давно не было данных - считаем, что сбор данных закончен.
+  
+  noInterrupts();
   if( (now - list1LastDataAt) > INTERRUPT_MAX_IDLE_TIME &&
       (now - list2LastDataAt) > INTERRUPT_MAX_IDLE_TIME &&
       (now - list3LastDataAt) > INTERRUPT_MAX_IDLE_TIME
-  )
-  {
-    noInterrupts();
+    )
+      isCatched = true;
+  interrupts();
 
-      // здесь обновляем время "сработки" списков, чтобы часто не дёргать эту проверку в случае, когда долго не срабатывают прерывания
-      list1LastDataAt = now;
-      list2LastDataAt = now;
-      list3LastDataAt = now;
-    
+  // если во всех трёх списках давно не было данных - считаем, что сбор данных закончен.
+  if(isCatched)
+  {
+
+    noInterrupts();
+      
       InterruptTimeList copyList1 = list1;
 
       // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
@@ -217,12 +238,12 @@ void InterruptHandlerClass::update()
       
       // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
       list3.empty();
-
-      normalizeList(copyList1);
-      normalizeList(copyList2);
-      normalizeList(copyList3);
-
+      
     interrupts();
+
+      InterruptHandlerClass::normalizeList(copyList1);
+      InterruptHandlerClass::normalizeList(copyList2);
+      InterruptHandlerClass::normalizeList(copyList3);
 
     bool needToLog = false;
 
@@ -266,8 +287,7 @@ void InterruptHandlerClass::update()
     if(needToLog)
     {
       // надо записать в лог дату срабатывания системы
-      writeToLog(copyList1, copyList2, copyList3);
-      
+      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3);     
     } // needToLog
     
 
@@ -290,8 +310,15 @@ void InterruptHandlerClass::update()
        subscriber->OnHaveInterruptData();
       
     }    
+
+      // здесь обновляем время "сработки" списков, чтобы часто не дёргать эту проверку в случае, когда долго не срабатывают прерывания
+      now = micros();
+      list1LastDataAt = now;
+      list2LastDataAt = now;
+      list3LastDataAt = now;
+    
       
-  }
+  } // if(isCatched)
 
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -301,28 +328,3 @@ void InterruptHandlerClass::setSubscriber(InterruptEventSubscriber* h)
   subscriber = h;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
-{
-  
-  // запоминаем время, когда произошло прерывание, в нужный список
-  uint32_t now = micros();
-  
-  if(interruptNumber == 0)
-  {
-    list1.push_back(now);
-    list1LastDataAt = now;
-  }
-  else if(interruptNumber == 1) 
-  {
-    list2.push_back(now);
-    list2LastDataAt = now;
-  }
-  else if(interruptNumber == 2)
-  {
-    list3.push_back(now);
-    list3LastDataAt = now;
-  }
-  
-}
-//--------------------------------------------------------------------------------------------------------------------------------------
-

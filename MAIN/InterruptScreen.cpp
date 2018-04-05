@@ -21,6 +21,7 @@ AbstractTFTScreen* InterruptScreen::create()
 InterruptScreen::InterruptScreen() : AbstractTFTScreen("INTERRUPT")
 {
   startSeenTime = 0;
+  timerDelta = 0;
   canAcceptInterruptData = true;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -88,7 +89,7 @@ void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t l
     break;      
     
   } // switch
-  
+/*  
   // для теста - печатаем в Serial
   #ifdef _DEBUG
 
@@ -105,6 +106,7 @@ void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t l
     DBGLN("<< END OF INTERRUPT DATA");
     
   #endif // _DEBUG  
+*/  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::drawTime(TFTMenu* menu)
@@ -132,21 +134,29 @@ void InterruptScreen::doSetup(TFTMenu* menu)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::doUpdate(TFTMenu* menu)
 {
-    if(millis() - startSeenTime > INTERRUPT_SCREEN_SEE_TIME)
+    uint32_t now = millis();
+    uint32_t dT = now - timerDelta;
+    timerDelta = now;
+    
+    if(now - startSeenTime > INTERRUPT_SCREEN_SEE_TIME)
     {
       // время показа истекло, переключаемся на главный экран
       startSeenTime = 0;
       Screen.switchToScreen("Main");
+      return;
     }
 
     bool canRedrawMotoresource = false;
-
+    
     if(channelMotoresourcePercents1 >= (100 - MOTORESOURCE_BLINK_PERCENTS) )
     {
       // ресурс по системе на канале 1 исчерпан, надо мигать надписью
-      if(millis() - motoresourceBlinkTimer1 > MOTORESOURCE_BLINK_DURATION)
-      {
-        motoresourceBlinkTimer1 = millis();
+      motoresourceBlinkTimer1 += dT;
+      
+      if(motoresourceBlinkTimer1 > MOTORESOURCE_BLINK_DURATION)
+      { 
+        motoresourceBlinkTimer1 -= MOTORESOURCE_BLINK_DURATION;
+               
         if(motoresourceLastFontColor1 == VGA_RED)
           motoresourceLastFontColor1 = VGA_BLACK;
         else
@@ -159,9 +169,11 @@ void InterruptScreen::doUpdate(TFTMenu* menu)
     if(channelMotoresourcePercents2 >= (100 - MOTORESOURCE_BLINK_PERCENTS) )
     {
       // ресурс по системе на канале 2 исчерпан, надо мигать надписью
-      if(millis() - motoresourceBlinkTimer2 > MOTORESOURCE_BLINK_DURATION)
+       motoresourceBlinkTimer2 += dT;
+      if(motoresourceBlinkTimer2 > MOTORESOURCE_BLINK_DURATION)
       {
-        motoresourceBlinkTimer2 = millis();
+        motoresourceBlinkTimer2 -= MOTORESOURCE_BLINK_DURATION;
+        
         if(motoresourceLastFontColor2 == VGA_RED)
           motoresourceLastFontColor2 = VGA_BLACK;
         else
@@ -174,9 +186,11 @@ void InterruptScreen::doUpdate(TFTMenu* menu)
     if(channelMotoresourcePercents3 >= (100 - MOTORESOURCE_BLINK_PERCENTS) )
     {
       // ресурс по системе на канале 3 исчерпан, надо мигать надписью
-      if(millis() - motoresourceBlinkTimer3 > MOTORESOURCE_BLINK_DURATION)
+      motoresourceBlinkTimer3 += dT;
+      if(motoresourceBlinkTimer3 > MOTORESOURCE_BLINK_DURATION)
       {
-        motoresourceBlinkTimer3 = millis();
+        motoresourceBlinkTimer3 -= MOTORESOURCE_BLINK_DURATION;
+        
         if(motoresourceLastFontColor3 == VGA_RED)
           motoresourceLastFontColor3 = VGA_BLACK;
         else
@@ -188,6 +202,8 @@ void InterruptScreen::doUpdate(TFTMenu* menu)
 
     if(canRedrawMotoresource)
       drawMotoresource(menu);
+      
+      
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::drawMotoresource(TFTMenu* menu)
@@ -259,6 +275,7 @@ void InterruptScreen::drawMotoresource(TFTMenu* menu)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::computeMotoresource()
 {
+  
   uint32_t channelResourceCurrent1 = Settings.getMotoresource(0);
   uint32_t channelResourceMax1 = Settings.getMotoresourceMax(0);
   channelMotoresourcePercents1 = (channelResourceCurrent1*100)/channelResourceMax1;
@@ -275,9 +292,10 @@ void InterruptScreen::computeMotoresource()
   motoresourceLastFontColor2 = channelMotoresourcePercents2 < (100 - MOTORESOURCE_BLINK_PERCENTS) ? VGA_BLUE : VGA_RED;
   motoresourceLastFontColor3 = channelMotoresourcePercents3 < (100 - MOTORESOURCE_BLINK_PERCENTS) ? VGA_YELLOW : VGA_RED;
 
-  motoresourceBlinkTimer1 = millis();
-  motoresourceBlinkTimer2 = millis() + MOTORESOURCE_BLINK_DURATION/3;
-  motoresourceBlinkTimer3 = millis() + (MOTORESOURCE_BLINK_DURATION/3)*2;
+  timerDelta = millis();
+  motoresourceBlinkTimer3 = 0;
+  motoresourceBlinkTimer2 = MOTORESOURCE_BLINK_DURATION/3;
+  motoresourceBlinkTimer1 = (MOTORESOURCE_BLINK_DURATION/3)*2;
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

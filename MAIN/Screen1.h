@@ -43,6 +43,7 @@ private:
     void drawChart(); // рисуем наши графики
     bool canDrawChart;
     bool inDrawingChart;
+    bool canLoopADC;
     
 	  int getFreeMemory();
 	  int oldsecond;

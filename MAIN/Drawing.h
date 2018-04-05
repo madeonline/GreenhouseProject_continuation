@@ -59,8 +59,8 @@ class ChartSerie
 
       uint16_t getMaxYValue();
 
-      void clearLine(uint16_t xPoint);
-      void drawLine(uint16_t xPoint);
+      void clearLine(UTFT* dc, uint16_t xPoint);
+      void drawLine(UTFT* dc, uint16_t xPoint);
     
 
   private:
@@ -127,10 +127,12 @@ class Chart
 
     private:
 
-    bool stopped;
+    bool stopped, inDraw;
 
     uint16_t xPoints, yPoints;
     byte* pixelsHits;
+
+    uint16_t computedMaxYValue;
           
     uint16_t xCoord, yCoord;
     ChartSeries series;

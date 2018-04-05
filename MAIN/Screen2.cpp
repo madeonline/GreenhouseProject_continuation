@@ -1175,7 +1175,7 @@ void EthalonRecordScreen::saveEthalon(int selChannel, int saveChannel)
       file.write(&val,sizeof(val));
     }
 
-    file.flush();
+  //  file.flush();
     file.close();
   }
  
@@ -1404,7 +1404,8 @@ void EthalonRecordScreen::OnInterruptRaised(const InterruptTimeList& list, uint8
     break;      
     
   } // switch
-  
+
+/*  
   // для теста - печатаем в Serial
   #ifdef _DEBUG
 
@@ -1421,6 +1422,7 @@ void EthalonRecordScreen::OnInterruptRaised(const InterruptTimeList& list, uint8
     DBGLN("<< END OF INTERRUPT DATA");
     
   #endif // _DEBUG  
+*/  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // FileEntry
