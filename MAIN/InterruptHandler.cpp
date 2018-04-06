@@ -9,27 +9,61 @@
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass InterruptHandler;
 //--------------------------------------------------------------------------------------------------------------------------------------
+// списки времён срабатываний прерываний на наших портах
+InterruptTimeList list1;
+InterruptTimeList list2;
+InterruptTimeList list3;
+//--------------------------------------------------------------------------------------------------------------------------------------
+volatile bool onTimer = false;
+volatile uint32_t lastInterruptTime = 0;
+//--------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+volatile uint32_t list1LastDataAt = 0;
+volatile uint32_t list2LastDataAt = 0;
+volatile uint32_t list3LastDataAt = 0;
+*/
+//--------------------------------------------------------------------------------------------------------------------------------------
+InterruptEventSubscriber* subscriber = NULL;
+//--------------------------------------------------------------------------------------------------------------------------------------
+void setInterruptFlag()
+{
+  onTimer = true;
+  lastInterruptTime = micros();
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt1Handler()
 {
-  InterruptHandler.handleInterrupt(0);
+    uint32_t now = micros();
+    list1.push_back(now);
+    setInterruptFlag();
+    //list1LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt2Handler()
 {
-  InterruptHandler.handleInterrupt(1);
+    uint32_t now = micros();
+    list2.push_back(now);
+    setInterruptFlag();
+    //list2LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt3Handler()
 {
-  InterruptHandler.handleInterrupt(2);
+    uint32_t now = micros();
+    list3.push_back(now);
+    setInterruptFlag();
+   // list3LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
 {
   subscriber = NULL;
+  /*
   list1LastDataAt = 0;
   list2LastDataAt = 0;
   list3LastDataAt = 0;
+  */
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
@@ -46,14 +80,16 @@ void InterruptHandlerClass::begin()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
 {
-  if(list.size() < 2)
+  size_t sz = list.size();
+  
+  if(sz < 2)
     return;
 
   // нормализуем список относительно первого значения
   uint32_t first = list[0];
   list[0] = 0;
 
-  for(size_t i=1;i<list.size();i++)
+  for(size_t i=1;i<sz;i++)
   {
     list[i] = (list[i] - first);
   }
@@ -173,7 +209,118 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::update()
 {
+
+  static bool inProcess = false;
+
+  noInterrupts();
+    bool thisOnTimer = onTimer;
+    uint32_t lastTime = lastInterruptTime;
+  interrupts();
+
+
+  if(!thisOnTimer || inProcess)
+    return;
+
+    if(!(micros() - lastTime > INTERRUPT_MAX_IDLE_TIME))
+    {
+      return;
+    }
+
+    noInterrupts();
+
+      inProcess = true;
+      onTimer = false;
+      
+      InterruptTimeList copyList1 = list1;
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list1.empty();
   
+      InterruptTimeList copyList2 = list2;      
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list2.empty();
+      
+      InterruptTimeList copyList3 = list3;      
+      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
+      list3.empty();
+          
+    interrupts();
+
+     InterruptHandlerClass::normalizeList(copyList1);
+     InterruptHandlerClass::normalizeList(copyList2);
+     InterruptHandlerClass::normalizeList(copyList3);
+
+    bool needToLog = false;
+
+    // теперь смотрим - надо ли нам самим чего-то обрабатывать?
+    if(copyList1.size() > 1)
+    {
+      DBG("INTERRUPT #1 HAS SERIES OF DATA: ");
+      DBGLN(copyList1.size());
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+
+      needToLog = true;
+        
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+    
+    if(copyList2.size() > 1)
+    {
+      DBG("INTERRUPT #2 HAS SERIES OF DATA: ");
+      DBGLN(copyList2.size());
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+
+      needToLog = true;
+       
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+    
+    if(copyList3.size() > 1)
+    {
+      DBG("INTERRUPT #3 HAS SERIES OF DATA: ");
+      DBGLN(copyList3.size());
+
+      // зажигаем светодиод "ТЕСТ"
+      InfoDiodes.test();
+
+      needToLog = true;
+       
+       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+    }
+
+    if(needToLog)
+    {
+      // надо записать в лог дату срабатывания системы
+      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3);     
+    } // needToLog
+    
+
+    // если в каком-то из списков есть данные - значит, одно из прерываний сработало,
+    // в этом случае мы должны сообщить обработчику, что данные есть. При этом мы
+    // не в ответе за то, что делает сейчас обработчик - пускай сам разруливает ситуацию
+    // так, как нужно ему.
+
+    bool wantToInformSubscriber = subscriber && ( (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
+
+
+    if(wantToInformSubscriber)
+    {
+      
+      subscriber->OnInterruptRaised(copyList1, 0);
+      subscriber->OnInterruptRaised(copyList2, 1);      
+      subscriber->OnInterruptRaised(copyList3, 2);
+      
+       // сообщаем обработчику, что данные в каком-то из списков есть
+       subscriber->OnHaveInterruptData();
+      
+    }    
+
+    inProcess = false;
+
+  /*
   uint32_t now = micros();
 
   // ситуация следующая - если у нас взведён хотя бы один флаг ожидания окончания списка - мы ждём, пока этот список не заполнится.
@@ -189,20 +336,23 @@ void InterruptHandlerClass::update()
   // два: вызывать sendDataToHandler можно СРАЗУ по факту заполнения списка, здесь же - можно обрабатывать факт срабатывания.
   // три: по факту мы должны дождаться заполнения всех трёх списков прежде, чем вызывать OnHaveInterruptData.
 
+  bool isCatched = false;
 
-  // если во всех трёх списках давно не было данных - считаем, что сбор данных закончен.
+  
+  noInterrupts();
   if( (now - list1LastDataAt) > INTERRUPT_MAX_IDLE_TIME &&
       (now - list2LastDataAt) > INTERRUPT_MAX_IDLE_TIME &&
       (now - list3LastDataAt) > INTERRUPT_MAX_IDLE_TIME
-  )
-  {
-    noInterrupts();
+    )
+      isCatched = true;
+  interrupts();
 
-      // здесь обновляем время "сработки" списков, чтобы часто не дёргать эту проверку в случае, когда долго не срабатывают прерывания
-      list1LastDataAt = now;
-      list2LastDataAt = now;
-      list3LastDataAt = now;
-    
+  // если во всех трёх списках давно не было данных - считаем, что сбор данных закончен.
+  if(isCatched)
+  {
+
+    noInterrupts();
+      
       InterruptTimeList copyList1 = list1;
 
       // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
@@ -217,12 +367,12 @@ void InterruptHandlerClass::update()
       
       // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
       list3.empty();
-
-      normalizeList(copyList1);
-      normalizeList(copyList2);
-      normalizeList(copyList3);
-
+      
     interrupts();
+
+      InterruptHandlerClass::normalizeList(copyList1);
+      InterruptHandlerClass::normalizeList(copyList2);
+      InterruptHandlerClass::normalizeList(copyList3);
 
     bool needToLog = false;
 
@@ -266,8 +416,7 @@ void InterruptHandlerClass::update()
     if(needToLog)
     {
       // надо записать в лог дату срабатывания системы
-      writeToLog(copyList1, copyList2, copyList3);
-      
+      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3);     
     } // needToLog
     
 
@@ -290,8 +439,16 @@ void InterruptHandlerClass::update()
        subscriber->OnHaveInterruptData();
       
     }    
+
+      // здесь обновляем время "сработки" списков, чтобы часто не дёргать эту проверку в случае, когда долго не срабатывают прерывания
+      now = micros();
+      list1LastDataAt = now;
+      list2LastDataAt = now;
+      list3LastDataAt = now;
+    
       
-  }
+  } // if(isCatched)
+  */
 
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -301,28 +458,3 @@ void InterruptHandlerClass::setSubscriber(InterruptEventSubscriber* h)
   subscriber = h;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::handleInterrupt(uint8_t interruptNumber)
-{
-  
-  // запоминаем время, когда произошло прерывание, в нужный список
-  uint32_t now = micros();
-  
-  if(interruptNumber == 0)
-  {
-    list1.push_back(now);
-    list1LastDataAt = now;
-  }
-  else if(interruptNumber == 1) 
-  {
-    list2.push_back(now);
-    list2LastDataAt = now;
-  }
-  else if(interruptNumber == 2)
-  {
-    list3.push_back(now);
-    list3LastDataAt = now;
-  }
-  
-}
-//--------------------------------------------------------------------------------------------------------------------------------------
-

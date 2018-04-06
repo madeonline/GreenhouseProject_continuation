@@ -35,8 +35,8 @@ void LoggerClass::writeLine(const String& line)
 
   logFileName += F(".LOG");
 
-  DBG(F("WRITE INFO TO: "));
-  DBGLN(logFileName);
+  //DBG(F("WRITE INFO TO: "));
+  //DBGLN(logFileName);
 
   SdFile file;
   file.open(logFileName.c_str(),FILE_WRITE);
@@ -44,15 +44,12 @@ void LoggerClass::writeLine(const String& line)
   if(file.isOpen())
   {
 
-    DBG(F("WRITE LINE TO FILE: "));
-    DBGLN(line);
+  //  DBG(F("WRITE LINE TO FILE: "));
+  //  DBGLN(line);
     
     file.println(line);
     file.close();
   }
 }
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

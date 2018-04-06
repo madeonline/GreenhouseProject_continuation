@@ -24,11 +24,35 @@ void loopADC()
   {
     int bufferLength = 0;
     uint16_t* cBuf = sampler.getFilledBuffer(&bufferLength);    // Получить буфер с данными
+
+
+    static uint16_t countOfPoints = 0;    
+    static uint16_t* serie1 = NULL;
+    static uint16_t* serie2 = NULL;
+    static uint16_t* serie3 = NULL;
     
+    uint16_t currentCountOfPoints = bufferLength/6;
+
+    if(currentCountOfPoints != countOfPoints)
+    {
+      countOfPoints = currentCountOfPoints;
+      
+      delete [] serie1;
+      delete [] serie2;
+      delete [] serie3;
+
+      serie1 = new uint16_t[countOfPoints];
+      serie2 = new uint16_t[countOfPoints];
+      serie3 = new uint16_t[countOfPoints];
+
+    }
+
+    /*
     uint16_t countOfPoints = bufferLength/6;
     uint16_t* serie1 = new uint16_t[countOfPoints];
     uint16_t* serie2 = new uint16_t[countOfPoints];
     uint16_t* serie3 = new uint16_t[countOfPoints];
+    */
     uint16_t serieWriteIterator = 0;
 
     uint32_t raw200V = 0;
@@ -62,20 +86,19 @@ void loopADC()
     {
       mainScreen->requestToDrawChart(serie1, serie2, serie3, countOfPoints);      
     }
+    /*
     else
     {
       delete [] serie1;
       delete [] serie2;
       delete [] serie3;
     }
+    */
   }
-  yield();
-
     if (dataHigh_old != sampler.dataHigh)
     {
       dataHigh_old = sampler.dataHigh;
     }
-   yield();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Screen1::Screen1() : AbstractTFTScreen("Main")
@@ -88,6 +111,7 @@ Screen1::Screen1() : AbstractTFTScreen("Main")
   canDrawChart = false;
   inDrawingChart = false;
   last3V3Voltage = last5Vvoltage = last200Vvoltage = -1;
+  canLoopADC = false;
 
   inductiveSensorState1 = inductiveSensorState2 = inductiveSensorState3 = 0xFF;
 }
@@ -267,19 +291,25 @@ void Screen1::drawVoltage(TFTMenu* menu)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::onDeactivate()
 {
+  // станем неактивными, надо выключить подписчика результатов прерываний
+  InterruptHandler.setSubscriber(NULL);
+  
   last3V3Voltage = last5Vvoltage = last200Vvoltage = -1;
 
   inductiveSensorState1 = inductiveSensorState2 = inductiveSensorState3 = 0xFF;
   
   // прекращаем отрисовку графика
   chart.stopDraw();
+
+  inDrawingChart = false;
+  canDrawChart = false;
+  canLoopADC = false;
   
-  // станем неактивными, надо выключить подписчика результатов прерываний
-  InterruptHandler.setSubscriber(NULL);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::onActivate()
 {
+  canLoopADC = true;
   // мы активизируемся, назначаем подписчика результатов прерываний
   InterruptHandler.setSubscriber(ScreenInterrupt);
   
@@ -310,27 +340,28 @@ void Screen1::doSetup(TFTMenu* menu)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::drawTime(TFTMenu* menu)
 {
-  DS3231Time tm = RealtimeClock.getTime();
-  if (oldsecond != tm.second)
-  {
-      oldsecond = tm.second;
-    // получаем компоненты даты в виде строк
-    UTFT* dc = menu->getDC();
-    dc->setColor(VGA_WHITE);
-    dc->setBackColor(VGA_BLACK);
-    dc->setFont(SmallRusFont);
-    String strDate = RealtimeClock.getDateStr(tm);
-    String strTime = RealtimeClock.getTimeStr(tm);
 
-    // печатаем их
-    dc->print(strDate, 5, 1);
-    dc->print(strTime, 90, 1);
-
-    String str = "RAM: ";
-    str += getFreeMemory();
-    Screen.print(str.c_str(), 10,123);
-    
-  }  
+    DS3231Time tm = RealtimeClock.getTime();
+    if (oldsecond != tm.second)
+    {
+        oldsecond = tm.second;
+      // получаем компоненты даты в виде строк
+      UTFT* dc = menu->getDC();
+      dc->setColor(VGA_WHITE);
+      dc->setBackColor(VGA_BLACK);
+      dc->setFont(SmallRusFont);
+      String strDate = RealtimeClock.getDateStr(tm);
+      String strTime = RealtimeClock.getTimeStr(tm);
+  
+      // печатаем их
+      dc->print(strDate, 5, 1);
+      dc->print(strTime, 90, 1);
+  
+      String str = "RAM: ";
+      str += getFreeMemory();
+      Screen.print(str.c_str(), 10,123);
+      
+    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::doUpdate(TFTMenu* menu)
@@ -341,7 +372,8 @@ void Screen1::doUpdate(TFTMenu* menu)
   drawInductiveSensors(menu);
   drawChart();
 
-  loopADC();
+  if(canLoopADC)
+    loopADC();
 	// тут обновляем внутреннее состояние
 }
 
@@ -420,29 +452,23 @@ void Screen1::requestToDrawChart(uint16_t* _points1,   uint16_t* _points2,  uint
   canDrawChart = true;
   inDrawingChart = false;
   
-  delete [] points1;
   points1 = _points1;
-
-  delete [] points2;
   points2 = _points2;
-  
-  delete [] points3;
   points3 = _points3;
 
-
   int shift = getSynchroPoint(points1,pointsCount);
-  int totalPoint = min(CHART_POINTS_COUNT, (pointsCount - shift));
+  int totalPoints = min(CHART_POINTS_COUNT, (pointsCount - shift));
 
-  serie1->setPoints(&(points1[shift]), totalPoint);
-  serie2->setPoints(&(points2[shift]), totalPoint);
-  serie3->setPoints(&(points3[shift]), totalPoint);
+  serie1->setPoints(&(points1[shift]), totalPoints);
+  serie2->setPoints(&(points2[shift]), totalPoints);
+  serie3->setPoints(&(points3[shift]), totalPoints);
     
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::drawChart()
 {
-  if(!isActive() || !canDrawChart)
+  if(!isActive() || !canDrawChart || inDrawingChart)
     return;
 
   inDrawingChart = true;    
@@ -456,10 +482,18 @@ void Screen1::drawChart()
 	RGBColor gridColor = { 0,200,0 }; // цвет сетки
 
 
-	// вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
-	Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
+  static uint32_t fpsMillis = 0;
+  uint32_t now = millis();
 
-	chart.draw();// просим график отрисовать наши серии
+  if(now - fpsMillis > (1000/CHART_FPS) )
+  {
+  	// вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
+  	Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
+  
+  	chart.draw();// просим график отрисовать наши серии
+
+   fpsMillis = millis();
+  }
 
   inDrawingChart = false;
   canDrawChart = false;

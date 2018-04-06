@@ -31,24 +31,10 @@ class InterruptHandlerClass
 
    void setSubscriber(InterruptEventSubscriber* h);
 
-   void handleInterrupt(uint8_t interruptNumber);
-
 private:
 
-  // списки времён срабатываний прерываний на наших портах
-  InterruptTimeList list1;
-  InterruptTimeList list2;
-  InterruptTimeList list3;
-
-  uint32_t list1LastDataAt;
-  uint32_t list2LastDataAt;
-  uint32_t list3LastDataAt;
-
-  InterruptEventSubscriber* subscriber;
-
-  void normalizeList(InterruptTimeList& list);
-
-  void writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3);
+  static void normalizeList(InterruptTimeList& list);
+  static void writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3);
 
 };
 //--------------------------------------------------------------------------------------------------------------------------------------
