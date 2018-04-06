@@ -112,8 +112,11 @@
 
 
 
-
-
+#define NVIC_PriorityGroup_0   ((uint32_t)0x700)
+#define NVIC_PriorityGroup_1   ((uint32_t)0x600)
+#define NVIC_PriorityGroup_2   ((uint32_t)0x500)
+#define NVIC_PriorityGroup_3   ((uint32_t)0x400)
+#define NVIC_PriorityGroup_4   ((uint32_t)0x300)
 
 
 

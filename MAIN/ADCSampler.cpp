@@ -1,5 +1,6 @@
 
 #include "ADCSampler.h"
+#include "CONFIG.h"
 
 ADCSampler::ADCSampler()
 {
@@ -93,7 +94,7 @@ void ADCSampler::begin(unsigned int samplingRate)
   ADC->ADC_RNCR = (unsigned int)  BUFFER_SIZE;
 
   // Enable interrupts
-  NVIC_SetPriorityGrouping(5);
+  NVIC_SetPriorityGrouping(NVIC_PriorityGroup_3);
   NVIC_DisableIRQ(ADC_IRQn);
   NVIC_ClearPendingIRQ(ADC_IRQn);  
   NVIC_SetPriority(ADC_IRQn, 6);  
