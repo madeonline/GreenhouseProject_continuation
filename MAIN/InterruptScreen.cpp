@@ -87,13 +87,15 @@ void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t l
     break;      
     
   } // switch
-/*  
+  
   // для теста - печатаем в Serial
   #ifdef _DEBUG
 
     if(list.size() > 1)
     {
-      DBGLN("INTERRUPT DATA >>");
+      DBG("INTERRUPT #")
+      DBG(listNum);
+      DBGLN(" DATA >>");
       
       for(size_t i=0;i<list.size();i++)
       {
@@ -104,7 +106,7 @@ void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t l
     DBGLN("<< END OF INTERRUPT DATA");
     
   #endif // _DEBUG  
-*/  
+ 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::drawTime(TFTMenu* menu)
