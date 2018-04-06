@@ -114,7 +114,7 @@ void AT24CX::init(byte index, byte pageSize) {
 	_id = AT24CX_ID | (index & 0x7);
 	_pageSize = pageSize;
 	Wire.begin(); 
-  ConfigPin::setI2CPriority(10);
+  ConfigPin::setI2CPriority(5);
 }
 
 /**

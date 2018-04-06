@@ -95,7 +95,7 @@ void ADCSampler::begin(unsigned int samplingRate)
   // Enable interrupts
   NVIC_DisableIRQ(ADC_IRQn);
   NVIC_ClearPendingIRQ(ADC_IRQn);  
-  NVIC_SetPriority(ADC_IRQn, 15);  
+  NVIC_SetPriority(ADC_IRQn, 6);  
   NVIC_EnableIRQ(ADC_IRQn);
   ADC->ADC_PTCR  =  ADC_PTCR_RXTEN;                               // Enable receiving data.
   ADC->ADC_CR   |=  ADC_CR_START;                                 // start waiting for trigger.

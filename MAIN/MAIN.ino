@@ -33,7 +33,7 @@ void setup()
   Serial.begin(115200);
   while(!Serial);
 
-  Serial.setInterruptPriority(9);
+  Serial.setInterruptPriority(4);
 
   ConfigPin::setup();
   
