@@ -24,6 +24,8 @@ CorePinScenario pulseScene1;
 CorePinScenario pulseScene2;
 CorePinScenario pulseScene3;
 CorePinScenario pulseSceneLed;
+bool onIdleTimer = false;
+uint32_t timer = 0;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 const int ledPin = LED_BUILTIN;    // the number of the LED pin
@@ -53,6 +55,9 @@ void setup()
   scene3.add({LINE3, LOW, DURATION});
 
   // добавляем тестовые импульсы
+  pulseScene1.setLoop(false);
+  pulseScene2.setLoop(false);
+  pulseScene3.setLoop(false);
 
 
   unsigned long duration = 40000;
@@ -170,12 +175,14 @@ void setup()
   level = HIGH;
   pulseSceneLed.add({ledPin, level, duration });
 
-
+  // добавляем установку низкого уровня
+  pulseScene1.add({PULSE_PIN1, LOW, 10000});
+  pulseScene2.add({PULSE_PIN2, LOW, 10000});
+  pulseScene3.add({PULSE_PIN3, LOW, 10000});
+  
   // добавляем паузу в 20 секунд
-  pulseScene1.add({PULSE_PIN1, LOW, 20000000});
-  pulseScene2.add({PULSE_PIN2, LOW, 20000000});
-  pulseScene3.add({PULSE_PIN3, LOW, 20000000});
   pulseSceneLed.add({ledPin, LOW, 20000000 });
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void loop()
@@ -193,15 +200,36 @@ void loop()
 
   while (1)
   {
+    
     scene1.update();
     scene2.update();
     scene3.update();
 
     pulseSceneLed.update();
+
     pulseScene1.update();
     pulseScene2.update();
     pulseScene3.update();
 
-  }
+      if(pulseScene1.isDone() && pulseScene2.isDone() && pulseScene3.isDone())
+      {
+          if(!onIdleTimer)
+          {
+              onIdleTimer = true;
+              timer = micros();
+          }
+          else
+          {
+              if(micros() - timer > 20000000)
+              {
+                onIdleTimer = false;
+                pulseScene1.reset();
+                pulseScene2.reset();
+                pulseScene3.reset();
+              }
+          }
+      }
+
+  } // while(1)
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

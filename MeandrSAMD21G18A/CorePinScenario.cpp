@@ -9,6 +9,20 @@ CorePinScenario::CorePinScenario()
   isEnabled = true;
   currentActionIndex = 0;
   timer = 0;
+  loopMode = true;
+  isdone = false;
+  wantreset = false;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void CorePinScenario::setLoop(bool bLoop)
+{
+  loopMode = bLoop;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void CorePinScenario::reset()
+{
+  isdone = false;
+  wantreset = true;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 bool CorePinScenario::enabled()
@@ -38,9 +52,14 @@ void CorePinScenario::add(CorePinAction action)
   actions->push_back(action); 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+bool CorePinScenario::isDone()
+{
+  return isdone;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void CorePinScenario::update()
 {
-  if(!isEnabled || !actions->size())
+  if(!isEnabled || !actions->size() || isdone)
     return;
 
    CorePinAction* action = &((*actions)[currentActionIndex]);
@@ -55,12 +74,29 @@ void CorePinScenario::update()
       currentActionIndex++;
       
       if(currentActionIndex >= actions->size())
-        currentActionIndex = 0;
+      {
+          if(loopMode)
+            currentActionIndex = 0;
+          else
+          {
+            if(wantreset)
+            {
+              currentActionIndex = 0;
+              wantreset = false;
+            }
+            else
+            {
+              currentActionIndex = actions->size()-1;
+              isdone = true;
+            }
+          }
+      }
 
        action = &((*actions)[currentActionIndex]);
        digitalWrite(action->pin,action->level);
-      
+             
        timer = micros();
+
    }
     
 }

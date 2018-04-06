@@ -28,6 +28,9 @@ class CorePinScenario
       void clear();
       void update();
       void add(CorePinAction action);
+      void setLoop(bool bLoop);
+      void reset();
+      bool isDone();
 
     private:
 
@@ -35,6 +38,9 @@ class CorePinScenario
           CorePinActionsList* actions;
           size_t currentActionIndex;
           unsigned long timer;
+          bool loopMode;
+          bool isdone;
+          bool wantreset;
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
