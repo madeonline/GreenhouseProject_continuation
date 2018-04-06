@@ -33,7 +33,7 @@ void setup()
   Serial.begin(115200);
   while(!Serial);
 
-  NVIC_SetPriorityGrouping(NVIC_PriorityGroup_4);
+  NVIC_SetPriorityGrouping(NVIC_PriorityGroup_1);
   Serial.setInterruptPriority(2);
 
   ConfigPin::setup();

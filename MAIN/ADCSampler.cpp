@@ -94,7 +94,7 @@ void ADCSampler::begin(unsigned int samplingRate)
   ADC->ADC_RNCR = (unsigned int)  BUFFER_SIZE;
 
   // Enable interrupts
-  NVIC_SetPriorityGrouping(NVIC_PriorityGroup_3);
+  NVIC_SetPriorityGrouping(NVIC_PriorityGroup_1);
   NVIC_DisableIRQ(ADC_IRQn);
   NVIC_ClearPendingIRQ(ADC_IRQn);  
   NVIC_SetPriority(ADC_IRQn, 6);  

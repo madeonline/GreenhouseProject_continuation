@@ -28,7 +28,7 @@ RodPosition ConfigPin::getRodPosition()
 void ConfigPin::setI2CPriority(uint8_t priority)
 {
 
-  NVIC_SetPriorityGrouping(NVIC_PriorityGroup_4);
+  NVIC_SetPriorityGrouping(NVIC_PriorityGroup_1);
   NVIC_DisableIRQ(WIRE_ISR_ID);
   NVIC_ClearPendingIRQ(WIRE_ISR_ID);
   NVIC_SetPriority(WIRE_ISR_ID, priority);
