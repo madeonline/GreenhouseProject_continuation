@@ -73,7 +73,7 @@ void InterruptHandlerClass::begin()
   list2.reserve(INTERRUPT_RESERVE_RECORDS);
   list3.reserve(INTERRUPT_RESERVE_RECORDS);
 
-  NVIC_SetPriorityGrouping(5);
+  NVIC_SetPriorityGrouping(4);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT1_PIN),Interrupt1Handler,RISING);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT2_PIN),Interrupt2Handler,RISING);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler,RISING);
