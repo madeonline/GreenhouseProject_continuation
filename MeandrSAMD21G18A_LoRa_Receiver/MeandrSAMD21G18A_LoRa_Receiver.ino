@@ -19,11 +19,12 @@
 CorePinScenario scene1;
 CorePinScenario scene2;
 CorePinScenario scene3;
+CorePinScenario pulseSceneLed;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #define PULSE_PIN1 A1 // номер пина для генерации тестовых импульсов индуктивного датчика №1
 #define PULSE_PIN2 A0 // номер пина для генерации тестовых импульсов индуктивного датчика №2
 #define PULSE_PIN3 A5 // номер пина для генерации тестовых импульсов индуктивного датчика №3
-
+const int ledPin = LED_BUILTIN;    // the number of the LED pin
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CorePinScenario pulseScene1;
 CorePinScenario pulseScene2;
@@ -33,13 +34,15 @@ void setup()
 {
   Serial.begin(9600);
   // while (!Serial);
-  LoRa.setPins(10, 9, 2);       // Только для  ATMEL_SAMD21
-  Serial.println("LoRa Receiver");
+  
+    LoRa.setPins(10, 9, 2);       // Только для  ATMEL_SAMD21
+    Serial.println("LoRa Receiver");
 
-  if (!LoRa.begin(868E6)) {
+    if (!LoRa.begin(868E6)) {
     Serial.println("Starting LoRa failed!");
     while (1);
-  }
+    }
+  
   pinMode(LINE1, OUTPUT);
   pinMode(LINE2, OUTPUT);
   pinMode(LINE3, OUTPUT);
@@ -47,7 +50,7 @@ void setup()
   pinMode(PULSE_PIN1, OUTPUT);
   pinMode(PULSE_PIN2, OUTPUT);
   pinMode(PULSE_PIN3, OUTPUT);
-
+  pinMode(ledPin, OUTPUT);
 
   scene1.add({LINE1, HIGH, DURATION});
   scene1.add({LINE1, LOW, DURATION});
@@ -64,6 +67,8 @@ void setup()
 
   unsigned long duration = 40000;
   uint8_t level = HIGH;
+
+  // Формируем 30 импульса первого графика прерывания. Желтый цвет графика.
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
 
   for (int i = 0; i < 10; i++, duration -= 2000)
@@ -77,29 +82,36 @@ void setup()
     level = !level;
   }
 
-  for (int i = 0; i < 15; i++)
+  for (int i = 0; i < 10; i++, duration -= 100)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
   }
 
-  // затем добавляем 15 импульсов по возрастанию
-  for (int i = 0; i < 14; i++, duration += 1000)
+  // затем добавляем 10 импульсов по возрастанию
+  for (int i = 0; i < 10; i++, duration += 1000)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
   }
-  // затем добавляем 16 импульсов по возрастанию
+  // затем добавляем 15 импульсов по возрастанию
   for (int i = 0; i < 15; i++, duration += 1600)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
   }
-
+  // затем добавляем 5 импульсов по возрастанию
+  for (int i = 0; i < 5; i++, duration += 600)
+  {
+    pulseScene1.add({PULSE_PIN1, level, duration});
+    level = !level;
+  }
 
   duration = 40000;
   level = HIGH;
-  // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
+
+  // Формируем 30 импульса второго графика прерывания. Синий график.
+  // сперва добавляем 20 импульсов по убыванию, от 20 мс до 2 мс, с шагом 1,5 мс
 
   for (int i = 0; i < 20; i++, duration -= 1500)
   {
@@ -113,13 +125,13 @@ void setup()
     level = !level;
   }
 
-  // затем добавляем 15 импульсов по возрастанию
+  // затем добавляем 10 импульсов по возрастанию
   for (int i = 0; i < 10; i++, duration += 400)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
     level = !level;
   }
-  // затем добавляем 5 импульсов по возрастанию
+  // затем добавляем 14 импульсов по возрастанию
   for (int i = 0; i < 14; i++, duration += 2800)
   {
     pulseScene2.add({PULSE_PIN2, level, duration});
@@ -130,6 +142,8 @@ void setup()
 
   duration = 40000;
   level = HIGH;
+
+  // Формируем 30 импульса второго графика прерывания. Красный график.
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
 
   for (int i = 0; i < 10; i++, duration -= 1500)
@@ -155,18 +169,23 @@ void setup()
     pulseScene3.add({PULSE_PIN3, level, duration});
     level = !level;
   }
-  // затем добавляем 5 импульсов по возрастанию
-  for (int i = 0; i < 15; i++, duration += 1600)
+  // затем добавляем 10 импульсов по возрастанию
+  for (int i = 0; i < 10; i++, duration += 1600)
   {
     pulseScene3.add({PULSE_PIN3, level, duration});
     level = !level;
   }
 
+  duration = 500000;
+  level = HIGH;
+  pulseSceneLed.add({ledPin, level, duration });
 
-  // добавляем паузу в 5 секунд
+
+  // добавляем паузу в 20 секунд
   pulseScene1.add({PULSE_PIN1, LOW, 20000000});
   pulseScene2.add({PULSE_PIN2, LOW, 20000000});
   pulseScene3.add({PULSE_PIN3, LOW, 20000000});
+  pulseSceneLed.add({ledPin, LOW, 20000000 });
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void loop()
@@ -187,6 +206,7 @@ void loop()
     scene2.update();
     scene3.update();
 
+    pulseSceneLed.update();
     pulseScene1.update();
     pulseScene2.update();
     pulseScene3.update();
@@ -194,12 +214,14 @@ void loop()
     // try to parse packet
     int packetSize = LoRa.parsePacket();
     //  Serial.println(packetSize);
-    if (packetSize) {
+    if (packetSize)
+    {
       // received a packet
       Serial.print("Received packet '");
 
       // read packet
-      while (LoRa.available()) {
+      while (LoRa.available())
+      {
         Serial.print((char)LoRa.read());
       }
 

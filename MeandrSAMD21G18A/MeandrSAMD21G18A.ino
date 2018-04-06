@@ -57,6 +57,8 @@ void setup()
 
   unsigned long duration = 40000;
   uint8_t level = HIGH;
+
+  // Формируем 30 импульса первого графика прерывания. Желтый цвет графика.
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
 
   for (int i = 0; i < 10; i++, duration -= 2000)
@@ -70,29 +72,36 @@ void setup()
     level = !level;
   }
 
-  for (int i = 0; i < 15; i++)
+  for (int i = 0; i < 10; i++, duration -= 100)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
   }
 
-  // затем добавляем 15 импульсов по возрастанию
-  for (int i = 0; i < 14; i++, duration += 1000)
+  // затем добавляем 10 импульсов по возрастанию
+  for (int i = 0; i < 10; i++, duration += 1000)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
   }
-  // затем добавляем 16 импульсов по возрастанию
+  // затем добавляем 15 импульсов по возрастанию
   for (int i = 0; i < 15; i++, duration += 1600)
   {
     pulseScene1.add({PULSE_PIN1, level, duration});
     level = !level;
   }
-
+  // затем добавляем 5 импульсов по возрастанию
+  for (int i = 0; i < 5; i++, duration += 600)
+  {
+    pulseScene1.add({PULSE_PIN1, level, duration});
+    level = !level;
+  }
 
   duration = 40000;
   level = HIGH;
-  // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
+
+  // Формируем 30 импульса второго графика прерывания. Синий график.
+  // сперва добавляем 20 импульсов по убыванию, от 20 мс до 2 мс, с шагом 1,5 мс
 
   for (int i = 0; i < 20; i++, duration -= 1500)
   {
@@ -123,6 +132,8 @@ void setup()
 
   duration = 40000;
   level = HIGH;
+
+  // Формируем 30 импульса второго графика прерывания. Красный график.
   // сперва добавляем 10 импульсов по убыванию, от 20 мс до 2 мс, с шагом 2 мс
 
   for (int i = 0; i < 10; i++, duration -= 1500)
@@ -148,8 +159,8 @@ void setup()
     pulseScene3.add({PULSE_PIN3, level, duration});
     level = !level;
   }
-  // затем добавляем 5 импульсов по возрастанию
-  for (int i = 0; i < 15; i++, duration += 1600)
+  // затем добавляем 10 импульсов по возрастанию
+  for (int i = 0; i < 10; i++, duration += 1600)
   {
     pulseScene3.add({PULSE_PIN3, level, duration});
     level = !level;
@@ -158,7 +169,7 @@ void setup()
   duration = 500000;
   level = HIGH;
   pulseSceneLed.add({ledPin, level, duration });
- 
+
 
   // добавляем паузу в 20 секунд
   pulseScene1.add({PULSE_PIN1, LOW, 20000000});
@@ -186,10 +197,11 @@ void loop()
     scene2.update();
     scene3.update();
 
+    pulseSceneLed.update();
     pulseScene1.update();
     pulseScene2.update();
     pulseScene3.update();
-	pulseSceneLed.update();
+
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
