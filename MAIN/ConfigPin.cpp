@@ -88,7 +88,7 @@ void ConfigPin::setup()
 	pinMode(TFT_reset, OUTPUT);                         // Выход pin сброса TFT дисплея.  
 	digitalWrite(TFT_reset, HIGH);                      // Выход pin сброса TFT дисплея. 
 	delay(10);
-	digitalWrite(TFT_reset, HIGH);                      // Сброс TFT дисплея. 
+	digitalWrite(TFT_reset, LOW);                      // Сброс TFT дисплея. 
 	delay(10);
 	digitalWrite(TFT_reset, HIGH);                      // Выход pin сброса TFT дисплея. 
 
