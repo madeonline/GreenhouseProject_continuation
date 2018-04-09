@@ -83,7 +83,7 @@ void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t l
   {
     case 0:
       list1 = list;
-      box.chartColor = VGA_RED;
+      box.chartColor = VGA_WHITE;
     break;      
 
     case 1:

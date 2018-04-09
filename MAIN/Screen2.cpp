@@ -1070,7 +1070,7 @@ void EthalonRecordScreen::drawState(TFTMenu* menu)
     Screen.getDC()->fillScr(TFT_BACK_COLOR);
     showButtons(true);    
     
-    Drawing::DrawChart(this, serie1, serie2, serie3);
+    Drawing::DrawChart(this, serie1, serie2, serie3, VGA_RED);
   }    
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1379,7 +1379,7 @@ void EthalonRecordScreen::OnHaveInterruptData()
   
   Screen.getDC()->fillScr(TFT_BACK_COLOR);
   showButtons(true);  
-  Drawing::DrawChart(this, serie1, serie2, serie3);
+  Drawing::DrawChart(this, serie1, serie2, serie3,VGA_RED);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void EthalonRecordScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum, EthalonCompareResult compareResult)

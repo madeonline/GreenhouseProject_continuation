@@ -117,11 +117,33 @@ namespace Drawing
       // подсчёты завершены
     //  DBGLN("");    
   }
+
+  void doDrawSerie(UTFT* dc,Points& serie)
+  {
+      for (size_t i=1;i<serie.size();i++)
+      {
+          Point ptStart = serie[i-1];
+          Point ptEnd = serie[i];
+          dc->drawLine(ptStart.X , ptStart.Y, ptEnd.X , ptEnd.Y);
+          yield();
+      }    
+  }
+
+  void DrawSerie(AbstractTFTScreen* caller, Points& serie, uint16_t color)
+  {
+    if(serie.size() < 2 || !caller->isActive()) // низзя рисовать
+      return;
+     
+      UTFT* dc = Screen.getDC();
+      word oldColor = dc->getColor();  
+    
+      dc->setColor(color);
+      doDrawSerie(dc,serie);        
+      dc->setColor(oldColor);          
+  }
   
   void DrawSerie(AbstractTFTScreen* caller, Points& serie, RGBColor color)
   {
- //   DBGLN(F("DrawSerie"));
-    
     if(serie.size() < 2 || !caller->isActive()) // низзя рисовать
       return;
      
@@ -129,19 +151,11 @@ namespace Drawing
       word oldColor = dc->getColor();  
     
       dc->setColor(color.R, color.G, color.B);
-        
-      for (size_t i=1;i<serie.size();i++)
-      {
-          Point ptStart = serie[i-1];
-          Point ptEnd = serie[i];
-          dc->drawLine(ptStart.X , ptStart.Y, ptEnd.X , ptEnd.Y);
-          yield();
-      }
-      
-        dc->setColor(oldColor);      
+      doDrawSerie(dc,serie);        
+      dc->setColor(oldColor);   
   }
 
-  void DrawChart(AbstractTFTScreen* caller, Points& serie1, Points& serie2, Points& serie3)
+  void DrawChart(AbstractTFTScreen* caller, Points& serie1, Points& serie2, Points& serie3, uint16_t serie1Color, uint16_t serie2Color, uint16_t serie3Color)
   {
     
     // рисуем сетку
@@ -157,11 +171,11 @@ namespace Drawing
     // вызываем функцию для отрисовки сетки, её можно вызывать из каждого класса экрана
     Drawing::DrawGrid(gridX, gridY, columnsCount, rowsCount, columnWidth, rowHeight, gridColor);
   
-    Drawing::DrawSerie(caller, serie1,{ 255,0,0 });
+    Drawing::DrawSerie(caller, serie1,serie1Color);
     yield();
-    Drawing::DrawSerie(caller, serie2,{ 0,0,255 });
+    Drawing::DrawSerie(caller, serie2,serie2Color);
     yield();
-    Drawing::DrawSerie(caller, serie3,{ 255,255,0 });
+    Drawing::DrawSerie(caller, serie3,serie3Color);
     yield();    
   }
 
