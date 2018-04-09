@@ -286,6 +286,11 @@ void InterruptHandlerClass::update()
         
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
        compareRes1 = EthalonComparer::Compare(copyList1, 0);
+
+       if(compareRes1 == COMPARE_RESULT_MatchEthalon)
+        InfoDiodes.ready();
+       else if(compareRes1 == COMPARE_RESULT_MismatchEthalon || compareRes1 == COMPARE_RESULT_RodBroken)
+        InfoDiodes.failure();
     }
     
     if(copyList2.size() > 1)
@@ -300,6 +305,11 @@ void InterruptHandlerClass::update()
        
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
        compareRes2 = EthalonComparer::Compare(copyList2, 1);
+       
+       if(compareRes2 == COMPARE_RESULT_MatchEthalon)
+        InfoDiodes.ready();
+       else if(compareRes2 == COMPARE_RESULT_MismatchEthalon || compareRes2 == COMPARE_RESULT_RodBroken)
+        InfoDiodes.failure();
     }
     
     if(copyList3.size() > 1)
@@ -314,6 +324,12 @@ void InterruptHandlerClass::update()
        
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
        compareRes3 = EthalonComparer::Compare(copyList3, 2);
+
+       if(compareRes3 == COMPARE_RESULT_MatchEthalon)
+        InfoDiodes.ready();
+       else if(compareRes3 == COMPARE_RESULT_MismatchEthalon || compareRes3 == COMPARE_RESULT_RodBroken)
+        InfoDiodes.failure();
+       
     }
 
     if(needToLog)
