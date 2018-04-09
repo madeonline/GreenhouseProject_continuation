@@ -54,10 +54,52 @@ void InterruptScreen::OnHaveInterruptData()
 
   // вычисляем моторесурс
   computeMotoresource();
+
+
+  // проверяем совпадение с эталонными графиками
+  compareBoxes.empty();
+  compareWithEthalon(0,list1,VGA_RED);
+  compareWithEthalon(1,list2,VGA_BLUE);
+  compareWithEthalon(2,list3,VGA_YELLOW);
   
   // запоминаем время начала показа и переключаемся на экран
   startSeenTime = millis();
   Screen.switchToScreen(this);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InterruptScreen::compareWithEthalon(uint8_t channelNum, InterruptTimeList& list, uint16_t chartColor)
+{
+  EthalonCompareBox box;
+
+  box.channelNum = channelNum;
+  box.chartColor = chartColor;
+
+  EthalonCompareResult compareResult = EthalonComparer::Compare(list,channelNum);
+  
+  switch(compareResult)
+  {
+    case COMPARE_RESULT_NoSourcePulses:
+    case COMPARE_RESULT_NoEthalonFound:
+    case COMPARE_RESULT_RodBroken:
+      box.compareColor = VGA_GRAY;
+      box.foreCompareColor = VGA_BLACK;
+      box.compareCaption = "-";
+    break;
+
+    case COMPARE_RESULT_MatchEthalon:
+      box.compareColor = VGA_LIME;
+      box.foreCompareColor = VGA_BLACK;
+      box.compareCaption = "OK";
+    break;
+
+    case COMPARE_RESULT_MismatchEthalon:
+      box.compareColor = VGA_RED;
+      box.foreCompareColor = VGA_WHITE;
+      box.compareCaption = "ERR";
+    break;
+  }
+
+  compareBoxes.push_back(box);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum)
@@ -299,11 +341,58 @@ void InterruptScreen::computeMotoresource()
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InterruptScreen::drawCompareResult(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  word oldBackColor = dc->getBackColor();  
+  word oldColor = dc->getColor();
+  uint8_t* oldFont = dc->getFont();
+  dc->setFont(SmallRusFont);
+  uint8_t fontWidth = dc->getFontXsize();
+  uint8_t fontHeight = dc->getFontYsize();
+  
+  uint16_t curX = 162;
+  uint16_t curY = 20; 
+  uint8_t boxWidth = 30;  
+  uint8_t boxHeight = 18;
+  uint8_t spacing = 4;
+
+
+  for(size_t i=0;i<compareBoxes.size();i++)
+  {
+
+    EthalonCompareBox box = compareBoxes[i];
+    dc->setBackColor(VGA_BLACK);
+    dc->setColor(box.chartColor);
+    String channelNum = String(box.channelNum+1);
+    uint8_t captionLen = menu->print(channelNum.c_str(),0,0,0,true);
+    menu->print(channelNum.c_str(), curX, curY + (boxHeight - fontHeight)/2 );
+
+    dc->setBackColor(box.compareColor);
+    dc->setColor(box.compareColor);
+
+    uint16_t boxLeft = curX + captionLen*fontWidth + spacing;
+    dc->fillRoundRect(boxLeft, curY, boxLeft + boxWidth, curY + boxHeight);
+
+    dc->setColor(box.foreCompareColor);
+    captionLen = menu->print(box.compareCaption,0,0,0,true);
+    menu->print(box.compareCaption, boxLeft + (boxWidth - captionLen*fontWidth)/2, curY + (boxHeight - fontHeight)/2 );  
+    
+    curY += boxHeight + spacing;
+
+  } // for
+
+  dc->setBackColor(oldBackColor);
+  dc->setColor(oldColor);
+  dc->setFont(oldFont);  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::doDraw(TFTMenu* menu)
 {
   drawTime(menu);
   Drawing::DrawChart(this,serie1, serie2, serie3);
   drawMotoresource(menu);
+  drawCompareResult(menu);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
