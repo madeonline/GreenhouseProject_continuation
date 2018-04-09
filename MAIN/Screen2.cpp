@@ -1382,7 +1382,7 @@ void EthalonRecordScreen::OnHaveInterruptData()
   Drawing::DrawChart(this, serie1, serie2, serie3);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void EthalonRecordScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum)
+void EthalonRecordScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum, EthalonCompareResult compareResult)
 {
   DBGLN(F("EthalonRecordScreen::OnInterruptRaised"));
 

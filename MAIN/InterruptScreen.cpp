@@ -23,6 +23,12 @@ InterruptScreen::InterruptScreen() : AbstractTFTScreen("INTERRUPT")
   startSeenTime = 0;
   timerDelta = 0;
   canAcceptInterruptData = true;
+
+  for(int i=0;i<3;i++)
+  {
+    EthalonCompareBox box;
+    compareBoxes.push_back(box);
+  }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::onDeactivate()
@@ -55,26 +61,45 @@ void InterruptScreen::OnHaveInterruptData()
   // вычисляем моторесурс
   computeMotoresource();
 
-
-  // проверяем совпадение с эталонными графиками
-  compareBoxes.empty();
-  compareWithEthalon(0,list1,VGA_RED);
-  compareWithEthalon(1,list2,VGA_BLUE);
-  compareWithEthalon(2,list3,VGA_YELLOW);
-  
   // запоминаем время начала показа и переключаемся на экран
   startSeenTime = millis();
   Screen.switchToScreen(this);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void InterruptScreen::compareWithEthalon(uint8_t channelNum, InterruptTimeList& list, uint16_t chartColor)
+void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum, EthalonCompareResult compareResult)
 {
+
+  if(!canAcceptInterruptData)
+  {
+    DBGLN("InterruptScreen::OnInterruptRaised - CAN'T ACCEPT INTERRUPT DATA!");
+    return;
+  }
+
+  // пришли результаты серии прерываний с одного из списков.
+  // мы запоминаем результаты в локальный список.
   EthalonCompareBox box;
 
-  box.channelNum = channelNum;
-  box.chartColor = chartColor;
+  switch(listNum)
+  {
+    case 0:
+      list1 = list;
+      box.chartColor = VGA_RED;
+    break;      
 
-  EthalonCompareResult compareResult = EthalonComparer::Compare(list,channelNum);
+    case 1:
+      list2 = list;
+      box.chartColor = VGA_BLUE;
+    break;      
+
+    case 2:
+      list3 = list;
+      box.chartColor = VGA_YELLOW;
+    break;      
+    
+  } // switch
+
+
+  box.channelNum = listNum;
   
   switch(compareResult)
   {
@@ -99,36 +124,8 @@ void InterruptScreen::compareWithEthalon(uint8_t channelNum, InterruptTimeList& 
     break;
   }
 
-  compareBoxes.push_back(box);
-}
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void InterruptScreen::OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum)
-{
-
-  if(!canAcceptInterruptData)
-  {
-    DBGLN("InterruptScreen::OnInterruptRaised - CAN'T ACCEPT INTERRUPT DATA!");
-    return;
-  }
-
-  // пришли результаты серии прерываний с одного из списков.
-  // мы запоминаем результаты в локальный список.
-
-  switch(listNum)
-  {
-    case 0:
-      list1 = list;
-    break;      
-
-    case 1:
-      list2 = list;
-    break;      
-
-    case 2:
-      list3 = list;
-    break;      
-    
-  } // switch
+  compareBoxes[listNum] = box;  
+  
   
   // для теста - печатаем в Serial
   #ifdef _DEBUG

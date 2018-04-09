@@ -402,7 +402,7 @@ class EthalonRecordScreen : public AbstractTFTScreen, public InterruptEventSubsc
     return new EthalonRecordScreen();
   }
 
-  void OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum);
+  void OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum, EthalonCompareResult compareResult);
   void OnHaveInterruptData();  
     
 protected:

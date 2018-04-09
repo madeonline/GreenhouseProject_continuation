@@ -25,7 +25,7 @@ class InterruptScreen : public AbstractTFTScreen, public InterruptEventSubscribe
 
   static AbstractTFTScreen* create();  
 
-  void OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum);
+  void OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum, EthalonCompareResult result);
   void OnHaveInterruptData();
     
 protected:
@@ -57,7 +57,6 @@ private:
     bool canAcceptInterruptData;
 
     EthalonCompareBoxes compareBoxes;
-    void compareWithEthalon(uint8_t channelNum,InterruptTimeList& list, uint16_t chartColor);
     void drawCompareResult(TFTMenu* menu);
 
     Points serie1;

@@ -96,7 +96,7 @@ void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
   }
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3)
+void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3)
 {
 
   // пишем время срабатывания прерывания
@@ -164,7 +164,12 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
     line = "[MOTORESOURCE_1]";
     line += motoresource;
   
-    Logger.writeLine(line);    
+    Logger.writeLine(line);
+
+    // тут пишем результат сравнения с эталоном для канала
+    line = "[COMPARE_RESULT_0]";
+    line += res1;
+    Logger.writeLine(line);
   } // if
 
   if(lst2.size() > 1)
@@ -183,7 +188,13 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
     line = "[MOTORESOURCE_2]";
     line += motoresource;
   
-    Logger.writeLine(line);       
+    Logger.writeLine(line); 
+
+    // тут пишем результат сравнения с эталоном для канала
+    line = "[COMPARE_RESULT_1]";
+    line += res2;
+    Logger.writeLine(line);
+          
   } // if
 
   if(lst3.size() > 1)
@@ -202,7 +213,13 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
     line = "[MOTORESOURCE_3]";
     line += motoresource;
   
-    Logger.writeLine(line);       
+    Logger.writeLine(line); 
+
+    // тут пишем результат сравнения с эталоном для канала
+    line = "[COMPARE_RESULT_2]";
+    line += res2;
+    Logger.writeLine(line);
+          
   } // if
   
   
@@ -250,6 +267,10 @@ void InterruptHandlerClass::update()
      InterruptHandlerClass::normalizeList(copyList2);
      InterruptHandlerClass::normalizeList(copyList3);
 
+     EthalonCompareResult compareRes1 = COMPARE_RESULT_NoSourcePulses;
+     EthalonCompareResult compareRes2 = COMPARE_RESULT_NoSourcePulses;
+     EthalonCompareResult compareRes3 = COMPARE_RESULT_NoSourcePulses;
+     
     bool needToLog = false;
 
     // теперь смотрим - надо ли нам самим чего-то обрабатывать?
@@ -264,6 +285,7 @@ void InterruptHandlerClass::update()
       needToLog = true;
         
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+       compareRes1 = EthalonComparer::Compare(copyList1, 0);
     }
     
     if(copyList2.size() > 1)
@@ -277,6 +299,7 @@ void InterruptHandlerClass::update()
       needToLog = true;
        
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+       compareRes2 = EthalonComparer::Compare(copyList2, 1);
     }
     
     if(copyList3.size() > 1)
@@ -290,12 +313,13 @@ void InterruptHandlerClass::update()
       needToLog = true;
        
        //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
+       compareRes3 = EthalonComparer::Compare(copyList3, 2);
     }
 
     if(needToLog)
     {
       // надо записать в лог дату срабатывания системы
-      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3);     
+      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3, compareRes1, compareRes2, compareRes3);     
     } // needToLog
     
 
@@ -310,9 +334,9 @@ void InterruptHandlerClass::update()
     if(wantToInformSubscriber)
     {
       
-      subscriber->OnInterruptRaised(copyList1, 0);
-      subscriber->OnInterruptRaised(copyList2, 1);      
-      subscriber->OnInterruptRaised(copyList3, 2);
+      subscriber->OnInterruptRaised(copyList1, 0, compareRes1);
+      subscriber->OnInterruptRaised(copyList2, 1, compareRes2);      
+      subscriber->OnInterruptRaised(copyList3, 2, compareRes3);
       
        // сообщаем обработчику, что данные в каком-то из списков есть
        subscriber->OnHaveInterruptData();
@@ -320,136 +344,6 @@ void InterruptHandlerClass::update()
     }    
 
     inProcess = false;
-
-  /*
-  uint32_t now = micros();
-
-  // ситуация следующая - если у нас взведён хотя бы один флаг ожидания окончания списка - мы ждём, пока этот список не заполнится.
-  // если у нас ни одного флага уже не взведено, списки заполнены по принципу давности прихода последнего значения,
-  // и хотя бы в одном списке есть данные - мы отправляем все три списка обработчику, и чистим их локально.
-  // по другому мы сделать не можем, т.к. работаем по прерываниям, и всегда может быть ситуация, когда заполняется какой-то список.
-  // при этом нам надо быть уверенными в целостности данных, т.е. мы не можем отправлять обработчику данные, когда нам заблагорассудится,
-  // поскольку он там с ними может что-то делать (например, мееедленно отрисовывать просчитанные ранее точки).
-  // однако, по факту заполнения любого одного списка мы должны немедленно прореагировать на это дело, например, записать на SD, и 
-  // после всего этого - почистить локальный список, чтобы он был готов к принятию новой порции данных.
-
-  // резюмируем: вызывать OnHaveInterruptData у обработчика можно ТОЛЬКО тогда, когда все три списка не изменяются длительное время - это раз.
-  // два: вызывать sendDataToHandler можно СРАЗУ по факту заполнения списка, здесь же - можно обрабатывать факт срабатывания.
-  // три: по факту мы должны дождаться заполнения всех трёх списков прежде, чем вызывать OnHaveInterruptData.
-
-  bool isCatched = false;
-
-  
-  noInterrupts();
-  if( (now - list1LastDataAt) > INTERRUPT_MAX_IDLE_TIME &&
-      (now - list2LastDataAt) > INTERRUPT_MAX_IDLE_TIME &&
-      (now - list3LastDataAt) > INTERRUPT_MAX_IDLE_TIME
-    )
-      isCatched = true;
-  interrupts();
-
-  // если во всех трёх списках давно не было данных - считаем, что сбор данных закончен.
-  if(isCatched)
-  {
-
-    noInterrupts();
-      
-      InterruptTimeList copyList1 = list1;
-
-      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
-      list1.empty();
-  
-      InterruptTimeList copyList2 = list2;
-      
-      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
-      list2.empty();
-  
-      InterruptTimeList copyList3 = list3;
-      
-      // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
-      list3.empty();
-      
-    interrupts();
-
-      InterruptHandlerClass::normalizeList(copyList1);
-      InterruptHandlerClass::normalizeList(copyList2);
-      InterruptHandlerClass::normalizeList(copyList3);
-
-    bool needToLog = false;
-
-    // теперь смотрим - надо ли нам самим чего-то обрабатывать?
-    if(copyList1.size() > 1)
-    {
-      DBGLN("INTERRUPT #1 HAS SERIES OF DATA!");
-
-      // зажигаем светодиод "ТЕСТ"
-      InfoDiodes.test();
-
-      needToLog = true;
-        
-       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
-    }
-    
-    if(copyList2.size() > 1)
-    {
-      DBGLN("INTERRUPT #2 HAS SERIES OF DATA!");
-
-      // зажигаем светодиод "ТЕСТ"
-      InfoDiodes.test();
-
-      needToLog = true;
-       
-       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
-    }
-    
-    if(copyList3.size() > 1)
-    {
-      DBGLN("INTERRUPT #3 HAS SERIES OF DATA!");
-
-      // зажигаем светодиод "ТЕСТ"
-      InfoDiodes.test();
-
-      needToLog = true;
-       
-       //TODO: здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные !!!
-    }
-
-    if(needToLog)
-    {
-      // надо записать в лог дату срабатывания системы
-      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3);     
-    } // needToLog
-    
-
-    // если в каком-то из списков есть данные - значит, одно из прерываний сработало,
-    // в этом случае мы должны сообщить обработчику, что данные есть. При этом мы
-    // не в ответе за то, что делает сейчас обработчик - пускай сам разруливает ситуацию
-    // так, как нужно ему.
-
-    bool wantToInformSubscriber = subscriber && ( (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
-
-    if(wantToInformSubscriber)
-    {
-      DBGLN(F("InterruptHandlerClass - wantToInformHandler"));
-      
-      subscriber->OnInterruptRaised(copyList1, 0);
-      subscriber->OnInterruptRaised(copyList2, 1);      
-      subscriber->OnInterruptRaised(copyList3, 2);
-      
-       // сообщаем обработчику, что данные в каком-то из списков есть
-       subscriber->OnHaveInterruptData();
-      
-    }    
-
-      // здесь обновляем время "сработки" списков, чтобы часто не дёргать эту проверку в случае, когда долго не срабатывают прерывания
-      now = micros();
-      list1LastDataAt = now;
-      list2LastDataAt = now;
-      list3LastDataAt = now;
-    
-      
-  } // if(isCatched)
-  */
 
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
