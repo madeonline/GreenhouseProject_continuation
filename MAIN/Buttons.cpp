@@ -34,6 +34,8 @@ void ButtonsList::update()
   {
     DBGLN(F("YELLOW BUTTON CLICKED!"));
     InfoDiodes.test(false); // гасим светодиод ТЕСТ
+    InfoDiodes.failure(false); // гасим светодиод ОШИБКА
+    InfoDiodes.ready(false); // гасим светодиод УСПЕХ
   }
 
   if(redButton.isClicked())
