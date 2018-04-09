@@ -44,8 +44,8 @@ void LoggerClass::writeLine(const String& line)
   if(file.isOpen())
   {
 
-  //  DBG(F("WRITE LINE TO FILE: "));
-  //  DBGLN(line);
+    DBG(F("LOG >> "));
+    DBGLN(line);
     
     file.println(line);
     file.close();

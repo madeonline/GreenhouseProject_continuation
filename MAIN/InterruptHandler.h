@@ -46,8 +46,10 @@ class InterruptHandlerClass
 private:
 
   static void normalizeList(InterruptTimeList& list);
-  static void writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3);
 
+  static void writeLogRecord(uint8_t channelNumber, const InterruptTimeList& _list, EthalonCompareResult compareResult);
+  static void writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3);
+  static void writeRodPositionToLog(uint8_t channelNumber);
 };
 //--------------------------------------------------------------------------------------------------------------------------------------
 extern InterruptHandlerClass InterruptHandler;

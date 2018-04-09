@@ -43,8 +43,14 @@
 #define TFT_reset 34                 // Назначение pin сброса TFT дисплея.
 
 
-#define ROD_POSITION_PIN1 11          // Вход для чтения позиции штанги №1
-#define ROD_POSITION_PIN2 12          // Вход для чтения позиции штанги №2
+#define ROD_POSITION1_PIN1 11          // Вход для чтения позиции штанги №1, вверху
+#define ROD_POSITION1_PIN2 12          // Вход для чтения позиции штанги №1, внизу
+
+#define ROD_POSITION2_PIN1 11          // Вход для чтения позиции штанги №2, вверху
+#define ROD_POSITION2_PIN2 12          // Вход для чтения позиции штанги №2, внизу
+
+#define ROD_POSITION3_PIN1 11          // Вход для чтения позиции штанги №3, вверху
+#define ROD_POSITION3_PIN2 12          // Вход для чтения позиции штанги №3, внизу
 
 #define ROD_POSITION_TRIGGERED LOW // уровень, когда датчик позиции штанги сработал
 
@@ -66,7 +72,7 @@ public:
   static void setup();
 
   // возвращает true, если штанга в верхнем положении, false - если штанга в нижнем положении
-  static RodPosition getRodPosition();
+  static RodPosition getRodPosition(uint8_t channelNumber);
   static void setI2CPriority(uint8_t priority);
 
  

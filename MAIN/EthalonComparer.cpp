@@ -33,7 +33,7 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
   }
 
   // смотрим позицию штанги
-  RodPosition rodPos = ConfigPin::getRodPosition();
+  RodPosition rodPos = ConfigPin::getRodPosition(channelNumber);
   
  #ifndef IGNORE_ROD_POSITION
     if(rpBroken == rodPos)

@@ -8,10 +8,28 @@ ConfigPin::ConfigPin()
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-RodPosition ConfigPin::getRodPosition()
+RodPosition ConfigPin::getRodPosition(uint8_t channelNumber)
 {
-  uint8_t rodPinState1 = digitalRead(ROD_POSITION_PIN1);
-  uint8_t rodPinState2 = digitalRead(ROD_POSITION_PIN2);
+  uint8_t rodPinState1 = LOW;
+  uint8_t rodPinState2 = LOW;
+
+  switch(channelNumber)
+  {
+    case 0:
+      rodPinState1 = digitalRead(ROD_POSITION1_PIN1);
+      rodPinState2 = digitalRead(ROD_POSITION1_PIN2);
+    break;
+    
+    case 1:
+      rodPinState1 = digitalRead(ROD_POSITION2_PIN1);
+      rodPinState2 = digitalRead(ROD_POSITION2_PIN2);
+    break;
+
+    case 2:
+      rodPinState1 = digitalRead(ROD_POSITION3_PIN1);
+      rodPinState2 = digitalRead(ROD_POSITION3_PIN2);
+    break;
+  }
 
   // если на обеих датчиках одинаковое состояние - поломка штанги
   if(rodPinState1 == rodPinState2)
@@ -45,11 +63,20 @@ void ConfigPin::setI2CPriority(uint8_t priority)
 void ConfigPin::setup()
 {
   
-	pinMode(ROD_POSITION_PIN1, INPUT);                  // Вход "Релейная защита N1"
-	digitalWrite(ROD_POSITION_PIN1, INPUT_PULLUP);      // Вход "Релейная защита N1", подключить резисторы
-  
-	pinMode(ROD_POSITION_PIN2, INPUT);                  // Вход "Релейная защита N2"
-	digitalWrite(ROD_POSITION_PIN2, INPUT_PULLUP);      // Вход "Релейная защита N2", подключить резисторы
+	pinMode(ROD_POSITION1_PIN1, INPUT);                  
+	digitalWrite(ROD_POSITION1_PIN1, INPUT_PULLUP);      
+  pinMode(ROD_POSITION1_PIN2, INPUT);                  
+  digitalWrite(ROD_POSITION1_PIN2, INPUT_PULLUP);      
+
+  pinMode(ROD_POSITION2_PIN1, INPUT);                  
+  digitalWrite(ROD_POSITION2_PIN1, INPUT_PULLUP);      
+  pinMode(ROD_POSITION2_PIN2, INPUT);                  
+  digitalWrite(ROD_POSITION2_PIN2, INPUT_PULLUP);      
+
+  pinMode(ROD_POSITION3_PIN1, INPUT);                  
+  digitalWrite(ROD_POSITION3_PIN1, INPUT_PULLUP);      
+  pinMode(ROD_POSITION3_PIN2, INPUT);                  
+  digitalWrite(ROD_POSITION3_PIN2, INPUT_PULLUP);
 
 	pinMode(inductive_sensor1, INPUT);                  // Вход индуктивного датчика №1
 	digitalWrite(inductive_sensor1, INPUT_PULLUP);      // Вход индуктивного датчика №1, подключить резисторы

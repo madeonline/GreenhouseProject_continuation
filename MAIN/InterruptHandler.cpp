@@ -96,13 +96,83 @@ void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
   }
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
+void InterruptHandlerClass::writeRodPositionToLog(uint8_t channelNumber)
+{
+  String line;
+ // пишем положение штанги
+  RodPosition rodPos = ConfigPin::getRodPosition(channelNumber);
+  line = "[ROD_";
+  line += channelNumber;
+  line += "]";
+
+  switch(rodPos)
+  {
+    case rpBroken:
+      line += "BROKEN";
+    break;
+    
+    case rpUp:
+      line += "UP";
+    break;
+
+    case rpDown:
+      line += "DOWN";
+    break;
+
+  }
+
+  Logger.writeLine(line);  
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, const InterruptTimeList& _list, EthalonCompareResult compareResult)
+{
+  if(_list.size() < 2) // ничего в списке прерываний нет
+    return;
+
+  String line;
+  
+  // пишем положение штанги №1
+  writeRodPositionToLog(channelNumber);
+
+  // пишем время движения штанги
+  line = "[LINE_MOVE_TIME_";
+  line += channelNumber;
+  line += "]";
+  
+  uint32_t moveTime = _list[_list.size()-1] - _list[0];
+  line += moveTime;
+
+  Logger.writeLine(line);
+
+  // пишем кол-во срабатываний канала
+  uint32_t motoresource = Settings.getMotoresource(channelNumber);
+  motoresource++;
+  Settings.setMotoresource(channelNumber,motoresource);
+
+  line = "[MOTORESOURCE_";
+  line += channelNumber;
+  line += "]";  
+  line += motoresource;
+
+  Logger.writeLine(line);
+
+  // пишем результат сравнения с эталоном для канала
+  line = "[COMPARE_RESULT_";
+  line += channelNumber;
+  line += "]";
+  line += compareResult;
+  
+  Logger.writeLine(line);    
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3)
 {
 
+  Logger.writeLine(F("[INTERRUPT_INFO_BEGIN]"));
   // пишем время срабатывания прерывания
   DS3231Time tm = RealtimeClock.getTime();
   String line;
-  line = F("[INTERRUPT]");
+  line = F("[INTERRUPT_TIME]");
   line += RealtimeClock.getDateStr(tm);
   line += ' ';
   line += RealtimeClock.getTimeStr(tm);
@@ -124,104 +194,24 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
   Logger.writeLine(line);
 
 
-  // пишем положение штанги
-  RodPosition rodPos = ConfigPin::getRodPosition();
-  line = "[ROD]";
-
-  switch(rodPos)
-  {
-    case rpBroken:
-      line += "BROKEN";
-    break;
-    
-    case rpUp:
-      line += "UP";
-    break;
-
-    case rpDown:
-      line += "DOWN";
-    break;
-
-  }
-
-
-  Logger.writeLine(line);
-
-  // теперь смотрим, в каких списках есть данные, подсчитываем общее время движения планки, в микросекундах, и пишем в файл
+  // теперь смотрим, в каких списках есть данные, и пишем записи в лог
   if(lst1.size() > 1)
   {
-    line = "[LINE_MOVE_TIME_1]";
-    uint32_t moveTime = lst1[lst1.size()-1] - lst1[0];
-    line += moveTime;
-
-    Logger.writeLine(line);
-
-    // пишем кол-во срабатываний системы
-    uint32_t motoresource = Settings.getMotoresource(0);
-    motoresource++;
-    Settings.setMotoresource(0,motoresource);
-  
-    line = "[MOTORESOURCE_1]";
-    line += motoresource;
-  
-    Logger.writeLine(line);
-
-    // тут пишем результат сравнения с эталоном для канала
-    line = "[COMPARE_RESULT_0]";
-    line += res1;
-    Logger.writeLine(line);
+    writeLogRecord(0,lst1,res1); 
   } // if
 
   if(lst2.size() > 1)
   {
-    line = "[LINE_MOVE_TIME_2]";
-    uint32_t moveTime = lst2[lst2.size()-1] - lst2[0];
-    line += moveTime;
-
-    Logger.writeLine(line);
-
-    // пишем кол-во срабатываний системы
-    uint32_t motoresource = Settings.getMotoresource(1);
-    motoresource++;
-    Settings.setMotoresource(1,motoresource);
-  
-    line = "[MOTORESOURCE_2]";
-    line += motoresource;
-  
-    Logger.writeLine(line); 
-
-    // тут пишем результат сравнения с эталоном для канала
-    line = "[COMPARE_RESULT_1]";
-    line += res2;
-    Logger.writeLine(line);
-          
+    writeLogRecord(1,lst2,res2); 
   } // if
 
   if(lst3.size() > 1)
   {
-    line = "[LINE_MOVE_TIME_3]";
-    uint32_t moveTime = lst3[lst3.size()-1] - lst3[0];
-    line += moveTime;
-
-    Logger.writeLine(line);
-
-    // пишем кол-во срабатываний системы
-    uint32_t motoresource = Settings.getMotoresource(2);
-    motoresource++;
-    Settings.setMotoresource(2,motoresource);
-  
-    line = "[MOTORESOURCE_3]";
-    line += motoresource;
-  
-    Logger.writeLine(line); 
-
-    // тут пишем результат сравнения с эталоном для канала
-    line = "[COMPARE_RESULT_2]";
-    line += res2;
-    Logger.writeLine(line);
-          
+    writeLogRecord(2,lst3,res3);
   } // if
-  
+
+
+  Logger.writeLine(F("[INTERRUPT_INFO_END]"));
   
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
