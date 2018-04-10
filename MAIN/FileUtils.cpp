@@ -57,20 +57,70 @@ void FileUtils::SendToStream(Stream* s, const String& fileName)
   SdFile file;
   file.open(fileName.c_str(),FILE_READ);
 
+    if(file.isDir())
+    {
+      file.close();
+      return;
+    }  
+
   if(file.isOpen())
   {
-      uint8_t curByte;
-      while(1)
-      {
-        int readResult = file.read(&curByte,sizeof(curByte));
-        if(readResult == -1 || size_t(readResult) < sizeof(curByte))
-          break;
-  
-          s->write(&curByte,sizeof(curByte));
-      }    
+     while(1)
+    {
+      int iCh = file.read();
+      if(iCh == -1)
+        break;
+
+        s->write((uint8_t) iCh);
+    }
 
     file.close();
   }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+String FileUtils::getFileName(SdFile &f)
+{
+    char nameBuff[50] = {0};
+    f.getName(nameBuff,50);
+    return nameBuff;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FileUtils::printFilesNames(const String& dirName, bool recursive, Stream* outStream)
+{  
+  const char* dirP = dirName.c_str(); 
+
+  SdFile root;
+  if(!root.open(dirP,O_READ))
+    return;
+
+  root.rewind();
+
+  SdFile entry;
+  while(entry.openNext(&root,O_READ))
+  {
+    if(entry.isDir())
+    {
+      String currentDirName =  FileUtils::getFileName(entry);
+      outStream->print(currentDirName);
+      outStream->println(F("\t<DIR>"));
+      
+      if(recursive)
+      {
+        String subPath = dirName + "/";
+        subPath += currentDirName;
+        FileUtils::printFilesNames(subPath,recursive, outStream);      
+      }
+    }
+    else
+    {      
+      outStream->println(FileUtils::getFileName(entry));
+    }
+    entry.close();
+  } // while
+
+
+  root.close();
+ 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SDInit

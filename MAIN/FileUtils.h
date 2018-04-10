@@ -20,6 +20,8 @@ class FileUtils
     static int CountFiles(const String& dirName);
     static void SendToStream(Stream* s, const String& fileName);
     static void SendToStream(Stream& s, const String& fileName);
+    static void printFilesNames(const String& dirName, bool recursive, Stream* outStream);
+    static String getFileName(SdFile &f);
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
