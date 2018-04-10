@@ -18,6 +18,8 @@ class FileUtils
   public:
 
     static int CountFiles(const String& dirName);
+    static void SendToStream(Stream* s, const String& fileName);
+    static void SendToStream(Stream& s, const String& fileName);
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

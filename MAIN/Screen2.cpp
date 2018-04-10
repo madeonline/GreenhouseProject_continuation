@@ -1668,8 +1668,13 @@ void ListFilesScreen::doSetup(TFTMenu* menu)
   hasSD = SDInit::InitSD();
 
   screenButtons->setSymbolFont(Various_Symbols_32x32);
+  
   backButton = screenButtons->addButton(5, 142, 210, 30, "ВЫХОД");
-  viewFileButton = screenButtons->addButton(130, 2, 85, 50, "|", BUTTON_SYMBOL);
+  
+  if(viewType == vtEthalonsListing)
+    viewFileButton = screenButtons->addButton(128, 2, 90, 50, "|", BUTTON_SYMBOL);
+  else if(viewType == vtLogsListing)
+    viewFileButton = screenButtons->addButton(128, 2, 90, 30, "=>COM");
 
   UTFT* dc = menu->getDC();
   int screenWidth = dc->getDisplayXSize();
@@ -1681,7 +1686,7 @@ void ListFilesScreen::doSetup(TFTMenu* menu)
     filesButtons->setTextFont(SmallRusFont);
   
     int filesButtonHeight = 20;
-    int filesButtonWidth = 120;
+    int filesButtonWidth = 118;
     int curY = 2;
     int curX = 5;
   
@@ -1814,7 +1819,8 @@ void ListFilesScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
         }
         else if(viewType == vtLogsListing)
         {
-          //TODO: ТУТ ПРОСМОТР ЛОГ-ФАЙЛА !!!
+          // отправляем содержимое файла в Serial
+          FileUtils::SendToStream(Serial,fileName);
         }
       
     }

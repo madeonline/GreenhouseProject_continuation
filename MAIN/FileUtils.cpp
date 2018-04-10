@@ -47,6 +47,34 @@ int FileUtils::CountFiles(const String& dirName)
   return result;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FileUtils::SendToStream(Stream& s, const String& fileName)
+{
+  FileUtils::SendToStream(&s,fileName);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FileUtils::SendToStream(Stream* s, const String& fileName)
+{
+  SdFile file;
+  file.open(fileName.c_str(),FILE_READ);
+
+  if(file.isOpen())
+  {
+      uint8_t curByte;
+      while(1)
+      {
+        int readResult = file.read(&curByte,sizeof(curByte));
+        if(readResult == -1 || size_t(readResult) < sizeof(curByte))
+          break;
+  
+          s->write(&curByte,sizeof(curByte));
+      }    
+
+    file.close();
+  }
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// SDInit
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 bool SDInit::InitSD()
 {
   if(SDInit::sdInitFlag)
@@ -59,3 +87,4 @@ bool SDInit::InitSD()
   return SDInit::sdInitResult;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
