@@ -26,25 +26,23 @@ int FileUtils::CountFiles(const String& dirName)
   if(!SDInit::sdInitResult)
     return 0;
 
+  SdFile root;
+  if(!root.open(dirName.c_str(),O_READ))
+    return 0;
+
   int result = 0;
+  root.rewind();
 
-  if(!SD.exists(dirName.c_str()))
-    return result;
-  
-  SD.chdir(dirName.c_str());
-  SD.vwd()->rewind();
-   
-  SdFile file;
-
-  while(file.openNext(SD.vwd(), O_READ)) 
+  SdFile entry;
+  while(entry.openNext(&root,O_READ))
   {
-    if(!file.isHidden())
-      result++;
+    entry.close();
+    result++;  
+  }
 
-    file.close();
-  }  
-
+  root.close();
   return result;
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void FileUtils::SendToStream(Stream& s, const String& fileName)
