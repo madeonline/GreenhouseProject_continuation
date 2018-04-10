@@ -31,7 +31,7 @@ void screenAction(AbstractTFTScreen* screen)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void setup() 
 {
-  Serial.begin(115200);
+  Serial.begin(SERIAL_SPEED);
   while(!Serial);
 
   NVIC_SetPriorityGrouping(NVIC_PriorityGroup_1);
@@ -93,6 +93,9 @@ void setup()
   Screen.onAction(screenAction);
 
   DBGLN(F("Inited."));
+
+  Serial.print(F("UROV "));
+  Serial.println(SOFTWARE_VERSION);
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
