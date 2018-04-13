@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Контроллер");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Контроллер");
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +61,6 @@
             this.treeView = new System.Windows.Forms.TreeView();
             this.smallImages = new System.Windows.Forms.ImageList(this.components);
             this.plSection = new System.Windows.Forms.Panel();
-            this.plStartPanel = new System.Windows.Forms.Panel();
             this.plMainSettings = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.plInfo = new System.Windows.Forms.Panel();
@@ -75,6 +74,26 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.plInductive = new System.Windows.Forms.Panel();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.lblInductive3 = new System.Windows.Forms.Label();
+            this.lblInductive2 = new System.Windows.Forms.Label();
+            this.lblInductive1 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.label24 = new System.Windows.Forms.Label();
+            this.plVoltage = new System.Windows.Forms.Panel();
+            this.panel15 = new System.Windows.Forms.Panel();
+            this.lblVoltage3 = new System.Windows.Forms.Label();
+            this.lblVoltage2 = new System.Windows.Forms.Label();
+            this.lblVoltage1 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
+            this.panel16 = new System.Windows.Forms.Panel();
+            this.label31 = new System.Windows.Forms.Label();
             this.plMotoresourceCurrent = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.btnSetMotoresourceCurrent = new System.Windows.Forms.Button();
@@ -126,6 +145,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnListSDFiles = new System.Windows.Forms.Button();
             this.richTextBoxFileView = new System.Windows.Forms.RichTextBox();
+            this.plStartPanel = new System.Windows.Forms.Panel();
             this.lvLog = new System.Windows.Forms.ListView();
             this.logColumn1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.logColumn2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -133,27 +153,7 @@
             this.dataImages = new System.Windows.Forms.ImageList(this.components);
             this.tmDateTime = new System.Windows.Forms.Timer(this.components);
             this.tmEnumComPorts = new System.Windows.Forms.Timer(this.components);
-            this.plInductive = new System.Windows.Forms.Panel();
-            this.panel13 = new System.Windows.Forms.Panel();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.panel14 = new System.Windows.Forms.Panel();
-            this.label24 = new System.Windows.Forms.Label();
-            this.lblInductive1 = new System.Windows.Forms.Label();
-            this.lblInductive2 = new System.Windows.Forms.Label();
-            this.lblInductive3 = new System.Windows.Forms.Label();
             this.tmPeriodicCommandsTimer = new System.Windows.Forms.Timer(this.components);
-            this.plVoltage = new System.Windows.Forms.Panel();
-            this.panel15 = new System.Windows.Forms.Panel();
-            this.lblVoltage3 = new System.Windows.Forms.Label();
-            this.lblVoltage2 = new System.Windows.Forms.Label();
-            this.lblVoltage1 = new System.Windows.Forms.Label();
-            this.label28 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.panel16 = new System.Windows.Forms.Panel();
-            this.label31 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -170,6 +170,12 @@
             this.plInfo.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.plInductive.SuspendLayout();
+            this.panel13.SuspendLayout();
+            this.panel14.SuspendLayout();
+            this.plVoltage.SuspendLayout();
+            this.panel15.SuspendLayout();
+            this.panel16.SuspendLayout();
             this.plMotoresourceCurrent.SuspendLayout();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMotoresourceCurrent3)).BeginInit();
@@ -200,12 +206,6 @@
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.plInductive.SuspendLayout();
-            this.panel13.SuspendLayout();
-            this.panel14.SuspendLayout();
-            this.plVoltage.SuspendLayout();
-            this.panel15.SuspendLayout();
-            this.panel16.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -480,11 +480,11 @@
             this.treeView.ImageList = this.smallImages;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            treeNode2.ImageIndex = 1;
-            treeNode2.Name = "rootNode";
-            treeNode2.Text = "Контроллер";
+            treeNode1.ImageIndex = 1;
+            treeNode1.Name = "rootNode";
+            treeNode1.Text = "Контроллер";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.treeView.SelectedImageIndex = 1;
             this.treeView.ShowPlusMinus = false;
             this.treeView.ShowRootLines = false;
@@ -523,13 +523,6 @@
             this.plSection.Name = "plSection";
             this.plSection.Size = new System.Drawing.Size(1071, 533);
             this.plSection.TabIndex = 1;
-            // 
-            // plStartPanel
-            // 
-            this.plStartPanel.Location = new System.Drawing.Point(480, 81);
-            this.plStartPanel.Name = "plStartPanel";
-            this.plStartPanel.Size = new System.Drawing.Size(671, 346);
-            this.plStartPanel.TabIndex = 10;
             // 
             // plMainSettings
             // 
@@ -685,6 +678,234 @@
             this.label1.Size = new System.Drawing.Size(123, 24);
             this.label1.TabIndex = 0;
             this.label1.Text = "Информация";
+            // 
+            // plInductive
+            // 
+            this.plInductive.BackColor = System.Drawing.Color.SteelBlue;
+            this.plInductive.Controls.Add(this.panel13);
+            this.plInductive.Controls.Add(this.panel14);
+            this.plInductive.Location = new System.Drawing.Point(240, 20);
+            this.plInductive.Margin = new System.Windows.Forms.Padding(10);
+            this.plInductive.Name = "plInductive";
+            this.plInductive.Padding = new System.Windows.Forms.Padding(2);
+            this.plInductive.Size = new System.Drawing.Size(200, 215);
+            this.plInductive.TabIndex = 5;
+            // 
+            // panel13
+            // 
+            this.panel13.BackColor = System.Drawing.Color.White;
+            this.panel13.Controls.Add(this.lblInductive3);
+            this.panel13.Controls.Add(this.lblInductive2);
+            this.panel13.Controls.Add(this.lblInductive1);
+            this.panel13.Controls.Add(this.label21);
+            this.panel13.Controls.Add(this.label22);
+            this.panel13.Controls.Add(this.label23);
+            this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel13.Location = new System.Drawing.Point(2, 26);
+            this.panel13.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(196, 187);
+            this.panel13.TabIndex = 2;
+            // 
+            // lblInductive3
+            // 
+            this.lblInductive3.BackColor = System.Drawing.Color.LightGray;
+            this.lblInductive3.Location = new System.Drawing.Point(16, 126);
+            this.lblInductive3.Name = "lblInductive3";
+            this.lblInductive3.Size = new System.Drawing.Size(167, 20);
+            this.lblInductive3.TabIndex = 7;
+            this.lblInductive3.Text = "-";
+            this.lblInductive3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblInductive2
+            // 
+            this.lblInductive2.BackColor = System.Drawing.Color.LightGray;
+            this.lblInductive2.Location = new System.Drawing.Point(16, 78);
+            this.lblInductive2.Name = "lblInductive2";
+            this.lblInductive2.Size = new System.Drawing.Size(167, 20);
+            this.lblInductive2.TabIndex = 6;
+            this.lblInductive2.Text = "-";
+            this.lblInductive2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblInductive1
+            // 
+            this.lblInductive1.BackColor = System.Drawing.Color.LightGray;
+            this.lblInductive1.Location = new System.Drawing.Point(16, 35);
+            this.lblInductive1.Name = "lblInductive1";
+            this.lblInductive1.Size = new System.Drawing.Size(167, 20);
+            this.lblInductive1.TabIndex = 5;
+            this.lblInductive1.Text = "-";
+            this.lblInductive1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.ForeColor = System.Drawing.Color.Black;
+            this.label21.Location = new System.Drawing.Point(13, 110);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(61, 13);
+            this.label21.TabIndex = 4;
+            this.label21.Text = "Канал №3:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.ForeColor = System.Drawing.Color.Black;
+            this.label22.Location = new System.Drawing.Point(13, 62);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(61, 13);
+            this.label22.TabIndex = 2;
+            this.label22.Text = "Канал №2:";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.ForeColor = System.Drawing.Color.Black;
+            this.label23.Location = new System.Drawing.Point(13, 19);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(61, 13);
+            this.label23.TabIndex = 0;
+            this.label23.Text = "Канал №1:";
+            // 
+            // panel14
+            // 
+            this.panel14.AutoSize = true;
+            this.panel14.BackColor = System.Drawing.Color.SteelBlue;
+            this.panel14.Controls.Add(this.label24);
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel14.Location = new System.Drawing.Point(2, 2);
+            this.panel14.Margin = new System.Windows.Forms.Padding(0);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(196, 24);
+            this.panel14.TabIndex = 1;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label24.ForeColor = System.Drawing.Color.White;
+            this.label24.Location = new System.Drawing.Point(0, 0);
+            this.label24.Margin = new System.Windows.Forms.Padding(0);
+            this.label24.Name = "label24";
+            this.label24.Padding = new System.Windows.Forms.Padding(2);
+            this.label24.Size = new System.Drawing.Size(155, 24);
+            this.label24.TabIndex = 0;
+            this.label24.Text = "Индукт. датчики";
+            // 
+            // plVoltage
+            // 
+            this.plVoltage.BackColor = System.Drawing.Color.SteelBlue;
+            this.plVoltage.Controls.Add(this.panel15);
+            this.plVoltage.Controls.Add(this.panel16);
+            this.plVoltage.Location = new System.Drawing.Point(460, 20);
+            this.plVoltage.Margin = new System.Windows.Forms.Padding(10);
+            this.plVoltage.Name = "plVoltage";
+            this.plVoltage.Padding = new System.Windows.Forms.Padding(2);
+            this.plVoltage.Size = new System.Drawing.Size(200, 215);
+            this.plVoltage.TabIndex = 6;
+            // 
+            // panel15
+            // 
+            this.panel15.BackColor = System.Drawing.Color.White;
+            this.panel15.Controls.Add(this.lblVoltage3);
+            this.panel15.Controls.Add(this.lblVoltage2);
+            this.panel15.Controls.Add(this.lblVoltage1);
+            this.panel15.Controls.Add(this.label28);
+            this.panel15.Controls.Add(this.label29);
+            this.panel15.Controls.Add(this.label30);
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel15.Location = new System.Drawing.Point(2, 26);
+            this.panel15.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(196, 187);
+            this.panel15.TabIndex = 2;
+            // 
+            // lblVoltage3
+            // 
+            this.lblVoltage3.BackColor = System.Drawing.Color.LightGray;
+            this.lblVoltage3.Location = new System.Drawing.Point(16, 126);
+            this.lblVoltage3.Name = "lblVoltage3";
+            this.lblVoltage3.Size = new System.Drawing.Size(167, 20);
+            this.lblVoltage3.TabIndex = 7;
+            this.lblVoltage3.Text = "-";
+            this.lblVoltage3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblVoltage2
+            // 
+            this.lblVoltage2.BackColor = System.Drawing.Color.LightGray;
+            this.lblVoltage2.Location = new System.Drawing.Point(16, 78);
+            this.lblVoltage2.Name = "lblVoltage2";
+            this.lblVoltage2.Size = new System.Drawing.Size(167, 20);
+            this.lblVoltage2.TabIndex = 6;
+            this.lblVoltage2.Text = "-";
+            this.lblVoltage2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblVoltage1
+            // 
+            this.lblVoltage1.BackColor = System.Drawing.Color.LightGray;
+            this.lblVoltage1.Location = new System.Drawing.Point(16, 35);
+            this.lblVoltage1.Name = "lblVoltage1";
+            this.lblVoltage1.Size = new System.Drawing.Size(167, 20);
+            this.lblVoltage1.TabIndex = 5;
+            this.lblVoltage1.Text = "-";
+            this.lblVoltage1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.ForeColor = System.Drawing.Color.Black;
+            this.label28.Location = new System.Drawing.Point(13, 110);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(62, 13);
+            this.label28.TabIndex = 4;
+            this.label28.Text = "Вход 200В:";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.ForeColor = System.Drawing.Color.Black;
+            this.label29.Location = new System.Drawing.Point(13, 62);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(50, 13);
+            this.label29.TabIndex = 2;
+            this.label29.Text = "Вход 5В:";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.ForeColor = System.Drawing.Color.Black;
+            this.label30.Location = new System.Drawing.Point(13, 19);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(59, 13);
+            this.label30.TabIndex = 0;
+            this.label30.Text = "Вход 3.3В:";
+            // 
+            // panel16
+            // 
+            this.panel16.AutoSize = true;
+            this.panel16.BackColor = System.Drawing.Color.SteelBlue;
+            this.panel16.Controls.Add(this.label31);
+            this.panel16.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel16.Location = new System.Drawing.Point(2, 2);
+            this.panel16.Margin = new System.Windows.Forms.Padding(0);
+            this.panel16.Name = "panel16";
+            this.panel16.Size = new System.Drawing.Size(196, 24);
+            this.panel16.TabIndex = 1;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label31.ForeColor = System.Drawing.Color.White;
+            this.label31.Location = new System.Drawing.Point(0, 0);
+            this.label31.Margin = new System.Windows.Forms.Padding(0);
+            this.label31.Name = "label31";
+            this.label31.Padding = new System.Windows.Forms.Padding(2);
+            this.label31.Size = new System.Drawing.Size(88, 24);
+            this.label31.TabIndex = 0;
+            this.label31.Text = "Вольтаж";
             // 
             // plMotoresourceCurrent
             // 
@@ -1304,6 +1525,13 @@
             this.richTextBoxFileView.TabIndex = 0;
             this.richTextBoxFileView.Text = "";
             // 
+            // plStartPanel
+            // 
+            this.plStartPanel.Location = new System.Drawing.Point(480, 81);
+            this.plStartPanel.Name = "plStartPanel";
+            this.plStartPanel.Size = new System.Drawing.Size(671, 346);
+            this.plStartPanel.TabIndex = 10;
+            // 
             // lvLog
             // 
             this.lvLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -1359,238 +1587,10 @@
             this.tmEnumComPorts.Interval = 2000;
             this.tmEnumComPorts.Tick += new System.EventHandler(this.tmEnumComPorts_Tick);
             // 
-            // plInductive
-            // 
-            this.plInductive.BackColor = System.Drawing.Color.SteelBlue;
-            this.plInductive.Controls.Add(this.panel13);
-            this.plInductive.Controls.Add(this.panel14);
-            this.plInductive.Location = new System.Drawing.Point(240, 20);
-            this.plInductive.Margin = new System.Windows.Forms.Padding(10);
-            this.plInductive.Name = "plInductive";
-            this.plInductive.Padding = new System.Windows.Forms.Padding(2);
-            this.plInductive.Size = new System.Drawing.Size(200, 215);
-            this.plInductive.TabIndex = 5;
-            // 
-            // panel13
-            // 
-            this.panel13.BackColor = System.Drawing.Color.White;
-            this.panel13.Controls.Add(this.lblInductive3);
-            this.panel13.Controls.Add(this.lblInductive2);
-            this.panel13.Controls.Add(this.lblInductive1);
-            this.panel13.Controls.Add(this.label21);
-            this.panel13.Controls.Add(this.label22);
-            this.panel13.Controls.Add(this.label23);
-            this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel13.Location = new System.Drawing.Point(2, 26);
-            this.panel13.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
-            this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(196, 187);
-            this.panel13.TabIndex = 2;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.ForeColor = System.Drawing.Color.Black;
-            this.label21.Location = new System.Drawing.Point(13, 110);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(61, 13);
-            this.label21.TabIndex = 4;
-            this.label21.Text = "Канал №3:";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.ForeColor = System.Drawing.Color.Black;
-            this.label22.Location = new System.Drawing.Point(13, 62);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(61, 13);
-            this.label22.TabIndex = 2;
-            this.label22.Text = "Канал №2:";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.ForeColor = System.Drawing.Color.Black;
-            this.label23.Location = new System.Drawing.Point(13, 19);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(61, 13);
-            this.label23.TabIndex = 0;
-            this.label23.Text = "Канал №1:";
-            // 
-            // panel14
-            // 
-            this.panel14.AutoSize = true;
-            this.panel14.BackColor = System.Drawing.Color.SteelBlue;
-            this.panel14.Controls.Add(this.label24);
-            this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel14.Location = new System.Drawing.Point(2, 2);
-            this.panel14.Margin = new System.Windows.Forms.Padding(0);
-            this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(196, 24);
-            this.panel14.TabIndex = 1;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label24.ForeColor = System.Drawing.Color.White;
-            this.label24.Location = new System.Drawing.Point(0, 0);
-            this.label24.Margin = new System.Windows.Forms.Padding(0);
-            this.label24.Name = "label24";
-            this.label24.Padding = new System.Windows.Forms.Padding(2);
-            this.label24.Size = new System.Drawing.Size(155, 24);
-            this.label24.TabIndex = 0;
-            this.label24.Text = "Индукт. датчики";
-            // 
-            // lblInductive1
-            // 
-            this.lblInductive1.BackColor = System.Drawing.Color.LightGray;
-            this.lblInductive1.Location = new System.Drawing.Point(16, 35);
-            this.lblInductive1.Name = "lblInductive1";
-            this.lblInductive1.Size = new System.Drawing.Size(167, 20);
-            this.lblInductive1.TabIndex = 5;
-            this.lblInductive1.Text = "-";
-            this.lblInductive1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblInductive2
-            // 
-            this.lblInductive2.BackColor = System.Drawing.Color.LightGray;
-            this.lblInductive2.Location = new System.Drawing.Point(16, 78);
-            this.lblInductive2.Name = "lblInductive2";
-            this.lblInductive2.Size = new System.Drawing.Size(167, 20);
-            this.lblInductive2.TabIndex = 6;
-            this.lblInductive2.Text = "-";
-            this.lblInductive2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblInductive3
-            // 
-            this.lblInductive3.BackColor = System.Drawing.Color.LightGray;
-            this.lblInductive3.Location = new System.Drawing.Point(16, 126);
-            this.lblInductive3.Name = "lblInductive3";
-            this.lblInductive3.Size = new System.Drawing.Size(167, 20);
-            this.lblInductive3.TabIndex = 7;
-            this.lblInductive3.Text = "-";
-            this.lblInductive3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // tmPeriodicCommandsTimer
             // 
             this.tmPeriodicCommandsTimer.Interval = 5000;
             this.tmPeriodicCommandsTimer.Tick += new System.EventHandler(this.tmInductiveTimer_Tick);
-            // 
-            // plVoltage
-            // 
-            this.plVoltage.BackColor = System.Drawing.Color.SteelBlue;
-            this.plVoltage.Controls.Add(this.panel15);
-            this.plVoltage.Controls.Add(this.panel16);
-            this.plVoltage.Location = new System.Drawing.Point(460, 20);
-            this.plVoltage.Margin = new System.Windows.Forms.Padding(10);
-            this.plVoltage.Name = "plVoltage";
-            this.plVoltage.Padding = new System.Windows.Forms.Padding(2);
-            this.plVoltage.Size = new System.Drawing.Size(200, 215);
-            this.plVoltage.TabIndex = 6;
-            // 
-            // panel15
-            // 
-            this.panel15.BackColor = System.Drawing.Color.White;
-            this.panel15.Controls.Add(this.lblVoltage3);
-            this.panel15.Controls.Add(this.lblVoltage2);
-            this.panel15.Controls.Add(this.lblVoltage1);
-            this.panel15.Controls.Add(this.label28);
-            this.panel15.Controls.Add(this.label29);
-            this.panel15.Controls.Add(this.label30);
-            this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel15.Location = new System.Drawing.Point(2, 26);
-            this.panel15.Margin = new System.Windows.Forms.Padding(3, 11, 3, 3);
-            this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(196, 187);
-            this.panel15.TabIndex = 2;
-            // 
-            // lblVoltage3
-            // 
-            this.lblVoltage3.BackColor = System.Drawing.Color.LightGray;
-            this.lblVoltage3.Location = new System.Drawing.Point(16, 126);
-            this.lblVoltage3.Name = "lblVoltage3";
-            this.lblVoltage3.Size = new System.Drawing.Size(167, 20);
-            this.lblVoltage3.TabIndex = 7;
-            this.lblVoltage3.Text = "-";
-            this.lblVoltage3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblVoltage2
-            // 
-            this.lblVoltage2.BackColor = System.Drawing.Color.LightGray;
-            this.lblVoltage2.Location = new System.Drawing.Point(16, 78);
-            this.lblVoltage2.Name = "lblVoltage2";
-            this.lblVoltage2.Size = new System.Drawing.Size(167, 20);
-            this.lblVoltage2.TabIndex = 6;
-            this.lblVoltage2.Text = "-";
-            this.lblVoltage2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblVoltage1
-            // 
-            this.lblVoltage1.BackColor = System.Drawing.Color.LightGray;
-            this.lblVoltage1.Location = new System.Drawing.Point(16, 35);
-            this.lblVoltage1.Name = "lblVoltage1";
-            this.lblVoltage1.Size = new System.Drawing.Size(167, 20);
-            this.lblVoltage1.TabIndex = 5;
-            this.lblVoltage1.Text = "-";
-            this.lblVoltage1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.ForeColor = System.Drawing.Color.Black;
-            this.label28.Location = new System.Drawing.Point(13, 110);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(62, 13);
-            this.label28.TabIndex = 4;
-            this.label28.Text = "Вход 200В:";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.ForeColor = System.Drawing.Color.Black;
-            this.label29.Location = new System.Drawing.Point(13, 62);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(50, 13);
-            this.label29.TabIndex = 2;
-            this.label29.Text = "Вход 5В:";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.ForeColor = System.Drawing.Color.Black;
-            this.label30.Location = new System.Drawing.Point(13, 19);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(59, 13);
-            this.label30.TabIndex = 0;
-            this.label30.Text = "Вход 3.3В:";
-            // 
-            // panel16
-            // 
-            this.panel16.AutoSize = true;
-            this.panel16.BackColor = System.Drawing.Color.SteelBlue;
-            this.panel16.Controls.Add(this.label31);
-            this.panel16.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel16.Location = new System.Drawing.Point(2, 2);
-            this.panel16.Margin = new System.Windows.Forms.Padding(0);
-            this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(196, 24);
-            this.panel16.TabIndex = 1;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label31.ForeColor = System.Drawing.Color.White;
-            this.label31.Location = new System.Drawing.Point(0, 0);
-            this.label31.Margin = new System.Windows.Forms.Padding(0);
-            this.label31.Name = "label31";
-            this.label31.Padding = new System.Windows.Forms.Padding(2);
-            this.label31.Size = new System.Drawing.Size(88, 24);
-            this.label31.TabIndex = 0;
-            this.label31.Text = "Вольтаж";
             // 
             // MainForm
             // 
@@ -1631,6 +1631,18 @@
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.plInductive.ResumeLayout(false);
+            this.plInductive.PerformLayout();
+            this.panel13.ResumeLayout(false);
+            this.panel13.PerformLayout();
+            this.panel14.ResumeLayout(false);
+            this.panel14.PerformLayout();
+            this.plVoltage.ResumeLayout(false);
+            this.plVoltage.PerformLayout();
+            this.panel15.ResumeLayout(false);
+            this.panel15.PerformLayout();
+            this.panel16.ResumeLayout(false);
+            this.panel16.PerformLayout();
             this.plMotoresourceCurrent.ResumeLayout(false);
             this.plMotoresourceCurrent.PerformLayout();
             this.panel5.ResumeLayout(false);
@@ -1673,18 +1685,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.plInductive.ResumeLayout(false);
-            this.plInductive.PerformLayout();
-            this.panel13.ResumeLayout(false);
-            this.panel13.PerformLayout();
-            this.panel14.ResumeLayout(false);
-            this.panel14.PerformLayout();
-            this.plVoltage.ResumeLayout(false);
-            this.plVoltage.PerformLayout();
-            this.panel15.ResumeLayout(false);
-            this.panel15.PerformLayout();
-            this.panel16.ResumeLayout(false);
-            this.panel16.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

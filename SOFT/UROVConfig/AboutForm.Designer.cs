@@ -68,7 +68,7 @@
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOK.ForeColor = System.Drawing.Color.Black;
-            this.btnOK.Location = new System.Drawing.Point(120, 196);
+            this.btnOK.Location = new System.Drawing.Point(119, 205);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(160, 37);
             this.btnOK.TabIndex = 5;
@@ -80,11 +80,12 @@
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label1.Location = new System.Drawing.Point(30, 61);
+            this.label1.Location = new System.Drawing.Point(30, 55);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(340, 104);
+            this.label1.Size = new System.Drawing.Size(340, 138);
             this.label1.TabIndex = 4;
-            this.label1.Text = "Конфигуратор UROV.\r\n\r\nАвтор: Порохня Дмитрий.\r\n\r\n© 2018, spywarrior@gmail.com";
+            this.label1.Text = "Конфигуратор UROV.\r\n\r\nООО \"ДЕЦИМА\" \r\nE-mail: decima@decima.ru \r\nWeb: www.decima.r" +
+    "u\r\nАвтор: Порохня Дмитрий.\r\n© 2018, spywarrior@gmail.com\r\n\r\n";
             // 
             // panel1
             // 
