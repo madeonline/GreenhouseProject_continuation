@@ -145,5 +145,6 @@ template <typename T> inline Stream& operator << (Stream &s, T n) { s.print(n); 
 #define CORE_COMMAND_ANSWER_ERROR F("ER=") // какой префикс будет посылаться в ответ на команду получения данных и её неуспешной отработке
 #define CORE_COMMAND_PARAM_DELIMITER '|' // разделитель параметров
 #define CORE_END_OF_DATA F("[END]")
+#define CORE_COMMAND_DONE F("DONE")
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

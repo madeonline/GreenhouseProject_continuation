@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "DS3231.h"
+#include "Settings.h"
 //--------------------------------------------------------------------------------------------------------------------------------------
 // список поддерживаемых команд
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -14,6 +15,12 @@ const char FREERAM_COMMAND[] PROGMEM = "FREERAM"; // получить инфор
 const char PIN_COMMAND[] PROGMEM = "PIN"; // установить уровень на пине
 const char LS_COMMAND[] PROGMEM = "LS"; // отдать список файлов
 const char FILE_COMMAND[] PROGMEM = "FILE"; // отдать содержимое файла
+const char MOTORESOURCE_CURRENT_COMMAND[] PROGMEM = "RES_CUR"; // получить текущий моторесурс по каналам
+const char MOTORESOURCE_MAX_COMMAND[] PROGMEM = "RES_MAX"; // получить максимальный моторесурс по каналам
+const char PULSES_COMMAND[] PROGMEM = "PULSES"; // получить импульсы по каналам
+const char DELTA_COMMAND[] PROGMEM = "DELTA"; // получить дельты по каналам
+const char INDUCTIVE_COMMAND[] PROGMEM = "IND"; // получить состояние индуктивных датчиков
+const char VOLTAGE_COMMAND[] PROGMEM = "VDATA"; // получить вольтаж на входах
 //--------------------------------------------------------------------------------------------------------------------------------------
 CoreCommandBuffer Commands(&Serial);
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -188,6 +195,60 @@ void CommandHandlerClass::processCommand(const String& command,Stream* pStream)
           }
                     
         } // DATETIME
+        else
+        if(!strcmp_P(commandName, PULSES_COMMAND))
+        {
+            if(cParser.argsCount() > 3)
+            {
+              commandHandled = setPULSES(cParser, pStream);
+            }
+            else
+            {
+              // недостаточно параметров
+              commandHandled = printBackSETResult(false,commandName,pStream);
+            }
+        } // PULSES_COMMAND               
+        else
+        if(!strcmp_P(commandName, DELTA_COMMAND))
+        {
+            if(cParser.argsCount() > 3)
+            {
+              commandHandled = setDELTA(cParser, pStream);
+            }
+            else
+            {
+              // недостаточно параметров
+              commandHandled = printBackSETResult(false,commandName,pStream);
+            }
+        } // DELTA_COMMAND               
+        else
+        if(!strcmp_P(commandName, MOTORESOURCE_CURRENT_COMMAND))
+        {
+            // запросили установить текущий моторесурс SET=RES_CUR|0|1|2
+            if(cParser.argsCount() > 3)
+            {
+              commandHandled = setMOTORESOURCE_CURRENT(cParser, pStream);
+            }
+            else
+            {
+              // недостаточно параметров
+              commandHandled = printBackSETResult(false,commandName,pStream);
+            }
+        } // MOTORESOURCE_CURRENT_COMMAND               
+        else
+        if(!strcmp_P(commandName, MOTORESOURCE_MAX_COMMAND))
+        {
+            // запросили установить текущий моторесурс SET=RES_CUR|0|1|2
+            if(cParser.argsCount() > 3)
+            {
+              commandHandled = setMOTORESOURCE_MAX(cParser, pStream);
+            }
+            else
+            {
+              // недостаточно параметров
+              commandHandled = printBackSETResult(false,commandName,pStream);
+            }
+        } // MOTORESOURCE_MAX_COMMAND               
       
       //TODO: тут разбор команды !!!
       
@@ -213,7 +274,44 @@ void CommandHandlerClass::processCommand(const String& command,Stream* pStream)
         {
             commandHandled = getPIN(commandName,cParser,pStream);                    
           
-        } // PIN_COMMAND       
+        } // PIN_COMMAND
+        else
+        if(!strcmp_P(commandName, PULSES_COMMAND))
+        {
+            commandHandled = getPULSES(commandName,cParser,pStream);                    
+          
+        } // PULSES_COMMAND       
+        else
+        if(!strcmp_P(commandName, INDUCTIVE_COMMAND))
+        {
+            commandHandled = getINDUCTIVE(commandName,cParser,pStream);                    
+          
+        } // INDUCTIVE_COMMAND       
+        else
+        if(!strcmp_P(commandName, VOLTAGE_COMMAND))
+        {
+            commandHandled = getVOLTAGE(commandName,cParser,pStream);                    
+          
+        } // VOLTAGE_COMMAND       
+        else
+        if(!strcmp_P(commandName, DELTA_COMMAND))
+        {
+            commandHandled = getDELTA(commandName,cParser,pStream);                    
+          
+        } // DELTA_COMMAND       
+        else
+        if(!strcmp_P(commandName, MOTORESOURCE_CURRENT_COMMAND))
+        {
+            commandHandled = getMOTORESOURCE_CURRENT(commandName,cParser,pStream);                    
+          
+        } // MOTORESOURCE_CURRENT_COMMAND       
+        else
+        if(!strcmp_P(commandName, MOTORESOURCE_MAX_COMMAND))
+        {
+            commandHandled = getMOTORESOURCE_MAX(commandName,cParser,pStream);                    
+          
+        } // MOTORESOURCE_MAX_COMMAND       
+        else      
         if(!strcmp_P(commandName, FREERAM_COMMAND))
         {
           commandHandled = getFREERAM(commandName,pStream);
@@ -291,6 +389,234 @@ bool CommandHandlerClass::getLS(const char* commandPassed, const CommandParser& 
   FileUtils::printFilesNames(folderName,false,pStream);
   pStream->println(CORE_END_OF_DATA);
   
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::getVOLTAGE(const char* commandPassed, const CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() < 1)
+    return false;  
+
+
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(commandPassed);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  
+  pStream->print(Settings.get3V3Voltage().raw);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->print(Settings.get5Vvoltage().raw);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->println(Settings.get200Vvoltage().raw);
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::getINDUCTIVE(const char* commandPassed, const CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() < 1)
+    return false;  
+
+
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(commandPassed);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  
+  pStream->print(Settings.getInductiveSensorState(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->print(Settings.getInductiveSensorState(1));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->println(Settings.getInductiveSensorState(2));
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::getDELTA(const char* commandPassed, const CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() < 1)
+    return false;  
+
+
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(commandPassed);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  
+  pStream->print(Settings.getChannelDelta(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->print(Settings.getChannelDelta(1));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->println(Settings.getChannelDelta(2));
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::setDELTA(CommandParser& parser, Stream* pStream)
+{
+
+  if(parser.argsCount() < 4)
+    return false;
+  
+  uint8_t resCurrent1 = atoi(parser.getArg(1));
+  uint8_t resCurrent2 = atoi(parser.getArg(2));
+  uint8_t resCurrent3 = atoi(parser.getArg(3));
+
+  Settings.setChannelDelta(0,resCurrent1);
+  Settings.setChannelDelta(1,resCurrent2);
+  Settings.setChannelDelta(2,resCurrent3);
+  
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(parser.getArg(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  pStream->println(CORE_COMMAND_DONE);
+
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::getPULSES(const char* commandPassed, const CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() < 1)
+    return false;  
+
+
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(commandPassed);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  
+  pStream->print(Settings.getChannelPulses(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->print(Settings.getChannelPulses(1));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->println(Settings.getChannelPulses(2));
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::setPULSES(CommandParser& parser, Stream* pStream)
+{
+
+  if(parser.argsCount() < 4)
+    return false;
+  
+  uint16_t resCurrent1 = atoi(parser.getArg(1));
+  uint16_t resCurrent2 = atoi(parser.getArg(2));
+  uint16_t resCurrent3 = atoi(parser.getArg(3));
+
+  Settings.setChannelPulses(0,resCurrent1);
+  Settings.setChannelPulses(1,resCurrent2);
+  Settings.setChannelPulses(2,resCurrent3);
+  
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(parser.getArg(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  pStream->println(CORE_COMMAND_DONE);
+
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::getMOTORESOURCE_MAX(const char* commandPassed, const CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() < 1)
+    return false;  
+
+
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(commandPassed);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  
+  pStream->print(Settings.getMotoresourceMax(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->print(Settings.getMotoresourceMax(1));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->println(Settings.getMotoresourceMax(2));
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::setMOTORESOURCE_MAX(CommandParser& parser, Stream* pStream)
+{
+
+  if(parser.argsCount() < 4)
+    return false;
+  
+  uint32_t resCurrent1 = atoi(parser.getArg(1));
+  uint32_t resCurrent2 = atoi(parser.getArg(2));
+  uint32_t resCurrent3 = atoi(parser.getArg(3));
+
+  Settings.setMotoresourceMax(0,resCurrent1);
+  Settings.setMotoresourceMax(1,resCurrent2);
+  Settings.setMotoresourceMax(2,resCurrent3);
+  
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(parser.getArg(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  pStream->println(CORE_COMMAND_DONE);
+
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::getMOTORESOURCE_CURRENT(const char* commandPassed, const CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() < 1)
+    return false;  
+
+
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(commandPassed);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  
+  pStream->print(Settings.getMotoresource(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->print(Settings.getMotoresource(1));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+
+  pStream->println(Settings.getMotoresource(2));
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::setMOTORESOURCE_CURRENT(CommandParser& parser, Stream* pStream)
+{
+
+  if(parser.argsCount() < 4)
+    return false;
+  
+  uint32_t resCurrent1 = atoi(parser.getArg(1));
+  uint32_t resCurrent2 = atoi(parser.getArg(2));
+  uint32_t resCurrent3 = atoi(parser.getArg(3));
+
+  Settings.setMotoresource(0,resCurrent1);
+  Settings.setMotoresource(1,resCurrent2);
+  Settings.setMotoresource(2,resCurrent3);
+  
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(parser.getArg(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  pStream->println(CORE_COMMAND_DONE);
+
+
   return true;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------

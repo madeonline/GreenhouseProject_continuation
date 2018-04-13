@@ -65,6 +65,22 @@ class CommandHandlerClass
   bool getDATETIME(const char* commandPassed, Stream* pStream);
   void setCurrentDateTime(uint8_t day, uint8_t month, uint16_t year, uint8_t hour, uint8_t minute, uint8_t second);
 
+  bool setMOTORESOURCE_CURRENT(CommandParser& parser, Stream* pStream);
+  bool getMOTORESOURCE_CURRENT(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+  
+  bool setMOTORESOURCE_MAX(CommandParser& parser, Stream* pStream);
+  bool getMOTORESOURCE_MAX(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+
+  bool setPULSES(CommandParser& parser, Stream* pStream);
+  bool getPULSES(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+
+  bool setDELTA(CommandParser& parser, Stream* pStream);
+  bool getDELTA(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+
+  bool getINDUCTIVE(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+  bool getVOLTAGE(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+
+
   bool printBackSETResult(bool isOK, const char* command, Stream* pStream);
     
 };

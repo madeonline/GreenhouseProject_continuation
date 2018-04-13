@@ -22,3 +22,5 @@
 /MeandrSAMD21G18A/MeandrSAMD21G18A.sln
 /MeandrSAMD21G18A/MeandrSAMD21G18A.vcxproj
 /MeandrSAMD21G18A/MeandrSAMD21G18A.vcxproj.filters
+
+*.pdb
