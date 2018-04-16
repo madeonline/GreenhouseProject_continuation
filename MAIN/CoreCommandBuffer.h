@@ -52,6 +52,7 @@ class CommandHandlerClass
   void onUnknownCommand(const String& command, Stream* outStream);
   
   bool getFILE(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+  bool setDELFILE(CommandParser& parser, Stream* pStream);
   bool getLS(const char* commandPassed, const CommandParser& parser, Stream* pStream);
   
   bool getPIN(const char* commandPassed, const CommandParser& parser, Stream* pStream);

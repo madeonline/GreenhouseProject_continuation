@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Контроллер");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Контроллер");
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,11 +48,8 @@
             this.ps74880ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ps115200ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ps250000ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnDisconnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnSetDateTime = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnAbout = new System.Windows.Forms.ToolStripButton();
             this.toolbarImages = new System.Windows.Forms.ImageList(this.components);
             this.tmProcessCommandsTimer = new System.Windows.Forms.Timer(this.components);
             this.tmGetSensorsData = new System.Windows.Forms.Timer(this.components);
@@ -139,12 +136,7 @@
             this.panel12 = new System.Windows.Forms.Panel();
             this.label20 = new System.Windows.Forms.Label();
             this.plSDSettings = new System.Windows.Forms.Panel();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.treeViewSD = new System.Windows.Forms.TreeView();
             this.sdImagesNormal = new System.Windows.Forms.ImageList(this.components);
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.btnListSDFiles = new System.Windows.Forms.Button();
-            this.richTextBoxFileView = new System.Windows.Forms.RichTextBox();
             this.plStartPanel = new System.Windows.Forms.Panel();
             this.lvLog = new System.Windows.Forms.ListView();
             this.logColumn1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -157,6 +149,15 @@
             this.lblMotoresourcePercents1 = new System.Windows.Forms.Label();
             this.lblMotoresourcePercents2 = new System.Windows.Forms.Label();
             this.lblMotoresourcePercents3 = new System.Windows.Forms.Label();
+            this.toolStripSD = new System.Windows.Forms.ToolStrip();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.treeViewSD = new System.Windows.Forms.TreeView();
+            this.richTextBoxFileView = new System.Windows.Forms.RichTextBox();
+            this.btnListSDFiles = new System.Windows.Forms.ToolStripButton();
+            this.btnDeleteSDFile = new System.Windows.Forms.ToolStripButton();
+            this.btnDisconnect = new System.Windows.Forms.ToolStripButton();
+            this.btnSetDateTime = new System.Windows.Forms.ToolStripButton();
+            this.btnAbout = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -204,11 +205,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta1)).BeginInit();
             this.panel12.SuspendLayout();
             this.plSDSettings.SuspendLayout();
+            this.toolStripSD.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -371,49 +372,15 @@
             this.ps250000ToolStripMenuItem.Text = "250000";
             this.ps250000ToolStripMenuItem.Click += new System.EventHandler(this.ChangePortSpeed);
             // 
-            // btnDisconnect
-            // 
-            this.btnDisconnect.Enabled = false;
-            this.btnDisconnect.Image = ((System.Drawing.Image)(resources.GetObject("btnDisconnect.Image")));
-            this.btnDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnDisconnect.Name = "btnDisconnect";
-            this.btnDisconnect.Size = new System.Drawing.Size(66, 67);
-            this.btnDisconnect.Text = "Разорвать";
-            this.btnDisconnect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnDisconnect.ToolTipText = "Разорвать соединение";
-            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 70);
             // 
-            // btnSetDateTime
-            // 
-            this.btnSetDateTime.Enabled = false;
-            this.btnSetDateTime.Image = ((System.Drawing.Image)(resources.GetObject("btnSetDateTime.Image")));
-            this.btnSetDateTime.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSetDateTime.Name = "btnSetDateTime";
-            this.btnSetDateTime.Size = new System.Drawing.Size(75, 67);
-            this.btnSetDateTime.Text = "Дата/время";
-            this.btnSetDateTime.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnSetDateTime.ToolTipText = "Установить дату/время на контроллере";
-            this.btnSetDateTime.Click += new System.EventHandler(this.btnSetDateTime_Click);
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 70);
-            // 
-            // btnAbout
-            // 
-            this.btnAbout.Image = ((System.Drawing.Image)(resources.GetObject("btnAbout.Image")));
-            this.btnAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(86, 67);
-            this.btnAbout.Text = "О программе";
-            this.btnAbout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
             // toolbarImages
             // 
@@ -483,11 +450,11 @@
             this.treeView.ImageList = this.smallImages;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            treeNode2.ImageIndex = 1;
-            treeNode2.Name = "rootNode";
-            treeNode2.Text = "Контроллер";
+            treeNode1.ImageIndex = 1;
+            treeNode1.Name = "rootNode";
+            treeNode1.Text = "Контроллер";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.treeView.SelectedImageIndex = 1;
             this.treeView.ShowPlusMinus = false;
             this.treeView.ShowRootLines = false;
@@ -518,8 +485,8 @@
             // 
             this.plSection.BackColor = System.Drawing.Color.White;
             this.plSection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.plSection.Controls.Add(this.plMainSettings);
             this.plSection.Controls.Add(this.plSDSettings);
+            this.plSection.Controls.Add(this.plMainSettings);
             this.plSection.Controls.Add(this.plStartPanel);
             this.plSection.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plSection.Location = new System.Drawing.Point(0, 0);
@@ -1455,45 +1422,11 @@
             // plSDSettings
             // 
             this.plSDSettings.Controls.Add(this.splitContainer3);
+            this.plSDSettings.Controls.Add(this.toolStripSD);
             this.plSDSettings.Location = new System.Drawing.Point(16, 18);
             this.plSDSettings.Name = "plSDSettings";
             this.plSDSettings.Size = new System.Drawing.Size(573, 364);
             this.plSDSettings.TabIndex = 6;
-            // 
-            // splitContainer3
-            // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer3.Name = "splitContainer3";
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.treeViewSD);
-            this.splitContainer3.Panel1.Controls.Add(this.panel2);
-            this.splitContainer3.Panel1MinSize = 200;
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.richTextBoxFileView);
-            this.splitContainer3.Panel2MinSize = 100;
-            this.splitContainer3.Size = new System.Drawing.Size(573, 364);
-            this.splitContainer3.SplitterDistance = 200;
-            this.splitContainer3.TabIndex = 3;
-            // 
-            // treeViewSD
-            // 
-            this.treeViewSD.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.treeViewSD.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeViewSD.HideSelection = false;
-            this.treeViewSD.ImageIndex = 2;
-            this.treeViewSD.ImageList = this.sdImagesNormal;
-            this.treeViewSD.Location = new System.Drawing.Point(0, 0);
-            this.treeViewSD.Name = "treeViewSD";
-            this.treeViewSD.SelectedImageIndex = 0;
-            this.treeViewSD.Size = new System.Drawing.Size(200, 317);
-            this.treeViewSD.TabIndex = 1;
-            this.treeViewSD.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewSD_BeforeExpand);
-            this.treeViewSD.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.treeViewSD_MouseDoubleClick);
             // 
             // sdImagesNormal
             // 
@@ -1502,40 +1435,6 @@
             this.sdImagesNormal.Images.SetKeyName(0, "folder-blue.png");
             this.sdImagesNormal.Images.SetKeyName(1, "document-open-folder.png");
             this.sdImagesNormal.Images.SetKeyName(2, "list.png");
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.btnListSDFiles);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 317);
-            this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(0, 4, 0, 4);
-            this.panel2.Size = new System.Drawing.Size(200, 47);
-            this.panel2.TabIndex = 0;
-            // 
-            // btnListSDFiles
-            // 
-            this.btnListSDFiles.BackColor = System.Drawing.Color.LightGreen;
-            this.btnListSDFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnListSDFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnListSDFiles.ForeColor = System.Drawing.Color.Black;
-            this.btnListSDFiles.Location = new System.Drawing.Point(0, 4);
-            this.btnListSDFiles.Name = "btnListSDFiles";
-            this.btnListSDFiles.Size = new System.Drawing.Size(200, 39);
-            this.btnListSDFiles.TabIndex = 3;
-            this.btnListSDFiles.Text = "Перечитать SD";
-            this.btnListSDFiles.UseVisualStyleBackColor = false;
-            this.btnListSDFiles.Click += new System.EventHandler(this.btnListSDFiles_Click);
-            // 
-            // richTextBoxFileView
-            // 
-            this.richTextBoxFileView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.richTextBoxFileView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBoxFileView.Location = new System.Drawing.Point(0, 0);
-            this.richTextBoxFileView.Name = "richTextBoxFileView";
-            this.richTextBoxFileView.Size = new System.Drawing.Size(369, 364);
-            this.richTextBoxFileView.TabIndex = 0;
-            this.richTextBoxFileView.Text = "";
             // 
             // plStartPanel
             // 
@@ -1637,6 +1536,119 @@
             this.lblMotoresourcePercents3.Text = "0%";
             this.lblMotoresourcePercents3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // toolStripSD
+            // 
+            this.toolStripSD.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStripSD.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnListSDFiles,
+            this.btnDeleteSDFile});
+            this.toolStripSD.Location = new System.Drawing.Point(0, 0);
+            this.toolStripSD.Name = "toolStripSD";
+            this.toolStripSD.Size = new System.Drawing.Size(573, 54);
+            this.toolStripSD.TabIndex = 4;
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 54);
+            this.splitContainer3.Name = "splitContainer3";
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.treeViewSD);
+            this.splitContainer3.Panel1MinSize = 150;
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.richTextBoxFileView);
+            this.splitContainer3.Panel2MinSize = 100;
+            this.splitContainer3.Size = new System.Drawing.Size(573, 310);
+            this.splitContainer3.SplitterDistance = 150;
+            this.splitContainer3.TabIndex = 5;
+            // 
+            // treeViewSD
+            // 
+            this.treeViewSD.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewSD.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewSD.HideSelection = false;
+            this.treeViewSD.ImageIndex = 2;
+            this.treeViewSD.ImageList = this.sdImagesNormal;
+            this.treeViewSD.Location = new System.Drawing.Point(0, 0);
+            this.treeViewSD.Name = "treeViewSD";
+            this.treeViewSD.SelectedImageIndex = 0;
+            this.treeViewSD.Size = new System.Drawing.Size(150, 310);
+            this.treeViewSD.TabIndex = 1;
+            this.treeViewSD.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewSD_BeforeExpand);
+            this.treeViewSD.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewSD_BeforeSelect);
+            this.treeViewSD.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSD_AfterSelect);
+            // 
+            // richTextBoxFileView
+            // 
+            this.richTextBoxFileView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBoxFileView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxFileView.Location = new System.Drawing.Point(0, 0);
+            this.richTextBoxFileView.Name = "richTextBoxFileView";
+            this.richTextBoxFileView.Size = new System.Drawing.Size(419, 310);
+            this.richTextBoxFileView.TabIndex = 0;
+            this.richTextBoxFileView.Text = "";
+            // 
+            // btnListSDFiles
+            // 
+            this.btnListSDFiles.Image = global::UROVConfig.Properties.Resources.rescan;
+            this.btnListSDFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnListSDFiles.Name = "btnListSDFiles";
+            this.btnListSDFiles.Size = new System.Drawing.Size(75, 51);
+            this.btnListSDFiles.Text = "Перечитать";
+            this.btnListSDFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnListSDFiles.ToolTipText = "Перечитать содержимое SD";
+            this.btnListSDFiles.Click += new System.EventHandler(this.btnListSDFiles_Click);
+            // 
+            // btnDeleteSDFile
+            // 
+            this.btnDeleteSDFile.Enabled = false;
+            this.btnDeleteSDFile.Image = global::UROVConfig.Properties.Resources.delete;
+            this.btnDeleteSDFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDeleteSDFile.Name = "btnDeleteSDFile";
+            this.btnDeleteSDFile.Size = new System.Drawing.Size(55, 51);
+            this.btnDeleteSDFile.Text = "Удалить";
+            this.btnDeleteSDFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnDeleteSDFile.ToolTipText = "Удалить выбранный файл";
+            this.btnDeleteSDFile.Click += new System.EventHandler(this.btnDeleteSDFile_Click);
+            // 
+            // btnDisconnect
+            // 
+            this.btnDisconnect.Enabled = false;
+            this.btnDisconnect.Image = ((System.Drawing.Image)(resources.GetObject("btnDisconnect.Image")));
+            this.btnDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDisconnect.Name = "btnDisconnect";
+            this.btnDisconnect.Size = new System.Drawing.Size(66, 67);
+            this.btnDisconnect.Text = "Разорвать";
+            this.btnDisconnect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnDisconnect.ToolTipText = "Разорвать соединение";
+            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
+            // 
+            // btnSetDateTime
+            // 
+            this.btnSetDateTime.Enabled = false;
+            this.btnSetDateTime.Image = ((System.Drawing.Image)(resources.GetObject("btnSetDateTime.Image")));
+            this.btnSetDateTime.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSetDateTime.Name = "btnSetDateTime";
+            this.btnSetDateTime.Size = new System.Drawing.Size(75, 67);
+            this.btnSetDateTime.Text = "Дата/время";
+            this.btnSetDateTime.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnSetDateTime.ToolTipText = "Установить дату/время на контроллере";
+            this.btnSetDateTime.Click += new System.EventHandler(this.btnSetDateTime_Click);
+            // 
+            // btnAbout
+            // 
+            this.btnAbout.Image = ((System.Drawing.Image)(resources.GetObject("btnAbout.Image")));
+            this.btnAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAbout.Name = "btnAbout";
+            this.btnAbout.Size = new System.Drawing.Size(86, 67);
+            this.btnAbout.Text = "О программе";
+            this.btnAbout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1725,11 +1737,13 @@
             this.panel12.ResumeLayout(false);
             this.panel12.PerformLayout();
             this.plSDSettings.ResumeLayout(false);
+            this.plSDSettings.PerformLayout();
+            this.toolStripSD.ResumeLayout(false);
+            this.toolStripSD.PerformLayout();
             this.splitContainer3.Panel1.ResumeLayout(false);
             this.splitContainer3.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1764,12 +1778,7 @@
         private System.Windows.Forms.ToolStripMenuItem miHelp;
         private System.Windows.Forms.ToolStripMenuItem miAbout;
         private System.Windows.Forms.Panel plSDSettings;
-        private System.Windows.Forms.SplitContainer splitContainer3;
-        private System.Windows.Forms.TreeView treeViewSD;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button btnListSDFiles;
         private System.Windows.Forms.ImageList sdImagesNormal;
-        private System.Windows.Forms.RichTextBox richTextBoxFileView;
         private System.Windows.Forms.Panel plMainSettings;
         private System.Windows.Forms.Timer tmEnumComPorts;
         private System.Windows.Forms.ToolStripButton btnDisconnect;
@@ -1863,6 +1872,12 @@
         private System.Windows.Forms.Label lblMotoresourcePercents3;
         private System.Windows.Forms.Label lblMotoresourcePercents2;
         private System.Windows.Forms.Label lblMotoresourcePercents1;
+        private System.Windows.Forms.ToolStrip toolStripSD;
+        private System.Windows.Forms.ToolStripButton btnListSDFiles;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.TreeView treeViewSD;
+        private System.Windows.Forms.RichTextBox richTextBoxFileView;
+        private System.Windows.Forms.ToolStripButton btnDeleteSDFile;
     }
 }
 

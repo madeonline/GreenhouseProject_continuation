@@ -37,10 +37,12 @@ namespace UROVConfig
     {
         public SDNodeTags Tag = SDNodeTags.TagFolderUninitedNode;
         public string FileName = "";
-        public SDNodeTagHelper(SDNodeTags t, string f)
+        public bool IsDirectory = false;
+        public SDNodeTagHelper(SDNodeTags tag, string fileName, bool isDir)
         {
-            Tag = t;
-            FileName = f;
+            Tag = tag;
+            FileName = fileName;
+            IsDirectory = isDir;
         }
     }
 

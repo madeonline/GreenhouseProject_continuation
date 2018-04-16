@@ -22,6 +22,7 @@ class FileUtils
     static void SendToStream(Stream& s, const String& fileName);
     static void printFilesNames(const String& dirName, bool recursive, Stream* outStream);
     static String getFileName(SdFile &f);
+    static void deleteFile(const String& fileName);
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -83,6 +83,16 @@ namespace UROVConfig.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap delete {
+            get {
+                object obj = ResourceManager.GetObject("delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ip {
             get {
                 object obj = ResourceManager.GetObject("ip", resourceCulture);
@@ -106,6 +116,16 @@ namespace UROVConfig.Properties {
         internal static System.Drawing.Bitmap ping {
             get {
                 object obj = ResourceManager.GetObject("ping", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rescan {
+            get {
+                object obj = ResourceManager.GetObject("rescan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

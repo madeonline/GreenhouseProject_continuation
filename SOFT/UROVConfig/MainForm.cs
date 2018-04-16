@@ -287,7 +287,7 @@ namespace UROVConfig
             {
                 nodes = parent.Nodes;
                 SDNodeTagHelper existingTag = (SDNodeTagHelper)parent.Tag;
-                parent.Tag = new SDNodeTagHelper(SDNodeTags.TagFolderNode,existingTag.FileName); // говорим, что мы вычитали это дело
+                parent.Tag = new SDNodeTagHelper(SDNodeTags.TagFolderNode,existingTag.FileName, existingTag.IsDirectory); // говорим, что мы вычитали это дело
                 // и удаляем заглушку...
                 for(int i=0;i<parent.Nodes.Count;i++)
                 {
@@ -315,16 +315,16 @@ namespace UROVConfig
                 node.ImageIndex = 0;
                 node.SelectedImageIndex = 0;
                 TreeNode dummy = node.Nodes.Add("вычитываем....");
-                dummy.Tag = new SDNodeTagHelper(SDNodeTags.TagDummyNode,""); // этот узел потом удалим, при перечитывании
+                dummy.Tag = new SDNodeTagHelper(SDNodeTags.TagDummyNode,"",false); // этот узел потом удалим, при перечитывании
                 dummy.ImageIndex = -1;
 
-                node.Tag = new SDNodeTagHelper(SDNodeTags.TagFolderUninitedNode,line); // говорим, что мы не перечитали содержимое папки ещё
+                node.Tag = new SDNodeTagHelper(SDNodeTags.TagFolderUninitedNode,line, isDir); // говорим, что мы не перечитали содержимое папки ещё
             }
             else
             {
                 node.ImageIndex = 2;
                 node.SelectedImageIndex = node.ImageIndex;
-                node.Tag = new SDNodeTagHelper(SDNodeTags.TagFileNode,line);
+                node.Tag = new SDNodeTagHelper(SDNodeTags.TagFileNode,line, isDir);
             }
         }
 
@@ -1812,6 +1812,65 @@ namespace UROVConfig
         private void MotoresourceCurrentValueChanged(object sender, EventArgs e)
         {
             UpdateMotoresourcePercents();
+        }
+
+        private void treeViewSD_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            /*
+            SDNodeTagHelper h = e.Node.Tag as SDNodeTagHelper;
+            if (h == null || h.IsDirectory)
+                e.Cancel = true;
+                */
+        }
+
+        private void treeViewSD_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            btnDeleteSDFile.Enabled = false;
+            if (treeViewSD.SelectedNode == null)
+            {
+                return;
+            }
+
+            SDNodeTagHelper h = e.Node.Tag as SDNodeTagHelper;
+            if (h == null || h.IsDirectory)
+                return;
+
+            btnDeleteSDFile.Enabled = true;
+
+        }
+
+        private void btnDeleteSDFile_Click(object sender, EventArgs e)
+        {
+            if (treeViewSD.SelectedNode == null)
+                return;
+
+            SDNodeTagHelper h = treeViewSD.SelectedNode.Tag as SDNodeTagHelper;
+
+            if (h == null || h.IsDirectory)
+                return;
+
+            string fileName = h.FileName;
+
+            string fAsk = treeViewSD.SelectedNode.Text;
+            if (fileName != fAsk)
+                fAsk += " (" + fileName + ")";
+
+            if (MessageBox.Show("Вы уверены, что хотите удалить файл \"" + fAsk + "\"?", "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            TreeNode parent = treeViewSD.SelectedNode.Parent;
+            while (parent != null)
+            {
+                SDNodeTagHelper nt = (SDNodeTagHelper)parent.Tag;
+                fileName =  nt.FileName + PARAM_DELIMITER + fileName;
+                parent = parent.Parent;
+            }
+
+
+            treeViewSD.SelectedNode.Remove();
+           PushCommandToQueue(SET_PREFIX + "DELFILE" + PARAM_DELIMITER + fileName, DummyAnswerReceiver);
+
+
         }
     }
 

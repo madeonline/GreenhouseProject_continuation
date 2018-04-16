@@ -15,6 +15,7 @@ const char FREERAM_COMMAND[] PROGMEM = "FREERAM"; // получить инфор
 const char PIN_COMMAND[] PROGMEM = "PIN"; // установить уровень на пине
 const char LS_COMMAND[] PROGMEM = "LS"; // отдать список файлов
 const char FILE_COMMAND[] PROGMEM = "FILE"; // отдать содержимое файла
+const char DELFILE_COMMAND[] PROGMEM = "DELFILE"; // удалить файл
 const char MOTORESOURCE_CURRENT_COMMAND[] PROGMEM = "RES_CUR"; // получить текущий моторесурс по каналам
 const char MOTORESOURCE_MAX_COMMAND[] PROGMEM = "RES_MAX"; // получить максимальный моторесурс по каналам
 const char PULSES_COMMAND[] PROGMEM = "PULSES"; // получить импульсы по каналам
@@ -196,6 +197,19 @@ void CommandHandlerClass::processCommand(const String& command,Stream* pStream)
                     
         } // DATETIME
         else
+        if(!strcmp_P(commandName, DELFILE_COMMAND))
+        {
+            if(cParser.argsCount() > 1)
+            {
+              commandHandled = setDELFILE(cParser, pStream);
+            }
+            else
+            {
+              // недостаточно параметров
+              commandHandled = printBackSETResult(false,commandName,pStream);
+            }
+        } // DELFILE_COMMAND               
+        else
         if(!strcmp_P(commandName, PULSES_COMMAND))
         {
             if(cParser.argsCount() > 3)
@@ -343,6 +357,33 @@ void CommandHandlerClass::onUnknownCommand(const String& command, Stream* outStr
 {
     outStream->print(CORE_COMMAND_ANSWER_ERROR);
     outStream->println(F("UNKNOWN_COMMAND"));  
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::setDELFILE(CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() > 1)
+  {
+    String fileName;
+
+    for(size_t i=1;i<parser.argsCount();i++)
+    {
+      if(fileName.length())
+        fileName += F("/");
+
+      fileName += parser.getArg(i);
+    }
+    
+    FileUtils::deleteFile(fileName);
+
+    pStream->print(CORE_COMMAND_ANSWER_OK);
+    pStream->print(parser.getArg(0));
+    pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+    pStream->println(CORE_COMMAND_DONE);    
+
+    return true;
+
+  }
+  return false;    
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 bool CommandHandlerClass::getFILE(const char* commandPassed, const CommandParser& parser, Stream* pStream)

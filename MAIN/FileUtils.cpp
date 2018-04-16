@@ -21,6 +21,11 @@ void setFileDateTime(uint16_t* date, uint16_t* time)
   *time = FAT_TIME(tm.hour, tm. minute, tm. second);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void FileUtils::deleteFile(const String& fileName)
+{
+  SD.remove(fileName.c_str());
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 int FileUtils::CountFiles(const String& dirName)
 {
   if(!SDInit::sdInitResult)

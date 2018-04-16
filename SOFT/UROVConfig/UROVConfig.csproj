@@ -168,6 +168,8 @@
   <ItemGroup>
     <Content Include="decima.ico" />
     <None Include="Icons\decima-logo.png" />
+    <None Include="Icons\sdimages\rescan.png" />
+    <None Include="Icons\sdimages\delete.png" />
     <Content Include="program.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
