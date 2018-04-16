@@ -23,6 +23,7 @@ class FileUtils
     static void printFilesNames(const String& dirName, bool recursive, Stream* outStream);
     static String getFileName(SdFile &f);
     static void deleteFile(const String& fileName);
+    static uint32_t getFileSize(const String& fileName);
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

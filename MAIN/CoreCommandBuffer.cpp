@@ -15,6 +15,7 @@ const char FREERAM_COMMAND[] PROGMEM = "FREERAM"; // получить инфор
 const char PIN_COMMAND[] PROGMEM = "PIN"; // установить уровень на пине
 const char LS_COMMAND[] PROGMEM = "LS"; // отдать список файлов
 const char FILE_COMMAND[] PROGMEM = "FILE"; // отдать содержимое файла
+const char FILESIZE_COMMAND[] PROGMEM = "FILESIZE"; // отдать размер файла
 const char DELFILE_COMMAND[] PROGMEM = "DELFILE"; // удалить файл
 const char MOTORESOURCE_CURRENT_COMMAND[] PROGMEM = "RES_CUR"; // получить текущий моторесурс по каналам
 const char MOTORESOURCE_MAX_COMMAND[] PROGMEM = "RES_MAX"; // получить максимальный моторесурс по каналам
@@ -339,8 +340,14 @@ void CommandHandlerClass::processCommand(const String& command,Stream* pStream)
         else
         if(!strcmp_P(commandName, FILE_COMMAND)) // FILE
         {
-            // запросили получить список файлов в папке, GET=FILE|FilePath
+            // запросили получить файл, GET=FILE|FilePath
             commandHandled = getFILE(commandName,cParser,pStream);                    
+        } // LS        
+        else
+        if(!strcmp_P(commandName, FILESIZE_COMMAND)) // FILESIZE
+        {
+            // запросили размер файла, GET=FILESIZE|FilePath
+            commandHandled = getFILESIZE(commandName,cParser,pStream);                    
         } // LS        
                 
         //TODO: тут разбор команды !!!
@@ -384,6 +391,30 @@ bool CommandHandlerClass::setDELFILE(CommandParser& parser, Stream* pStream)
 
   }
   return false;    
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::getFILESIZE(const char* commandPassed, const CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() > 1)
+  {
+    String fileName;
+
+    for(size_t i=1;i<parser.argsCount();i++)
+    {
+      if(fileName.length())
+        fileName += F("/");
+
+      fileName += parser.getArg(i);
+    }
+
+    pStream->print(CORE_COMMAND_ANSWER_OK);
+    pStream->print(parser.getArg(0));
+    pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+    pStream->println(FileUtils::getFileSize(fileName));    
+    
+    return true;
+  }
+  return false;  
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 bool CommandHandlerClass::getFILE(const char* commandPassed, const CommandParser& parser, Stream* pStream)

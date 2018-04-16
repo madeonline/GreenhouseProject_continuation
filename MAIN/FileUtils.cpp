@@ -23,7 +23,26 @@ void setFileDateTime(uint16_t* date, uint16_t* time)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void FileUtils::deleteFile(const String& fileName)
 {
+  if(!SDInit::sdInitResult)
+    return;
+      
   SD.remove(fileName.c_str());
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+uint32_t FileUtils::getFileSize(const String& fileName)
+{
+  if(!SDInit::sdInitResult)
+    return 0;
+      
+  uint32_t result = 0;
+  SdFile f;
+  if(f.open(fileName.c_str(),O_READ))
+  {
+    result = f.fileSize();
+    f.close();
+  }
+
+  return result;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 int FileUtils::CountFiles(const String& dirName)
@@ -57,6 +76,9 @@ void FileUtils::SendToStream(Stream& s, const String& fileName)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void FileUtils::SendToStream(Stream* s, const String& fileName)
 {
+  if(!SDInit::sdInitResult)
+    return;
+      
   SdFile file;
   file.open(fileName.c_str(),FILE_READ);
 
@@ -90,6 +112,9 @@ String FileUtils::getFileName(SdFile &f)
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void FileUtils::printFilesNames(const String& dirName, bool recursive, Stream* outStream)
 {  
+  if(!SDInit::sdInitResult)
+    return;
+      
   const char* dirP = dirName.c_str(); 
 
   SdFile root;
