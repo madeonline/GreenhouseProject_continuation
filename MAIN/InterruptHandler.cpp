@@ -212,6 +212,7 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
 
 
   Logger.writeLine(F("[INTERRUPT_INFO_END]"));
+  Logger.writeLine("");
   
 }
 //--------------------------------------------------------------------------------------------------------------------------------------

@@ -642,10 +642,49 @@ namespace UROVConfig
                 Config.Instance.MotoresourceCurrent2 = 0;
                 Config.Instance.MotoresourceCurrent3 = 0;
             }
-
+  
             nudMotoresourceCurrent1.Value = Config.Instance.MotoresourceCurrent1;
             nudMotoresourceCurrent2.Value = Config.Instance.MotoresourceCurrent2;
             nudMotoresourceCurrent3.Value = Config.Instance.MotoresourceCurrent3;
+
+            UpdateMotoresourcePercents();
+        }
+
+        private void UpdateMotoresourcePercents()
+        {
+            if (this.inSetMotoresourceMaxToController || this.inSetMotoresourceCurrentToController)
+                return;
+
+            NumberFormatInfo nfi = new NumberFormatInfo();
+            nfi.NumberDecimalSeparator = ".";
+
+            float percents = (Config.Instance.MotoresourceCurrent1 * 100.0f) / Config.Instance.MotoresourceMax1;
+
+            Color foreColor = Color.Green;
+            if (percents >= 90.0f)
+                foreColor = Color.Red;
+
+            lblMotoresourcePercents1.ForeColor = foreColor;
+            lblMotoresourcePercents1.Text = percents.ToString("n1", nfi) + "%";
+
+            foreColor = Color.Green;
+            percents = (Config.Instance.MotoresourceCurrent2 * 100.0f) / Config.Instance.MotoresourceMax2;
+
+            if (percents >= 90.0f)
+                foreColor = Color.Red;
+
+            lblMotoresourcePercents2.ForeColor = foreColor;
+            lblMotoresourcePercents2.Text = percents.ToString("n1", nfi) + "%";
+
+            foreColor = Color.Green;
+            percents = (Config.Instance.MotoresourceCurrent3 * 100.0f) / Config.Instance.MotoresourceMax3;
+
+            if (percents >= 90.0f)
+                foreColor = Color.Red;
+
+            lblMotoresourcePercents3.ForeColor = foreColor;
+            lblMotoresourcePercents3.Text = percents.ToString("n1", nfi) + "%";
+
         }
 
         private void ParseAskMotoresurceMax(Answer a)
@@ -667,6 +706,7 @@ namespace UROVConfig
             nudMotoresourceMax1.Value = Config.Instance.MotoresourceMax1;
             nudMotoresourceMax2.Value = Config.Instance.MotoresourceMax2;
             nudMotoresourceMax3.Value = Config.Instance.MotoresourceMax3;
+
         }
 
 
@@ -1212,6 +1252,8 @@ namespace UROVConfig
 
                 MessageBox.Show("Ошибка обновления текущего моторесурса!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            UpdateMotoresourcePercents();
         }
 
         private void ParseSetMotoresourceMax(Answer a)
@@ -1235,6 +1277,8 @@ namespace UROVConfig
 
                 MessageBox.Show("Ошибка обновления максимального моторесурса!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            UpdateMotoresourcePercents();
         }
 
         private void ParseSetDatetime(Answer a)
@@ -1556,20 +1600,31 @@ namespace UROVConfig
             PushCommandToQueue(SET_PREFIX + "DELTA" + PARAM_DELIMITER + s, ParseSetDelta);
         }
 
-        void GetInductiveSensors()
+        private void GetInductiveSensors()
         {
             PushCommandToQueue(GET_PREFIX + "IND", ParseInductiveSensors);
         }
 
-        void GetVoltage()
+        private void GetVoltage()
         {
             PushCommandToQueue(GET_PREFIX + "VDATA", ParseVoltage);
 
         }
+
+        private void GetMotoresourceCurrent()
+        {
+            if (this.inSetMotoresourceCurrentToController)
+                return;
+
+            PushCommandToQueue(GET_PREFIX + "RES_CUR", ParseAskMotoresurceCurrent, BeforeAskMotoresourceCurrent);
+
+        }
+
         private void tmInductiveTimer_Tick(object sender, EventArgs e)
         {
             GetInductiveSensors();
             GetVoltage();
+            GetMotoresourceCurrent();
         }
 
         private void ResetVoltage()
@@ -1752,6 +1807,11 @@ namespace UROVConfig
             {
                 ResetVoltage();
             }
+        }
+
+        private void MotoresourceCurrentValueChanged(object sender, EventArgs e)
+        {
+            UpdateMotoresourcePercents();
         }
     }
 

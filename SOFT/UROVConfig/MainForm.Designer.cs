@@ -154,6 +154,9 @@
             this.tmDateTime = new System.Windows.Forms.Timer(this.components);
             this.tmEnumComPorts = new System.Windows.Forms.Timer(this.components);
             this.tmPeriodicCommandsTimer = new System.Windows.Forms.Timer(this.components);
+            this.lblMotoresourcePercents1 = new System.Windows.Forms.Label();
+            this.lblMotoresourcePercents2 = new System.Windows.Forms.Label();
+            this.lblMotoresourcePercents3 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -903,9 +906,9 @@
             this.label31.Margin = new System.Windows.Forms.Padding(0);
             this.label31.Name = "label31";
             this.label31.Padding = new System.Windows.Forms.Padding(2);
-            this.label31.Size = new System.Drawing.Size(88, 24);
+            this.label31.Size = new System.Drawing.Size(148, 24);
             this.label31.TabIndex = 0;
-            this.label31.Text = "Вольтаж";
+            this.label31.Text = "Напряжение ИП";
             // 
             // plMotoresourceCurrent
             // 
@@ -922,6 +925,9 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.White;
+            this.panel5.Controls.Add(this.lblMotoresourcePercents3);
+            this.panel5.Controls.Add(this.lblMotoresourcePercents2);
+            this.panel5.Controls.Add(this.lblMotoresourcePercents1);
             this.panel5.Controls.Add(this.btnSetMotoresourceCurrent);
             this.panel5.Controls.Add(this.nudMotoresourceCurrent3);
             this.panel5.Controls.Add(this.nudMotoresourceCurrent2);
@@ -958,8 +964,9 @@
             0,
             0});
             this.nudMotoresourceCurrent3.Name = "nudMotoresourceCurrent3";
-            this.nudMotoresourceCurrent3.Size = new System.Drawing.Size(167, 20);
+            this.nudMotoresourceCurrent3.Size = new System.Drawing.Size(86, 20);
             this.nudMotoresourceCurrent3.TabIndex = 7;
+            this.nudMotoresourceCurrent3.ValueChanged += new System.EventHandler(this.MotoresourceCurrentValueChanged);
             // 
             // nudMotoresourceCurrent2
             // 
@@ -970,8 +977,9 @@
             0,
             0});
             this.nudMotoresourceCurrent2.Name = "nudMotoresourceCurrent2";
-            this.nudMotoresourceCurrent2.Size = new System.Drawing.Size(167, 20);
+            this.nudMotoresourceCurrent2.Size = new System.Drawing.Size(86, 20);
             this.nudMotoresourceCurrent2.TabIndex = 6;
+            this.nudMotoresourceCurrent2.ValueChanged += new System.EventHandler(this.MotoresourceCurrentValueChanged);
             // 
             // nudMotoresourceCurrent1
             // 
@@ -982,8 +990,9 @@
             0,
             0});
             this.nudMotoresourceCurrent1.Name = "nudMotoresourceCurrent1";
-            this.nudMotoresourceCurrent1.Size = new System.Drawing.Size(167, 20);
+            this.nudMotoresourceCurrent1.Size = new System.Drawing.Size(86, 20);
             this.nudMotoresourceCurrent1.TabIndex = 5;
+            this.nudMotoresourceCurrent1.ValueChanged += new System.EventHandler(this.MotoresourceCurrentValueChanged);
             // 
             // label5
             // 
@@ -1093,6 +1102,7 @@
             this.nudMotoresourceMax3.Name = "nudMotoresourceMax3";
             this.nudMotoresourceMax3.Size = new System.Drawing.Size(167, 20);
             this.nudMotoresourceMax3.TabIndex = 7;
+            this.nudMotoresourceMax3.ValueChanged += new System.EventHandler(this.MotoresourceCurrentValueChanged);
             // 
             // nudMotoresourceMax2
             // 
@@ -1105,6 +1115,7 @@
             this.nudMotoresourceMax2.Name = "nudMotoresourceMax2";
             this.nudMotoresourceMax2.Size = new System.Drawing.Size(167, 20);
             this.nudMotoresourceMax2.TabIndex = 6;
+            this.nudMotoresourceMax2.ValueChanged += new System.EventHandler(this.MotoresourceCurrentValueChanged);
             // 
             // nudMotoresourceMax1
             // 
@@ -1117,6 +1128,7 @@
             this.nudMotoresourceMax1.Name = "nudMotoresourceMax1";
             this.nudMotoresourceMax1.Size = new System.Drawing.Size(167, 20);
             this.nudMotoresourceMax1.TabIndex = 5;
+            this.nudMotoresourceMax1.ValueChanged += new System.EventHandler(this.MotoresourceCurrentValueChanged);
             // 
             // label9
             // 
@@ -1592,6 +1604,39 @@
             this.tmPeriodicCommandsTimer.Interval = 5000;
             this.tmPeriodicCommandsTimer.Tick += new System.EventHandler(this.tmInductiveTimer_Tick);
             // 
+            // lblMotoresourcePercents1
+            // 
+            this.lblMotoresourcePercents1.BackColor = System.Drawing.Color.White;
+            this.lblMotoresourcePercents1.ForeColor = System.Drawing.Color.Green;
+            this.lblMotoresourcePercents1.Location = new System.Drawing.Point(108, 37);
+            this.lblMotoresourcePercents1.Name = "lblMotoresourcePercents1";
+            this.lblMotoresourcePercents1.Size = new System.Drawing.Size(75, 13);
+            this.lblMotoresourcePercents1.TabIndex = 9;
+            this.lblMotoresourcePercents1.Text = "0%";
+            this.lblMotoresourcePercents1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblMotoresourcePercents2
+            // 
+            this.lblMotoresourcePercents2.BackColor = System.Drawing.Color.White;
+            this.lblMotoresourcePercents2.ForeColor = System.Drawing.Color.Green;
+            this.lblMotoresourcePercents2.Location = new System.Drawing.Point(111, 80);
+            this.lblMotoresourcePercents2.Name = "lblMotoresourcePercents2";
+            this.lblMotoresourcePercents2.Size = new System.Drawing.Size(72, 13);
+            this.lblMotoresourcePercents2.TabIndex = 10;
+            this.lblMotoresourcePercents2.Text = "0%";
+            this.lblMotoresourcePercents2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblMotoresourcePercents3
+            // 
+            this.lblMotoresourcePercents3.BackColor = System.Drawing.Color.White;
+            this.lblMotoresourcePercents3.ForeColor = System.Drawing.Color.Green;
+            this.lblMotoresourcePercents3.Location = new System.Drawing.Point(114, 128);
+            this.lblMotoresourcePercents3.Name = "lblMotoresourcePercents3";
+            this.lblMotoresourcePercents3.Size = new System.Drawing.Size(69, 13);
+            this.lblMotoresourcePercents3.TabIndex = 11;
+            this.lblMotoresourcePercents3.Text = "0%";
+            this.lblMotoresourcePercents3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1815,6 +1860,9 @@
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Panel panel16;
         private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label lblMotoresourcePercents3;
+        private System.Windows.Forms.Label lblMotoresourcePercents2;
+        private System.Windows.Forms.Label lblMotoresourcePercents1;
     }
 }
 
