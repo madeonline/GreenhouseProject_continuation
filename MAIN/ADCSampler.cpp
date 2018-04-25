@@ -50,6 +50,8 @@ void ADCSampler::begin(unsigned int samplingRate)
 
   ADC->ADC_CWR = ADC_CWR_LOWTHRES(_compare_Low) | ADC_CWR_HIGHTHRES(_compare_High); // Установить высокий и низкий порог компаратора АЦП
 
+  //ADC->ADC_SEQR1 = 0x01234567;                            // использовать A0 до A7 в порядке в массив
+  //ADC->ADC_SEQR2 = 0x00dcba00;                            // использовать для А8 А11 следующие действия по порядку в массив  
 
   /* Interupts */
   ADC->ADC_IDR = ~ADC_IDR_ENDRX;                        // сбросить регистры прерывания по готовности данных.
