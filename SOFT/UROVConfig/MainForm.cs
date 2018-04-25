@@ -129,9 +129,109 @@ namespace UROVConfig
         /// <param name="content"></param>
         private void ShowFileContent(List<byte> content)
         {
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            string combindedString = encoding.GetString(content.ToArray());
-            this.richTextBoxFileView.Text = combindedString;
+            ShowWaitCursor(false);
+            statusProgressBar.Visible = false;
+            statusProgressMessage.Visible = false;
+
+            this.btnViewSDFile.Enabled = treeViewSD.SelectedNode != null;
+            this.btnDeleteSDFile.Enabled = treeViewSD.SelectedNode != null;
+            this.btnListSDFiles.Enabled = true;
+
+            string upStr = this.requestedFileName.ToUpper();
+
+            if (upStr.EndsWith(".LOG"))
+            {
+
+                ASCIIEncoding encoding = new ASCIIEncoding();
+                string combindedString = encoding.GetString(content.ToArray());
+                this.richTextBoxFileView.Text = combindedString;
+                this.richTextBoxFileView.BringToFront();
+            }
+            else if(upStr.EndsWith(".ETL"))
+            {
+                CreateEthalonChart(content);
+                this.plEthalonChart.BringToFront();
+            }
+        }
+
+        private void CreateEthalonChart(List<byte> content)
+        {
+
+            System.Windows.Forms.DataVisualization.Charting.Series s = this.ethalonChart.Series[0];
+            s.Points.Clear();
+
+            // у нас размер одной записи - 4 байта
+            int pointsCount = content.Count / 4;
+            byte[] dt = new byte[4];
+
+            int xStep = 1;
+
+
+            // подсчитываем максимальное значение по Y
+
+            List<int> timeList = new List<int>();
+            for (int i = 0; i < content.Count; i += 4)
+            {
+                dt[0] = content[i];
+                dt[1] = content[i + 1];
+                dt[2] = content[i + 2];
+                dt[3] = content[i + 3];
+
+                int curVal = BitConverter.ToInt32(dt, 0);
+                timeList.Add(curVal);
+            }
+
+            // получаем максимальное время импульса - это будет 100% по оси Y
+            int maxPulseTime = 0;
+            for (int i = 1; i < timeList.Count; i++)
+            {
+                maxPulseTime = Math.Max(maxPulseTime, (timeList[i] - timeList[i - 1]));
+            }
+
+            double xCoord = 0;
+
+            // теперь считаем все остальные точки
+            for (int i = 1; i < timeList.Count; i++)
+            {
+                int pulseTime = timeList[i] - timeList[i - 1];
+                pulseTime *= 100;
+
+                int pulseTimePercents = pulseTime / maxPulseTime;
+                pulseTimePercents = 100 - pulseTimePercents;
+
+
+                System.Windows.Forms.DataVisualization.Charting.DataPoint pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint();
+                pt.XValue = xCoord;
+                pt.SetValueY(pulseTimePercents);
+
+                xCoord += xStep;
+
+                s.Points.Add(pt);
+
+            } // for
+
+            /*
+            int curXVal = 0;
+
+            for (int i=0;i<content.Count;i+=4)
+            {
+                dt[0] = content[i];
+                dt[1] = content[i+1];
+                dt[2] = content[i+2];
+                dt[3] = content[i+3];
+
+                int curPointVal = BitConverter.ToInt32(dt, 0);
+
+                System.Windows.Forms.DataVisualization.Charting.DataPoint pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint();
+                pt.XValue = curXVal;
+                curXVal++;
+                pt.SetValueY(curPointVal);
+
+                s.Points.Add(pt);
+            }
+            */
+
+
         }
 
         /// <summary>
@@ -172,6 +272,14 @@ namespace UROVConfig
 
                 case AnswerBehaviour.SDCommandFILE:
                     {
+                        fileReadedBytes += dt.Length;
+                        int percentsReading = (fileReadedBytes * 100) / requestedFileSize;
+
+                        if (percentsReading > 100)
+                            percentsReading = 100;
+
+                        this.statusProgressBar.Value = percentsReading;
+
                         // вычитываем файл с SD. Признаком окончания файла служат байты [END]\r\n
                         for (int i = 0; i < dt.Length; i++)
                         {
@@ -805,6 +913,10 @@ namespace UROVConfig
 
             plMainSettings.Dock = DockStyle.Fill;
             this.plSDSettings.Dock = DockStyle.Fill;
+            this.richTextBoxFileView.Dock = DockStyle.Fill;
+            this.plEthalonChart.Dock = DockStyle.Fill;
+            this.plEmptySDWorkspace.Dock = DockStyle.Fill;
+            this.plEmptySDWorkspace.BringToFront();
             //TODO: тут остальные панели !!!
 
             ShowStartPanel();
@@ -1430,32 +1542,63 @@ namespace UROVConfig
             ShowWaitCursor(true);
         }
 
-        private void treeViewSD_MouseDoubleClick(object sender, MouseEventArgs e)
+        private string requestedFileName = "";
+        private int requestedFileSize = 0;
+        private int fileReadedBytes = 0;
+
+        private void RequestFile(TreeNode node)
         {
-            TreeNode selectedNode = treeViewSD.SelectedNode;
-            if (selectedNode == null)
+            if (node == null)
                 return;
 
-            if (selectedNode.Tag == null)
+            if (node.Tag == null)
                 return;
 
-            SDNodeTagHelper tg = (SDNodeTagHelper)selectedNode.Tag;
+            SDNodeTagHelper tg = (SDNodeTagHelper)node.Tag;
             if (tg.Tag != SDNodeTags.TagFileNode)
                 return;
 
+            ShowWaitCursor(true);
+
             string fullPathName = tg.FileName;//getFileNameFromText(selectedNode.Text);
 
-            TreeNode parent = selectedNode.Parent;
-            while(parent != null)
+
+            TreeNode parent = node.Parent;
+            while (parent != null)
             {
                 SDNodeTagHelper nt = (SDNodeTagHelper)parent.Tag;
                 fullPathName = /*getFileNameFromText(parent.Text)*/ nt.FileName + PARAM_DELIMITER + fullPathName;
                 parent = parent.Parent;
             }
 
-            PushCommandToQueue(GET_PREFIX + "FILE" + PARAM_DELIMITER + fullPathName, DummyAnswerReceiver, SetSDFileReadingFlag);
+            requestedFileName = fullPathName;
+
+            this.btnViewSDFile.Enabled = false;
+            this.btnDeleteSDFile.Enabled = false;
             this.btnListSDFiles.Enabled = false;
-            this.treeViewSD.Enabled = false;
+            PushCommandToQueue(GET_PREFIX + "FILESIZE" + PARAM_DELIMITER + fullPathName, ParseAskFileSize);
+
+        }
+
+        private void ParseAskFileSize(Answer a)
+        {
+            if(!a.IsOkAnswer)
+            {
+                this.btnViewSDFile.Enabled = treeViewSD.SelectedNode != null;
+                this.btnDeleteSDFile.Enabled = treeViewSD.SelectedNode != null;
+                this.btnListSDFiles.Enabled = true;
+
+                return;
+            }
+
+            requestedFileSize = Convert.ToInt32(a.Params[1]);
+            fileReadedBytes = 0;
+
+            statusProgressMessage.Text = "Вычитываем файл \"" + requestedFileName + "\"...";
+            statusProgressMessage.Visible = true;
+            statusProgressBar.Value = 0;
+            statusProgressBar.Visible = true;
+            PushCommandToQueue(GET_PREFIX + "FILE" + PARAM_DELIMITER + requestedFileName, DummyAnswerReceiver, SetSDFileReadingFlag);
 
         }
 
@@ -1826,6 +1969,8 @@ namespace UROVConfig
         private void treeViewSD_AfterSelect(object sender, TreeViewEventArgs e)
         {
             btnDeleteSDFile.Enabled = false;
+            btnViewSDFile.Enabled = false;
+
             if (treeViewSD.SelectedNode == null)
             {
                 return;
@@ -1836,6 +1981,7 @@ namespace UROVConfig
                 return;
 
             btnDeleteSDFile.Enabled = true;
+            btnViewSDFile.Enabled = true;
 
         }
 
@@ -1871,6 +2017,16 @@ namespace UROVConfig
            PushCommandToQueue(SET_PREFIX + "DELFILE" + PARAM_DELIMITER + fileName, DummyAnswerReceiver);
 
 
+        }
+
+        private void btnViewSDFile_Click(object sender, EventArgs e)
+        {
+            RequestFile(treeViewSD.SelectedNode);
+        }
+
+        private void treeViewSD_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            RequestFile(treeViewSD.SelectedNode);
         }
     }
 

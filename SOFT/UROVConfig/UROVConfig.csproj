@@ -70,6 +70,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -170,6 +171,7 @@
     <None Include="Icons\decima-logo.png" />
     <None Include="Icons\sdimages\rescan.png" />
     <None Include="Icons\sdimages\delete.png" />
+    <None Include="Icons\sdimages\view.png" />
     <Content Include="program.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

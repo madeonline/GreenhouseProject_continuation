@@ -19,8 +19,6 @@ D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.ConnectForm.resources
 D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.MainForm.resources
 D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.Properties.Resources.resources
 D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.csproj.GenerateResource.Cache
-D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.exe
-D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.pdb
 D:\JOB\UROV\UROV\SOFT\UROVConfig\bin\Debug\UROVConfig.exe.config
 D:\JOB\UROV\UROV\SOFT\UROVConfig\bin\Debug\UROVConfig.exe.manifest
 D:\JOB\UROV\UROV\SOFT\UROVConfig\bin\Debug\UROVConfig.application
@@ -28,4 +26,5 @@ D:\JOB\UROV\UROV\SOFT\UROVConfig\bin\Debug\UROVConfig.exe
 D:\JOB\UROV\UROV\SOFT\UROVConfig\bin\Debug\UROVConfig.pdb
 D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.exe.manifest
 D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.application
-D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.csprojResolveAssemblyReference.cache
+D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.exe
+D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.pdb
