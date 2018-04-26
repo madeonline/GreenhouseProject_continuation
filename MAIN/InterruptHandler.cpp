@@ -98,9 +98,17 @@ void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::writeRodPositionToLog(uint8_t channelNumber)
 {
-  String line;
+  //String line;
  // пишем положение штанги
   RodPosition rodPos = ConfigPin::getRodPosition(channelNumber);
+
+  uint8_t workBuff[2] = {0};
+  workBuff[0] = recordRodPosition;
+  workBuff[1] = rodPos;
+  
+  Logger.write(workBuff,2);
+  
+  /*
   line = "[ROD_";
   line += channelNumber;
   line += "]";
@@ -122,54 +130,85 @@ void InterruptHandlerClass::writeRodPositionToLog(uint8_t channelNumber)
   }
 
   Logger.writeLine(line);  
+  */
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, const InterruptTimeList& _list, EthalonCompareResult compareResult)
+void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeList& _list, EthalonCompareResult compareResult)
 {
   if(_list.size() < 2) // ничего в списке прерываний нет
     return;
 
-  String line;
+ // String line;
+ uint8_t workBuff[5] = {0};
 
-  Logger.writeLine("[INTERRUPT_RECORD_BEGIN]");
+  workBuff[0] = recordInterruptRecordBegin;
+  Logger.write(workBuff,1);
+  
+  //Logger.writeLine("[INTERRUPT_RECORD_BEGIN]");
 
   // пишем номер канала, для которого сработало прерывание
-  line = "[RECORD_CHANNEL]";
-  line += channelNumber;
-  Logger.writeLine(line);
+  workBuff[0] = recordChannelNumber;
+  workBuff[1] = channelNumber;
+  Logger.write(workBuff,2);
+
+//  line = "[RECORD_CHANNEL]";
+//  line += channelNumber;
+//  Logger.writeLine(line);
   
   // пишем положение штанги №1
   writeRodPositionToLog(channelNumber);
 
   // пишем время движения штанги  
   uint32_t moveTime = _list[_list.size()-1] - _list[0];
+  workBuff[0] = recordMoveTime;
+  memcpy(&(workBuff[1]),&moveTime,4);
+  Logger.write(workBuff,5);
+  
+  /*
   line = F("[LINE_MOVE_TIME]");
   line += moveTime;
 
   Logger.writeLine(line);
+  */
 
   // пишем кол-во срабатываний канала
   uint32_t motoresource = Settings.getMotoresource(channelNumber);
   motoresource++;
   Settings.setMotoresource(channelNumber,motoresource);
 
+/*
   line = "[MOTORESOURCE]";
   line += motoresource;
 
   Logger.writeLine(line);
+*/
+  workBuff[0] = recordMotoresource;
+  memcpy(&(workBuff[1]),&motoresource,4);
+  Logger.write(workBuff,5);  
 
   // пишем результат сравнения с эталоном для канала
+  /*
   line = "[COMPARE_RESULT]";
   line += compareResult;
   
   Logger.writeLine(line);
+  */
+  workBuff[0] = recordCompareResult;
+  workBuff[1] = compareResult;
+  Logger.write(workBuff,2);
 
   // пишем список прерываний
   if(_list.size() > 1)
   {
     // есть список прерываний
-   Logger.write("[INTERRUPT_DATA]");
-   String dt;
+   //Logger.write("[INTERRUPT_DATA]");
+   //String dt;
+   workBuff[0] = recordInterruptDataBegin;
+   Logger.write(workBuff,1);
+
+   Logger.write((uint8_t*) _list.pData(), _list.size()*sizeof(uint32_t));
+
+   /*
    for(size_t i=0;i<_list.size();i++)
    {
       dt = _list[i];
@@ -178,19 +217,31 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, const Interrup
 
         Logger.write(dt);
    }
-   Logger.writeLine("");
+   */
+   //Logger.writeLine("");
+   workBuff[0] = recordInterruptDataEnd;
+   Logger.write(workBuff,1);
   }
 
-  Logger.writeLine("[INTERRUPT_RECORD_END]");
+  // заканчиваем запись
+  workBuff[0] = recordInterruptRecordEnd;
+  Logger.write(workBuff,1);
+  //Logger.writeLine("[INTERRUPT_RECORD_END]");
     
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3)
+void InterruptHandlerClass::writeToLog(InterruptTimeList& lst1, InterruptTimeList& lst2, InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3)
 {
 
-  Logger.writeLine(F("[INTERRUPT_INFO_BEGIN]"));
+  uint8_t workBuff[10] = {0};
+
+  //Logger.writeLine(F("[INTERRUPT_INFO_BEGIN]"));
+  workBuff[0] = recordInterruptInfoBegin;
+  Logger.write(workBuff,1);
+  
   // пишем время срабатывания прерывания
   DS3231Time tm = RealtimeClock.getTime();
+  /*
   String line;
   line = F("[INTERRUPT_TIME]");
   line += RealtimeClock.getDateStr(tm);
@@ -198,10 +249,28 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
   line += RealtimeClock.getTimeStr(tm);
 
   Logger.writeLine(line);
+  */
+
+  workBuff[0] = recordInterruptTime;
+  workBuff[1] = tm.dayOfMonth;
+  workBuff[2] = tm.month;
+  memcpy(&(workBuff[3]),&(tm.year),2);
+  workBuff[5] = tm.hour;
+  workBuff[6] = tm.minute;
+  workBuff[7] = tm.second;
+  
+  Logger.write(workBuff,8);
 
   // пишем температуру системы
   DS3231Temperature temp = Settings.getTemperature();
 
+  workBuff[0] = recordSystemTemperature;
+  workBuff[1] = temp.Value;
+  workBuff[2] = temp.Fract;
+  
+  Logger.write(workBuff,3);
+  
+/*
   line = "[TEMP]";
   line += temp.Value;
   line += '.';
@@ -212,7 +281,7 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
   line += temp.Fract;
 
   Logger.writeLine(line);
-
+*/
 
   // теперь смотрим, в каких списках есть данные, и пишем записи в лог
   if(lst1.size() > 1)
@@ -231,8 +300,10 @@ void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const Inte
   } // if
 
 
-  Logger.writeLine(F("[INTERRUPT_INFO_END]"));
-  Logger.writeLine("");
+    workBuff[0] = recordInterruptInfoEnd;
+    Logger.write(workBuff,1);
+//  Logger.writeLine(F("[INTERRUPT_INFO_END]"));
+//  Logger.writeLine("");
   
 }
 //--------------------------------------------------------------------------------------------------------------------------------------

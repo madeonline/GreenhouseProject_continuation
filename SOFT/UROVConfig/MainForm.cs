@@ -147,11 +147,8 @@ namespace UROVConfig
 
                         if (upStr.EndsWith(".LOG"))
                         {
-
-                            ASCIIEncoding encoding = new ASCIIEncoding();
-                            string combindedString = encoding.GetString(content.ToArray());
-                            this.richTextBoxFileView.Text = combindedString;
-                            this.richTextBoxFileView.BringToFront();
+                            ShowLogFile(content);
+                            
                         }
                         else if (upStr.EndsWith(".ETL"))
                         {
@@ -190,6 +187,14 @@ namespace UROVConfig
             ethalon2UpData.Clear();
             ethalon2DwnData.Clear();
             this.requestEthalonCounter = 0;
+        }
+
+        private void ShowLogFile(List<byte> content)
+        {
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            string combindedString = encoding.GetString(content.ToArray());
+            this.richTextBoxFileView.Text = combindedString;
+            this.richTextBoxFileView.BringToFront();
         }
 
         private void SaveEthalon(string fname, List<byte> content)
