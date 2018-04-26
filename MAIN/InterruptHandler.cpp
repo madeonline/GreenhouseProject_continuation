@@ -130,16 +130,20 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, const Interrup
     return;
 
   String line;
+
+  Logger.writeLine("[INTERRUPT_RECORD_BEGIN]");
+
+  // пишем номер канала, для которого сработало прерывание
+  line = "[RECORD_CHANNEL]";
+  line += channelNumber;
+  Logger.writeLine(line);
   
   // пишем положение штанги №1
   writeRodPositionToLog(channelNumber);
 
-  // пишем время движения штанги
-  line = "[LINE_MOVE_TIME_";
-  line += channelNumber;
-  line += "]";
-  
+  // пишем время движения штанги  
   uint32_t moveTime = _list[_list.size()-1] - _list[0];
+  line = F("[LINE_MOVE_TIME]");
   line += moveTime;
 
   Logger.writeLine(line);
@@ -149,20 +153,36 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, const Interrup
   motoresource++;
   Settings.setMotoresource(channelNumber,motoresource);
 
-  line = "[MOTORESOURCE_";
-  line += channelNumber;
-  line += "]";  
+  line = "[MOTORESOURCE]";
   line += motoresource;
 
   Logger.writeLine(line);
 
   // пишем результат сравнения с эталоном для канала
-  line = "[COMPARE_RESULT_";
-  line += channelNumber;
-  line += "]";
+  line = "[COMPARE_RESULT]";
   line += compareResult;
   
-  Logger.writeLine(line);    
+  Logger.writeLine(line);
+
+  // пишем список прерываний
+  if(_list.size() > 1)
+  {
+    // есть список прерываний
+   Logger.write("[INTERRUPT_DATA]");
+   String dt;
+   for(size_t i=0;i<_list.size();i++)
+   {
+      dt = _list[i];
+      if(i < (_list.size()-1))
+        dt += ",";
+
+        Logger.write(dt);
+   }
+   Logger.writeLine("");
+  }
+
+  Logger.writeLine("[INTERRUPT_RECORD_END]");
+    
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::writeToLog(const InterruptTimeList& lst1, const InterruptTimeList& lst2, const InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3)

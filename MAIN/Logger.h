@@ -9,6 +9,7 @@ class LoggerClass
     LoggerClass();
 
     void writeLine(const String& line);
+    void write(const String& data);
 
   private:
 

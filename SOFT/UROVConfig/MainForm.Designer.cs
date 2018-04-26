@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Контроллер");
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Контроллер");
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusProgressMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -69,6 +69,9 @@
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.treeViewSD = new System.Windows.Forms.TreeView();
             this.sdImagesNormal = new System.Windows.Forms.ImageList(this.components);
+            this.plEmptySDWorkspace = new System.Windows.Forms.Panel();
+            this.plEthalonChart = new System.Windows.Forms.Panel();
+            this.ethalonChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.richTextBoxFileView = new System.Windows.Forms.RichTextBox();
             this.toolStripSD = new System.Windows.Forms.ToolStrip();
             this.btnListSDFiles = new System.Windows.Forms.ToolStripButton();
@@ -163,9 +166,6 @@
             this.tmDateTime = new System.Windows.Forms.Timer(this.components);
             this.tmEnumComPorts = new System.Windows.Forms.Timer(this.components);
             this.tmPeriodicCommandsTimer = new System.Windows.Forms.Timer(this.components);
-            this.plEthalonChart = new System.Windows.Forms.Panel();
-            this.plEmptySDWorkspace = new System.Windows.Forms.Panel();
-            this.ethalonChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -183,6 +183,8 @@
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            this.plEthalonChart.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ethalonChart)).BeginInit();
             this.toolStripSD.SuspendLayout();
             this.plMainSettings.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -219,8 +221,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta1)).BeginInit();
             this.panel12.SuspendLayout();
-            this.plEthalonChart.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ethalonChart)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -512,11 +512,11 @@
             this.treeView.ImageList = this.smallImages;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            treeNode2.ImageIndex = 1;
-            treeNode2.Name = "rootNode";
-            treeNode2.Text = "Контроллер";
+            treeNode1.ImageIndex = 1;
+            treeNode1.Name = "rootNode";
+            treeNode1.Text = "Контроллер";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.treeView.SelectedImageIndex = 1;
             this.treeView.ShowPlusMinus = false;
             this.treeView.ShowRootLines = false;
@@ -610,6 +610,36 @@
             this.sdImagesNormal.Images.SetKeyName(0, "folder-blue.png");
             this.sdImagesNormal.Images.SetKeyName(1, "document-open-folder.png");
             this.sdImagesNormal.Images.SetKeyName(2, "list.png");
+            // 
+            // plEmptySDWorkspace
+            // 
+            this.plEmptySDWorkspace.Location = new System.Drawing.Point(81, 220);
+            this.plEmptySDWorkspace.Name = "plEmptySDWorkspace";
+            this.plEmptySDWorkspace.Size = new System.Drawing.Size(200, 100);
+            this.plEmptySDWorkspace.TabIndex = 2;
+            // 
+            // plEthalonChart
+            // 
+            this.plEthalonChart.Controls.Add(this.ethalonChart);
+            this.plEthalonChart.Location = new System.Drawing.Point(248, 32);
+            this.plEthalonChart.Name = "plEthalonChart";
+            this.plEthalonChart.Size = new System.Drawing.Size(200, 193);
+            this.plEthalonChart.TabIndex = 1;
+            // 
+            // ethalonChart
+            // 
+            chartArea1.Name = "ethalonChartArea";
+            this.ethalonChart.ChartAreas.Add(chartArea1);
+            this.ethalonChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ethalonChart.Location = new System.Drawing.Point(0, 0);
+            this.ethalonChart.Name = "ethalonChart";
+            series1.ChartArea = "ethalonChartArea";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Name = "ethalonChartSerie";
+            this.ethalonChart.Series.Add(series1);
+            this.ethalonChart.Size = new System.Drawing.Size(200, 193);
+            this.ethalonChart.TabIndex = 0;
+            this.ethalonChart.Text = "chart1";
             // 
             // richTextBoxFileView
             // 
@@ -1691,36 +1721,6 @@
             this.tmPeriodicCommandsTimer.Interval = 5000;
             this.tmPeriodicCommandsTimer.Tick += new System.EventHandler(this.tmInductiveTimer_Tick);
             // 
-            // plEthalonChart
-            // 
-            this.plEthalonChart.Controls.Add(this.ethalonChart);
-            this.plEthalonChart.Location = new System.Drawing.Point(248, 32);
-            this.plEthalonChart.Name = "plEthalonChart";
-            this.plEthalonChart.Size = new System.Drawing.Size(200, 193);
-            this.plEthalonChart.TabIndex = 1;
-            // 
-            // plEmptySDWorkspace
-            // 
-            this.plEmptySDWorkspace.Location = new System.Drawing.Point(81, 220);
-            this.plEmptySDWorkspace.Name = "plEmptySDWorkspace";
-            this.plEmptySDWorkspace.Size = new System.Drawing.Size(200, 100);
-            this.plEmptySDWorkspace.TabIndex = 2;
-            // 
-            // ethalonChart
-            // 
-            chartArea2.Name = "ethalonChartArea";
-            this.ethalonChart.ChartAreas.Add(chartArea2);
-            this.ethalonChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ethalonChart.Location = new System.Drawing.Point(0, 0);
-            this.ethalonChart.Name = "ethalonChart";
-            series2.ChartArea = "ethalonChartArea";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series2.Name = "ethalonChartSerie";
-            this.ethalonChart.Series.Add(series2);
-            this.ethalonChart.Size = new System.Drawing.Size(200, 193);
-            this.ethalonChart.TabIndex = 0;
-            this.ethalonChart.Text = "chart1";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1760,6 +1760,8 @@
             this.splitContainer3.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
+            this.plEthalonChart.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ethalonChart)).EndInit();
             this.toolStripSD.ResumeLayout(false);
             this.toolStripSD.PerformLayout();
             this.plMainSettings.ResumeLayout(false);
@@ -1818,8 +1820,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta1)).EndInit();
             this.panel12.ResumeLayout(false);
             this.panel12.PerformLayout();
-            this.plEthalonChart.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ethalonChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -33,6 +33,12 @@ namespace UROVConfig
         TagFileNode
     }
 
+    public enum FileDownloadFlags
+    {
+        View,
+        DownloadEthalon
+    }
+
     public class SDNodeTagHelper
     {
         public SDNodeTags Tag = SDNodeTags.TagFolderUninitedNode;

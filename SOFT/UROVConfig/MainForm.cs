@@ -123,35 +123,110 @@ namespace UROVConfig
 
         }
 
+        private FileDownloadFlags fileDownloadFlags = FileDownloadFlags.View;
+
         /// <summary>
         /// Показываем содержимое файла
         /// </summary>
         /// <param name="content"></param>
         private void ShowFileContent(List<byte> content)
         {
-            ShowWaitCursor(false);
-            statusProgressBar.Visible = false;
-            statusProgressMessage.Visible = false;
-
-            this.btnViewSDFile.Enabled = treeViewSD.SelectedNode != null;
-            this.btnDeleteSDFile.Enabled = treeViewSD.SelectedNode != null;
-            this.btnListSDFiles.Enabled = true;
-
-            string upStr = this.requestedFileName.ToUpper();
-
-            if (upStr.EndsWith(".LOG"))
+            switch (fileDownloadFlags)
             {
+                case FileDownloadFlags.View:
+                    {
+                        ShowWaitCursor(false);
+                        statusProgressBar.Visible = false;
+                        statusProgressMessage.Visible = false;
 
-                ASCIIEncoding encoding = new ASCIIEncoding();
-                string combindedString = encoding.GetString(content.ToArray());
-                this.richTextBoxFileView.Text = combindedString;
-                this.richTextBoxFileView.BringToFront();
-            }
-            else if(upStr.EndsWith(".ETL"))
+                        this.btnViewSDFile.Enabled = treeViewSD.SelectedNode != null;
+                        this.btnDeleteSDFile.Enabled = treeViewSD.SelectedNode != null;
+                        this.btnListSDFiles.Enabled = true;
+
+                        string upStr = this.requestedFileName.ToUpper();
+
+                        if (upStr.EndsWith(".LOG"))
+                        {
+
+                            ASCIIEncoding encoding = new ASCIIEncoding();
+                            string combindedString = encoding.GetString(content.ToArray());
+                            this.richTextBoxFileView.Text = combindedString;
+                            this.richTextBoxFileView.BringToFront();
+                        }
+                        else if (upStr.EndsWith(".ETL"))
+                        {
+                            CreateEthalonChart(content);
+                            this.plEthalonChart.BringToFront();
+                        }
+                    }
+                    break;
+
+                case FileDownloadFlags.DownloadEthalon:
+                    {
+                        SaveEthalon(requestedFileName, content);
+                        fileDownloadFlags = FileDownloadFlags.View;
+                    }
+                    break;
+            } // switch
+        }
+
+        private List<int> ethalon0UpData = new List<int>();
+        private List<int> ethalon0DwnData = new List<int>();
+
+        private List<int> ethalon1UpData = new List<int>();
+        private List<int> ethalon1DwnData = new List<int>();
+
+        private List<int> ethalon2UpData = new List<int>();
+        private List<int> ethalon2DwnData = new List<int>();
+
+        private void ClearEthalons()
+        {
+            ethalon0UpData.Clear();
+            ethalon0DwnData.Clear();
+
+            ethalon1UpData.Clear();
+            ethalon1DwnData.Clear();
+
+            ethalon2UpData.Clear();
+            ethalon2DwnData.Clear();
+            this.requestEthalonCounter = 0;
+        }
+
+        private void SaveEthalon(string fname, List<byte> content)
+        {
+
+            byte[] dt = new byte[4];
+            List<int> timeList = new List<int>();
+            for (int i = 0; i < content.Count; i += 4)
             {
-                CreateEthalonChart(content);
-                this.plEthalonChart.BringToFront();
+                dt[0] = content[i];
+                dt[1] = content[i + 1];
+                dt[2] = content[i + 2];
+                dt[3] = content[i + 3];
+
+                int curVal = BitConverter.ToInt32(dt, 0);
+                timeList.Add(curVal);
             }
+
+            if (fname.EndsWith("ET0UP.ETL"))
+                ethalon0UpData = timeList;
+            else
+            if (fname.EndsWith("ET0DWN.ETL"))
+                ethalon0DwnData = timeList;
+            else
+            if (fname.EndsWith("ET1UP.ETL"))
+                ethalon1UpData = timeList;
+            else
+            if (fname.EndsWith("ET1DWN.ETL"))
+                ethalon1DwnData = timeList;
+            else
+            if (fname.EndsWith("ET2UP.ETL"))
+                ethalon2UpData = timeList;
+            else
+            if (fname.EndsWith("ET2DWN.ETL"))
+                ethalon2DwnData = timeList;
+
+
         }
 
         private void CreateEthalonChart(List<byte> content)
@@ -210,26 +285,6 @@ namespace UROVConfig
 
             } // for
 
-            /*
-            int curXVal = 0;
-
-            for (int i=0;i<content.Count;i+=4)
-            {
-                dt[0] = content[i];
-                dt[1] = content[i+1];
-                dt[2] = content[i+2];
-                dt[3] = content[i+3];
-
-                int curPointVal = BitConverter.ToInt32(dt, 0);
-
-                System.Windows.Forms.DataVisualization.Charting.DataPoint pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint();
-                pt.XValue = curXVal;
-                curXVal++;
-                pt.SetValueY(curPointVal);
-
-                s.Points.Add(pt);
-            }
-            */
 
 
         }
@@ -272,13 +327,16 @@ namespace UROVConfig
 
                 case AnswerBehaviour.SDCommandFILE:
                     {
-                        fileReadedBytes += dt.Length;
-                        int percentsReading = (fileReadedBytes * 100) / requestedFileSize;
+                        if (fileDownloadFlags == FileDownloadFlags.View)
+                        {
+                            fileReadedBytes += dt.Length;
+                            int percentsReading = (fileReadedBytes * 100) / (requestedFileSize == 0 ? 1 : requestedFileSize);
 
-                        if (percentsReading > 100)
-                            percentsReading = 100;
+                            if (percentsReading > 100)
+                                percentsReading = 100;
 
-                        this.statusProgressBar.Value = percentsReading;
+                            this.statusProgressBar.Value = percentsReading;
+                        }
 
                         // вычитываем файл с SD. Признаком окончания файла служат байты [END]\r\n
                         for (int i = 0; i < dt.Length; i++)
@@ -606,6 +664,10 @@ namespace UROVConfig
             ResetInductiveSensors();
             ResetVoltage();
 
+            ClearEthalons();
+
+            btnViewSDFile.Enabled = treeViewSD.SelectedNode != null;
+            btnDeleteSDFile.Enabled = btnViewSDFile.Enabled;
            
 
             if (isConnected)
@@ -645,10 +707,10 @@ namespace UROVConfig
                 PushCommandToQueue(GET_PREFIX + "DELTA", ParseAskDelta, BeforeAskDelta);
                 GetInductiveSensors();
                 GetVoltage();
+                RequestEthalons();
                 RescanSD();
 
                 ShowMainSettings();
-
                 tmPeriodicCommandsTimer.Enabled = true;
 
             }
@@ -663,6 +725,21 @@ namespace UROVConfig
 
 
         }
+
+        private void RequestEthalons()
+        {
+            PushCommandToQueue(GET_PREFIX + "FILE|ETL|ET0UP.ETL", DummyAnswerReceiver, SetSDFileReadingFlagEthalon);
+            PushCommandToQueue(GET_PREFIX + "FILE|ETL|ET0DWN.ETL", DummyAnswerReceiver, SetSDFileReadingFlagEthalon);
+
+            PushCommandToQueue(GET_PREFIX + "FILE|ETL|ET1UP.ETL", DummyAnswerReceiver, SetSDFileReadingFlagEthalon);
+            PushCommandToQueue(GET_PREFIX + "FILE|ETL|ET1DWN.ETL", DummyAnswerReceiver, SetSDFileReadingFlagEthalon);
+
+            PushCommandToQueue(GET_PREFIX + "FILE|ETL|ET2UP.ETL", DummyAnswerReceiver, SetSDFileReadingFlagEthalon);
+            PushCommandToQueue(GET_PREFIX + "FILE|ETL|ET2DWN.ETL", DummyAnswerReceiver, SetSDFileReadingFlagEthalon);
+
+        }
+
+
         private void BeforeAskDelta()
         {
             this.inSetDeltaToController = true;
@@ -1538,9 +1615,50 @@ namespace UROVConfig
         private void SetSDFileReadingFlag()
         {
             this.answerBehaviour = AnswerBehaviour.SDCommandFILE;
+            this.fileDownloadFlags = FileDownloadFlags.View;
             this.SDQueryAnswer.Clear();
             ShowWaitCursor(true);
         }
+
+        private int requestEthalonCounter = 0;
+        private void SetSDFileReadingFlagEthalon()
+        {
+            this.answerBehaviour = AnswerBehaviour.SDCommandFILE;
+            this.fileDownloadFlags = FileDownloadFlags.DownloadEthalon;
+            this.SDQueryAnswer.Clear();
+
+            switch(requestEthalonCounter)
+            {
+                case 0:
+                        requestedFileName = "ET0UP.ETL";
+                    break;
+
+                case 1:
+                    requestedFileName = "ET0DWN.ETL";
+                    break;
+
+                case 2:
+                    requestedFileName = "ET1UP.ETL";
+                    break;
+
+                case 3:
+                    requestedFileName = "ET1DWN.ETL";
+                    break;
+
+                case 4:
+                    requestedFileName = "ET2UP.ETL";
+                    break;
+
+                case 5:
+                    requestedFileName = "ET2DWN.ETL";
+                    break;
+
+            }
+
+            requestEthalonCounter++;
+
+        }
+
 
         private string requestedFileName = "";
         private int requestedFileSize = 0;
@@ -1557,6 +1675,8 @@ namespace UROVConfig
             SDNodeTagHelper tg = (SDNodeTagHelper)node.Tag;
             if (tg.Tag != SDNodeTags.TagFileNode)
                 return;
+
+            fileDownloadFlags = FileDownloadFlags.View;
 
             ShowWaitCursor(true);
 
