@@ -39,6 +39,46 @@ namespace UROVConfig
         DownloadEthalon
     }
 
+    public enum LogRecordType
+    {
+        InterruptInfoBegin,   // начало записи по прерыванию в логе
+
+        InterruptTime,        // время прерывания
+        SystemTemperature,    // температура системы
+
+        InterruptRecordBegin,// начало записи для канала
+
+        ChannelNumber,       // запись номера канала
+        RodPosition,         // позиция штанги для канала
+        MoveTime,            // время движения штанги для канала
+        Motoresource,        // моторесурс канала
+        CompareResult,       // результат сравнения с эталоном
+
+        InterruptDataBegin,  // начало данных прерывания
+        InterruptDataEnd,    // конец данных прерывания
+
+        InterruptRecordEnd, // конец записи для канада
+
+        InterruptInfoEnd    // конец записи по прерыванию
+    }
+
+    public enum EthalonCompareResult
+    {
+        NoSourcePulses, // нет исходных данных в списке
+        NoEthalonFound, // не найдено эталона для канала
+        RodBroken,      // штанга поломана
+        MatchEthalon,    // результат соответствует эталону
+        MismatchEthalon, // результат не соответствует эталону
+    }
+
+    public enum RodPosition
+    {
+        Broken, // штанга поломана и находится в промежуточной позиции
+        Up, // в верхней позиции
+        Down // в нижней позиции
+    }
+
+
     public class SDNodeTagHelper
     {
         public SDNodeTags Tag = SDNodeTags.TagFolderUninitedNode;
