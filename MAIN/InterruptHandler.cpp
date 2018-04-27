@@ -204,7 +204,9 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
    //Logger.write("[INTERRUPT_DATA]");
    //String dt;
    workBuff[0] = recordInterruptDataBegin;
-   Logger.write(workBuff,1);
+   uint16_t dataLen = _list.size();
+   memcpy(&(workBuff[1]),&dataLen,2);
+   Logger.write(workBuff,3);
 
    Logger.write((uint8_t*) _list.pData(), _list.size()*sizeof(uint32_t));
 

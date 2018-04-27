@@ -78,6 +78,22 @@ namespace UROVConfig
         Down // в нижней позиции
     }
 
+    public class InterruptInfo
+    {
+        public DateTime InterruptTime;
+        public float SystemTemperature;
+    }
+
+    public class InterruptRecord
+    {
+        public InterruptInfo InterruptInfo;
+        public byte ChannelNumber;
+        public RodPosition RodPosition;
+        public int MoveTime;
+        public int Motoresource;
+        public EthalonCompareResult EthalonCompareResult;
+        public List<int> InterruptData = new List<int>();
+    }
 
     public class SDNodeTagHelper
     {
