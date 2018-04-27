@@ -22,6 +22,8 @@ typedef enum
       recordInterruptDataBegin,  // начало данных прерывания
       recordInterruptDataEnd,    // конец данных прерывания
 
+      recordEthalonDataFollow,  // следом идут данные эталона, с которым сравнивали
+
     recordInterruptRecordEnd, // конец записи для канада
   
   recordInterruptInfoEnd    // конец записи по прерыванию

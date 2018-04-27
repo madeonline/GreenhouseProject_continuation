@@ -337,6 +337,27 @@ namespace UROVConfig
                             }
                             break;
 
+                        case LogRecordType.EthalonDataFollow:
+                            {
+                                // следом идут данные эталона, с которым сравнивали
+                                System.Diagnostics.Debug.Assert(curRecord != null);
+
+                                curRecord.EthalonData.Clear();
+
+                                // следом идут 2 байта длины данных
+                                int dataLen = Read16(content, readed); readed += 2;
+
+                                // далее идут пачки по 4 байта записей по прерыванию
+                                for (int k = 0; k < dataLen; k++)
+                                {
+                                    int curInterruptData = Read32(content, readed); readed += 4;
+                                    curRecord.EthalonData.Add(curInterruptData);
+
+                                } // for
+
+                            }
+                            break;
+
                         case LogRecordType.InterruptDataBegin:
                             {
                                 System.Diagnostics.Debug.Assert(curRecord != null);
@@ -2419,38 +2440,12 @@ namespace UROVConfig
 
             vcf.lblCaption.Text = "Срабатывание от " + record.InterruptInfo.InterruptTime.ToString("dd.MM.yyyy HH:mm:ss");
 
-            System.Windows.Forms.DataVisualization.Charting.Series s = vcf.chart.Series[0];
-            s.Points.Clear();
+            System.Windows.Forms.DataVisualization.Charting.Series ethalonSerie = vcf.chart.Series[0];
+            ethalonSerie.Points.Clear();
 
-            System.Windows.Forms.DataVisualization.Charting.Series s2 = vcf.chart.Series[1];
-            s2.Points.Clear();
+            System.Windows.Forms.DataVisualization.Charting.Series interruptSerie = vcf.chart.Series[1];
+            interruptSerie.Points.Clear();
 
-            // тут смотрим - есть есть сравнение с файлом эталона - получаем список его прерываний
-            List<int> ethalonData = null;
-            if(record.EthalonCompareNumber != EthalonCompareNumber.NoEthalon)
-            {
-                switch(record.EthalonCompareNumber)
-                {
-                    case EthalonCompareNumber.E1down:
-                        ethalonData = this.ethalon0DwnData;
-                        break;
-                    case EthalonCompareNumber.E1up:
-                        ethalonData = this.ethalon0UpData;
-                        break;
-                    case EthalonCompareNumber.E2down:
-                        ethalonData = this.ethalon1DwnData;
-                        break;
-                    case EthalonCompareNumber.E2up:
-                        ethalonData = this.ethalon1UpData;
-                        break;
-                    case EthalonCompareNumber.E3down:
-                        ethalonData = this.ethalon2DwnData;
-                        break;
-                    case EthalonCompareNumber.E3up:
-                        ethalonData = this.ethalon2UpData;
-                        break;
-                }
-            }
 
             int xStep = 1;
 
@@ -2465,15 +2460,12 @@ namespace UROVConfig
 
             int endStop = timeList.Count;
 
-            if (ethalonData != null)
+            for (int i = 1; i < record.EthalonData.Count; i++)
             {
-                for (int i = 1; i < ethalonData.Count; i++)
-                {
-                    maxPulseTime = Math.Max(maxPulseTime, (ethalonData[i] - ethalonData[i - 1]));
-                }
-
-                endStop = Math.Min(endStop, ethalonData.Count);
+                maxPulseTime = Math.Max(maxPulseTime, (record.EthalonData[i] - record.EthalonData[i - 1]));
             }
+
+            endStop = Math.Min(endStop, record.EthalonData.Count);
 
 
             double xCoord = 0;
@@ -2494,18 +2486,17 @@ namespace UROVConfig
 
                 xCoord += xStep;
 
-                s.Points.Add(pt);
+                interruptSerie.Points.Add(pt);
 
             } // for
 
-            if (ethalonData != null)
-            {
+
                 xCoord = 0;
 
                 // считаем график эталона
                 for (int i = 1; i < endStop; i++)
                 {
-                    int pulseTime = ethalonData[i] - ethalonData[i - 1];
+                    int pulseTime = record.EthalonData[i] - record.EthalonData[i - 1];
                     pulseTime *= 100;
 
                     int pulseTimePercents = pulseTime / maxPulseTime;
@@ -2518,10 +2509,9 @@ namespace UROVConfig
 
                     xCoord += xStep;
 
-                    s2.Points.Add(pt);
+                    ethalonSerie.Points.Add(pt);
 
                 } // for
-            }
 
                 vcf.ShowDialog();
 

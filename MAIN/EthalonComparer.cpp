@@ -5,7 +5,7 @@
 #include "Settings.h"
 #include "FileUtils.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t channelNumber, EthalonCompareNumber& compareNumber)
+EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t channelNumber, EthalonCompareNumber& compareNumber, InterruptTimeList& ethalonData)
 {
     DBGLN("");
     DBG(F("Compare pulses #"));
@@ -13,6 +13,7 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
     DBGLN(F(" with ethalon..."));
 
     compareNumber = ecnNoEthalon;
+    ethalonData.clear();
     
     if(list.size() < 2)
     {
@@ -114,7 +115,6 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
     return COMPARE_RESULT_NoEthalonFound; // не найдено эталона для канала
   }
    
-  InterruptTimeList ethalon;
   SdFile file;
   file.open(fileName.c_str(),FILE_READ);
   
@@ -127,7 +127,7 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
       if(readResult == -1 || size_t(readResult) < sizeof(curRec))
         break;
   
-        ethalon.push_back(curRec);
+        ethalonData.push_back(curRec);
     }
     file.close();
   }
@@ -150,7 +150,7 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
   DBGLN(list.size());
 
   // для начала вычисляем, сколько импульсов сравнивать
-  size_t toCompare = min(ethalon.size(),list.size());
+  size_t toCompare = min(ethalonData.size(),list.size());
 
   DBG(F("Pulses to compare: "));
   DBGLN(toCompare);
@@ -158,7 +158,7 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
   // потом проходим по каждому импульсу
   for(size_t i=1;i<toCompare;i++)
   {
-    uint32_t ethalonPulseDuration = ethalon[i] - ethalon[i-1];
+    uint32_t ethalonPulseDuration = ethalonData[i] - ethalonData[i-1];
     uint32_t passedPulseDuration = list[i] - list[i-1];
 
     DBG("#");

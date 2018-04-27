@@ -58,6 +58,8 @@ namespace UROVConfig
         InterruptDataBegin,  // начало данных прерывания
         InterruptDataEnd,    // конец данных прерывания
 
+        EthalonDataFollow, // следом идут данные эталона, с которым сравнивали
+
         InterruptRecordEnd, // конец записи для канада
 
         InterruptInfoEnd    // конец записи по прерыванию
@@ -131,6 +133,7 @@ namespace UROVConfig
         public EthalonCompareNumber EthalonCompareNumber;
         public EthalonCompareResult EthalonCompareResult;
         public List<int> InterruptData = new List<int>();
+        public List<int> EthalonData = new List<int>();
     }
 
     public class SDNodeTagHelper
