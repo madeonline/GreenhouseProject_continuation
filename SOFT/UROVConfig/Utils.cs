@@ -52,6 +52,7 @@ namespace UROVConfig
         RodPosition,         // позиция штанги для канала
         MoveTime,            // время движения штанги для канала
         Motoresource,        // моторесурс канала
+        EthalonNumber,       // номер эталона, с которым сравнивали
         CompareResult,       // результат сравнения с эталоном
 
         InterruptDataBegin,  // начало данных прерывания
@@ -62,19 +63,55 @@ namespace UROVConfig
         InterruptInfoEnd    // конец записи по прерыванию
     }
 
+    public enum EthalonCompareNumber
+    {
+        [Description("без сравнения")]
+        NoEthalon,
+
+        [Description("канал 1, вверх")]
+        E1up,
+        [Description("канал 1, вниз")]
+        E1down,
+
+        [Description("канал 2, вверх")]
+        E2up,
+        [Description("канал 2, вниз")]
+        E2down,
+
+        [Description("канал 3, вверх")]
+        E3up,
+        [Description("канал 3, вниз")]
+        E3down,
+
+    }
+
     public enum EthalonCompareResult
     {
+        [Description("нет данных")]
         NoSourcePulses, // нет исходных данных в списке
+
+        [Description("нет эталона")]
         NoEthalonFound, // не найдено эталона для канала
+
+        [Description("отказ штанги")]
         RodBroken,      // штанга поломана
+
+        [Description("совпадение")]
         MatchEthalon,    // результат соответствует эталону
+
+        [Description("несовпадение")]
         MismatchEthalon, // результат не соответствует эталону
     }
 
     public enum RodPosition
     {
+        [Description("поломана")]
         Broken, // штанга поломана и находится в промежуточной позиции
+
+        [Description("вверху")]
         Up, // в верхней позиции
+
+        [Description("внизу")]
         Down // в нижней позиции
     }
 
@@ -91,6 +128,7 @@ namespace UROVConfig
         public RodPosition RodPosition;
         public int MoveTime;
         public int Motoresource;
+        public EthalonCompareNumber EthalonCompareNumber;
         public EthalonCompareResult EthalonCompareResult;
         public List<int> InterruptData = new List<int>();
     }

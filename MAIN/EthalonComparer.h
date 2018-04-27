@@ -5,6 +5,6 @@
 class EthalonComparer
 {
   public:
-    static EthalonCompareResult Compare(InterruptTimeList& list, uint8_t channelNumber);
+    static EthalonCompareResult Compare(InterruptTimeList& list, uint8_t channelNumber,EthalonCompareNumber& compareNumber);
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

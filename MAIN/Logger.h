@@ -16,6 +16,7 @@ typedef enum
       recordRodPosition,         // позиция штанги для канала
       recordMoveTime,            // время движения штанги для канала
       recordMotoresource,        // моторесурс канала
+      recordEthalonNumber,       // номер эталона, с которым сравнивали
       recordCompareResult,       // результат сравнения с эталоном
 
       recordInterruptDataBegin,  // начало данных прерывания

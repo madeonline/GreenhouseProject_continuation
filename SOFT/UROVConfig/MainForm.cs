@@ -219,151 +219,172 @@ namespace UROVConfig
             InterruptInfo currentInterruptInfo = null;
             InterruptRecord curRecord = null;
 
-            while (readed < content.Count)
+            try
             {
-                byte curByte = content[readed];
-                readed++;
 
-                LogRecordType recType = (LogRecordType)curByte;
-
-                switch (recType)
+                while (readed < content.Count)
                 {
-                    case LogRecordType.InterruptInfoBegin:
-                        {
-                            currentInterruptInfo = new InterruptInfo();
-                        }
-                        break;
+                    byte curByte = content[readed];
+                    readed++;
 
-                    case LogRecordType.InterruptTime:
-                        {
-                            System.Diagnostics.Debug.Assert(currentInterruptInfo != null);
+                    LogRecordType recType = (LogRecordType)curByte;
 
-                            // далее идут 7 байт времени
-                            byte dayOfMonth = content[readed]; readed++;
-                            byte month =  content[readed]; readed++;
-
-                            UInt16 year = Read16(content, readed); readed += 2;
-
-                            byte hour = content[readed]; readed++;
-                            byte minute = content[readed]; readed++;
-                            byte second = content[readed]; readed++;
-
-                            currentInterruptInfo.InterruptTime = new DateTime(year, month, dayOfMonth, hour, minute, second);
-
-                        }
-                        break;
-
-                    case LogRecordType.SystemTemperature:
-                        {
-                            System.Diagnostics.Debug.Assert(currentInterruptInfo != null);
-
-                            // далее идут два байта температуры
-                            byte value = content[readed]; readed++;
-                            byte fract = content[readed]; readed++;
-
-                            float fVal = value * 100 + fract;
-                            fVal /= 100;
-
-                            currentInterruptInfo.SystemTemperature = fVal;
-                        }
-                        break;
-
-                    case LogRecordType.InterruptRecordBegin:
-                        {
-                            System.Diagnostics.Debug.Assert(currentInterruptInfo != null);
-
-                            curRecord = new InterruptRecord();
-                            curRecord.InterruptInfo = currentInterruptInfo;
-                        }
-                        break;
-
-                    case LogRecordType.ChannelNumber:
-                        {
-                            System.Diagnostics.Debug.Assert(curRecord != null);
-
-                            // далее идёт байт номера канала
-                            curRecord.ChannelNumber = content[readed]; readed++;
-                        }
-                        break;
-
-                    case LogRecordType.RodPosition:
-                        {
-                            System.Diagnostics.Debug.Assert(curRecord != null);
-
-                            // далее идёт позиция штанги
-                            curRecord.RodPosition = (RodPosition) content[readed]; readed++;
-                        }
-                        break;
-
-                    case LogRecordType.MoveTime:
-                        {
-                            System.Diagnostics.Debug.Assert(curRecord != null);
-
-                            // далее идут четыре байта времени движения штанги
-                            curRecord.MoveTime = Read32(content, readed); readed += 4;
-
-                        }
-                        break;
-
-                    case LogRecordType.Motoresource:
-                        {
-                            System.Diagnostics.Debug.Assert(curRecord != null);
-
-                            // далее идут 4 байта моторесурса
-                            curRecord.Motoresource = Read32(content, readed); readed += 4;
-
-                        }
-                        break;
-
-                    case LogRecordType.CompareResult:
-                        {
-                            System.Diagnostics.Debug.Assert(curRecord != null);
-
-                            // байт результатов сравнения с эталоном
-                            curRecord.EthalonCompareResult = (EthalonCompareResult) content[readed]; readed++;
-                        }
-                        break;
-
-                    case LogRecordType.InterruptDataBegin:
-                        {
-                            System.Diagnostics.Debug.Assert(curRecord != null);
-
-                            // начало данных по прерыванию
-                            curRecord.InterruptData.Clear();
-
-                            // следом идут 2 байта длины данных
-                            int dataLen = Read16(content, readed); readed += 2;
-
-                            // далее идут пачки по 4 байта записей по прерыванию
-                            for(int k=0;k<dataLen;k++)
+                    switch (recType)
+                    {
+                        case LogRecordType.InterruptInfoBegin:
                             {
-                                int curInterruptData = Read32(content, readed); readed += 4;                               
-                                curRecord.InterruptData.Add(curInterruptData);
+                                currentInterruptInfo = new InterruptInfo();
+                            }
+                            break;
 
-                            } // for
-                        }
-                        break;
+                        case LogRecordType.InterruptTime:
+                            {
+                                System.Diagnostics.Debug.Assert(currentInterruptInfo != null);
 
-                    case LogRecordType.InterruptDataEnd:
-                        {
-                            // конец данных
-                        }
-                        break;
+                                // далее идут 7 байт времени
+                                byte dayOfMonth = content[readed]; readed++;
+                                byte month = content[readed]; readed++;
 
-                    case LogRecordType.InterruptRecordEnd:
-                        {
-                            AddInterruptRecordToList(curRecord);
-                        }
-                        break;
+                                UInt16 year = Read16(content, readed); readed += 2;
 
-                    case LogRecordType.InterruptInfoEnd:
-                        {
-                            currentInterruptInfo = null;
-                        }
-                        break;
-                } // switch
-            } // while
+                                byte hour = content[readed]; readed++;
+                                byte minute = content[readed]; readed++;
+                                byte second = content[readed]; readed++;
 
+                                currentInterruptInfo.InterruptTime = new DateTime(year, month, dayOfMonth, hour, minute, second);
+
+                            }
+                            break;
+
+                        case LogRecordType.SystemTemperature:
+                            {
+                                System.Diagnostics.Debug.Assert(currentInterruptInfo != null);
+
+                                // далее идут два байта температуры
+                                byte value = content[readed]; readed++;
+                                byte fract = content[readed]; readed++;
+
+                                float fVal = value * 100 + fract;
+                                fVal /= 100;
+
+                                currentInterruptInfo.SystemTemperature = fVal;
+                            }
+                            break;
+
+                        case LogRecordType.InterruptRecordBegin:
+                            {
+                                System.Diagnostics.Debug.Assert(currentInterruptInfo != null);
+
+                                curRecord = new InterruptRecord();
+                                curRecord.InterruptInfo = currentInterruptInfo;
+                            }
+                            break;
+
+                        case LogRecordType.ChannelNumber:
+                            {
+                                System.Diagnostics.Debug.Assert(curRecord != null);
+
+                                // далее идёт байт номера канала
+                                curRecord.ChannelNumber = content[readed]; readed++;
+                            }
+                            break;
+
+                        case LogRecordType.RodPosition:
+                            {
+                                System.Diagnostics.Debug.Assert(curRecord != null);
+
+                                // далее идёт позиция штанги
+                                curRecord.RodPosition = (RodPosition)content[readed]; readed++;
+                            }
+                            break;
+
+                        case LogRecordType.MoveTime:
+                            {
+                                System.Diagnostics.Debug.Assert(curRecord != null);
+
+                                // далее идут четыре байта времени движения штанги
+                                curRecord.MoveTime = Read32(content, readed); readed += 4;
+
+                            }
+                            break;
+
+                        case LogRecordType.Motoresource:
+                            {
+                                System.Diagnostics.Debug.Assert(curRecord != null);
+
+                                // далее идут 4 байта моторесурса
+                                curRecord.Motoresource = Read32(content, readed); readed += 4;
+
+                            }
+                            break;
+
+                        case LogRecordType.EthalonNumber:
+                            {
+                                System.Diagnostics.Debug.Assert(curRecord != null);
+
+                                // байт номера эталона
+                                curRecord.EthalonCompareNumber = (EthalonCompareNumber)content[readed]; readed++;
+
+                            }
+                            break;
+
+                        case LogRecordType.CompareResult:
+                            {
+                                System.Diagnostics.Debug.Assert(curRecord != null);
+
+                                // байт результатов сравнения с эталоном
+                                curRecord.EthalonCompareResult = (EthalonCompareResult)content[readed]; readed++;
+                            }
+                            break;
+
+                        case LogRecordType.InterruptDataBegin:
+                            {
+                                System.Diagnostics.Debug.Assert(curRecord != null);
+
+                                // начало данных по прерыванию
+                                curRecord.InterruptData.Clear();
+
+                                // следом идут 2 байта длины данных
+                                int dataLen = Read16(content, readed); readed += 2;
+
+                                // далее идут пачки по 4 байта записей по прерыванию
+                                for (int k = 0; k < dataLen; k++)
+                                {
+                                    int curInterruptData = Read32(content, readed); readed += 4;
+                                    curRecord.InterruptData.Add(curInterruptData);
+
+                                } // for
+                            }
+                            break;
+
+                        case LogRecordType.InterruptDataEnd:
+                            {
+                                // конец данных
+                            }
+                            break;
+
+                        case LogRecordType.InterruptRecordEnd:
+                            {
+                                AddInterruptRecordToList(curRecord);
+                            }
+                            break;
+
+                        case LogRecordType.InterruptInfoEnd:
+                            {
+                                currentInterruptInfo = null;
+                            }
+                            break;
+                    } // switch
+                } // while
+            }
+            catch
+            {
+                this.plEmptySDWorkspace.BringToFront();
+                MessageBox.Show("Ошибка разбора лог-файла!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            this.logDataGrid.BringToFront();
         }
 
         private void AddInterruptRecordToList(InterruptRecord record)
@@ -371,13 +392,66 @@ namespace UROVConfig
             if (record == null)
                 return;
 
-            //TODO: Тут добавление в список в таблицу !!!
+            //Тут добавление в список в таблицу
+            int rowNumber = this.logDataGrid.Rows.Add();
+
+            DataGridViewRow row = this.logDataGrid.Rows[rowNumber];
+            row.Tag = record;
+
+            row.DefaultCellStyle.BackColor = rowNumber % 2 == 0 ? Color.LightGray : Color.White;
+
+            string cellText = (rowNumber+1).ToString();            
+            row.Cells["Num"].Value = cellText;
+            row.Cells["Time"].Value = record.InterruptInfo.InterruptTime.ToString("dd.MM.yyyy HH:mm:ss");
+            row.Cells["Temp"].Value = record.InterruptInfo.SystemTemperature.ToString("0.00") + " °C";
+            row.Cells["Channel"].Value = (1 + record.ChannelNumber).ToString();
+            row.Cells["Rod"].Value = EnumHelpers.GetEnumDescription(record.RodPosition);
+            row.Cells["Compare"].Value = EnumHelpers.GetEnumDescription(record.EthalonCompareResult);
+            row.Cells["Etl"].Value = EnumHelpers.GetEnumDescription(record.EthalonCompareNumber);
+
+            if (record.EthalonCompareResult == EthalonCompareResult.MatchEthalon)
+                row.Cells["Compare"].Style.BackColor = Color.LightGreen;
+            else
+                row.Cells["Compare"].Style.BackColor = Color.LightSalmon;
+
+
+            if(record.RodPosition == RodPosition.Broken)
+                row.Cells["Rod"].Style.BackColor = Color.LightSalmon;
+            else
+                row.Cells["Rod"].Style.BackColor = Color.White;
+
+            int resMax = 1;
+            switch(record.ChannelNumber)
+            {
+                case 0:
+                    resMax = Config.Instance.MotoresourceMax1;
+                    break;
+                case 1:
+                    resMax = Config.Instance.MotoresourceMax2;
+                    break;
+                case 2:
+                    resMax = Config.Instance.MotoresourceMax3;
+                    break;
+            }
+
+            if (resMax < 1)
+                resMax = 1;
+
+            float motoPercents = (record.Motoresource * 100.0f) / resMax;
+
+            row.Cells["Motoresource"].Value = record.Motoresource.ToString() + " (" + motoPercents.ToString("0.00") + "%)";
+
+            row.Cells["Pulses"].Value = record.InterruptData.Count.ToString();
+
+            row.Cells["Btn"].Value = "Просмотр";
+
+
         }
 
         private void ClearInterruptsList()
         {
-            this.richTextBoxFileView.Text = "";
-            //TODO: Тут очистка таблицы!!!
+            // Тут очистка таблицы
+            this.logDataGrid.Rows.Clear();
         }
 
         private void SaveEthalon(string fname, List<byte> content)
@@ -952,7 +1026,7 @@ namespace UROVConfig
         {
             this.treeView.Nodes[0].Nodes.Clear();
             this.treeViewSD.Nodes.Clear();
-            this.richTextBoxFileView.Clear();
+            this.ClearInterruptsList();
             dateTimeFromControllerReceived = false;
             tbFirmwareVersion.Text = "";
             tbFREERAM.Text = "";
@@ -1178,7 +1252,7 @@ namespace UROVConfig
 
             plMainSettings.Dock = DockStyle.Fill;
             this.plSDSettings.Dock = DockStyle.Fill;
-            this.richTextBoxFileView.Dock = DockStyle.Fill;
+            this.logDataGrid.Dock = DockStyle.Fill;
             this.plEthalonChart.Dock = DockStyle.Fill;
             this.plEmptySDWorkspace.Dock = DockStyle.Fill;
             this.plEmptySDWorkspace.BringToFront();
@@ -2335,6 +2409,133 @@ namespace UROVConfig
         private void treeViewSD_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             RequestFile(treeViewSD.SelectedNode);
+        }
+
+        private void ShowChart(InterruptRecord record)
+        {
+            System.Diagnostics.Debug.Assert(record != null);
+
+            ViewChartForm vcf = new ViewChartForm();
+
+            vcf.lblCaption.Text = "Срабатывание от " + record.InterruptInfo.InterruptTime.ToString("dd.MM.yyyy HH:mm:ss");
+
+            System.Windows.Forms.DataVisualization.Charting.Series s = vcf.chart.Series[0];
+            s.Points.Clear();
+
+            System.Windows.Forms.DataVisualization.Charting.Series s2 = vcf.chart.Series[1];
+            s2.Points.Clear();
+
+            // тут смотрим - есть есть сравнение с файлом эталона - получаем список его прерываний
+            List<int> ethalonData = null;
+            if(record.EthalonCompareNumber != EthalonCompareNumber.NoEthalon)
+            {
+                switch(record.EthalonCompareNumber)
+                {
+                    case EthalonCompareNumber.E1down:
+                        ethalonData = this.ethalon0DwnData;
+                        break;
+                    case EthalonCompareNumber.E1up:
+                        ethalonData = this.ethalon0UpData;
+                        break;
+                    case EthalonCompareNumber.E2down:
+                        ethalonData = this.ethalon1DwnData;
+                        break;
+                    case EthalonCompareNumber.E2up:
+                        ethalonData = this.ethalon1UpData;
+                        break;
+                    case EthalonCompareNumber.E3down:
+                        ethalonData = this.ethalon2DwnData;
+                        break;
+                    case EthalonCompareNumber.E3up:
+                        ethalonData = this.ethalon2UpData;
+                        break;
+                }
+            }
+
+            int xStep = 1;
+
+            List<int> timeList = record.InterruptData;
+
+            // получаем максимальное время импульса - это будет 100% по оси Y
+            int maxPulseTime = 0;
+            for (int i = 1; i < timeList.Count; i++)
+            {
+                maxPulseTime = Math.Max(maxPulseTime, (timeList[i] - timeList[i - 1]));
+            }
+
+            int endStop = timeList.Count;
+
+            if (ethalonData != null)
+            {
+                for (int i = 1; i < ethalonData.Count; i++)
+                {
+                    maxPulseTime = Math.Max(maxPulseTime, (ethalonData[i] - ethalonData[i - 1]));
+                }
+
+                endStop = Math.Min(endStop, ethalonData.Count);
+            }
+
+
+            double xCoord = 0;
+
+            // теперь считаем все остальные точки
+            for (int i = 1; i < endStop; i++)
+            {
+                int pulseTime = timeList[i] - timeList[i - 1];
+                pulseTime *= 100;
+
+                int pulseTimePercents = pulseTime / maxPulseTime;
+                pulseTimePercents = 100 - pulseTimePercents;
+
+
+                System.Windows.Forms.DataVisualization.Charting.DataPoint pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint();
+                pt.XValue = xCoord;
+                pt.SetValueY(pulseTimePercents);
+
+                xCoord += xStep;
+
+                s.Points.Add(pt);
+
+            } // for
+
+            if (ethalonData != null)
+            {
+                xCoord = 0;
+
+                // считаем график эталона
+                for (int i = 1; i < endStop; i++)
+                {
+                    int pulseTime = ethalonData[i] - ethalonData[i - 1];
+                    pulseTime *= 100;
+
+                    int pulseTimePercents = pulseTime / maxPulseTime;
+                    pulseTimePercents = 100 - pulseTimePercents;
+
+
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint pt = new System.Windows.Forms.DataVisualization.Charting.DataPoint();
+                    pt.XValue = xCoord;
+                    pt.SetValueY(pulseTimePercents);
+
+                    xCoord += xStep;
+
+                    s2.Points.Add(pt);
+
+                } // for
+            }
+
+                vcf.ShowDialog();
+
+        }
+
+        private void logDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                    e.RowIndex >= 0)
+            {
+                ShowChart(senderGrid.Rows[e.RowIndex].Tag as InterruptRecord);
+            }
         }
     }
 

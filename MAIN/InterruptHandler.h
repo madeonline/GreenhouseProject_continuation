@@ -24,6 +24,22 @@ typedef enum
   
 } EthalonCompareResult;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  ecnNoEthalon,
+  
+  ecnE1up,
+  ecnE1down,
+
+  ecnE2up,
+  ecnE2down,
+
+  ecnE3up,
+  ecnE3down,
+
+  
+} EthalonCompareNumber;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 struct InterruptEventSubscriber
 {
   // вызывается, когда прерывания на нужном номере завершены, и накоплена статистика
@@ -47,8 +63,8 @@ private:
 
   static void normalizeList(InterruptTimeList& list);
 
-  static void writeLogRecord(uint8_t channelNumber, InterruptTimeList& _list, EthalonCompareResult compareResult);
-  static void writeToLog(InterruptTimeList& lst1, InterruptTimeList& lst2, InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3);
+  static void writeLogRecord(uint8_t channelNumber, InterruptTimeList& _list, EthalonCompareResult compareResult, EthalonCompareNumber num);
+  static void writeToLog(InterruptTimeList& lst1, InterruptTimeList& lst2, InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3,EthalonCompareNumber num1,EthalonCompareNumber num2, EthalonCompareNumber num3);
   static void writeRodPositionToLog(uint8_t channelNumber);
 };
 //--------------------------------------------------------------------------------------------------------------------------------------

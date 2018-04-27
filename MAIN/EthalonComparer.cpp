@@ -5,12 +5,14 @@
 #include "Settings.h"
 #include "FileUtils.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t channelNumber)
+EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t channelNumber, EthalonCompareNumber& compareNumber)
 {
     DBGLN("");
     DBG(F("Compare pulses #"));
     DBG(channelNumber);
     DBGLN(F(" with ethalon..."));
+
+    compareNumber = ecnNoEthalon;
     
     if(list.size() < 2)
     {
@@ -53,11 +55,53 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
 
   #ifndef IGNORE_ROD_POSITION  
     if(rodPos == rpUp) // штанга в верхней позиции, значит, она поднималась
+    {
       fileName += ETHALON_UP_POSTFIX;
+      switch(channelNumber)
+      {
+        case 0:
+          compareNumber = ecnE1up;
+        break;
+        case 1:
+          compareNumber = ecnE2up;
+        break;
+        case 2:
+          compareNumber = ecnE3up;
+        break;
+      }
+    }
     else
+    {
       fileName += ETHALON_DOWN_POSTFIX;
+      switch(channelNumber)
+      {
+        case 0:
+          compareNumber = ecnE1down;
+        break;
+        case 1:
+          compareNumber = ecnE2down;
+        break;
+        case 2:
+          compareNumber = ecnE3down;
+        break;
+      }
+    }
   #else
+  {
     fileName += ETHALON_UP_POSTFIX;
+      switch(channelNumber)
+      {
+        case 0:
+          compareNumber = ecnE1up;
+        break;
+        case 1:
+          compareNumber = ecnE2up;
+        break;
+        case 2:
+          compareNumber = ecnE3up;
+        break;
+      }    
+  }
   #endif
   
   fileName += ETHALON_FILE_EXT;
@@ -65,6 +109,8 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
   if(!SD.exists(fileName.c_str()))
   {
     DBGLN(F("COMPARE_RESULT_NoEthalonFound 1"));
+
+    compareNumber = ecnNoEthalon;
     return COMPARE_RESULT_NoEthalonFound; // не найдено эталона для канала
   }
    
@@ -88,6 +134,8 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
   else
   {
     DBGLN(F("COMPARE_RESULT_NoEthalonFound 2"));
+
+    compareNumber = ecnNoEthalon;
     return COMPARE_RESULT_NoEthalonFound; // не найдено эталона для канала
   }
   

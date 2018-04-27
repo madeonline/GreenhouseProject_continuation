@@ -133,7 +133,7 @@ void InterruptHandlerClass::writeRodPositionToLog(uint8_t channelNumber)
   */
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeList& _list, EthalonCompareResult compareResult)
+void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeList& _list, EthalonCompareResult compareResult, EthalonCompareNumber num)
 {
   if(_list.size() < 2) // ничего в списке прерываний нет
     return;
@@ -186,6 +186,11 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
   memcpy(&(workBuff[1]),&motoresource,4);
   Logger.write(workBuff,5);  
 
+  // пишем номер эталона, с которым сравнивали
+  workBuff[0] = recordEthalonNumber;
+  workBuff[1] = num;
+  Logger.write(workBuff,2);
+  
   // пишем результат сравнения с эталоном для канала
   /*
   line = "[COMPARE_RESULT]";
@@ -193,6 +198,7 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
   
   Logger.writeLine(line);
   */
+  
   workBuff[0] = recordCompareResult;
   workBuff[1] = compareResult;
   Logger.write(workBuff,2);
@@ -232,7 +238,8 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
     
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-void InterruptHandlerClass::writeToLog(InterruptTimeList& lst1, InterruptTimeList& lst2, InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3)
+void InterruptHandlerClass::writeToLog(InterruptTimeList& lst1, InterruptTimeList& lst2, InterruptTimeList& lst3, EthalonCompareResult res1, EthalonCompareResult res2, EthalonCompareResult res3
+,EthalonCompareNumber num1,EthalonCompareNumber num2, EthalonCompareNumber num3)
 {
 
   uint8_t workBuff[10] = {0};
@@ -288,17 +295,17 @@ void InterruptHandlerClass::writeToLog(InterruptTimeList& lst1, InterruptTimeLis
   // теперь смотрим, в каких списках есть данные, и пишем записи в лог
   if(lst1.size() > 1)
   {
-    writeLogRecord(0,lst1,res1); 
+    writeLogRecord(0,lst1,res1,num1); 
   } // if
 
   if(lst2.size() > 1)
   {
-    writeLogRecord(1,lst2,res2); 
+    writeLogRecord(1,lst2,res2,num2); 
   } // if
 
   if(lst3.size() > 1)
   {
-    writeLogRecord(2,lst3,res3);
+    writeLogRecord(2,lst3,res3,num3);
   } // if
 
 
@@ -354,6 +361,8 @@ void InterruptHandlerClass::update()
      EthalonCompareResult compareRes1 = COMPARE_RESULT_NoSourcePulses;
      EthalonCompareResult compareRes2 = COMPARE_RESULT_NoSourcePulses;
      EthalonCompareResult compareRes3 = COMPARE_RESULT_NoSourcePulses;
+
+     EthalonCompareNumber compareNumber1,compareNumber2,compareNumber3;
      
     bool needToLog = false;
 
@@ -369,7 +378,7 @@ void InterruptHandlerClass::update()
       needToLog = true;
         
        // здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные
-       compareRes1 = EthalonComparer::Compare(copyList1, 0);
+       compareRes1 = EthalonComparer::Compare(copyList1, 0,compareNumber1);
 
        if(compareRes1 == COMPARE_RESULT_MatchEthalon)
         {}
@@ -388,7 +397,7 @@ void InterruptHandlerClass::update()
       needToLog = true;
        
        // здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные
-       compareRes2 = EthalonComparer::Compare(copyList2, 1);
+       compareRes2 = EthalonComparer::Compare(copyList2, 1,compareNumber2);
        
        if(compareRes2 == COMPARE_RESULT_MatchEthalon)
         {}
@@ -407,7 +416,7 @@ void InterruptHandlerClass::update()
       needToLog = true;
        
        // здесь мы можем обрабатывать список сами - в нём ЕСТЬ данные
-       compareRes3 = EthalonComparer::Compare(copyList3, 2);
+       compareRes3 = EthalonComparer::Compare(copyList3, 2,compareNumber3);
 
        if(compareRes3 == COMPARE_RESULT_MatchEthalon)
         {}
@@ -419,7 +428,7 @@ void InterruptHandlerClass::update()
     if(needToLog)
     {
       // надо записать в лог дату срабатывания системы
-      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3, compareRes1, compareRes2, compareRes3);     
+      InterruptHandlerClass::writeToLog(copyList1, copyList2, copyList3, compareRes1, compareRes2, compareRes3,compareNumber1,compareNumber2,compareNumber3);     
     } // needToLog
     
 
