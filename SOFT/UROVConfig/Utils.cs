@@ -569,6 +569,8 @@ namespace UROVConfig
             delta1 = 0;
             delta2 = 0;
             delta3 = 0;
+
+            controllerGUID = "";
         }
 
         private int motoresourceCurrent1 = 0;
@@ -602,6 +604,9 @@ namespace UROVConfig
         public int Delta1 { get { return delta1; } set { delta1 = value; } }
         public int Delta2 { get { return delta2; } set { delta2 = value; } }
         public int Delta3 { get { return delta3; } set { delta3 = value; } }
+
+        private string controllerGUID = "";
+        public string ControllerGUID { get { return controllerGUID; } set { controllerGUID = value; } }
 
 
     }

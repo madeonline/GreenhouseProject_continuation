@@ -23,6 +23,7 @@ const char PULSES_COMMAND[] PROGMEM = "PULSES"; // получить импуль
 const char DELTA_COMMAND[] PROGMEM = "DELTA"; // получить дельты по каналам
 const char INDUCTIVE_COMMAND[] PROGMEM = "IND"; // получить состояние индуктивных датчиков
 const char VOLTAGE_COMMAND[] PROGMEM = "VDATA"; // получить вольтаж на входах
+const char UUID_COMMAND[] PROGMEM = "UUID"; // получить уникальный идентификатор контроллера
 //--------------------------------------------------------------------------------------------------------------------------------------
 CoreCommandBuffer Commands(&Serial);
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -315,6 +316,12 @@ void CommandHandlerClass::processCommand(const String& command,Stream* pStream)
           
         } // DELTA_COMMAND       
         else
+        if(!strcmp_P(commandName, UUID_COMMAND))
+        {
+            commandHandled = getUUID(commandName,cParser,pStream);                    
+          
+        } // UUID_COMMAND       
+        else
         if(!strcmp_P(commandName, MOTORESOURCE_CURRENT_COMMAND))
         {
             commandHandled = getMOTORESOURCE_CURRENT(commandName,cParser,pStream);                    
@@ -504,6 +511,21 @@ bool CommandHandlerClass::getINDUCTIVE(const char* commandPassed, const CommandP
   pStream->print(CORE_COMMAND_PARAM_DELIMITER);
 
   pStream->println(Settings.getInductiveSensorState(2));
+
+  return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::getUUID(const char* commandPassed, const CommandParser& parser, Stream* pStream)
+{
+  if(parser.argsCount() < 2)
+    return false;  
+
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+
+  pStream->print(commandPassed);
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  
+  pStream->println(Settings.getUUID(parser.getArg(1)));
 
   return true;
 }

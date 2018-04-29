@@ -951,17 +951,19 @@ namespace UROVConfig
 
             btnViewSDFile.Enabled = treeViewSD.SelectedNode != null;
             btnDeleteSDFile.Enabled = btnViewSDFile.Enabled;
-           
+
 
             if (isConnected)
             {
                 this.btnConnect.ImageIndex = 1;
                 this.btnConnect.Text = "Соединено";
+                connectStatusMessage.Text = "Соединено.";
             }
             else
             {
                this.btnConnect.Text = "Соединить";
                 this.btnConnect.ImageIndex = 0; // коннект оборвался
+                connectStatusMessage.Text = "Нет соединения.";
             }
 
             dateTimeFromControllerReceived = false;
@@ -982,6 +984,8 @@ namespace UROVConfig
                 InitTreeView();
 
                 // добавляем нужные команды для обработки сразу после коннекта
+                PushCommandToQueue(GET_PREFIX + "UUID" + PARAM_DELIMITER + GenerateUUID(), ParseAskUUID);
+
                 PushCommandToQueue(GET_PREFIX + "DATETIME", ParseAskDatetime);
                 PushCommandToQueue(GET_PREFIX + "FREERAM", ParseAskFreeram);
                 PushCommandToQueue(GET_PREFIX + "RES_CUR", ParseAskMotoresurceCurrent, BeforeAskMotoresourceCurrent);
@@ -1007,6 +1011,20 @@ namespace UROVConfig
 
 
 
+        }
+
+        private void ParseAskUUID(Answer a)
+        {
+            if(a.IsOkAnswer)
+            {
+                Config.Instance.ControllerGUID = a.Params[1];
+                connectStatusMessage.Text = "Соединено, контроллер № " + Config.Instance.ControllerGUID;
+            }
+        }
+
+        private string GenerateUUID()
+        {
+            return Guid.NewGuid().ToString("N");
         }
 
         private void RequestEthalons()

@@ -17,6 +17,49 @@ SettingsClass::SettingsClass()
   inductiveSensorState1 = inductiveSensorState2 = inductiveSensorState3 = HIGH;
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+String SettingsClass::getUUID(const char* passedUUID)
+{
+    String savedUUID;
+    uint16_t addr = UUID_STORE_ADDRESS;
+    uint8_t header1 = eeprom->read(addr); addr++;
+    uint8_t header2 = eeprom->read(addr); addr++;
+    uint8_t header3 = eeprom->read(addr); addr++;
+
+    if(!(header1 == RECORD_HEADER1 && header2 == RECORD_HEADER2 && header3 == RECORD_HEADER3))
+    {
+      savedUUID = passedUUID;
+
+      addr = UUID_STORE_ADDRESS;
+      eeprom->write(addr,RECORD_HEADER1); addr++;
+      eeprom->write(addr,RECORD_HEADER2); addr++;
+      eeprom->write(addr,RECORD_HEADER3); addr++;
+
+      uint8_t written = 0;
+      for(int i=0;i<savedUUID.length();i++)
+      {
+        eeprom->write(addr,savedUUID[i]); 
+        addr++;
+        written++;
+      }
+
+      for(int i=written;i<32;i++)
+      {
+         eeprom->write(addr,'\0'); 
+         addr++;
+      }
+
+      return savedUUID;
+    }
+
+    // есть сохранённый GUID, читаем его
+    for(int i=0;i<32;i++)
+    {
+      savedUUID += (char) eeprom->read(addr); addr++;
+    }
+
+    return savedUUID;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 uint8_t SettingsClass::getInductiveSensorState(uint8_t channelNum)
 {
   switch(channelNum)

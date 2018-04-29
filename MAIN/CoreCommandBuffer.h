@@ -82,6 +82,8 @@ class CommandHandlerClass
   bool getINDUCTIVE(const char* commandPassed, const CommandParser& parser, Stream* pStream);
   bool getVOLTAGE(const char* commandPassed, const CommandParser& parser, Stream* pStream);
 
+  bool getUUID(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+
 
   bool printBackSETResult(bool isOK, const char* command, Stream* pStream);
     

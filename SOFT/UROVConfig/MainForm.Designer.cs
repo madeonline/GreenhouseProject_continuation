@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Контроллер");
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -40,7 +41,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusProgressMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -60,8 +60,11 @@
             this.ps74880ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ps115200ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ps250000ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnDisconnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnSetDateTime = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnAbout = new System.Windows.Forms.ToolStripButton();
             this.toolbarImages = new System.Windows.Forms.ImageList(this.components);
             this.tmProcessCommandsTimer = new System.Windows.Forms.Timer(this.components);
             this.tmGetSensorsData = new System.Windows.Forms.Timer(this.components);
@@ -74,10 +77,15 @@
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.treeViewSD = new System.Windows.Forms.TreeView();
             this.sdImagesNormal = new System.Windows.Forms.ImageList(this.components);
+            this.logDataGrid = new System.Windows.Forms.DataGridView();
+            this.Btn = new System.Windows.Forms.DataGridViewButtonColumn();
             this.plEmptySDWorkspace = new System.Windows.Forms.Panel();
             this.plEthalonChart = new System.Windows.Forms.Panel();
             this.ethalonChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.toolStripSD = new System.Windows.Forms.ToolStrip();
+            this.btnListSDFiles = new System.Windows.Forms.ToolStripButton();
+            this.btnViewSDFile = new System.Windows.Forms.ToolStripButton();
+            this.btnDeleteSDFile = new System.Windows.Forms.ToolStripButton();
             this.plMainSettings = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.plInfo = new System.Windows.Forms.Panel();
@@ -167,8 +175,7 @@
             this.tmDateTime = new System.Windows.Forms.Timer(this.components);
             this.tmEnumComPorts = new System.Windows.Forms.Timer(this.components);
             this.tmPeriodicCommandsTimer = new System.Windows.Forms.Timer(this.components);
-            this.logDataGrid = new System.Windows.Forms.DataGridView();
-            this.Btn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.connectStatusMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -187,12 +194,6 @@
             this.Rod = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Etl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Compare = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnListSDFiles = new System.Windows.Forms.ToolStripButton();
-            this.btnViewSDFile = new System.Windows.Forms.ToolStripButton();
-            this.btnDeleteSDFile = new System.Windows.Forms.ToolStripButton();
-            this.btnDisconnect = new System.Windows.Forms.ToolStripButton();
-            this.btnSetDateTime = new System.Windows.Forms.ToolStripButton();
-            this.btnAbout = new System.Windows.Forms.ToolStripButton();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -210,6 +211,7 @@
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logDataGrid)).BeginInit();
             this.plEthalonChart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ethalonChart)).BeginInit();
             this.toolStripSD.SuspendLayout();
@@ -248,12 +250,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta1)).BeginInit();
             this.panel12.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectStatusMessage,
             this.statusProgressMessage,
             this.statusProgressBar});
             this.statusStrip.Location = new System.Drawing.Point(0, 749);
@@ -428,15 +430,49 @@
             this.ps250000ToolStripMenuItem.Text = "250000";
             this.ps250000ToolStripMenuItem.Click += new System.EventHandler(this.ChangePortSpeed);
             // 
+            // btnDisconnect
+            // 
+            this.btnDisconnect.Enabled = false;
+            this.btnDisconnect.Image = ((System.Drawing.Image)(resources.GetObject("btnDisconnect.Image")));
+            this.btnDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDisconnect.Name = "btnDisconnect";
+            this.btnDisconnect.Size = new System.Drawing.Size(66, 67);
+            this.btnDisconnect.Text = "Разорвать";
+            this.btnDisconnect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnDisconnect.ToolTipText = "Разорвать соединение";
+            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 70);
             // 
+            // btnSetDateTime
+            // 
+            this.btnSetDateTime.Enabled = false;
+            this.btnSetDateTime.Image = ((System.Drawing.Image)(resources.GetObject("btnSetDateTime.Image")));
+            this.btnSetDateTime.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSetDateTime.Name = "btnSetDateTime";
+            this.btnSetDateTime.Size = new System.Drawing.Size(75, 67);
+            this.btnSetDateTime.Text = "Дата/время";
+            this.btnSetDateTime.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnSetDateTime.ToolTipText = "Установить дату/время на контроллере";
+            this.btnSetDateTime.Click += new System.EventHandler(this.btnSetDateTime_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 70);
+            // 
+            // btnAbout
+            // 
+            this.btnAbout.Image = ((System.Drawing.Image)(resources.GetObject("btnAbout.Image")));
+            this.btnAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAbout.Name = "btnAbout";
+            this.btnAbout.Size = new System.Drawing.Size(86, 67);
+            this.btnAbout.Text = "О программе";
+            this.btnAbout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
             // toolbarImages
             // 
@@ -605,6 +641,42 @@
             this.sdImagesNormal.Images.SetKeyName(1, "document-open-folder.png");
             this.sdImagesNormal.Images.SetKeyName(2, "list.png");
             // 
+            // logDataGrid
+            // 
+            this.logDataGrid.AllowUserToAddRows = false;
+            this.logDataGrid.AllowUserToDeleteRows = false;
+            this.logDataGrid.AllowUserToResizeRows = false;
+            this.logDataGrid.BackgroundColor = System.Drawing.Color.White;
+            this.logDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.logDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Num,
+            this.Time,
+            this.Temp,
+            this.Motoresource,
+            this.Channel,
+            this.Pulses,
+            this.Rod,
+            this.Etl,
+            this.Compare,
+            this.Btn});
+            this.logDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.logDataGrid.Location = new System.Drawing.Point(17, 20);
+            this.logDataGrid.MultiSelect = false;
+            this.logDataGrid.Name = "logDataGrid";
+            this.logDataGrid.ReadOnly = true;
+            this.logDataGrid.RowHeadersVisible = false;
+            this.logDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.logDataGrid.ShowEditingIcon = false;
+            this.logDataGrid.Size = new System.Drawing.Size(240, 150);
+            this.logDataGrid.TabIndex = 3;
+            this.logDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.logDataGrid_CellContentClick);
+            // 
+            // Btn
+            // 
+            this.Btn.HeaderText = "График";
+            this.Btn.Name = "Btn";
+            this.Btn.ReadOnly = true;
+            // 
             // plEmptySDWorkspace
             // 
             this.plEmptySDWorkspace.Location = new System.Drawing.Point(81, 220);
@@ -646,6 +718,40 @@
             this.toolStripSD.Name = "toolStripSD";
             this.toolStripSD.Size = new System.Drawing.Size(573, 54);
             this.toolStripSD.TabIndex = 4;
+            // 
+            // btnListSDFiles
+            // 
+            this.btnListSDFiles.Image = global::UROVConfig.Properties.Resources.rescan;
+            this.btnListSDFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnListSDFiles.Name = "btnListSDFiles";
+            this.btnListSDFiles.Size = new System.Drawing.Size(75, 51);
+            this.btnListSDFiles.Text = "Перечитать";
+            this.btnListSDFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnListSDFiles.ToolTipText = "Перечитать содержимое SD";
+            this.btnListSDFiles.Click += new System.EventHandler(this.btnListSDFiles_Click);
+            // 
+            // btnViewSDFile
+            // 
+            this.btnViewSDFile.Enabled = false;
+            this.btnViewSDFile.Image = global::UROVConfig.Properties.Resources.view;
+            this.btnViewSDFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnViewSDFile.Name = "btnViewSDFile";
+            this.btnViewSDFile.Size = new System.Drawing.Size(68, 51);
+            this.btnViewSDFile.Text = "Просмотр";
+            this.btnViewSDFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnViewSDFile.Click += new System.EventHandler(this.btnViewSDFile_Click);
+            // 
+            // btnDeleteSDFile
+            // 
+            this.btnDeleteSDFile.Enabled = false;
+            this.btnDeleteSDFile.Image = global::UROVConfig.Properties.Resources.delete;
+            this.btnDeleteSDFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDeleteSDFile.Name = "btnDeleteSDFile";
+            this.btnDeleteSDFile.Size = new System.Drawing.Size(55, 51);
+            this.btnDeleteSDFile.Text = "Удалить";
+            this.btnDeleteSDFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnDeleteSDFile.ToolTipText = "Удалить выбранный файл";
+            this.btnDeleteSDFile.Click += new System.EventHandler(this.btnDeleteSDFile_Click);
             // 
             // plMainSettings
             // 
@@ -1672,41 +1778,11 @@
             this.tmPeriodicCommandsTimer.Interval = 5000;
             this.tmPeriodicCommandsTimer.Tick += new System.EventHandler(this.tmInductiveTimer_Tick);
             // 
-            // logDataGrid
+            // connectStatusMessage
             // 
-            this.logDataGrid.AllowUserToAddRows = false;
-            this.logDataGrid.AllowUserToDeleteRows = false;
-            this.logDataGrid.AllowUserToResizeRows = false;
-            this.logDataGrid.BackgroundColor = System.Drawing.Color.White;
-            this.logDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.logDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Num,
-            this.Time,
-            this.Temp,
-            this.Motoresource,
-            this.Channel,
-            this.Pulses,
-            this.Rod,
-            this.Etl,
-            this.Compare,
-            this.Btn});
-            this.logDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.logDataGrid.Location = new System.Drawing.Point(17, 20);
-            this.logDataGrid.MultiSelect = false;
-            this.logDataGrid.Name = "logDataGrid";
-            this.logDataGrid.ReadOnly = true;
-            this.logDataGrid.RowHeadersVisible = false;
-            this.logDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.logDataGrid.ShowEditingIcon = false;
-            this.logDataGrid.Size = new System.Drawing.Size(240, 150);
-            this.logDataGrid.TabIndex = 3;
-            this.logDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.logDataGrid_CellContentClick);
-            // 
-            // Btn
-            // 
-            this.Btn.HeaderText = "График";
-            this.Btn.Name = "Btn";
-            this.Btn.ReadOnly = true;
+            this.connectStatusMessage.Name = "connectStatusMessage";
+            this.connectStatusMessage.Size = new System.Drawing.Size(98, 17);
+            this.connectStatusMessage.Text = "Нет соединения.";
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -1838,74 +1914,6 @@
             this.Compare.Name = "Compare";
             this.Compare.ReadOnly = true;
             // 
-            // btnListSDFiles
-            // 
-            this.btnListSDFiles.Image = global::UROVConfig.Properties.Resources.rescan;
-            this.btnListSDFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnListSDFiles.Name = "btnListSDFiles";
-            this.btnListSDFiles.Size = new System.Drawing.Size(75, 51);
-            this.btnListSDFiles.Text = "Перечитать";
-            this.btnListSDFiles.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnListSDFiles.ToolTipText = "Перечитать содержимое SD";
-            this.btnListSDFiles.Click += new System.EventHandler(this.btnListSDFiles_Click);
-            // 
-            // btnViewSDFile
-            // 
-            this.btnViewSDFile.Enabled = false;
-            this.btnViewSDFile.Image = global::UROVConfig.Properties.Resources.view;
-            this.btnViewSDFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnViewSDFile.Name = "btnViewSDFile";
-            this.btnViewSDFile.Size = new System.Drawing.Size(68, 51);
-            this.btnViewSDFile.Text = "Просмотр";
-            this.btnViewSDFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnViewSDFile.Click += new System.EventHandler(this.btnViewSDFile_Click);
-            // 
-            // btnDeleteSDFile
-            // 
-            this.btnDeleteSDFile.Enabled = false;
-            this.btnDeleteSDFile.Image = global::UROVConfig.Properties.Resources.delete;
-            this.btnDeleteSDFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnDeleteSDFile.Name = "btnDeleteSDFile";
-            this.btnDeleteSDFile.Size = new System.Drawing.Size(55, 51);
-            this.btnDeleteSDFile.Text = "Удалить";
-            this.btnDeleteSDFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnDeleteSDFile.ToolTipText = "Удалить выбранный файл";
-            this.btnDeleteSDFile.Click += new System.EventHandler(this.btnDeleteSDFile_Click);
-            // 
-            // btnDisconnect
-            // 
-            this.btnDisconnect.Enabled = false;
-            this.btnDisconnect.Image = ((System.Drawing.Image)(resources.GetObject("btnDisconnect.Image")));
-            this.btnDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnDisconnect.Name = "btnDisconnect";
-            this.btnDisconnect.Size = new System.Drawing.Size(66, 67);
-            this.btnDisconnect.Text = "Разорвать";
-            this.btnDisconnect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnDisconnect.ToolTipText = "Разорвать соединение";
-            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
-            // 
-            // btnSetDateTime
-            // 
-            this.btnSetDateTime.Enabled = false;
-            this.btnSetDateTime.Image = ((System.Drawing.Image)(resources.GetObject("btnSetDateTime.Image")));
-            this.btnSetDateTime.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSetDateTime.Name = "btnSetDateTime";
-            this.btnSetDateTime.Size = new System.Drawing.Size(75, 67);
-            this.btnSetDateTime.Text = "Дата/время";
-            this.btnSetDateTime.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnSetDateTime.ToolTipText = "Установить дату/время на контроллере";
-            this.btnSetDateTime.Click += new System.EventHandler(this.btnSetDateTime_Click);
-            // 
-            // btnAbout
-            // 
-            this.btnAbout.Image = ((System.Drawing.Image)(resources.GetObject("btnAbout.Image")));
-            this.btnAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(86, 67);
-            this.btnAbout.Text = "О программе";
-            this.btnAbout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1945,6 +1953,7 @@
             this.splitContainer3.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.logDataGrid)).EndInit();
             this.plEthalonChart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ethalonChart)).EndInit();
             this.toolStripSD.ResumeLayout(false);
@@ -2005,7 +2014,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta1)).EndInit();
             this.panel12.ResumeLayout(false);
             this.panel12.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logDataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2165,6 +2173,7 @@
         private System.Windows.Forms.DataGridViewButtonColumn Btn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
+        private System.Windows.Forms.ToolStripStatusLabel connectStatusMessage;
     }
 }
 

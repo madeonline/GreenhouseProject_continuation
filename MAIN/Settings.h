@@ -49,6 +49,8 @@ class SettingsClass
 
     // состояние индуктивных датчиков
     uint8_t getInductiveSensorState(uint8_t channelNum);
+
+    String getUUID(const char* passedUUID);
     
   private:
 
