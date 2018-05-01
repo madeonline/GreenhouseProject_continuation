@@ -106,6 +106,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transport.cs" />
+    <Compile Include="UploadFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UploadFileDialog.Designer.cs">
+      <DependentUpon>UploadFileDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
     <Compile Include="ViewChartForm.cs">
       <SubType>Form</SubType>
@@ -132,6 +138,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UploadFileDialog.resx">
+      <DependentUpon>UploadFileDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ViewChartForm.resx">
       <DependentUpon>ViewChartForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -181,6 +190,7 @@
     <None Include="Icons\sdimages\rescan.png" />
     <None Include="Icons\sdimages\delete.png" />
     <None Include="Icons\sdimages\view.png" />
+    <None Include="Icons\sdimages\download.png" />
     <Content Include="program.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

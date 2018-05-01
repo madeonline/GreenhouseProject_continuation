@@ -54,6 +54,7 @@ class CommandHandlerClass
   bool getFILE(const char* commandPassed, const CommandParser& parser, Stream* pStream);
   bool getFILESIZE(const char* commandPassed, const CommandParser& parser, Stream* pStream);
   bool setDELFILE(CommandParser& parser, Stream* pStream);
+  bool setUPLOADFILE(CommandParser& parser, Stream* pStream);
   bool getLS(const char* commandPassed, const CommandParser& parser, Stream* pStream);
   
   bool getPIN(const char* commandPassed, const CommandParser& parser, Stream* pStream);

@@ -17,6 +17,7 @@ const char LS_COMMAND[] PROGMEM = "LS"; // отдать список файло�
 const char FILE_COMMAND[] PROGMEM = "FILE"; // отдать содержимое файла
 const char FILESIZE_COMMAND[] PROGMEM = "FILESIZE"; // отдать размер файла
 const char DELFILE_COMMAND[] PROGMEM = "DELFILE"; // удалить файл
+const char UPLOADFILE_COMMAND[] PROGMEM = "UPL"; // загрузить файл
 const char MOTORESOURCE_CURRENT_COMMAND[] PROGMEM = "RES_CUR"; // получить текущий моторесурс по каналам
 const char MOTORESOURCE_MAX_COMMAND[] PROGMEM = "RES_MAX"; // получить максимальный моторесурс по каналам
 const char PULSES_COMMAND[] PROGMEM = "PULSES"; // получить импульсы по каналам
@@ -210,7 +211,20 @@ void CommandHandlerClass::processCommand(const String& command,Stream* pStream)
               // недостаточно параметров
               commandHandled = printBackSETResult(false,commandName,pStream);
             }
-        } // DELFILE_COMMAND               
+        } // DELFILE_COMMAND
+        else
+        if(!strcmp_P(commandName,UPLOADFILE_COMMAND))
+        {
+            if(cParser.argsCount() > 2)
+            {
+              commandHandled = setUPLOADFILE(cParser, pStream);
+            }
+            else
+            {
+              // недостаточно параметров
+              commandHandled = printBackSETResult(false,commandName,pStream);
+            }
+        } // UPLOADFILE_COMMAND                  
         else
         if(!strcmp_P(commandName, PULSES_COMMAND))
         {
@@ -371,6 +385,68 @@ void CommandHandlerClass::onUnknownCommand(const String& command, Stream* outStr
 {
     outStream->print(CORE_COMMAND_ANSWER_ERROR);
     outStream->println(F("UNKNOWN_COMMAND"));  
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+bool CommandHandlerClass::setUPLOADFILE(CommandParser& parser, Stream* pStream)
+{
+  // в первом параметре - длина данных
+  int dataLen = atoi(parser.getArg(1));
+
+  // во втором и последующих - имя файла вместе с путём
+  String filePath;
+  for(size_t i=2;i<parser.argsCount();i++)
+  {
+    if(filePath.length())
+      filePath += "/";
+
+     filePath += parser.getArg(i);
+  }
+
+
+ if(SDInit::sdInitResult)
+ {
+    String dirOnly;
+    int idx = filePath.lastIndexOf("/");
+    if(idx != -1)
+      dirOnly = filePath.substring(0,idx);
+
+    if(dirOnly.length())
+    {
+      SD.mkdir(dirOnly.c_str());
+    }
+
+    SdFile f;
+    f.open(filePath.c_str(),FILE_WRITE | O_TRUNC);
+    
+     for(int i=0;i<dataLen;i++)
+      {
+        while(!pStream->available());
+
+        uint8_t curByte = pStream->read();
+        
+        if(f.isOpen())
+          f.write(curByte);
+      }
+            
+      if(f.isOpen())
+        f.close(); 
+ } // if(SDInit::sdInitResult)
+ else
+ {
+  // не удалось инициализировать SD - просто пропускаем данные файла
+      for(int i=0;i<dataLen;i++)
+      {
+        while(!pStream->available());
+        pStream->read();        
+      }  
+ }
+
+  pStream->print(CORE_COMMAND_ANSWER_OK);
+  pStream->print(parser.getArg(0));
+  pStream->print(CORE_COMMAND_PARAM_DELIMITER);
+  pStream->println(CORE_COMMAND_DONE);
+
+  return true;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 bool CommandHandlerClass::setDELFILE(CommandParser& parser, Stream* pStream)

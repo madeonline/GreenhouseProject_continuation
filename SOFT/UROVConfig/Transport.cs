@@ -43,6 +43,8 @@ namespace UROVConfig
         /// <returns></returns>
         public abstract bool WriteLine(string line);
 
+        public abstract bool Write(byte[] data, int length);
+
         /// <summary>
         /// отсоединяемся
         /// </summary>
@@ -138,6 +140,35 @@ namespace UROVConfig
         public override bool Connected()
         {
             return this.port.IsOpen && !this.hasWriteError;
+        }
+
+        public override bool Write(byte[] data, int length)
+        {
+            try
+            {
+                this.port.Write(data, 0, length);
+            }
+            catch (Exception)
+            {
+                this.hasWriteError = true;
+
+                if (this.port.IsOpen)
+                {
+                    try
+                    {
+                        this.port.Close();
+                    }
+                    catch { }
+                }
+
+                while (port.IsOpen)
+                {
+                    Application.DoEvents();
+                }
+                CallDisconnectEvent();
+                return false;
+            }
+            return true;
         }
 
         public override bool WriteLine(string line)

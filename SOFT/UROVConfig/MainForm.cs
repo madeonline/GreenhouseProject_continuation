@@ -507,7 +507,10 @@ namespace UROVConfig
                 ethalon2UpData = timeList;
             else
             if (fname.EndsWith("ET2DWN.ETL"))
+            {
                 ethalon2DwnData = timeList;
+                ethalonsRequested = true;
+            }
 
 
         }
@@ -530,13 +533,20 @@ namespace UROVConfig
             List<int> timeList = new List<int>();
             for (int i = 0; i < content.Count; i += 4)
             {
-                dt[0] = content[i];
-                dt[1] = content[i + 1];
-                dt[2] = content[i + 2];
-                dt[3] = content[i + 3];
+                try
+                {
+                    dt[0] = content[i];
+                    dt[1] = content[i + 1];
+                    dt[2] = content[i + 2];
+                    dt[3] = content[i + 3];
 
-                int curVal = BitConverter.ToInt32(dt, 0);
-                timeList.Add(curVal);
+                    int curVal = BitConverter.ToInt32(dt, 0);
+                    timeList.Add(curVal);
+                }
+                catch
+                {
+                    break;
+                }
             }
 
             // получаем максимальное время импульса - это будет 100% по оси Y
@@ -783,6 +793,7 @@ namespace UROVConfig
         /// <param name="a"></param>
         public delegate void DataParseFunction(Answer a);
         public delegate void BeforeSendFunction();
+        public delegate void AfterSendFunction();
 
         /// <summary>
         /// Структура команды на обработку
@@ -792,6 +803,7 @@ namespace UROVConfig
             public string CommandToSend;
             public DataParseFunction ParseFunction;
             public BeforeSendFunction BeforeSend;
+            public AfterSendFunction AfterSend;
         };
 
 
@@ -801,12 +813,13 @@ namespace UROVConfig
         /// <param name="cmd">Текстовая команда для контроллера</param>
         /// <param name="act">К какому действию команда привязана</param>
         /// <param name="func">Указатель на функцию-обработчик ответа от контроллера</param>
-        public void PushCommandToQueue(string cmd, DataParseFunction func, BeforeSendFunction before = null)
+        public void PushCommandToQueue(string cmd, DataParseFunction func, BeforeSendFunction before = null, AfterSendFunction after = null)
         {
             QueuedCommand q = new QueuedCommand();
             q.CommandToSend = cmd;
             q.ParseFunction = func;
             q.BeforeSend = before;
+            q.AfterSend = after;
             if (!commandsQueue.Contains(q))
                 commandsQueue.Enqueue(q);
 
@@ -915,7 +928,7 @@ namespace UROVConfig
             }
         }
 
-
+        private bool ethalonsRequested = false;
 
         /// <summary>
         /// Инициализируем необходимое после успешного коннекта
@@ -923,6 +936,9 @@ namespace UROVConfig
         private void InitAfterConnect(bool isConnected)
         {
             Config.Instance.Clear();
+
+            ethalonsRequested = false;
+            inUploadFileToController = false;
 
             nudDelta1.Value = 0;
             nudDelta2.Value = 0;
@@ -1039,7 +1055,6 @@ namespace UROVConfig
             PushCommandToQueue(GET_PREFIX + "FILE|ETL|ET2DWN.ETL", DummyAnswerReceiver, SetSDFileReadingFlagEthalon);
 
         }
-
 
         private void BeforeAskDelta()
         {
@@ -1286,6 +1301,7 @@ namespace UROVConfig
             this.btnConnect.ImageIndex = 0;
             this.btnSetDateTime.ImageIndex = 3;
             this.btnAbout.ImageIndex = 5;
+            this.btnUploadEthalon.ImageIndex = 4;
             this.btnDisconnect.ImageIndex = 6;
 
 
@@ -1322,6 +1338,8 @@ namespace UROVConfig
 
             bool bConnected = IsConnected();
 
+            btnUploadEthalon.Enabled = bConnected && !inUploadFileToController;
+            btnSaveEthalons.Enabled = ethalonsRequested;
             btnSetDateTime.Enabled = bConnected && !inSetDateTimeToController;
             btnSetDateTime2.Enabled = bConnected && !inSetDateTimeToController;
             this.btnDisconnect.Enabled = bConnected && currentTransport != null;
@@ -1554,6 +1572,8 @@ namespace UROVConfig
             currentCommand.BeforeSend?.Invoke();
 
             this.currentTransport.WriteLine(currentCommand.CommandToSend);
+
+            currentCommand.AfterSend?.Invoke();
 
         }
 
@@ -2543,6 +2563,108 @@ namespace UROVConfig
                     e.RowIndex >= 0)
             {
                 ShowChart(senderGrid.Rows[e.RowIndex].Tag as InterruptRecord);
+            }
+        }
+
+        private void SaveEthalonToDisk(string dirName, List<int> data, string filename)
+        {
+            string resultfname = dirName + filename;
+
+            System.IO.BinaryWriter bw;
+            try
+            {
+                bw = new System.IO.BinaryWriter(new System.IO.FileStream(resultfname, System.IO.FileMode.Create));
+
+                for (int i = 0; i < data.Count; i++)
+                    bw.Write(data[i]);
+
+                bw.Close();
+            }
+            catch
+            {
+                return;
+            }
+
+        }
+
+        private void btnSaveEthalons_Click(object sender, EventArgs e)
+        {
+            if(folderBrowserDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            string dir = folderBrowserDialog.SelectedPath;
+
+            if (!dir.EndsWith("\\"))
+                dir += "\\";
+
+            dir += Config.Instance.ControllerGUID + "\\";
+            try
+            {
+                System.IO.Directory.CreateDirectory(dir);
+            }
+            catch
+            {
+                MessageBox.Show("Не получается создать папку \"" + dir + "\"!");
+                return;
+            }
+
+            SaveEthalonToDisk(dir, this.ethalon0UpData, "Канал 1, вверх.ETL");
+            SaveEthalonToDisk(dir, this.ethalon0DwnData, "Канал 1, вниз.ETL");
+
+            SaveEthalonToDisk(dir, this.ethalon1UpData, "Канал 2, вверх.ETL");
+            SaveEthalonToDisk(dir, this.ethalon1DwnData, "Канал 2, вниз.ETL");
+
+            SaveEthalonToDisk(dir, this.ethalon2UpData, "Канал 3, вверх.ETL");
+            SaveEthalonToDisk(dir, this.ethalon2DwnData, "Канал 3, вниз.ETL");
+
+            MessageBox.Show("Эталоны сохранены по адресу \"" + dir + "\".");
+        }
+
+        byte[] dataToSend = null;
+        bool inUploadFileToController = false;
+        private void SendEthalonData()
+        {
+            this.currentTransport.Write(dataToSend, dataToSend.Length);
+            inUploadFileToController = false;
+        }
+
+        private void btnUploadEthalon_Click(object sender, EventArgs e)
+        {
+            UploadFileDialog ufd = new UploadFileDialog();
+            if(ufd.ShowDialog() == DialogResult.OK)
+            {
+                string sourcefilename = ufd.GetSelectedFileName();
+                string targetfilename = ufd.GetTargetFileName();
+                if (sourcefilename.Length < 1)
+                    return;
+
+                try
+                {
+                    dataToSend = System.IO.File.ReadAllBytes(sourcefilename);
+                    ShowWaitCursor(true);
+
+                    inUploadFileToController = true;
+                    PushCommandToQueue(SET_PREFIX + "UPL|" + dataToSend.Length.ToString() + "|" + targetfilename, UploadEthalonCompleted, null, SendEthalonData);
+                }
+                catch
+                {
+                    ShowWaitCursor(false);
+                }
+
+            }
+        }
+
+        private void UploadEthalonCompleted(Answer a)
+        {
+            ShowWaitCursor(false);
+            if(a.IsOkAnswer)
+            {
+                MessageBox.Show("Эталон загружен в контроллер!", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Не удалось загрузить эталон в контроллер!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
