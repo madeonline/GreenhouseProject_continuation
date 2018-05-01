@@ -193,9 +193,9 @@
         private System.Windows.Forms.TextBox filePath;
         private System.Windows.Forms.Button btnSelectFile;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown nudChannelNumber;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox cbRodMove;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        public System.Windows.Forms.NumericUpDown nudChannelNumber;
+        public System.Windows.Forms.ComboBox cbRodMove;
     }
 }

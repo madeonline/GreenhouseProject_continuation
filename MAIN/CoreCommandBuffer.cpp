@@ -402,7 +402,9 @@ bool CommandHandlerClass::setUPLOADFILE(CommandParser& parser, Stream* pStream)
      filePath += parser.getArg(i);
   }
 
-
+  uint16_t reading_timeout = 5000;
+  bool wantBreak = false;
+  
  if(SDInit::sdInitResult)
  {
     String dirOnly;
@@ -417,11 +419,23 @@ bool CommandHandlerClass::setUPLOADFILE(CommandParser& parser, Stream* pStream)
 
     SdFile f;
     f.open(filePath.c_str(),FILE_WRITE | O_TRUNC);
-    
+
+     uint32_t startReadingTime = millis();
+       
      for(int i=0;i<dataLen;i++)
       {
-        while(!pStream->available());
-
+        while(!pStream->available())
+        {
+          if(millis() - startReadingTime > reading_timeout)
+          {
+            wantBreak = true;
+            break;
+          }
+        }
+        if(wantBreak)
+          break;
+          
+        startReadingTime = millis();        
         uint8_t curByte = pStream->read();
         
         if(f.isOpen())
@@ -434,14 +448,32 @@ bool CommandHandlerClass::setUPLOADFILE(CommandParser& parser, Stream* pStream)
  else
  {
   // не удалось инициализировать SD - просто пропускаем данные файла
+      uint32_t startReadingTime = millis();
+      
       for(int i=0;i<dataLen;i++)
       {
-        while(!pStream->available());
+        while(!pStream->available())
+        {
+          if(millis() - startReadingTime > reading_timeout)
+          {
+            wantBreak = true;
+            break;
+          }
+        }
+
+        if(wantBreak)
+          break;
+          
+        startReadingTime = millis(); 
         pStream->read();        
       }  
  }
 
-  pStream->print(CORE_COMMAND_ANSWER_OK);
+  if(wantBreak)
+    pStream->print(CORE_COMMAND_ANSWER_ERROR);
+  else
+    pStream->print(CORE_COMMAND_ANSWER_OK);
+    
   pStream->print(parser.getArg(0));
   pStream->print(CORE_COMMAND_PARAM_DELIMITER);
   pStream->println(CORE_COMMAND_DONE);

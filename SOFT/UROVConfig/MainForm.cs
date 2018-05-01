@@ -482,13 +482,20 @@ namespace UROVConfig
             List<int> timeList = new List<int>();
             for (int i = 0; i < content.Count; i += 4)
             {
-                dt[0] = content[i];
-                dt[1] = content[i + 1];
-                dt[2] = content[i + 2];
-                dt[3] = content[i + 3];
+                try
+                {
+                    dt[0] = content[i];
+                    dt[1] = content[i + 1];
+                    dt[2] = content[i + 2];
+                    dt[3] = content[i + 3];
 
-                int curVal = BitConverter.ToInt32(dt, 0);
-                timeList.Add(curVal);
+                    int curVal = BitConverter.ToInt32(dt, 0);
+                    timeList.Add(curVal);
+                }
+                catch
+                {
+                    break;
+                }
             }
 
             if (fname.EndsWith("ET0UP.ETL"))
@@ -2629,6 +2636,33 @@ namespace UROVConfig
             inUploadFileToController = false;
         }
 
+        private void FillEthalonWithData(List<int> etl, byte[] data)
+        {
+            etl.Clear();
+            byte[] dt = new byte[4];
+            for (int i = 0; i < data.Length; i += 4)
+            {
+                try
+                {
+
+                    dt[0] = data[i];
+                    dt[1] = data[i + 1];
+                    dt[2] = data[i + 2];
+                    dt[3] = data[i + 3];
+
+                    int curVal = BitConverter.ToInt32(dt, 0);
+                    etl.Add(curVal);
+                }
+                catch
+                {
+                    break;
+                }
+            }
+        }
+
+        private int uploadedEthalonChannel = 0;
+        private int uploadedEthalonRod = 0;
+
         private void btnUploadEthalon_Click(object sender, EventArgs e)
         {
             UploadFileDialog ufd = new UploadFileDialog();
@@ -2639,11 +2673,14 @@ namespace UROVConfig
                 if (sourcefilename.Length < 1)
                     return;
 
+
+
                 try
                 {
                     dataToSend = System.IO.File.ReadAllBytes(sourcefilename);
                     ShowWaitCursor(true);
-
+                    uploadedEthalonChannel = Convert.ToInt32(ufd.nudChannelNumber.Value) - 1;
+                    uploadedEthalonRod = ufd.cbRodMove.SelectedIndex;
                     inUploadFileToController = true;
                     PushCommandToQueue(SET_PREFIX + "UPL|" + dataToSend.Length.ToString() + "|" + targetfilename, UploadEthalonCompleted, null, SendEthalonData);
                 }
@@ -2660,10 +2697,44 @@ namespace UROVConfig
             ShowWaitCursor(false);
             if(a.IsOkAnswer)
             {
+                
+                switch(this.uploadedEthalonChannel)
+                {
+                    case 0:
+                        {
+                            if (this.uploadedEthalonRod == 0)
+                                FillEthalonWithData(this.ethalon0UpData, dataToSend);
+                            else
+                                FillEthalonWithData(this.ethalon0DwnData, dataToSend);
+                        }
+                        break;
+
+                    case 1:
+                        {
+                            if (this.uploadedEthalonRod == 0)
+                                FillEthalonWithData(this.ethalon1UpData, dataToSend);
+                            else
+                                FillEthalonWithData(this.ethalon1DwnData, dataToSend);
+                        }
+                        break;
+
+                    case 2:
+                        {
+                            if (this.uploadedEthalonRod == 0)
+                                FillEthalonWithData(this.ethalon2UpData, dataToSend);
+                            else
+                                FillEthalonWithData(this.ethalon2DwnData, dataToSend);
+                        }
+                        break;
+                }
+                dataToSend = null;
+
                 MessageBox.Show("Эталон загружен в контроллер!", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             else
             {
+                dataToSend = null;
                 MessageBox.Show("Не удалось загрузить эталон в контроллер!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
