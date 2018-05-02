@@ -42,8 +42,11 @@ bool CoreCommandBuffer::hasCommand()
     while(pStream->available())
     {
       ch = (char) pStream->read();
+
+      if(ch == '\r')
+        continue;
             
-      if(ch == '\r' || ch == '\n')
+      if(ch == '\n')
       {
         return strBuff->length() > 0; // вдруг лишние управляющие символы придут в начале строки?
       } // if
@@ -389,6 +392,10 @@ void CommandHandlerClass::onUnknownCommand(const String& command, Stream* outStr
 //--------------------------------------------------------------------------------------------------------------------------------------
 bool CommandHandlerClass::setUPLOADFILE(CommandParser& parser, Stream* pStream)
 {
+/*
+  for(size_t i=0;i<parser.argsCount();i++)
+    pStream->println(parser.getArg(i));
+*/  
   // в первом параметре - длина данных
   int dataLen = atoi(parser.getArg(1));
 

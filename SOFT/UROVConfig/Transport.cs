@@ -146,7 +146,12 @@ namespace UROVConfig
         {
             try
             {
-                this.port.Write(data, 0, length);
+                for(int i=0;i<length;i++)
+                {
+                    this.port.Write(data, i, 1);
+                    Thread.Sleep(0);
+                }
+                //this.port.Write(data, 0, length);
             }
             catch (Exception)
             {
