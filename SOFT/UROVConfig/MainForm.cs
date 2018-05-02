@@ -1346,7 +1346,7 @@ namespace UROVConfig
             bool bConnected = IsConnected();
 
             btnUploadEthalon.Enabled = bConnected && !inUploadFileToController;
-            btnSaveEthalons.Enabled = ethalonsRequested;
+            //btnSaveEthalons.Enabled = ethalonsRequested;
             btnSetDateTime.Enabled = bConnected && !inSetDateTimeToController;
             btnSetDateTime2.Enabled = bConnected && !inSetDateTimeToController;
             this.btnDisconnect.Enabled = bConnected && currentTransport != null;
@@ -2572,6 +2572,7 @@ namespace UROVConfig
                 ShowChart(senderGrid.Rows[e.RowIndex].Tag as InterruptRecord);
             }
         }
+        /*
 
         private void SaveEthalonToDisk(string dirName, List<int> data, string filename)
         {
@@ -2593,9 +2594,11 @@ namespace UROVConfig
             }
 
         }
+        */
 
         private void btnSaveEthalons_Click(object sender, EventArgs e)
         {
+            /*
             if(folderBrowserDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
@@ -2626,6 +2629,7 @@ namespace UROVConfig
             SaveEthalonToDisk(dir, this.ethalon2DwnData, "Канал 3, вниз.ETL");
 
             MessageBox.Show("Эталоны сохранены по адресу \"" + dir + "\".");
+            */
         }
 
         byte[] dataToSend = null;
