@@ -92,6 +92,12 @@
     <Compile Include="ConnectForm.Designer.cs">
       <DependentUpon>ConnectForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ControllerNameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControllerNameForm.Designer.cs">
+      <DependentUpon>ControllerNameForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataGridViewNumericUpDownCell.cs" />
     <Compile Include="DataGridViewNumericUpDownColumn.cs" />
     <Compile Include="DataGridViewNumericUpDownEditingControl.cs">
@@ -124,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConnectForm.resx">
       <DependentUpon>ConnectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControllerNameForm.resx">
+      <DependentUpon>ControllerNameForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

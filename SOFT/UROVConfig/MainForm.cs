@@ -996,6 +996,8 @@ namespace UROVConfig
             inSetPulsesToController = true;
             inSetDeltaToController = true;
 
+            uuidRequested = false;
+
             // очищаем очередь
             commandsQueue.Clear();
             this.currentCommand.ParseFunction = null;
@@ -1038,10 +1040,21 @@ namespace UROVConfig
 
         private void ParseAskUUID(Answer a)
         {
-            if(a.IsOkAnswer)
+            uuidRequested = true;
+
+            if (a.IsOkAnswer)
             {
-                Config.Instance.ControllerGUID = a.Params[1];
-                connectStatusMessage.Text = "Соединено, контроллер № " + Config.Instance.ControllerGUID;
+                string receivedGUID = a.Params[1];
+                Config.Instance.ControllerGUID = receivedGUID;
+
+                string savedName = receivedGUID;
+
+                if (ControllerNames.Instance.Names.ContainsKey(receivedGUID))
+                    savedName = ControllerNames.Instance.Names[receivedGUID];
+                else
+                    ControllerNames.Instance.Names[receivedGUID] = "";
+
+                connectStatusMessage.Text = "Соединено, контроллер " + savedName;
             }
         }
 
@@ -1310,6 +1323,7 @@ namespace UROVConfig
             this.btnAbout.ImageIndex = 5;
             this.btnUploadEthalon.ImageIndex = 4;
             this.btnDisconnect.ImageIndex = 6;
+            this.btnControllerName.ImageIndex = 8;
 
 
             plMainSettings.Dock = DockStyle.Fill;
@@ -1334,6 +1348,8 @@ namespace UROVConfig
 
         }
 
+        private bool uuidRequested = false;
+
 
         /// <summary>
         /// Обработчик простоя
@@ -1346,6 +1362,7 @@ namespace UROVConfig
             bool bConnected = IsConnected();
 
             btnUploadEthalon.Enabled = bConnected && !inUploadFileToController;
+            btnControllerName.Enabled = bConnected && uuidRequested;
             //btnSaveEthalons.Enabled = ethalonsRequested;
             btnSetDateTime.Enabled = bConnected && !inSetDateTimeToController;
             btnSetDateTime2.Enabled = bConnected && !inSetDateTimeToController;
@@ -2741,6 +2758,17 @@ namespace UROVConfig
                 dataToSend = null;
                 MessageBox.Show("Не удалось загрузить эталон в контроллер!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ControllerNames.Instance.Save();
+        }
+
+        private void btnControllerName_Click(object sender, EventArgs e)
+        {
+            ControllerNameForm cnf = new ControllerNameForm();
+            cnf.ShowDialog();
         }
     }
 

@@ -9,6 +9,7 @@ using System.Drawing.Design;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using System.Xml.Serialization;
 
 namespace UROVConfig
 {
@@ -521,6 +522,90 @@ namespace UROVConfig
             sdAvailable = true;
         }
 
+    }
+
+    public class ControllerNameItem
+    {
+        [XmlAttribute]
+        public string id;
+        [XmlAttribute]
+        public string value;
+    }
+
+    public class ControllerNames
+    {
+        private static object lockFlag = new object();
+        private static ControllerNames instance;
+
+        private Dictionary<string, string> cNames = new Dictionary<string, string>();
+        public Dictionary<string, string> Names
+        {
+            get { return cNames; }
+            set { cNames = value; }
+        }
+
+        public static ControllerNames Instance
+        {
+            get
+            {
+                lock (lockFlag)
+                {
+                    if (instance == null)
+                    {
+
+                        try
+                        {
+                            //Пытаемся загрузить файл с диска и десериализовать его
+                            using (System.IO.FileStream fs =
+                                new System.IO.FileStream(Application.StartupPath
+                                + "\\controllers.xml", System.IO.FileMode.Open))
+                            {
+                                System.Xml.Serialization.XmlSerializer xs =
+                                    new System.Xml.Serialization.XmlSerializer(typeof(ControllerNameItem[]), new XmlRootAttribute() { ElementName = "items" });
+
+                                instance = new ControllerNames();
+
+                                //instance = (ControllerNames)xs.Deserialize(fs);
+                                instance.cNames = ((ControllerNameItem[])xs.Deserialize(fs)).ToDictionary(i => i.id, i => i.value);
+
+
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            //Если не удалось десериализовать то просто создаем новый экземпляр
+                            instance = new ControllerNames();
+                        }
+
+                    } // if instance == null
+                } // lock
+                return instance;
+            } // get
+
+        }
+
+        public void Save()
+        {
+            using (System.IO.FileStream fs =
+              new System.IO.FileStream(Application.StartupPath + "\\controllers.xml", System.IO.FileMode.Create))
+            {
+                System.Xml.Serialization.XmlSerializer xs =
+                    new System.Xml.Serialization.XmlSerializer(typeof(ControllerNameItem[]), new XmlRootAttribute() { ElementName = "items" });
+
+                xs.Serialize(fs, cNames.Select(kv => new ControllerNameItem() { id = kv.Key, value = kv.Value }).ToArray());
+
+            }
+        }
+
+        public static void Reload()
+        {
+            instance = null;
+        }
+
+
+        private ControllerNames()
+        {
+        }
     }
 
     public class Config
