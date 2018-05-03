@@ -1038,6 +1038,21 @@ namespace UROVConfig
 
         }
 
+        private void setConnectionStatusMessage()
+        {
+            string cguid = Config.Instance.ControllerGUID;
+            string savedName = Config.Instance.ControllerGUID;
+            if (ControllerNames.Instance.Names.ContainsKey(cguid))
+                savedName = ControllerNames.Instance.Names[cguid];
+
+            if (IsConnected())
+            {
+                connectStatusMessage.Text = "Соединено, контроллер " + savedName;
+            }
+            else
+                connectStatusMessage.Text = "";
+        }
+
         private void ParseAskUUID(Answer a)
         {
             uuidRequested = true;
@@ -1054,7 +1069,7 @@ namespace UROVConfig
                 else
                     ControllerNames.Instance.Names[receivedGUID] = "";
 
-                connectStatusMessage.Text = "Соединено, контроллер " + savedName;
+                setConnectionStatusMessage();
             }
         }
 
@@ -2769,6 +2784,8 @@ namespace UROVConfig
         {
             ControllerNameForm cnf = new ControllerNameForm();
             cnf.ShowDialog();
+
+            setConnectionStatusMessage();
         }
     }
 
