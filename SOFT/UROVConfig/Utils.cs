@@ -34,11 +34,13 @@ namespace UROVConfig
         TagFileNode
     }
 
+    /*
     public enum FileDownloadFlags
     {
         View,
         DownloadEthalon
     }
+    */
 
     public enum LogRecordType
     {

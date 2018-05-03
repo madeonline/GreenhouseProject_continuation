@@ -90,6 +90,8 @@
             this.Controls.Add(this.btnOK);
             this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ControllerNameForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

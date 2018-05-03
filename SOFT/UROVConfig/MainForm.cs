@@ -123,13 +123,44 @@ namespace UROVConfig
 
         }
 
-        private FileDownloadFlags fileDownloadFlags = FileDownloadFlags.View;
+//        private FileDownloadFlags fileDownloadFlags = FileDownloadFlags.View;
 
+        private void ViewFile(List<byte> content)
+        {
+            ShowWaitCursor(false);
+            statusProgressBar.Visible = false;
+            statusProgressMessage.Visible = false;
+
+            this.btnViewSDFile.Enabled = treeViewSD.SelectedNode != null;
+            this.btnDeleteSDFile.Enabled = treeViewSD.SelectedNode != null;
+            this.btnListSDFiles.Enabled = true;
+            this.treeViewSD.Enabled = true;
+
+            string upStr = this.requestedFileName.ToUpper();
+
+            if (upStr.EndsWith(".LOG"))
+            {
+                ShowLogFile(content);
+
+            }
+            else if (upStr.EndsWith(".ETL"))
+            {
+                CreateEthalonChart(content);
+                this.plEthalonChart.BringToFront();
+            }
+        }
+
+        private void SaveEthalonFile(List<byte> content)
+        {
+            SaveEthalon(requestedFileName, content);
+        }
+
+        /*
         /// <summary>
         /// Показываем содержимое файла
         /// </summary>
         /// <param name="content"></param>
-        private void ShowFileContent(List<byte> content)
+        private void DealWithFileContent(List<byte> content)
         {
             switch (fileDownloadFlags)
             {
@@ -142,6 +173,7 @@ namespace UROVConfig
                         this.btnViewSDFile.Enabled = treeViewSD.SelectedNode != null;
                         this.btnDeleteSDFile.Enabled = treeViewSD.SelectedNode != null;
                         this.btnListSDFiles.Enabled = true;
+                        this.treeViewSD.Enabled = true;
 
                         string upStr = this.requestedFileName.ToUpper();
 
@@ -166,7 +198,7 @@ namespace UROVConfig
                     break;
             } // switch
         }
-
+        */
         private List<int> ethalon0UpData = new List<int>();
         private List<int> ethalon0DwnData = new List<int>();
 
@@ -627,16 +659,20 @@ namespace UROVConfig
 
                 case AnswerBehaviour.SDCommandFILE:
                     {
-                        if (fileDownloadFlags == FileDownloadFlags.View)
-                        {
+                        
+                        //if (fileDownloadFlags == FileDownloadFlags.View)
+                        //{
                             fileReadedBytes += dt.Length;
                             int percentsReading = (fileReadedBytes * 100) / (requestedFileSize == 0 ? 1 : requestedFileSize);
 
                             if (percentsReading > 100)
                                 percentsReading = 100;
 
-                            this.statusProgressBar.Value = percentsReading;
-                        }
+                            fileDownloadProgressFunction?.Invoke(percentsReading);
+
+                            //this.statusProgressBar.Value = percentsReading;
+                        //}
+                        
 
                         // вычитываем файл с SD. Признаком окончания файла служат байты [END]\r\n
                         for (int i = 0; i < dt.Length; i++)
@@ -657,16 +693,15 @@ namespace UROVConfig
                             if(endOfFile == "[END]\r\n")
                             {
                                 SDQueryAnswer.RemoveRange(SDQueryAnswer.Count - 7, 7);
-                                ShowFileContent(SDQueryAnswer);
+
+                                //DealWithFileContent(SDQueryAnswer);
+                                fileDataParseFunction?.Invoke(SDQueryAnswer);
+
                                 SDQueryAnswer.Clear();
 
                                 this.answerBehaviour = AnswerBehaviour.Normal;
                                 this.currentCommand.ParseFunction = null; // освобождаем
                                 this.currentCommand.CommandToSend = "";
-
-                                ShowWaitCursor(false);
-                                this.btnListSDFiles.Enabled = true;
-                                this.treeViewSD.Enabled = true;
 
                             }
 
@@ -707,22 +742,7 @@ namespace UROVConfig
                                     this.currentCommand.ParseFunction = null; // освобождаем
                                     this.currentCommand.CommandToSend = "";
 
-                                    this.btnListSDFiles.Enabled = true;
-
-                                    if (currentSDParentNode != null)
-                                    {
-                                        // и удаляем заглушку...
-                                        for (int i = 0; i < currentSDParentNode.Nodes.Count; i++)
-                                        {
-                                            TreeNode child = currentSDParentNode.Nodes[i];
-                                            SDNodeTagHelper tg = (SDNodeTagHelper)child.Tag;
-                                            if (tg.Tag == SDNodeTags.TagDummyNode)
-                                            {
-                                                child.Remove();
-                                                break;
-                                            }
-                                        }
-                                    } // if
+                                    lsParseFunction?.Invoke();
 
                                     break;
 
@@ -730,8 +750,7 @@ namespace UROVConfig
                                 else
                                 {
                                     // продолжаем список
-                                    AddToLog(lsLine, false);
-                                    AddRecordToSDList(lsLine, currentSDParentNode);
+                                    lsRecordFunction?.Invoke(lsLine);
                                 }
                             } // if
                             else
@@ -801,6 +820,10 @@ namespace UROVConfig
         public delegate void DataParseFunction(Answer a);
         public delegate void BeforeSendFunction();
         public delegate void AfterSendFunction();
+        public delegate void LSDoneFunction();
+        public delegate void LSRecordFunction(string line);
+        public delegate void FileDownloadProgressFunction(int percentsCompleted);
+        public delegate void FileDataParseFunction(List<byte> content);
 
         /// <summary>
         /// Структура команды на обработку
@@ -1339,6 +1362,7 @@ namespace UROVConfig
             this.btnUploadEthalon.ImageIndex = 4;
             this.btnDisconnect.ImageIndex = 6;
             this.btnControllerName.ImageIndex = 8;
+            this.btnImportSettings.ImageIndex = 9;
 
 
             plMainSettings.Dock = DockStyle.Fill;
@@ -1378,6 +1402,7 @@ namespace UROVConfig
 
             btnUploadEthalon.Enabled = bConnected && !inUploadFileToController;
             btnControllerName.Enabled = bConnected && uuidRequested;
+            btnImportSettings.Enabled = bConnected;
             //btnSaveEthalons.Enabled = ethalonsRequested;
             btnSetDateTime.Enabled = bConnected && !inSetDateTimeToController;
             btnSetDateTime2.Enabled = bConnected && !inSetDateTimeToController;
@@ -1892,8 +1917,42 @@ namespace UROVConfig
         {
 
         }
+
+        private LSDoneFunction lsParseFunction = null;
+        private LSRecordFunction lsRecordFunction = null;
+        private FileDownloadProgressFunction fileDownloadProgressFunction = null;
+        private FileDataParseFunction fileDataParseFunction = null;
+
+        private void ParseSDLSRecord(string line)
+        {
+            AddToLog(line, false);
+            AddRecordToSDList(line, currentSDParentNode);
+
+        }
+
+        private void ParseSDLSDone()
+        {
+            this.btnListSDFiles.Enabled = true;
+
+            if (currentSDParentNode != null)
+            {
+                // и удаляем заглушку...
+                for (int i = 0; i < currentSDParentNode.Nodes.Count; i++)
+                {
+                    TreeNode child = currentSDParentNode.Nodes[i];
+                    SDNodeTagHelper tg = (SDNodeTagHelper)child.Tag;
+                    if (tg.Tag == SDNodeTags.TagDummyNode)
+                    {
+                        child.Remove();
+                        break;
+                    }
+                }
+            } // if
+        }
         private void SetSDReadingFlag()
         {
+            lsParseFunction = ParseSDLSDone;
+            lsRecordFunction = ParseSDLSRecord;
             this.answerBehaviour = AnswerBehaviour.SDCommandLS;
             this.currentSDParentNode = null;
             this.SDQueryAnswer.Clear();
@@ -1902,6 +1961,8 @@ namespace UROVConfig
 
         private void SetSDFolderReadingFlag()
         {
+            lsParseFunction = ParseSDLSDone;
+            lsRecordFunction = ParseSDLSRecord;
             this.answerBehaviour = AnswerBehaviour.SDCommandLS;
             this.currentSDParentNode = tempSDParentNode;
             this.SDQueryAnswer.Clear();
@@ -1975,7 +2036,8 @@ namespace UROVConfig
         private void SetSDFileReadingFlag()
         {
             this.answerBehaviour = AnswerBehaviour.SDCommandFILE;
-            this.fileDownloadFlags = FileDownloadFlags.View;
+            this.fileDataParseFunction = this.ViewFile;
+            //this.fileDownloadFlags = FileDownloadFlags.View;
             this.SDQueryAnswer.Clear();
             ShowWaitCursor(true);
         }
@@ -1984,7 +2046,9 @@ namespace UROVConfig
         private void SetSDFileReadingFlagEthalon()
         {
             this.answerBehaviour = AnswerBehaviour.SDCommandFILE;
-            this.fileDownloadFlags = FileDownloadFlags.DownloadEthalon;
+            //this.fileDownloadFlags = FileDownloadFlags.DownloadEthalon;
+            this.fileDataParseFunction = this.SaveEthalonFile;
+            this.fileDownloadProgressFunction = null;
             this.SDQueryAnswer.Clear();
 
             switch(requestEthalonCounter)
@@ -2024,6 +2088,11 @@ namespace UROVConfig
         private int requestedFileSize = 0;
         private int fileReadedBytes = 0;
 
+        private void ShowDownloadPercents(int percents)
+        {
+            this.statusProgressBar.Value = percents;
+        }
+
         private void RequestFile(TreeNode node)
         {
             if (node == null)
@@ -2036,7 +2105,9 @@ namespace UROVConfig
             if (tg.Tag != SDNodeTags.TagFileNode)
                 return;
 
-            fileDownloadFlags = FileDownloadFlags.View;
+            //fileDownloadFlags = FileDownloadFlags.View;
+            this.fileDataParseFunction = this.ViewFile;
+            this.fileDownloadProgressFunction = ShowDownloadPercents;
 
             ShowWaitCursor(true);
 
