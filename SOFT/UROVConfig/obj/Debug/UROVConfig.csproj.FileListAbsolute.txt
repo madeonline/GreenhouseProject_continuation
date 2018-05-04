@@ -32,3 +32,4 @@ D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.exe
 D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.pdb
 D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.csprojResolveAssemblyReference.cache
 D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.ControllerNameForm.resources
+D:\JOB\UROV\UROV\SOFT\UROVConfig\obj\Debug\UROVConfig.ArchiveImportForm.resources

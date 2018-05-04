@@ -88,7 +88,7 @@ namespace DataGridViewNumericUpDownElements
                         }
                     }
                     this.DataGridView.InvalidateColumn(this.Index);
-                    // TODO: Call the grid's autosizing methods to autosize the column, rows, column headers / row headers as needed.
+                    // Call the grid's autosizing methods to autosize the column, rows, column headers / row headers as needed.
                 }
             }
         }
@@ -179,7 +179,7 @@ namespace DataGridViewNumericUpDownElements
                         }
                     }
                     this.DataGridView.InvalidateColumn(this.Index);
-                    // TODO: This column and/or grid rows may need to be autosized depending on their
+                    // This column and/or grid rows may need to be autosized depending on their
                     //       autosize settings. Call the autosizing methods to autosize the column, rows, 
                     //       column headers / row headers as needed.
                 }
@@ -231,7 +231,7 @@ namespace DataGridViewNumericUpDownElements
                         }
                     }
                     this.DataGridView.InvalidateColumn(this.Index);
-                    // TODO: This column and/or grid rows may need to be autosized depending on their
+                    // This column and/or grid rows may need to be autosized depending on their
                     //       autosize settings. Call the autosizing methods to autosize the column, rows, 
                     //       column headers / row headers as needed.
                 }
@@ -283,7 +283,7 @@ namespace DataGridViewNumericUpDownElements
                         }
                     }
                     this.DataGridView.InvalidateColumn(this.Index);
-                    // TODO: This column and/or grid rows may need to be autosized depending on their
+                    // This column and/or grid rows may need to be autosized depending on their
                     //       autosize settings. Call the autosizing methods to autosize the column, rows, 
                     //       column headers / row headers as needed.
                 }

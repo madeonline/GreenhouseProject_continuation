@@ -478,7 +478,7 @@ namespace DataGridViewNumericUpDownElements
                     // Invalidate and autosize column
                     this.DataGridView.InvalidateColumn(this.ColumnIndex);
 
-                    // TODO: Add code to autosize the cell's column, the rows, the column headers 
+                    // Add code to autosize the cell's column, the rows, the column headers 
                     // and the row headers depending on their autosize settings.
                     // The DataGridView control does not expose a public method that takes care of this.
                 }

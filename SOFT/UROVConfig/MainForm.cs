@@ -668,7 +668,7 @@ namespace UROVConfig
                             if (percentsReading > 100)
                                 percentsReading = 100;
 
-                            fileDownloadProgressFunction?.Invoke(percentsReading);
+                            fileDownloadProgressFunction?.Invoke(percentsReading, dt.Length);
 
                             //this.statusProgressBar.Value = percentsReading;
                         //}
@@ -822,7 +822,7 @@ namespace UROVConfig
         public delegate void AfterSendFunction();
         public delegate void LSDoneFunction();
         public delegate void LSRecordFunction(string line);
-        public delegate void FileDownloadProgressFunction(int percentsCompleted);
+        public delegate void FileDownloadProgressFunction(int percentsCompleted, int bytesReceived);
         public delegate void FileDataParseFunction(List<byte> content);
 
         /// <summary>
@@ -1279,7 +1279,7 @@ namespace UROVConfig
             {
                 try
                 {
-                    //TODO: пришло время из контроллера!!!
+                    //пришло время из контроллера
                     this.controllerDateTime = DateTime.ParseExact(a.Params[1], "dd.MM.yyyy HH:mm:ss", null);
                     dateTimeFromControllerReceived = true;
                 }
@@ -1296,7 +1296,7 @@ namespace UROVConfig
         {
             if (a.IsOkAnswer)
             {
-                //TODO: пришли данные о свободной памяти!!!
+                //пришли данные о свободной памяти
                 tbFREERAM.Text = a.Params[1];
             }
             else
@@ -2088,7 +2088,7 @@ namespace UROVConfig
         private int requestedFileSize = 0;
         private int fileReadedBytes = 0;
 
-        private void ShowDownloadPercents(int percents)
+        private void ShowDownloadPercents(int percents, int bytesReceived)
         {
             this.statusProgressBar.Value = percents;
         }
@@ -2153,6 +2153,318 @@ namespace UROVConfig
 
         }
 
+        private ArchiveImportForm archiveImportForm = null;
+        private List<String> archiveLogsList = new List<string>();
+        private List<String> archiveEthalonsList = new List<string>();
+
+        private List<int> archiveLogsSizes = new List<int>();
+        private List<int> archiveEthalonsSizes = new List<int>();
+
+        private int archiveLogsIterator = 0;
+        private int archiveEthalonsIterator = 0;
+        private int waitForFileSizeCount = 0;
+        private int waitForFileSizeDone = 0;
+
+        private int archiveTotalFilesSize = 0;
+        private int archiveWaitForListDone = 0;
+        private int archiveListDoneCount = 0;
+
+        public void StartArchive(ArchiveImportForm fm)
+        {
+            archiveImportForm = fm;
+            archiveImportForm.DisableControls();
+
+            DoArchive();
+
+        }
+
+        private void StartListLogs()
+        {
+            lsParseFunction = ParseLogsDone;
+            lsRecordFunction = ParseLogsRecord;
+            this.answerBehaviour = AnswerBehaviour.SDCommandLS;
+            this.SDQueryAnswer.Clear();
+        }
+
+        private void ParseLogsDone()
+        {
+            archiveListDoneCount++;
+
+            if (archiveListDoneCount >= archiveWaitForListDone)
+            {
+                // получили список файлов, получаем их размеры
+                ArchiveRequestFileSizes();
+            }
+        }
+
+        private void ParseLogsRecord(string rec)
+        {
+            archiveLogsList.Add(rec);
+        }
+
+
+        private void StartListEthalons()
+        {
+            lsParseFunction = ParseEthalonsDone;
+            lsRecordFunction = ParseEthalonsRecord;
+            this.answerBehaviour = AnswerBehaviour.SDCommandLS;
+            this.SDQueryAnswer.Clear();
+        }
+
+        private void ParseEthalonsDone()
+        {
+            archiveListDoneCount++;
+
+            if (archiveListDoneCount >= archiveWaitForListDone)
+            {
+                // получили список файлов, получаем их размеры
+                ArchiveRequestFileSizes();
+            }
+        }
+
+        private void ParseEthalonsRecord(string rec)
+        {
+            archiveEthalonsList.Add(rec);
+        }
+
+        private void ArchiveRequestFileSizes()
+        {
+            archiveImportForm.lblMessage.Text = "Получаем размер файлов для архивирования...";
+            archiveTotalFilesSize = 0;
+
+            if(archiveLogsList.Count < 1 && archiveEthalonsList.Count < 1)
+            {
+                // оба списка пустых, надо импортировать только настройки
+                ArchiveImportSettings();
+                return;
+            }
+
+            // тут получаем список файлов
+
+            if (archiveEthalonsList.Count > 0)
+                waitForFileSizeCount++;
+
+            // requestedFileSize
+            for (int i=0;i<archiveEthalonsList.Count;i++)
+            {
+                string fullPathName = "ETL" + PARAM_DELIMITER + archiveEthalonsList[i];
+                PushCommandToQueue(GET_PREFIX + "FILESIZE" + PARAM_DELIMITER + fullPathName, ArchiveParseEthalonFileSize);
+            }
+
+
+            if (archiveLogsList.Count > 0)
+                waitForFileSizeCount++;
+
+            // requestedFileSize
+            for (int i = 0; i < archiveLogsList.Count; i++)
+            {
+                string fullPathName = "LOG" + PARAM_DELIMITER + archiveLogsList[i];
+                PushCommandToQueue(GET_PREFIX + "FILESIZE" + PARAM_DELIMITER + fullPathName, ArchiveParseLogsFileSize);
+            }
+
+        }
+
+        private void ArchiveParseEthalonFileSize(Answer a)
+        {
+            archiveEthalonsIterator++;
+            int fsize = 0;
+
+            if(a.IsOkAnswer)
+            {
+                fsize = Convert.ToInt32(a.Params[1]);
+                archiveImportForm.pbProgress.Maximum += fsize + 15;
+            }
+
+            archiveEthalonsSizes.Add(fsize);
+
+            if(archiveEthalonsIterator >= archiveEthalonsList.Count)
+            {
+                // закончили получение списка эталонов
+                waitForFileSizeDone++;
+
+                if(waitForFileSizeDone >= waitForFileSizeCount)
+                {
+                    // закончили получение размеров для всех файлов, можно начинать скачивать
+                    ArchiveDownloadFiles();
+                }
+            }
+        }
+
+        private void ArchiveParseLogsFileSize(Answer a)
+        {
+            archiveLogsIterator++;
+            int fsize = 0;
+            if (a.IsOkAnswer)
+            {
+                fsize = Convert.ToInt32(a.Params[1]);
+                archiveImportForm.pbProgress.Maximum += fsize;
+            }
+
+            archiveLogsSizes.Add(fsize);
+
+            if (archiveLogsIterator >= archiveLogsList.Count)
+            {
+                // закончили получение списка эталонов
+                waitForFileSizeDone++;
+
+                if (waitForFileSizeDone >= waitForFileSizeCount)
+                {
+                    // закончили получение размеров для всех файлов, можно начинать скачивать
+                    ArchiveDownloadFiles();
+                }
+            }
+        }
+
+        private int waitForArchiveDownloadListCount = 0;
+        private int waitForArchiveDownloadListDone = 0;
+
+        private void ArchiveDownloadFiles()
+        {
+            archiveImportForm.lblMessage.Text = "Начинаем скачивать файлы...";
+            waitForArchiveDownloadListDone = 0;
+            waitForArchiveDownloadListCount = archiveLogsList.Count + archiveEthalonsList.Count;
+            // тут начинаем скачивать файлы
+
+            archiveEthalonsIterator = 0;
+            for(int i=0;i< archiveEthalonsList.Count;i++)
+            {
+                string filePath = "ETL" + PARAM_DELIMITER + archiveEthalonsList[i];
+                PushCommandToQueue(GET_PREFIX + "FILE" + PARAM_DELIMITER + filePath, DummyAnswerReceiver, ArchiveStartEthalonFileReading);
+            }
+
+            archiveLogsIterator = 0;
+            for (int i = 0; i < archiveLogsList.Count; i++)
+            {
+                string filePath = "LOG" + PARAM_DELIMITER + archiveLogsList[i];
+                PushCommandToQueue(GET_PREFIX + "FILE" + PARAM_DELIMITER + filePath, DummyAnswerReceiver, ArchiveStartLogFileReading);
+            }
+
+        }
+
+        private void ArchiveStartEthalonFileReading()
+        {
+            archiveImportForm.lblMessage.Text = "Скачиваем файл \"" + archiveEthalonsList[archiveEthalonsIterator] + "\"...";
+
+            requestedFileSize = archiveEthalonsSizes[archiveEthalonsIterator];
+            this.answerBehaviour = AnswerBehaviour.SDCommandFILE;
+            this.fileDataParseFunction = ArchiveEthalonFileReceived;
+            this.fileDownloadProgressFunction = ArchiveFileDownloadProgress;
+            this.SDQueryAnswer.Clear();
+            archiveEthalonsIterator++;
+        }
+
+        private void ArchiveStartLogFileReading()
+        {
+            archiveImportForm.lblMessage.Text = "Скачиваем файл \"" + archiveLogsList[archiveLogsIterator] + "\"...";
+
+            requestedFileSize = archiveLogsSizes[archiveLogsIterator];
+            this.answerBehaviour = AnswerBehaviour.SDCommandFILE;
+            this.fileDataParseFunction = ArchiveLogFileReceived;
+            this.fileDownloadProgressFunction = ArchiveFileDownloadProgress;
+            this.SDQueryAnswer.Clear();
+            archiveLogsIterator++;
+        }
+
+        private void ArchiveImportSettings()
+        {
+            // импортируем настройки
+            archiveImportForm.lblMessage.Text = "Импортируем настройки...";
+
+            //TODO: ТУТ ИМПОРТИРУЕМ НАСТРОЙКИ!!!
+
+            archiveImportForm.pbProgress.Value = archiveImportForm.pbProgress.Maximum;
+            archiveImportForm.lblMessage.Text = "Готово.";
+
+            MessageBox.Show("Импорт успешно завершён!");
+            archiveImportForm.Done();
+            archiveImportForm = null;
+        }
+
+        private void ArchiveEthalonFileReceived(List<byte> content)
+        {
+            // тут получены данные файла эталона
+            string fileName = archiveEthalonsList[archiveEthalonsIterator-1];
+
+            //TODO: тут сохраняем файл на диске!!!!
+
+            waitForArchiveDownloadListDone++;
+            if(waitForArchiveDownloadListDone >= waitForArchiveDownloadListCount)
+            {
+                // получены все файлы, можно импортировать настройки
+                ArchiveImportSettings();
+            }
+        }
+
+        private void ArchiveLogFileReceived(List<byte> content)
+        {
+            // тут получены данные файла лога
+            string fileName = archiveLogsList[archiveLogsIterator - 1];
+
+            //TODO: тут сохраняем файл на диске!!!!
+
+            waitForArchiveDownloadListDone++;
+            if (waitForArchiveDownloadListDone >= waitForArchiveDownloadListCount)
+            {
+                // получены все файлы, можно импортировать настройки
+                ArchiveImportSettings();
+            }
+        }
+
+        private void ArchiveFileDownloadProgress(int percents, int bytesReceived)
+        {
+            try
+            {
+                archiveImportForm.pbProgress.Value += bytesReceived;
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void DoArchive()
+        {
+            archiveLogsList.Clear();
+            archiveEthalonsList.Clear();
+
+            archiveLogsSizes.Clear();
+            archiveEthalonsSizes.Clear();
+
+            archiveLogsIterator = 0;
+            archiveEthalonsIterator = 0;
+            waitForFileSizeCount = 0;
+            waitForFileSizeDone = 0;
+
+            archiveTotalFilesSize = 0;
+            archiveWaitForListDone = 0;
+            archiveListDoneCount = 0;
+
+            archiveImportForm.lblMessage.Text = "Получаем список файлов для архивирования...";
+            archiveImportForm.pbProgress.Maximum = 3;
+            archiveImportForm.pbProgress.Value = 1;
+
+            if (archiveImportForm.cbEthalons.Checked)
+            {
+                // запрошено архивирование эталонов
+                archiveWaitForListDone++;
+                PushCommandToQueue(GET_PREFIX + "LS|ETL", DummyAnswerReceiver, StartListEthalons);
+            }
+
+            if (archiveImportForm.cbLogs.Checked)
+            {
+                // запрошено архивирование логов
+                archiveWaitForListDone++;
+                PushCommandToQueue(GET_PREFIX + "LS|LOG", DummyAnswerReceiver, StartListLogs);
+            }
+
+
+            if (archiveListDoneCount >= archiveWaitForListDone)
+            {
+                // получили список файлов, получаем их размеры
+                ArchiveRequestFileSizes();
+            }
+            
+        }
 
         private void tmEnumComPorts_Tick(object sender, EventArgs e)
         {
@@ -2857,6 +3169,12 @@ namespace UROVConfig
             cnf.ShowDialog();
 
             setConnectionStatusMessage();
+        }
+
+        private void btnImportSettings_Click(object sender, EventArgs e)
+        {
+            ArchiveImportForm af = new ArchiveImportForm(this);
+            af.ShowDialog();
         }
     }
 

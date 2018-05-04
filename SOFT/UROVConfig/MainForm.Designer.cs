@@ -494,6 +494,7 @@
             this.btnImportSettings.Text = "Архивация данных";
             this.btnImportSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnImportSettings.ToolTipText = "Архивация данных с контроллера";
+            this.btnImportSettings.Click += new System.EventHandler(this.btnImportSettings_Click);
             // 
             // btnUploadEthalon
             // 
