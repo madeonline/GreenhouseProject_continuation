@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ArchiveSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <mmax1>100</mmax1>
+  <mmax2>10000</mmax2>
+  <mmax3>8000</mmax3>
+  <pulses1>60</pulses1>
+  <pulses2>60</pulses2>
+  <pulses3>60</pulses3>
+  <delta1>5</delta1>
+  <delta2>5</delta2>
+  <delta3>5</delta3>
+</ArchiveSettings>

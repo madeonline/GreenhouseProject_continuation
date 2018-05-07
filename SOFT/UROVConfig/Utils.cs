@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace UROVConfig
 {
@@ -608,6 +609,188 @@ namespace UROVConfig
         private ControllerNames()
         {
         }
+    }
+
+    public class ArchiveTreeRootItem
+    {
+        private string guid = "";
+        public string GUID
+        {
+            get { return this.guid; }
+            set { this.guid = value; }
+        }
+
+        public ArchiveTreeRootItem(string g)
+        {
+            guid = g;
+        }
+
+        public override string ToString()
+        {
+            if(ControllerNames.Instance.Names.ContainsKey(this.guid))
+            {
+                return ControllerNames.Instance.Names[this.guid];
+            }
+            return this.guid;
+        }
+    }
+
+    public class ArchiveTreeLogItem
+    {
+        private ArchiveTreeRootItem parent = null;
+        public ArchiveTreeRootItem Parent { get { return this.parent; } }
+
+        public ArchiveTreeLogItem(ArchiveTreeRootItem p)
+        {
+            parent = p;
+        }
+    }
+
+    public class ArchiveTreeLogItemRecord
+    {
+        private ArchiveTreeLogItem parent = null;
+        public ArchiveTreeLogItem Parent { get { return this.parent; } }
+
+        private string filename = "";
+        public string FileName { get { return filename; } }
+
+        public ArchiveTreeLogItemRecord(ArchiveTreeLogItem p, string fname)
+        {
+            parent = p;
+            filename = fname;
+        }
+        
+    }
+
+    public class ArchiveTreeEthalonItem
+    {
+        private ArchiveTreeRootItem parent = null;
+        public ArchiveTreeRootItem Parent { get { return this.parent; } }
+
+        public ArchiveTreeEthalonItem(ArchiveTreeRootItem p)
+        {
+            parent = p;
+        }
+    }
+
+    public class ArchiveTreeEthalonItemRecord
+    {
+        private ArchiveTreeEthalonItem parent = null;
+        public ArchiveTreeEthalonItem Parent { get { return this.parent; } }
+
+        private string filename = "";
+        public string FileName { get { return filename; } }
+
+        public ArchiveTreeEthalonItemRecord(ArchiveTreeEthalonItem p, string fname)
+        {
+            parent = p;
+            filename = fname;
+        }
+
+    }
+
+    public class ArchiveSettings
+    {
+        public ArchiveSettings()
+        {
+
+        }
+
+        private int motoresourceMax1 = 0;
+        private int motoresourceMax2 = 0;
+        private int motoresourceMax3 = 0;
+
+        [XmlElement("mmax1")]
+        public int MotoresourceMax1 { get { return motoresourceMax1; } set { motoresourceMax1 = value; } }
+        [XmlElement("mmax2")]
+        public int MotoresourceMax2 { get { return motoresourceMax2; } set { motoresourceMax2 = value; } }
+        [XmlElement("mmax3")]
+        public int MotoresourceMax3 { get { return motoresourceMax3; } set { motoresourceMax3 = value; } }
+
+        private int pulses1 = 0;
+        private int pulses2 = 0;
+        private int pulses3 = 0;
+
+        [XmlElement("pulses1")]
+        public int Pulses1 { get { return pulses1; } set { pulses1 = value; } }
+        [XmlElement("pulses2")]
+        public int Pulses2 { get { return pulses2; } set { pulses2 = value; } }
+        [XmlElement("pulses3")]
+        public int Pulses3 { get { return pulses3; } set { pulses3 = value; } }
+
+        private int delta1 = 0;
+        private int delta2 = 0;
+        private int delta3 = 0;
+
+        [XmlElement("delta1")]
+        public int Delta1 { get { return delta1; } set { delta1 = value; } }
+        [XmlElement("delta2")]
+        public int Delta2 { get { return delta2; } set { delta2 = value; } }
+        [XmlElement("delta3")]
+        public int Delta3 { get { return delta3; } set { delta3 = value; } }
+
+        public void ApplyFromConfig()
+        {
+            Config c = Config.Instance;
+
+            this.motoresourceMax1 = c.MotoresourceMax1;
+            this.motoresourceMax2 = c.MotoresourceMax2;
+            this.motoresourceMax3 = c.MotoresourceMax3;
+
+            this.pulses1 = c.Pulses1;
+            this.pulses2 = c.Pulses2;
+            this.pulses3 = c.Pulses3;
+
+            this.delta1 = c.Delta1;
+            this.delta2 = c.Delta2;
+            this.delta3 = c.Delta3;
+        }
+
+        public ArchiveSettings Load(string filename)
+        {
+            ArchiveSettings toLoad = null;
+            try
+            {
+                //Пытаемся загрузить файл с диска и десериализовать его
+                using (FileStream fs =
+                    new FileStream(filename, FileMode.Open))
+                {
+                    System.Xml.Serialization.XmlSerializer xs =
+                        new System.Xml.Serialization.XmlSerializer(typeof(ArchiveSettings));
+                    toLoad = (ArchiveSettings)xs.Deserialize(fs);
+
+
+                }
+            }
+            catch (Exception)
+            {
+                //Если не удалось десериализовать то просто создаем новый экземпляр
+                toLoad = new ArchiveSettings();
+            }
+            return toLoad;
+        }
+
+        public bool Save(string filename)
+        {
+            bool result = true;
+            try
+            {
+
+                using (FileStream fs =
+                  new FileStream(filename, FileMode.Create))
+                {
+                    System.Xml.Serialization.XmlSerializer xs =
+                        new System.Xml.Serialization.XmlSerializer(typeof(ArchiveSettings));
+                    xs.Serialize(fs, this);
+                }
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            return result;
+        }
+
     }
 
     public class Config

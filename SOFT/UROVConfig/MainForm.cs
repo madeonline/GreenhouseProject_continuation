@@ -140,12 +140,12 @@ namespace UROVConfig
 
             if (upStr.EndsWith(".LOG"))
             {
-                ShowLogFile(content);
+                ShowLogFile(content, this.logDataGrid,"",true);
 
             }
             else if (upStr.EndsWith(".ETL"))
             {
-                CreateEthalonChart(content);
+                CreateEthalonChart(content, this.ethalonChart);
                 this.plEthalonChart.BringToFront();
             }
         }
@@ -236,7 +236,7 @@ namespace UROVConfig
             return result;
         }
 
-        private void ShowLogFile(List<byte> content)
+        private void ShowLogFile(List<byte> content, DataGridView targetGrid, string addToColumnName, bool computeMotoresurcePercents)
         {
             /*
             ASCIIEncoding encoding = new ASCIIEncoding();
@@ -245,7 +245,7 @@ namespace UROVConfig
             this.richTextBoxFileView.BringToFront();
             */
 
-            ClearInterruptsList();
+            ClearInterruptsList(targetGrid);
             // парсим лог-файл
             int readed = 0;
             InterruptInfo currentInterruptInfo = null;
@@ -418,7 +418,7 @@ namespace UROVConfig
 
                         case LogRecordType.InterruptRecordEnd:
                             {
-                                AddInterruptRecordToList(curRecord);
+                                AddInterruptRecordToList(curRecord, targetGrid, addToColumnName, computeMotoresurcePercents);
                             }
                             break;
 
@@ -428,83 +428,91 @@ namespace UROVConfig
                             }
                             break;
                     } // switch
-                } // while
+                } // while                
             }
+            
             catch
             {
                 this.plEmptySDWorkspace.BringToFront();
                 MessageBox.Show("Ошибка разбора лог-файла!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            
 
-            this.logDataGrid.BringToFront();
+            targetGrid.BringToFront();
         }
 
-        private void AddInterruptRecordToList(InterruptRecord record)
+        private void AddInterruptRecordToList(InterruptRecord record, DataGridView targetGrid, string addToColumnName, bool computeMotoresurcePercents)
         {
             if (record == null)
                 return;
 
             //Тут добавление в список в таблицу
-            int rowNumber = this.logDataGrid.Rows.Add();
+            int rowNumber = targetGrid.Rows.Add();
 
-            DataGridViewRow row = this.logDataGrid.Rows[rowNumber];
+            DataGridViewRow row = targetGrid.Rows[rowNumber];
             row.Tag = record;
 
             row.DefaultCellStyle.BackColor = rowNumber % 2 == 0 ? Color.LightGray : Color.White;
 
             string cellText = (rowNumber+1).ToString();            
-            row.Cells["Num"].Value = cellText;
-            row.Cells["Time"].Value = record.InterruptInfo.InterruptTime.ToString("dd.MM.yyyy HH:mm:ss");
-            row.Cells["Temp"].Value = record.InterruptInfo.SystemTemperature.ToString("0.00") + " °C";
-            row.Cells["Channel"].Value = (1 + record.ChannelNumber).ToString();
-            row.Cells["Rod"].Value = EnumHelpers.GetEnumDescription(record.RodPosition);
-            row.Cells["Compare"].Value = EnumHelpers.GetEnumDescription(record.EthalonCompareResult);
-            row.Cells["Etl"].Value = EnumHelpers.GetEnumDescription(record.EthalonCompareNumber);
+            row.Cells["Num" + addToColumnName].Value = cellText;
+            row.Cells["Time" + addToColumnName].Value = record.InterruptInfo.InterruptTime.ToString("dd.MM.yyyy HH:mm:ss");
+            row.Cells["Temp" + addToColumnName].Value = record.InterruptInfo.SystemTemperature.ToString("0.00") + " °C";
+            row.Cells["Channel" + addToColumnName].Value = (1 + record.ChannelNumber).ToString();
+            row.Cells["Rod" + addToColumnName].Value = EnumHelpers.GetEnumDescription(record.RodPosition);
+            row.Cells["Compare" + addToColumnName].Value = EnumHelpers.GetEnumDescription(record.EthalonCompareResult);
+            row.Cells["Etl" + addToColumnName].Value = EnumHelpers.GetEnumDescription(record.EthalonCompareNumber);
 
             if (record.EthalonCompareResult == EthalonCompareResult.MatchEthalon)
-                row.Cells["Compare"].Style.BackColor = Color.LightGreen;
+                row.Cells["Compare" + addToColumnName].Style.BackColor = Color.LightGreen;
             else
-                row.Cells["Compare"].Style.BackColor = Color.LightSalmon;
+                row.Cells["Compare" + addToColumnName].Style.BackColor = Color.LightSalmon;
 
 
             if(record.RodPosition == RodPosition.Broken)
-                row.Cells["Rod"].Style.BackColor = Color.LightSalmon;
+                row.Cells["Rod" + addToColumnName].Style.BackColor = Color.LightSalmon;
             else
-                row.Cells["Rod"].Style.BackColor = Color.White;
+                row.Cells["Rod" + addToColumnName].Style.BackColor = Color.White;
 
-            int resMax = 1;
-            switch(record.ChannelNumber)
+            if (computeMotoresurcePercents)
             {
-                case 0:
-                    resMax = Config.Instance.MotoresourceMax1;
-                    break;
-                case 1:
-                    resMax = Config.Instance.MotoresourceMax2;
-                    break;
-                case 2:
-                    resMax = Config.Instance.MotoresourceMax3;
-                    break;
+                int resMax = 1;
+                switch (record.ChannelNumber)
+                {
+                    case 0:
+                        resMax = Config.Instance.MotoresourceMax1;
+                        break;
+                    case 1:
+                        resMax = Config.Instance.MotoresourceMax2;
+                        break;
+                    case 2:
+                        resMax = Config.Instance.MotoresourceMax3;
+                        break;
+                }
+
+                if (resMax < 1)
+                    resMax = 1;
+
+                float motoPercents = (record.Motoresource * 100.0f) / resMax;
+
+                row.Cells["Motoresource" + addToColumnName].Value = record.Motoresource.ToString() + " (" + motoPercents.ToString("0.00") + "%)";
             }
+            else
+                row.Cells["Motoresource" + addToColumnName].Value = record.Motoresource.ToString();
 
-            if (resMax < 1)
-                resMax = 1;
 
-            float motoPercents = (record.Motoresource * 100.0f) / resMax;
+            row.Cells["Pulses" + addToColumnName].Value = record.InterruptData.Count.ToString();
 
-            row.Cells["Motoresource"].Value = record.Motoresource.ToString() + " (" + motoPercents.ToString("0.00") + "%)";
-
-            row.Cells["Pulses"].Value = record.InterruptData.Count.ToString();
-
-            row.Cells["Btn"].Value = "Просмотр";
+            row.Cells["Btn" + addToColumnName].Value = "Просмотр";
 
 
         }
 
-        private void ClearInterruptsList()
+        private void ClearInterruptsList(DataGridView targetGrid)
         {
             // Тут очистка таблицы
-            this.logDataGrid.Rows.Clear();
+            targetGrid.Rows.Clear();
         }
 
         private void SaveEthalon(string fname, List<byte> content)
@@ -552,12 +560,12 @@ namespace UROVConfig
             }
 
 
-        }
+        } 
 
-        private void CreateEthalonChart(List<byte> content)
+        private void CreateEthalonChart(List<byte> content, System.Windows.Forms.DataVisualization.Charting.Chart targetChart)
         {
 
-            System.Windows.Forms.DataVisualization.Charting.Series s = this.ethalonChart.Series[0];
+            System.Windows.Forms.DataVisualization.Charting.Series s = targetChart.Series[0];
             s.Points.Clear();
 
             // у нас размер одной записи - 4 байта
@@ -1138,7 +1146,7 @@ namespace UROVConfig
         {
             this.treeView.Nodes[0].Nodes.Clear();
             this.treeViewSD.Nodes.Clear();
-            this.ClearInterruptsList();
+            this.ClearInterruptsList(this.logDataGrid);
             dateTimeFromControllerReceived = false;
             tbFirmwareVersion.Text = "";
             tbFREERAM.Text = "";
@@ -1347,6 +1355,20 @@ namespace UROVConfig
             this.logColumn2.Width = this.logColumn1.Width;
         }
 
+        private void InitArchive()
+        {
+            // загружаем архив
+
+            string path = Application.StartupPath + "\\Archive\\";
+            List<string> dirs = new List<string>(System.IO.Directory.EnumerateDirectories(path));
+
+            foreach(string dir in dirs)
+            {
+                string dirNameOnly = dir.Substring(dir.LastIndexOf("\\") + 1);
+                AddItemToArchive(dirNameOnly);
+            }
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             InitSubstitutions();
@@ -1354,6 +1376,8 @@ namespace UROVConfig
             EnumSerialPorts();
 
             ResizeLogColumns();
+
+            InitArchive();
 
             this.toolStrip.ImageList = toolbarImages;
             this.btnConnect.ImageIndex = 0;
@@ -1370,6 +1394,8 @@ namespace UROVConfig
             this.logDataGrid.Dock = DockStyle.Fill;
             this.plEthalonChart.Dock = DockStyle.Fill;
             this.plEmptySDWorkspace.Dock = DockStyle.Fill;
+            this.plArchiveEthalonChart.Dock = DockStyle.Fill;
+            this.archiveLogDataGrid.Dock = DockStyle.Fill;
             this.plEmptySDWorkspace.BringToFront();
             //TODO: тут остальные панели !!!
 
@@ -1698,21 +1724,24 @@ namespace UROVConfig
                 return;
             }
 
-            TreeNodeType tp = (TreeNodeType)selectedNode.Tag;
-            switch(tp)
+            if (selectedNode.Tag is TreeNodeType)
             {
+                TreeNodeType tp = (TreeNodeType)selectedNode.Tag;
+                switch (tp)
+                {
 
-                case TreeNodeType.MainSettingsNode:
-                    ShowMainSettings();
-                    break;
+                    case TreeNodeType.MainSettingsNode:
+                        ShowMainSettings();
+                        break;
 
-                //TODO: Тут другие панели!!!
+                    //TODO: Тут другие панели!!!
 
-                case TreeNodeType.SDSettingsNode:
-                    this.plSDSettings.BringToFront();
-                    break;
+                    case TreeNodeType.SDSettingsNode:
+                        this.plSDSettings.BringToFront();
+                        break;
 
 
+                } // switch
             }
         }
 
@@ -1880,7 +1909,7 @@ namespace UROVConfig
 
         private void treeView_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
         {
-            e.Cancel = true;
+            //e.Cancel = true;
         }
 
 
@@ -2367,10 +2396,28 @@ namespace UROVConfig
 
         private void ArchiveImportSettings()
         {
-            // импортируем настройки
-            archiveImportForm.lblMessage.Text = "Импортируем настройки...";
+            if (archiveImportForm.cbSettings.Checked)
+            {
+                // импортируем настройки
+                archiveImportForm.lblMessage.Text = "Импортируем настройки...";
 
-            //TODO: ТУТ ИМПОРТИРУЕМ НАСТРОЙКИ!!!
+                ArchiveSettings aSett = new ArchiveSettings();
+                aSett.ApplyFromConfig();
+
+                string filename = Application.StartupPath + "\\Archive\\" + Config.Instance.ControllerGUID + "\\Settings\\";
+
+                try
+                {
+                    System.IO.Directory.CreateDirectory(filename);
+                    filename += "settings.xml";
+                    aSett.Save(filename);
+                }
+                catch { }
+            }
+
+
+            //Тут заполнения дерева архива новой записью
+            AddItemToArchive(Config.Instance.ControllerGUID);
 
             archiveImportForm.pbProgress.Value = archiveImportForm.pbProgress.Maximum;
             archiveImportForm.lblMessage.Text = "Готово.";
@@ -2380,12 +2427,129 @@ namespace UROVConfig
             archiveImportForm = null;
         }
 
+        private void AddItemToArchive(string guid)
+        {
+            // ищем, есть ли такая запись. Если есть - обновляем, если нет - добавляем
+            TreeNode archiveNode = treeView.Nodes[1];
+            TreeNode existingNode = null;
+            ArchiveTreeRootItem atri = null;
+
+            for (int i=0;i< archiveNode.Nodes.Count;i++)
+            {
+                TreeNode child = archiveNode.Nodes[i];
+                if(child.Tag is ArchiveTreeRootItem)
+                {
+                    atri = child.Tag as ArchiveTreeRootItem;
+                    if(atri.GUID == guid)
+                    {
+                        existingNode = child;
+                        if (ControllerNames.Instance.Names.ContainsKey(guid))
+                            existingNode.Text = ControllerNames.Instance.Names[guid];
+                        else
+                            existingNode.Text = guid;
+
+                        existingNode.Nodes.Clear();
+                        break;
+                    }
+                }
+            } // for
+
+            if(existingNode == null)
+            {
+                atri = new ArchiveTreeRootItem(guid);
+                existingNode = archiveNode.Nodes.Add(atri.ToString());
+                existingNode.Tag = atri;
+                existingNode.ImageIndex = 8;
+                existingNode.SelectedImageIndex = 8;
+            }
+
+            // тут добавляем дочерние ноды - эталоны и логи
+            TreeNode ethalonNode = existingNode.Nodes.Add("Эталоны");
+            ethalonNode.Tag = new ArchiveTreeEthalonItem(atri);
+            ethalonNode.ImageIndex = 14;
+            ethalonNode.SelectedImageIndex = 14;
+
+            FillArchiveEthalonsList(ethalonNode, ethalonNode.Tag as ArchiveTreeEthalonItem);
+
+            TreeNode logNode = existingNode.Nodes.Add("Логи");
+            logNode.Tag = new ArchiveTreeLogItem(atri);
+            logNode.ImageIndex = 13;
+            logNode.SelectedImageIndex = 13;
+
+            FillArchiveLogsList(logNode, logNode.Tag as ArchiveTreeLogItem);
+
+        }
+
+        private void FillArchiveEthalonsList(TreeNode n, ArchiveTreeEthalonItem eti)
+        {
+            n.Nodes.Clear();
+            string path = Application.StartupPath + "\\Archive\\" + eti.Parent.GUID + "\\ETL\\";
+            string[] files = System.IO.Directory.GetFiles(path);
+
+            foreach(string fullfilename in files)
+            {
+                string fileDisplayName = getTextFromFileName(System.IO.Path.GetFileName(fullfilename));
+                TreeNode child = n.Nodes.Add(fileDisplayName);
+                child.ImageIndex = 16;
+                child.SelectedImageIndex = 16;
+                ArchiveTreeEthalonItemRecord ateir = new ArchiveTreeEthalonItemRecord(eti, fullfilename);
+                child.Tag = ateir;
+            }
+        }
+
+        private void FillArchiveLogsList(TreeNode n, ArchiveTreeLogItem eti)
+        {
+            n.Nodes.Clear();
+            string path = Application.StartupPath + "\\Archive\\" + eti.Parent.GUID + "\\LOG\\";
+            string[] files = System.IO.Directory.GetFiles(path);
+
+            foreach (string file in files)
+            {
+                string fileDisplayName = System.IO.Path.GetFileName(file);
+                TreeNode child = n.Nodes.Add(fileDisplayName);
+                child.ImageIndex = 15;
+                child.SelectedImageIndex = 15;
+                ArchiveTreeLogItemRecord ateir = new ArchiveTreeLogItemRecord(eti, file);
+                child.Tag = ateir;
+            }
+        }
+
+        private void SaveArchiveFile(string fileName, string dirName, List<byte> content)
+        {
+            String path = Application.StartupPath + "\\Archive\\" + Config.Instance.ControllerGUID + "\\" + dirName + "\\";
+            try
+            {
+                System.IO.Directory.CreateDirectory(path);
+                path += fileName;
+
+                try
+                {
+                    System.IO.BinaryWriter bw = new System.IO.BinaryWriter(new System.IO.FileStream(path, System.IO.FileMode.Create));
+
+                    for (int i = 0; i < content.Count; i++)
+                        bw.Write(content[i]);
+
+                    bw.Close();
+                }
+                catch
+                {
+                }
+
+
+            }
+            catch
+            {
+
+            }
+        }
+
         private void ArchiveEthalonFileReceived(List<byte> content)
         {
             // тут получены данные файла эталона
             string fileName = archiveEthalonsList[archiveEthalonsIterator-1];
 
-            //TODO: тут сохраняем файл на диске!!!!
+            //тут сохраняем файл на диске
+            SaveArchiveFile(fileName, "ETL", content);
 
             waitForArchiveDownloadListDone++;
             if(waitForArchiveDownloadListDone >= waitForArchiveDownloadListCount)
@@ -2400,7 +2564,8 @@ namespace UROVConfig
             // тут получены данные файла лога
             string fileName = archiveLogsList[archiveLogsIterator - 1];
 
-            //TODO: тут сохраняем файл на диске!!!!
+            //тут сохраняем файл на диске
+            SaveArchiveFile(fileName, "LOG", content);
 
             waitForArchiveDownloadListDone++;
             if (waitForArchiveDownloadListDone >= waitForArchiveDownloadListCount)
@@ -2438,6 +2603,9 @@ namespace UROVConfig
             archiveTotalFilesSize = 0;
             archiveWaitForListDone = 0;
             archiveListDoneCount = 0;
+
+            ControllerNames.Instance.Names[Config.Instance.ControllerGUID] = archiveImportForm.tbControllerName.Text.Trim();
+            ControllerNames.Instance.Save();
 
             archiveImportForm.lblMessage.Text = "Получаем список файлов для архивирования...";
             archiveImportForm.pbProgress.Maximum = 3;
@@ -3168,6 +3336,28 @@ namespace UROVConfig
             ControllerNameForm cnf = new ControllerNameForm();
             cnf.ShowDialog();
 
+            TreeNode archiveNode = treeView.Nodes[1];
+
+            // переименовываем в архиве
+            for (int i = 0; i < archiveNode.Nodes.Count; i++)
+            {
+                TreeNode child = archiveNode.Nodes[i];
+                if (child.Tag is ArchiveTreeRootItem)
+                {
+                    ArchiveTreeRootItem atri = child.Tag as ArchiveTreeRootItem;
+                    if (atri.GUID == Config.Instance.ControllerGUID)
+                    {
+                        TreeNode existingNode = child;
+                        if (ControllerNames.Instance.Names.ContainsKey(Config.Instance.ControllerGUID))
+                            existingNode.Text = ControllerNames.Instance.Names[Config.Instance.ControllerGUID];
+                        else
+                            existingNode.Text = Config.Instance.ControllerGUID;
+
+                        break;
+                    }
+                }
+            } // for
+
             setConnectionStatusMessage();
         }
 
@@ -3175,6 +3365,50 @@ namespace UROVConfig
         {
             ArchiveImportForm af = new ArchiveImportForm(this);
             af.ShowDialog();
+        }
+
+        private void ShowArchiveEthalon(ArchiveTreeEthalonItemRecord atei)
+        {
+            string fname = atei.FileName;
+            try
+            {
+                List<byte> content = new List<byte>(System.IO.File.ReadAllBytes(fname));
+                CreateEthalonChart(content, this.archiveAthalonChart);
+                this.plArchiveEthalonChart.BringToFront();
+            }
+            catch { }
+            
+        }
+
+        private void ShowArchiveLog(ArchiveTreeLogItemRecord atlir)
+        {
+            string fname = atlir.FileName;
+            try
+            {
+                List<byte> content = new List<byte>(System.IO.File.ReadAllBytes(fname));
+                ShowLogFile(content, this.archiveLogDataGrid, "1",false);
+                this.archiveLogDataGrid.BringToFront();
+            }
+            catch { }
+        }
+
+        private void treeView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            TreeNode selNode = treeView.SelectedNode;
+            if (selNode == null)
+                return;
+
+            if(selNode.Tag is ArchiveTreeEthalonItemRecord)
+            {
+                ShowArchiveEthalon(selNode.Tag as ArchiveTreeEthalonItemRecord);
+                return;
+            }
+
+            if (selNode.Tag is ArchiveTreeLogItemRecord)
+            {
+                ShowArchiveLog(selNode.Tag as ArchiveTreeLogItemRecord);
+                return;
+            }
         }
     }
 
