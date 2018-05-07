@@ -17,14 +17,16 @@ CorePinScenario scene3;
 #define PULSE_PIN1 A1 // номер пина для генерации тестовых импульсов индуктивного датчика №1
 #define PULSE_PIN2 A0 // номер пина для генерации тестовых импульсов индуктивного датчика №2
 #define PULSE_PIN3 A5 // номер пина для генерации тестовых импульсов индуктивного датчика №3
-
+#define SIGNAL_PIN 3 // номер пина, на который будет подаваться высокий уровень нужное кол-во микросекунд (имитация срабатывания реле)
+#define SIGNAL_PIN_DURATION 10000 // длительность импульса, микросекунд
+#define SIGNAL_PIN_WAIT_ARTER_RAISE  15000 // сколько микросекунд ждать после импульса реле до начала выдачи пачек импульсов прерываний
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CorePinScenario pulseScene1;
 CorePinScenario pulseScene2;
 CorePinScenario pulseScene3;
 CorePinScenario pulseSceneLed;
-bool onIdleTimer = false;
+//bool onIdleTimer = false;
 uint32_t timer = 0;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -42,6 +44,9 @@ void setup()
   pinMode(PULSE_PIN3, OUTPUT);
 
   pinMode(ledPin, OUTPUT);
+
+  pinMode(SIGNAL_PIN, OUTPUT);
+  digitalWrite(SIGNAL_PIN,LOW);
 
 
   scene1.add({LINE1, HIGH, DURATION});
@@ -185,6 +190,17 @@ void setup()
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+typedef enum
+{
+  msNormal,
+  msOnIdleTimer,
+  msOnRelayImpulse,
+  msWaitRelayDone,
+  
+} MachineState;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MachineState state = msNormal;
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void loop()
 {
 
@@ -207,12 +223,71 @@ void loop()
 
     pulseSceneLed.update();
 
-    pulseScene1.update();
-    pulseScene2.update();
-    pulseScene3.update();
 
-      if(pulseScene1.isDone() && pulseScene2.isDone() && pulseScene3.isDone())
+    static bool bFirst = true;
+
+    if(!bFirst)
+    {
+      pulseScene1.update();
+      pulseScene2.update();
+      pulseScene3.update();
+    }
+
+      if(bFirst || (pulseScene1.isDone() && pulseScene2.isDone() && pulseScene3.isDone()) )
       {
+        // сцены закончились
+        switch(state)
+        {
+          case msNormal:
+          {
+            state = msOnIdleTimer;            
+            timer = micros();
+          }
+          break;
+
+          case msOnIdleTimer:
+          {
+            if(micros() - timer > 20000000)
+            {
+              state = msOnRelayImpulse;
+              
+              digitalWrite(SIGNAL_PIN, HIGH);
+              
+              timer = micros();
+            }
+          }
+          break;
+
+          case msOnRelayImpulse:
+          {
+            if(micros() - timer > SIGNAL_PIN_DURATION)
+            {
+              digitalWrite(SIGNAL_PIN, LOW);
+              
+              timer = micros();
+              
+              state = msWaitRelayDone;
+            }
+          }
+          break;
+
+          case msWaitRelayDone:
+          {
+            if(micros() - timer > SIGNAL_PIN_WAIT_ARTER_RAISE)
+            {              
+                state = msNormal;
+                pulseScene1.reset();
+                pulseScene2.reset();
+                pulseScene3.reset();
+
+                bFirst = false;
+            }            
+          }
+          break;   
+               
+        } // switch
+        
+        /*
           if(!onIdleTimer)
           {
               onIdleTimer = true;
@@ -228,6 +303,7 @@ void loop()
                 pulseScene3.reset();
               }
           }
+          */
       }
 
   } // while(1)
