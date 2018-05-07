@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
 <items xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ControllerNameItem id="6f8d7758021f40b7be75bb8fc0975cae" value="Подстанция №1" />
+  <ControllerNameItem id="9db50904fb1a4e08996d3f4ea7fea70e" value="УРОВ N1" />
 </items>
