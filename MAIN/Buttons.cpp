@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 #include "Buttons.h"
-#include "InfoDiodes.h"
+#include "Feedback.h"
 #include "CONFIG.h"
 //--------------------------------------------------------------------------------------------------
 ButtonsList Buttons;
@@ -33,9 +33,11 @@ void ButtonsList::update()
   if(yellowButton.isClicked())
   {
     DBGLN(F("YELLOW BUTTON CLICKED!"));
-    InfoDiodes.test(false); // гасим светодиод ТЕСТ
-    InfoDiodes.failure(false); // гасим светодиод ОШИБКА
-    InfoDiodes.ready(false); // гасим светодиод УСПЕХ
+    Feedback.testDiode(false); // гасим светодиод ТЕСТ
+    Feedback.failureDiode(false); // гасим светодиод ОШИБКА
+    Feedback.readyDiode(false); // гасим светодиод УСПЕХ
+
+    Feedback.alarm(false); // сбрасываем сигнал АВАРИЯ
   }
 
   if(redButton.isClicked())

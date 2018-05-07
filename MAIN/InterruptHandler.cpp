@@ -1,7 +1,7 @@
 #include "InterruptHandler.h"
 #include "InterruptScreen.h"
 #include "ConfigPin.h"
-#include "InfoDiodes.h"
+#include "Feedback.h"
 #include "DS3231.h"
 #include "FileUtils.h"
 #include "Logger.h"
@@ -14,21 +14,17 @@ InterruptTimeList list1;
 InterruptTimeList list2;
 InterruptTimeList list3;
 //--------------------------------------------------------------------------------------------------------------------------------------
-volatile bool onTimer = false;
+volatile bool onInterruptSeriesTimer = false;
 volatile uint32_t lastInterruptTime = 0;
-//--------------------------------------------------------------------------------------------------------------------------------------
 
-/*
-volatile uint32_t list1LastDataAt = 0;
-volatile uint32_t list2LastDataAt = 0;
-volatile uint32_t list3LastDataAt = 0;
-*/
+volatile uint32_t relayTriggeredTime = 0;
+volatile bool onRelayTriggeredTimer = false;
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptEventSubscriber* subscriber = NULL;
 //--------------------------------------------------------------------------------------------------------------------------------------
 void setInterruptFlag()
 {
-  onTimer = true;
+  onInterruptSeriesTimer = true;
   lastInterruptTime = micros();
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -37,7 +33,6 @@ void Interrupt1Handler()
     uint32_t now = micros();
     list1.push_back(now);
     setInterruptFlag();
-    //list1LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt2Handler()
@@ -45,7 +40,6 @@ void Interrupt2Handler()
     uint32_t now = micros();
     list2.push_back(now);
     setInterruptFlag();
-    //list2LastDataAt = now;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt3Handler()
@@ -53,17 +47,18 @@ void Interrupt3Handler()
     uint32_t now = micros();
     list3.push_back(now);
     setInterruptFlag();
-   // list3LastDataAt = now;
+}
+//--------------------------------------------------------------------------------------------------------------------------------------
+void RelayTriggered()
+{
+  // запоминаем время срабатывания защиты
+  relayTriggeredTime = micros();
+  onRelayTriggeredTimer = true;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
 {
   subscriber = NULL;
-  /*
-  list1LastDataAt = 0;
-  list2LastDataAt = 0;
-  list3LastDataAt = 0;
-  */
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
@@ -74,6 +69,9 @@ void InterruptHandlerClass::begin()
   list3.reserve(INTERRUPT_RESERVE_RECORDS);
 
   NVIC_SetPriorityGrouping(NVIC_PriorityGroup_1);
+
+  attachInterrupt(digitalPinToInterrupt(RELAY_PIN),RelayTriggered, RISING);
+  
   attachInterrupt(digitalPinToInterrupt(INTERRUPT1_PIN),Interrupt1Handler, CHANGE);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT2_PIN),Interrupt2Handler, CHANGE);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT3_PIN),Interrupt3Handler, CHANGE);
@@ -98,7 +96,6 @@ void InterruptHandlerClass::normalizeList(InterruptTimeList& list)
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::writeRodPositionToLog(uint8_t channelNumber)
 {
-  //String line;
  // пишем положение штанги
   RodPosition rodPos = ConfigPin::getRodPosition(channelNumber);
 
@@ -107,30 +104,6 @@ void InterruptHandlerClass::writeRodPositionToLog(uint8_t channelNumber)
   workBuff[1] = rodPos;
   
   Logger.write(workBuff,2);
-  
-  /*
-  line = "[ROD_";
-  line += channelNumber;
-  line += "]";
-
-  switch(rodPos)
-  {
-    case rpBroken:
-      line += "BROKEN";
-    break;
-    
-    case rpUp:
-      line += "UP";
-    break;
-
-    case rpDown:
-      line += "DOWN";
-    break;
-
-  }
-
-  Logger.writeLine(line);  
-  */
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeList& _list, EthalonCompareResult compareResult, EthalonCompareNumber num, InterruptTimeList& ethalonData)
@@ -138,22 +111,15 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
   if(_list.size() < 2) // ничего в списке прерываний нет
     return;
 
- // String line;
  uint8_t workBuff[5] = {0};
 
   workBuff[0] = recordInterruptRecordBegin;
   Logger.write(workBuff,1);
   
-  //Logger.writeLine("[INTERRUPT_RECORD_BEGIN]");
-
   // пишем номер канала, для которого сработало прерывание
   workBuff[0] = recordChannelNumber;
   workBuff[1] = channelNumber;
   Logger.write(workBuff,2);
-
-//  line = "[RECORD_CHANNEL]";
-//  line += channelNumber;
-//  Logger.writeLine(line);
   
   // пишем положение штанги №1
   writeRodPositionToLog(channelNumber);
@@ -164,24 +130,12 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
   memcpy(&(workBuff[1]),&moveTime,4);
   Logger.write(workBuff,5);
   
-  /*
-  line = F("[LINE_MOVE_TIME]");
-  line += moveTime;
-
-  Logger.writeLine(line);
-  */
 
   // пишем кол-во срабатываний канала
   uint32_t motoresource = Settings.getMotoresource(channelNumber);
   motoresource++;
   Settings.setMotoresource(channelNumber,motoresource);
 
-/*
-  line = "[MOTORESOURCE]";
-  line += motoresource;
-
-  Logger.writeLine(line);
-*/
   workBuff[0] = recordMotoresource;
   memcpy(&(workBuff[1]),&motoresource,4);
   Logger.write(workBuff,5);  
@@ -192,13 +146,6 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
   Logger.write(workBuff,2);
   
   // пишем результат сравнения с эталоном для канала
-  /*
-  line = "[COMPARE_RESULT]";
-  line += compareResult;
-  
-  Logger.writeLine(line);
-  */
-  
   workBuff[0] = recordCompareResult;
   workBuff[1] = compareResult;
   Logger.write(workBuff,2);
@@ -207,26 +154,12 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
   if(_list.size() > 1)
   {
     // есть список прерываний
-   //Logger.write("[INTERRUPT_DATA]");
-   //String dt;
    workBuff[0] = recordInterruptDataBegin;
    uint16_t dataLen = _list.size();
    memcpy(&(workBuff[1]),&dataLen,2);
    Logger.write(workBuff,3);
 
    Logger.write((uint8_t*) _list.pData(), _list.size()*sizeof(uint32_t));
-
-   /*
-   for(size_t i=0;i<_list.size();i++)
-   {
-      dt = _list[i];
-      if(i < (_list.size()-1))
-        dt += ",";
-
-        Logger.write(dt);
-   }
-   */
-   //Logger.writeLine("");
    workBuff[0] = recordInterruptDataEnd;
    Logger.write(workBuff,1);
   }
@@ -245,7 +178,6 @@ void InterruptHandlerClass::writeLogRecord(uint8_t channelNumber, InterruptTimeL
   // заканчиваем запись
   workBuff[0] = recordInterruptRecordEnd;
   Logger.write(workBuff,1);
-  //Logger.writeLine("[INTERRUPT_RECORD_END]");
     
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -261,15 +193,6 @@ void InterruptHandlerClass::writeToLog(InterruptTimeList& lst1, InterruptTimeLis
   
   // пишем время срабатывания прерывания
   DS3231Time tm = RealtimeClock.getTime();
-  /*
-  String line;
-  line = F("[INTERRUPT_TIME]");
-  line += RealtimeClock.getDateStr(tm);
-  line += ' ';
-  line += RealtimeClock.getTimeStr(tm);
-
-  Logger.writeLine(line);
-  */
 
   workBuff[0] = recordInterruptTime;
   workBuff[1] = tm.dayOfMonth;
@@ -290,19 +213,6 @@ void InterruptHandlerClass::writeToLog(InterruptTimeList& lst1, InterruptTimeLis
   
   Logger.write(workBuff,3);
   
-/*
-  line = "[TEMP]";
-  line += temp.Value;
-  line += '.';
-
-  if(temp.Fract < 10)
-    line += '0';
-
-  line += temp.Fract;
-
-  Logger.writeLine(line);
-*/
-
   // теперь смотрим, в каких списках есть данные, и пишем записи в лог
   if(lst1.size() > 1)
   {
@@ -322,8 +232,6 @@ void InterruptHandlerClass::writeToLog(InterruptTimeList& lst1, InterruptTimeLis
 
     workBuff[0] = recordInterruptInfoEnd;
     Logger.write(workBuff,1);
-//  Logger.writeLine(F("[INTERRUPT_INFO_END]"));
-//  Logger.writeLine("");
   
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -333,15 +241,46 @@ void InterruptHandlerClass::update()
   static bool inProcess = false;
 
   noInterrupts();
-    bool thisOnTimer = onTimer;
-    uint32_t lastTime = lastInterruptTime;
+    bool thisOnInterruptSeriesTimer = onInterruptSeriesTimer;
+    uint32_t thisLastInterruptTime = lastInterruptTime;
+    
+    bool thisOnRelayTriggeredTimer  = onRelayTriggeredTimer;
+    uint32_t thisRelayTriggeredTime = relayTriggeredTime;
   interrupts();
 
 
-  if(!thisOnTimer || inProcess)
+  // проверяем факт срабатывания защиты
+  if(thisOnRelayTriggeredTimer)
+  {
+    // было прерывание срабатывания защиты - проверяем время
+    if(micros() - thisRelayTriggeredTime > RELAY_WANT_DATA_AFTER)
+    {
+      // время ожидания прошло
+      // проверяем - если данные в одном из списков есть - ничего не делаем.
+      // если ни в одном из списков нет данных - значит, это авария.
+      // в любом другом случае флаг аварии выставится после того, как будет принято решение
+      // о том, что пачки импульсов закончились.
+      
+      noInterrupts();
+        onRelayTriggeredTimer = false;
+        bool hasAlarm = !(list1.size() || list2.size() || list3.size());
+      interrupts();
+
+      // выставляем флаг аварии, в зависимости от наличия данных в списках
+      if(hasAlarm)
+      {
+        // сделал именно так, поскольку флаг аварии сбрасывать нельзя, плюс могут понадобиться дополнительные действия
+        Feedback.alarm(true);
+      }
+    } // if
+    
+  } // if
+
+
+  if(!thisOnInterruptSeriesTimer || inProcess)
     return;
 
-    if(!(micros() - lastTime > INTERRUPT_MAX_IDLE_TIME))
+    if(!(micros() - thisLastInterruptTime > INTERRUPT_MAX_IDLE_TIME))
     {
       return;
     }
@@ -349,7 +288,7 @@ void InterruptHandlerClass::update()
     noInterrupts();
 
       inProcess = true;
-      onTimer = false;
+      onInterruptSeriesTimer = false;
       
       InterruptTimeList copyList1 = list1;
       // вызываем не clear, а empty, чтобы исключить лишние переаллокации памяти
@@ -385,7 +324,7 @@ void InterruptHandlerClass::update()
       DBGLN(copyList1.size());
 
       // зажигаем светодиод "ТЕСТ"
-      InfoDiodes.test();
+      Feedback.testDiode();
 
       needToLog = true;
         
@@ -395,7 +334,10 @@ void InterruptHandlerClass::update()
        if(compareRes1 == COMPARE_RESULT_MatchEthalon)
         {}
        else if(compareRes1 == COMPARE_RESULT_MismatchEthalon || compareRes1 == COMPARE_RESULT_RodBroken)
-        InfoDiodes.failure();
+       {
+          Feedback.failureDiode();
+          Feedback.alarm();
+       }
     }
     
     if(copyList2.size() > 1)
@@ -404,7 +346,7 @@ void InterruptHandlerClass::update()
       DBGLN(copyList2.size());
 
       // зажигаем светодиод "ТЕСТ"
-      InfoDiodes.test();
+      Feedback.testDiode();
 
       needToLog = true;
        
@@ -414,7 +356,10 @@ void InterruptHandlerClass::update()
        if(compareRes2 == COMPARE_RESULT_MatchEthalon)
         {}
        else if(compareRes2 == COMPARE_RESULT_MismatchEthalon || compareRes2 == COMPARE_RESULT_RodBroken)
-        InfoDiodes.failure();
+       {
+        Feedback.failureDiode();
+        Feedback.alarm();
+       }
     }
     
     if(copyList3.size() > 1)
@@ -423,7 +368,7 @@ void InterruptHandlerClass::update()
       DBGLN(copyList3.size());
 
       // зажигаем светодиод "ТЕСТ"
-      InfoDiodes.test();
+      Feedback.testDiode();
 
       needToLog = true;
        
@@ -433,7 +378,10 @@ void InterruptHandlerClass::update()
        if(compareRes3 == COMPARE_RESULT_MatchEthalon)
         {}
        else if(compareRes3 == COMPARE_RESULT_MismatchEthalon || compareRes3 == COMPARE_RESULT_RodBroken)
-        InfoDiodes.failure();
+       {
+        Feedback.failureDiode();
+        Feedback.alarm();
+       }
        
     }
 

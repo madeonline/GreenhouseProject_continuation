@@ -340,6 +340,20 @@ namespace UROVConfig
                             }
                             break;
 
+                        case LogRecordType.RelayTriggeredTime: // время срабатывания защиты
+                            {                                
+                                // далее идут 7 байт времени
+                                byte dayOfMonth = content[readed]; readed++;
+                                byte month = content[readed]; readed++;
+
+                                UInt16 year = Read16(content, readed); readed += 2;
+
+                                byte hour = content[readed]; readed++;
+                                byte minute = content[readed]; readed++;
+                                byte second = content[readed]; readed++;
+                            }
+                            break;
+
                         case LogRecordType.Motoresource:
                             {
                                 System.Diagnostics.Debug.Assert(curRecord != null);

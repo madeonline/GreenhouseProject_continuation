@@ -66,7 +66,8 @@ namespace UROVConfig
 
         InterruptRecordEnd, // конец записи для канада
 
-        InterruptInfoEnd    // конец записи по прерыванию
+        InterruptInfoEnd,    // конец записи по прерыванию
+        RelayTriggeredTime, // время срабатывания защиты
     }
 
     public enum EthalonCompareNumber

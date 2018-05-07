@@ -1,36 +1,44 @@
 //--------------------------------------------------------------------------------------------------
-#include "InfoDiodes.h"
+#include "Feedback.h"
 #include "CONFIG.h"
 //--------------------------------------------------------------------------------------------------
-InfoDiodesList InfoDiodes;
+FeedbackList Feedback;
 //--------------------------------------------------------------------------------------------------
-InfoDiodesList::InfoDiodesList()
+FeedbackList::FeedbackList()
 {
   
 }
 //--------------------------------------------------------------------------------------------------
-void InfoDiodesList::begin()
+void FeedbackList::begin()
 {
   pinMode(LED_READY, OUTPUT);
   pinMode(LED_FAILURE, OUTPUT);
   pinMode(LED_TEST, OUTPUT);
 
-  ready(false);
-  failure(false);
-  test(false);
+  pinMode(STATUS_LINE,OUTPUT);
+  alarm(false);
+
+  readyDiode(false);
+  failureDiode(false);
+  testDiode(false);
 }
 //--------------------------------------------------------------------------------------------------
-void InfoDiodesList::ready(bool on)
+void FeedbackList::alarm(bool on)
+{
+  digitalWrite(STATUS_LINE, on ? STATUS_ALARM_LEVEL : !STATUS_ALARM_LEVEL);
+}
+//--------------------------------------------------------------------------------------------------
+void FeedbackList::readyDiode(bool on)
 {
   digitalWrite(LED_READY, on ? LED_ON_LEVEL : !LED_ON_LEVEL);
 }
 //--------------------------------------------------------------------------------------------------
-void InfoDiodesList::failure(bool on)
+void FeedbackList::failureDiode(bool on)
 {
   digitalWrite(LED_FAILURE, on ? LED_ON_LEVEL : !LED_ON_LEVEL);
 }
 //--------------------------------------------------------------------------------------------------
-void InfoDiodesList::test(bool on)
+void FeedbackList::testDiode(bool on)
 {
   digitalWrite(LED_TEST, on ? LED_ON_LEVEL : !LED_ON_LEVEL);
 }

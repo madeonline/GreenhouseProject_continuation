@@ -30,24 +30,24 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Контроллер");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Архив", 6, 6);
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Контроллер");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Архив", 6, 6);
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.connectStatusMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusProgressMessage = new System.Windows.Forms.ToolStripStatusLabel();
@@ -84,6 +84,19 @@
             this.treeView = new System.Windows.Forms.TreeView();
             this.smallImages = new System.Windows.Forms.ImageList(this.components);
             this.plSection = new System.Windows.Forms.Panel();
+            this.archiveLogDataGrid = new System.Windows.Forms.DataGridView();
+            this.Num1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Time1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Temp1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Motoresource1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Channel1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Pulses1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rod1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Etl1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Compare1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Btn1 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.plArchiveEthalonChart = new System.Windows.Forms.Panel();
+            this.archiveAthalonChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.plSDSettings = new System.Windows.Forms.Panel();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.treeViewSD = new System.Windows.Forms.TreeView();
@@ -205,19 +218,6 @@
             this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.plArchiveEthalonChart = new System.Windows.Forms.Panel();
-            this.archiveAthalonChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.archiveLogDataGrid = new System.Windows.Forms.DataGridView();
-            this.Num1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Time1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Temp1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Motoresource1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Channel1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Pulses1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rod1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Etl1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Compare1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Btn1 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -230,6 +230,9 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.plSection.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.archiveLogDataGrid)).BeginInit();
+            this.plArchiveEthalonChart.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.archiveAthalonChart)).BeginInit();
             this.plSDSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
@@ -274,9 +277,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta1)).BeginInit();
             this.panel12.SuspendLayout();
-            this.plArchiveEthalonChart.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.archiveAthalonChart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.archiveLogDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -616,16 +616,16 @@
             this.treeView.ImageList = this.smallImages;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            treeNode3.ImageIndex = 1;
-            treeNode3.Name = "rootNode";
-            treeNode3.Text = "Контроллер";
-            treeNode4.ImageIndex = 6;
-            treeNode4.Name = "Node0";
-            treeNode4.SelectedImageIndex = 6;
-            treeNode4.Text = "Архив";
+            treeNode1.ImageIndex = 1;
+            treeNode1.Name = "rootNode";
+            treeNode1.Text = "Контроллер";
+            treeNode2.ImageIndex = 6;
+            treeNode2.Name = "Node0";
+            treeNode2.SelectedImageIndex = 6;
+            treeNode2.Text = "Архив";
             this.treeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode4});
+            treeNode1,
+            treeNode2});
             this.treeView.SelectedImageIndex = 1;
             this.treeView.Size = new System.Drawing.Size(194, 533);
             this.treeView.TabIndex = 0;
@@ -669,6 +669,130 @@
             this.plSection.Name = "plSection";
             this.plSection.Size = new System.Drawing.Size(1071, 533);
             this.plSection.TabIndex = 1;
+            // 
+            // archiveLogDataGrid
+            // 
+            this.archiveLogDataGrid.AllowUserToAddRows = false;
+            this.archiveLogDataGrid.AllowUserToDeleteRows = false;
+            this.archiveLogDataGrid.AllowUserToResizeRows = false;
+            this.archiveLogDataGrid.BackgroundColor = System.Drawing.Color.White;
+            this.archiveLogDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.archiveLogDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Num1,
+            this.Time1,
+            this.Temp1,
+            this.Motoresource1,
+            this.Channel1,
+            this.Pulses1,
+            this.Rod1,
+            this.Etl1,
+            this.Compare1,
+            this.Btn1});
+            this.archiveLogDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.archiveLogDataGrid.Location = new System.Drawing.Point(414, 190);
+            this.archiveLogDataGrid.MultiSelect = false;
+            this.archiveLogDataGrid.Name = "archiveLogDataGrid";
+            this.archiveLogDataGrid.ReadOnly = true;
+            this.archiveLogDataGrid.RowHeadersVisible = false;
+            this.archiveLogDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.archiveLogDataGrid.ShowEditingIcon = false;
+            this.archiveLogDataGrid.Size = new System.Drawing.Size(240, 150);
+            this.archiveLogDataGrid.TabIndex = 12;
+            this.archiveLogDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.logDataGrid_CellContentClick);
+            // 
+            // Num1
+            // 
+            this.Num1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Num1.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Num1.HeaderText = "№";
+            this.Num1.Name = "Num1";
+            this.Num1.ReadOnly = true;
+            this.Num1.Width = 43;
+            // 
+            // Time1
+            // 
+            this.Time1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Time1.HeaderText = "Время";
+            this.Time1.Name = "Time1";
+            this.Time1.ReadOnly = true;
+            // 
+            // Temp1
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Temp1.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Temp1.HeaderText = "Температура";
+            this.Temp1.Name = "Temp1";
+            this.Temp1.ReadOnly = true;
+            // 
+            // Motoresource1
+            // 
+            this.Motoresource1.HeaderText = "Срабатываний";
+            this.Motoresource1.Name = "Motoresource1";
+            this.Motoresource1.ReadOnly = true;
+            // 
+            // Channel1
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Channel1.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Channel1.HeaderText = "Канал";
+            this.Channel1.Name = "Channel1";
+            this.Channel1.ReadOnly = true;
+            // 
+            // Pulses1
+            // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Pulses1.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Pulses1.HeaderText = "Импульсов";
+            this.Pulses1.Name = "Pulses1";
+            this.Pulses1.ReadOnly = true;
+            // 
+            // Rod1
+            // 
+            this.Rod1.HeaderText = "Штанга";
+            this.Rod1.Name = "Rod1";
+            this.Rod1.ReadOnly = true;
+            // 
+            // Etl1
+            // 
+            this.Etl1.HeaderText = "Эталон";
+            this.Etl1.Name = "Etl1";
+            this.Etl1.ReadOnly = true;
+            // 
+            // Compare1
+            // 
+            this.Compare1.HeaderText = "Сравнение";
+            this.Compare1.Name = "Compare1";
+            this.Compare1.ReadOnly = true;
+            // 
+            // Btn1
+            // 
+            this.Btn1.HeaderText = "График";
+            this.Btn1.Name = "Btn1";
+            this.Btn1.ReadOnly = true;
+            // 
+            // plArchiveEthalonChart
+            // 
+            this.plArchiveEthalonChart.Controls.Add(this.archiveAthalonChart);
+            this.plArchiveEthalonChart.Location = new System.Drawing.Point(434, 169);
+            this.plArchiveEthalonChart.Name = "plArchiveEthalonChart";
+            this.plArchiveEthalonChart.Size = new System.Drawing.Size(200, 193);
+            this.plArchiveEthalonChart.TabIndex = 11;
+            // 
+            // archiveAthalonChart
+            // 
+            chartArea1.Name = "ethalonChartArea";
+            this.archiveAthalonChart.ChartAreas.Add(chartArea1);
+            this.archiveAthalonChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.archiveAthalonChart.Location = new System.Drawing.Point(0, 0);
+            this.archiveAthalonChart.Name = "archiveAthalonChart";
+            series1.ChartArea = "ethalonChartArea";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.Name = "ethalonChartSerie";
+            this.archiveAthalonChart.Series.Add(series1);
+            this.archiveAthalonChart.Size = new System.Drawing.Size(200, 193);
+            this.archiveAthalonChart.TabIndex = 0;
+            this.archiveAthalonChart.Text = "chart1";
             // 
             // plSDSettings
             // 
@@ -758,8 +882,8 @@
             // Num
             // 
             this.Num.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Num.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Num.DefaultCellStyle = dataGridViewCellStyle5;
             this.Num.HeaderText = "№";
             this.Num.Name = "Num";
             this.Num.ReadOnly = true;
@@ -774,8 +898,8 @@
             // 
             // Temp
             // 
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Temp.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Temp.DefaultCellStyle = dataGridViewCellStyle6;
             this.Temp.HeaderText = "Температура";
             this.Temp.Name = "Temp";
             this.Temp.ReadOnly = true;
@@ -788,16 +912,16 @@
             // 
             // Channel
             // 
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Channel.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Channel.DefaultCellStyle = dataGridViewCellStyle7;
             this.Channel.HeaderText = "Канал";
             this.Channel.Name = "Channel";
             this.Channel.ReadOnly = true;
             // 
             // Pulses
             // 
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Pulses.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.Pulses.DefaultCellStyle = dataGridViewCellStyle8;
             this.Pulses.HeaderText = "Импульсов";
             this.Pulses.Name = "Pulses";
             this.Pulses.ReadOnly = true;
@@ -843,15 +967,15 @@
             // 
             // ethalonChart
             // 
-            chartArea3.Name = "ethalonChartArea";
-            this.ethalonChart.ChartAreas.Add(chartArea3);
+            chartArea2.Name = "ethalonChartArea";
+            this.ethalonChart.ChartAreas.Add(chartArea2);
             this.ethalonChart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ethalonChart.Location = new System.Drawing.Point(0, 0);
             this.ethalonChart.Name = "ethalonChart";
-            series3.ChartArea = "ethalonChartArea";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series3.Name = "ethalonChartSerie";
-            this.ethalonChart.Series.Add(series3);
+            series2.ChartArea = "ethalonChartArea";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.Name = "ethalonChartSerie";
+            this.ethalonChart.Series.Add(series2);
             this.ethalonChart.Size = new System.Drawing.Size(200, 193);
             this.ethalonChart.TabIndex = 0;
             this.ethalonChart.Text = "chart1";
@@ -1930,8 +2054,8 @@
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridViewTextBoxColumn1.HeaderText = "№";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -1945,8 +2069,8 @@
             // 
             // dataGridViewTextBoxColumn3
             // 
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle10;
             this.dataGridViewTextBoxColumn3.HeaderText = "Температура";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
@@ -1959,16 +2083,16 @@
             // 
             // dataGridViewTextBoxColumn5
             // 
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewTextBoxColumn5.DefaultCellStyle = dataGridViewCellStyle11;
             this.dataGridViewTextBoxColumn5.HeaderText = "Штанга";
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             this.dataGridViewTextBoxColumn5.ReadOnly = true;
             // 
             // dataGridViewTextBoxColumn6
             // 
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle12;
             this.dataGridViewTextBoxColumn6.HeaderText = "Сравнение";
             this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             this.dataGridViewTextBoxColumn6.ReadOnly = true;
@@ -1990,130 +2114,6 @@
             this.dataGridViewTextBoxColumn9.HeaderText = "Сравнение";
             this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
             this.dataGridViewTextBoxColumn9.ReadOnly = true;
-            // 
-            // plArchiveEthalonChart
-            // 
-            this.plArchiveEthalonChart.Controls.Add(this.archiveAthalonChart);
-            this.plArchiveEthalonChart.Location = new System.Drawing.Point(434, 169);
-            this.plArchiveEthalonChart.Name = "plArchiveEthalonChart";
-            this.plArchiveEthalonChart.Size = new System.Drawing.Size(200, 193);
-            this.plArchiveEthalonChart.TabIndex = 11;
-            // 
-            // archiveAthalonChart
-            // 
-            chartArea4.Name = "ethalonChartArea";
-            this.archiveAthalonChart.ChartAreas.Add(chartArea4);
-            this.archiveAthalonChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.archiveAthalonChart.Location = new System.Drawing.Point(0, 0);
-            this.archiveAthalonChart.Name = "archiveAthalonChart";
-            series4.ChartArea = "ethalonChartArea";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series4.Name = "ethalonChartSerie";
-            this.archiveAthalonChart.Series.Add(series4);
-            this.archiveAthalonChart.Size = new System.Drawing.Size(200, 193);
-            this.archiveAthalonChart.TabIndex = 0;
-            this.archiveAthalonChart.Text = "chart1";
-            // 
-            // archiveLogDataGrid
-            // 
-            this.archiveLogDataGrid.AllowUserToAddRows = false;
-            this.archiveLogDataGrid.AllowUserToDeleteRows = false;
-            this.archiveLogDataGrid.AllowUserToResizeRows = false;
-            this.archiveLogDataGrid.BackgroundColor = System.Drawing.Color.White;
-            this.archiveLogDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.archiveLogDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Num1,
-            this.Time1,
-            this.Temp1,
-            this.Motoresource1,
-            this.Channel1,
-            this.Pulses1,
-            this.Rod1,
-            this.Etl1,
-            this.Compare1,
-            this.Btn1});
-            this.archiveLogDataGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.archiveLogDataGrid.Location = new System.Drawing.Point(414, 190);
-            this.archiveLogDataGrid.MultiSelect = false;
-            this.archiveLogDataGrid.Name = "archiveLogDataGrid";
-            this.archiveLogDataGrid.ReadOnly = true;
-            this.archiveLogDataGrid.RowHeadersVisible = false;
-            this.archiveLogDataGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.archiveLogDataGrid.ShowEditingIcon = false;
-            this.archiveLogDataGrid.Size = new System.Drawing.Size(240, 150);
-            this.archiveLogDataGrid.TabIndex = 12;
-            this.archiveLogDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.logDataGrid_CellContentClick);
-            // 
-            // Num1
-            // 
-            this.Num1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.Num1.DefaultCellStyle = dataGridViewCellStyle13;
-            this.Num1.HeaderText = "№";
-            this.Num1.Name = "Num1";
-            this.Num1.ReadOnly = true;
-            this.Num1.Width = 43;
-            // 
-            // Time1
-            // 
-            this.Time1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Time1.HeaderText = "Время";
-            this.Time1.Name = "Time1";
-            this.Time1.ReadOnly = true;
-            // 
-            // Temp1
-            // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Temp1.DefaultCellStyle = dataGridViewCellStyle14;
-            this.Temp1.HeaderText = "Температура";
-            this.Temp1.Name = "Temp1";
-            this.Temp1.ReadOnly = true;
-            // 
-            // Motoresource1
-            // 
-            this.Motoresource1.HeaderText = "Срабатываний";
-            this.Motoresource1.Name = "Motoresource1";
-            this.Motoresource1.ReadOnly = true;
-            // 
-            // Channel1
-            // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Channel1.DefaultCellStyle = dataGridViewCellStyle15;
-            this.Channel1.HeaderText = "Канал";
-            this.Channel1.Name = "Channel1";
-            this.Channel1.ReadOnly = true;
-            // 
-            // Pulses1
-            // 
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.Pulses1.DefaultCellStyle = dataGridViewCellStyle16;
-            this.Pulses1.HeaderText = "Импульсов";
-            this.Pulses1.Name = "Pulses1";
-            this.Pulses1.ReadOnly = true;
-            // 
-            // Rod1
-            // 
-            this.Rod1.HeaderText = "Штанга";
-            this.Rod1.Name = "Rod1";
-            this.Rod1.ReadOnly = true;
-            // 
-            // Etl1
-            // 
-            this.Etl1.HeaderText = "Эталон";
-            this.Etl1.Name = "Etl1";
-            this.Etl1.ReadOnly = true;
-            // 
-            // Compare1
-            // 
-            this.Compare1.HeaderText = "Сравнение";
-            this.Compare1.Name = "Compare1";
-            this.Compare1.ReadOnly = true;
-            // 
-            // Btn1
-            // 
-            this.Btn1.HeaderText = "График";
-            this.Btn1.Name = "Btn1";
-            this.Btn1.ReadOnly = true;
             // 
             // MainForm
             // 
@@ -2149,6 +2149,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.plSection.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.archiveLogDataGrid)).EndInit();
+            this.plArchiveEthalonChart.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.archiveAthalonChart)).EndInit();
             this.plSDSettings.ResumeLayout(false);
             this.plSDSettings.PerformLayout();
             this.splitContainer3.Panel1.ResumeLayout(false);
@@ -2216,9 +2219,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelta1)).EndInit();
             this.panel12.ResumeLayout(false);
             this.panel12.PerformLayout();
-            this.plArchiveEthalonChart.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.archiveAthalonChart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.archiveLogDataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

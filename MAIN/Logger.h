@@ -6,7 +6,7 @@
 typedef enum
 {
   recordInterruptInfoBegin,   // начало записи по прерыванию в логе
-  
+
     recordInterruptTime,        // время прерывания
     recordSystemTemperature,    // температура системы
 
@@ -26,7 +26,9 @@ typedef enum
 
     recordInterruptRecordEnd, // конец записи для канада
   
-  recordInterruptInfoEnd    // конец записи по прерыванию
+  recordInterruptInfoEnd,    // конец записи по прерыванию
+
+  recordRelayTriggeredTime, // время срабатывания защиты
     
 } LogRecordTypes;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

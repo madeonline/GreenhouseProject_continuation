@@ -2,19 +2,21 @@
 //--------------------------------------------------------------------------------------------------
 #include <Arduino.h>
 //--------------------------------------------------------------------------------------------------
-class InfoDiodesList
+class FeedbackList
 {
   public:
-    InfoDiodesList();
+    FeedbackList();
     void begin();
 
-    void ready(bool on=true);
-    void failure(bool on=true);
-    void test(bool on=true);
+    void readyDiode(bool on=true);
+    void failureDiode(bool on=true);
+    void testDiode(bool on=true);
+
+    void alarm(bool on=true);
 
   private:
 };
 //--------------------------------------------------------------------------------------------------
-extern InfoDiodesList InfoDiodes;
+extern FeedbackList Feedback;
 //--------------------------------------------------------------------------------------------------
 

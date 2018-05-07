@@ -15,7 +15,7 @@
 #include "Screen6.h"              // Вызов установки даты
 #include "InterruptScreen.h"      // экран с графиком прерывания
 #include "Buttons.h"              // наши железные кнопки
-#include "InfoDiodes.h"           // информационные диоды
+#include "Feedback.h"           // обратная связь (диоды и прочее)
 #include "FileUtils.h"
 #include "Settings.h"
 #include "CoreCommandBuffer.h"
@@ -80,8 +80,8 @@ void setup()
   // переключаемся на первый экран
   Screen.switchToScreen("Main");
 
-  // настраиваем информационные диоды
-  InfoDiodes.begin();
+  // настраиваем обратную связь (информационные диоды и пр.)
+  Feedback.begin();
 
   // настраиваем железные кнопки
   Buttons.begin();

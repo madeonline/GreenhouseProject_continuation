@@ -35,7 +35,7 @@ String SettingsClass::getUUID(const char* passedUUID)
       eeprom->write(addr,RECORD_HEADER3); addr++;
 
       uint8_t written = 0;
-      for(int i=0;i<savedUUID.length();i++)
+      for(size_t i=0;i<savedUUID.length();i++)
       {
         eeprom->write(addr,savedUUID[i]); 
         addr++;
