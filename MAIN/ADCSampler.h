@@ -50,8 +50,8 @@ class ADCSampler {
     uint16_t adcBuffer[NUMBER_OF_BUFFERS][BUFFER_SIZE];
     unsigned int adcDMAIndex;                                  //!< This hold the index of the next DMA buffer
     unsigned int adcTransferIndex;                             //!< This hold the last filled buffer
-	uint32_t _compare_High = 3500;                                  // Верхний порог компаратора АЦП
-	uint32_t _compare_Low = 2500;                                   // Нижний порог компаратора АЦП
+	uint32_t _compare_High = TRANSFORMER_HIGH_DEFAULT_BORDER;                                  // Верхний порог компаратора АЦП
+	uint32_t _compare_Low = TRANSFORMER_LOW_DEFAULT_BORDER;                                   // Нижний порог компаратора АЦП
 
 
 };
