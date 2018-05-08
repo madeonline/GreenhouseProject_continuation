@@ -16,6 +16,7 @@ void FeedbackList::begin()
   pinMode(LED_TEST, OUTPUT);
 
   pinMode(STATUS_LINE,OUTPUT);
+  digitalWrite(STATUS_LINE, LOW);
   alarm(false);
 
   readyDiode(false);

@@ -18,8 +18,8 @@ CorePinScenario scene3;
 #define PULSE_PIN2 A0 // номер пина для генерации тестовых импульсов индуктивного датчика №2
 #define PULSE_PIN3 A5 // номер пина для генерации тестовых импульсов индуктивного датчика №3
 #define SIGNAL_PIN 3 // номер пина, на который будет подаваться высокий уровень нужное кол-во микросекунд (имитация срабатывания реле)
-#define SIGNAL_PIN_DURATION 10000 // длительность импульса, микросекунд
-#define SIGNAL_PIN_WAIT_ARTER_RAISE  35000 // сколько микросекунд ждать после импульса реле до начала выдачи пачек импульсов прерываний
+#define SIGNAL_PIN_DURATION 5000 // длительность импульса, микросекунд
+int SIGNAL_PIN_WAIT_ARTER_RAISE = 5000; // сколько микросекунд ждать после импульса реле до начала выдачи пачек импульсов прерываний
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CorePinScenario pulseScene1;
@@ -32,9 +32,11 @@ uint32_t timer = 0;
 
 const int ledPin = LED_BUILTIN;    // the number of the LED pin
 
+#define Serial SERIAL_PORT_USBVIRTUAL
+
 void setup()
 {
-
+  Serial.begin(115200);
   pinMode(LINE1, OUTPUT);
   pinMode(LINE2, OUTPUT);
   pinMode(LINE3, OUTPUT);
@@ -46,7 +48,7 @@ void setup()
   pinMode(ledPin, OUTPUT);
 
   pinMode(SIGNAL_PIN, OUTPUT);
-  digitalWrite(SIGNAL_PIN,LOW);
+  digitalWrite(SIGNAL_PIN, LOW);
 
 
   scene1.add({LINE1, HIGH, DURATION});
@@ -184,7 +186,7 @@ void setup()
   pulseScene1.add({PULSE_PIN1, LOW, 10000});
   pulseScene2.add({PULSE_PIN2, LOW, 10000});
   pulseScene3.add({PULSE_PIN3, LOW, 10000});
-  
+
   // добавляем паузу в 20 секунд
   pulseSceneLed.add({ledPin, LOW, 20000000 });
 
@@ -196,7 +198,7 @@ typedef enum
   msOnIdleTimer,
   msOnRelayImpulse,
   msWaitRelayDone,
-  
+
 } MachineState;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 MachineState state = msNormal;
@@ -216,7 +218,7 @@ void loop()
 
   while (1)
   {
-    
+
     scene1.update();
     scene2.update();
     scene3.update();
@@ -226,85 +228,88 @@ void loop()
 
     static bool bFirst = true;
 
-    if(!bFirst)
+    if (!bFirst)
     {
       pulseScene1.update();
       pulseScene2.update();
       pulseScene3.update();
     }
 
-      if(bFirst || (pulseScene1.isDone() && pulseScene2.isDone() && pulseScene3.isDone()) )
+    if (bFirst || (pulseScene1.isDone() && pulseScene2.isDone() && pulseScene3.isDone()) )
+    {
+      // сцены закончились
+      switch (state)
       {
-        // сцены закончились
-        switch(state)
-        {
-          case msNormal:
+        case msNormal:
           {
-            state = msOnIdleTimer;            
+            state = msOnIdleTimer;
             timer = micros();
           }
           break;
 
-          case msOnIdleTimer:
+        case msOnIdleTimer:
           {
-            if(micros() - timer > 20000000)
+            if (micros() - timer > 20000000)
             {
               state = msOnRelayImpulse;
-              
+
               digitalWrite(SIGNAL_PIN, HIGH);
-              
+
               timer = micros();
+              SIGNAL_PIN_WAIT_ARTER_RAISE = random(5000, 30000);
+              Serial.println(SIGNAL_PIN_WAIT_ARTER_RAISE);
             }
           }
           break;
 
-          case msOnRelayImpulse:
+        case msOnRelayImpulse:
           {
-            if(micros() - timer > SIGNAL_PIN_DURATION)
+            if (micros() - timer > SIGNAL_PIN_DURATION)
             {
               digitalWrite(SIGNAL_PIN, LOW);
-              
+
               timer = micros();
-              
+
               state = msWaitRelayDone;
+
             }
           }
           break;
 
-          case msWaitRelayDone:
+        case msWaitRelayDone:
           {
-            if(micros() - timer > SIGNAL_PIN_WAIT_ARTER_RAISE)
-            {              
-                state = msNormal;
-                pulseScene1.reset();
-                pulseScene2.reset();
-                pulseScene3.reset();
+            if (micros() - timer > SIGNAL_PIN_WAIT_ARTER_RAISE)
+            {
+              state = msNormal;
+              pulseScene1.reset();
+              pulseScene2.reset();
+              pulseScene3.reset();
 
-                bFirst = false;
-            }            
+              bFirst = false;
+            }
           }
-          break;   
-               
-        } // switch
-        
-        /*
-          if(!onIdleTimer)
-          {
-              onIdleTimer = true;
-              timer = micros();
-          }
-          else
-          {
-              if(micros() - timer > 20000000)
-              {
-                onIdleTimer = false;
-                pulseScene1.reset();
-                pulseScene2.reset();
-                pulseScene3.reset();
-              }
-          }
-          */
-      }
+          break;
+
+      } // switch
+
+      /*
+        if(!onIdleTimer)
+        {
+            onIdleTimer = true;
+            timer = micros();
+        }
+        else
+        {
+            if(micros() - timer > 20000000)
+            {
+              onIdleTimer = false;
+              pulseScene1.reset();
+              pulseScene2.reset();
+              pulseScene3.reset();
+            }
+        }
+      */
+    }
 
   } // while(1)
 }
