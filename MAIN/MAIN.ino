@@ -15,7 +15,7 @@
 #include "Screen6.h"              // Вызов установки даты
 #include "InterruptScreen.h"      // экран с графиком прерывания
 #include "Buttons.h"              // наши железные кнопки
-#include "Feedback.h"           // обратная связь (диоды и прочее)
+#include "Feedback.h"             // обратная связь (диоды и прочее)
 #include "FileUtils.h"
 #include "Settings.h"
 #include "CoreCommandBuffer.h"
