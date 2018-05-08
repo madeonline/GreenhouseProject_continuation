@@ -334,6 +334,10 @@ void Screen1::doSetup(TFTMenu* menu)
 	serie3 = chart.addSerie({ 255,255,0 });   // третий график - желтого цвета
 
   unsigned int samplingRate = 2500;   // Частота вызова (стробирования) АЦП 50мс
+  
+  adcSampler.setLowBorder(Settings.getTransformerLowBorder());
+  adcSampler.setHighBorder(Settings.getTransformerHighBorder());
+  
   adcSampler.begin(samplingRate);  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
