@@ -8,22 +8,21 @@
 #include "InterruptScreen.h"
 #include "Settings.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-ADCSampler sampler;
 Screen1* mainScreen = NULL;        
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ADC_Handler()
 {
-  sampler.handleInterrupt();
+  adcSampler.handleInterrupt();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void loopADC()
 {
   static bool dataHigh_old = false;
   
-  if (sampler.available()) 
+  if (adcSampler.available()) 
   {
     int bufferLength = 0;
-    uint16_t* cBuf = sampler.getFilledBuffer(&bufferLength);    // Получить буфер с данными
+    uint16_t* cBuf = adcSampler.getFilledBuffer(&bufferLength);    // Получить буфер с данными
 
 
     static uint16_t countOfPoints = 0;    
@@ -80,7 +79,7 @@ void loopADC()
     Settings.set5VRawVoltage(raw5V);
     Settings.set200VRawVoltage(raw200V);
       
-    sampler.readBufferDone();                                  // все данные переданы в ком
+    adcSampler.readBufferDone();                                  // все данные переданы в ком
 
     if(mainScreen && mainScreen->isActive())
     {
@@ -95,9 +94,9 @@ void loopADC()
     }
     */
   }
-    if (dataHigh_old != sampler.dataHigh)
+    if (dataHigh_old != adcSampler.dataHigh)
     {
-      dataHigh_old = sampler.dataHigh;
+      dataHigh_old = adcSampler.dataHigh;
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -335,7 +334,7 @@ void Screen1::doSetup(TFTMenu* menu)
 	serie3 = chart.addSerie({ 255,255,0 });   // третий график - желтого цвета
 
   unsigned int samplingRate = 2500;   // Частота вызова (стробирования) АЦП 50мс
-  sampler.begin(samplingRate);  
+  adcSampler.begin(samplingRate);  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Screen1::drawTime(TFTMenu* menu)

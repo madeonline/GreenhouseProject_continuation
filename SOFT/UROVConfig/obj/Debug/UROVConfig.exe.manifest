@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UROVConfig.exe" size="251904">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="UROVConfig.exe" size="255488">
       <assemblyIdentity name="UROVConfig" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>P5sZtYLqZuW7z5NHzp90LDbeO1s=</dsig:DigestValue>
+        <dsig:DigestValue>7u7oIll6bo279QZV9S4tKcNY4qI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

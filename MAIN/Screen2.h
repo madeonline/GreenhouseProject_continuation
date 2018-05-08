@@ -357,6 +357,62 @@ private:
   
 };
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class BorderMaxScreen : public AbstractTFTScreen, public KeyboardInputTarget
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new BorderMaxScreen();
+  }
+
+  virtual void onKeyboardInput(bool enterPressed, const String& enteredValue);
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+    virtual void onActivate();
+
+private:
+      BorderMaxScreen();
+
+      int channel1Button, backButton, resetButton;
+      String channel1BorderVal;
+      int currentEditedButton;
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+class BorderMinScreen : public AbstractTFTScreen, public KeyboardInputTarget
+{
+  public:
+
+  static AbstractTFTScreen* create()
+  {
+    return new BorderMinScreen();
+  }
+
+  virtual void onKeyboardInput(bool enterPressed, const String& enteredValue);
+    
+protected:
+
+    virtual void doSetup(TFTMenu* menu);
+    virtual void doUpdate(TFTMenu* menu);
+    virtual void doDraw(TFTMenu* menu);
+    virtual void onButtonPressed(TFTMenu* menu, int pressedButton);
+    virtual void onActivate();
+
+private:
+      BorderMinScreen();
+
+      int channel1Button, backButton, resetButton;
+      String channel1BorderVal;
+      int currentEditedButton;
+  
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class EthalonScreen : public AbstractTFTScreen
 {
   public:

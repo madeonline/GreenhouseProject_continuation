@@ -2,6 +2,8 @@
 #include "ADCSampler.h"
 #include "CONFIG.h"
 
+ADCSampler adcSampler;
+
 ADCSampler::ADCSampler()
 {
   dataReady = false;

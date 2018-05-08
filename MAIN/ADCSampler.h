@@ -2,6 +2,7 @@
 #define ADCSAMPLER_H
 
 #include <Arduino.h>
+#include "Config.h"
 
 #define NUM_CHANNELS 6   // Установить количество аналоговых входов
 /* 
@@ -33,6 +34,10 @@ class ADCSampler {
     void end();
     void handleInterrupt();
     bool available();
+
+    void setLowBorder(uint32_t val) {_compare_Low = val; } 
+    void setHighBorder(uint32_t val) {_compare_High = val; } 
+    
 	bool available_compare();
     unsigned int getSamplingRate();
     uint16_t* getFilledBuffer(int *bufferLength);
@@ -45,11 +50,14 @@ class ADCSampler {
     uint16_t adcBuffer[NUMBER_OF_BUFFERS][BUFFER_SIZE];
     unsigned int adcDMAIndex;                                  //!< This hold the index of the next DMA buffer
     unsigned int adcTransferIndex;                             //!< This hold the last filled buffer
-	int _compare_High = 3500;                                  // Верхний порог компаратора АЦП
-	int _compare_Low = 2500;                                   // Нижний порог компаратора АЦП
+	uint32_t _compare_High = 3500;                                  // Верхний порог компаратора АЦП
+	uint32_t _compare_Low = 2500;                                   // Нижний порог компаратора АЦП
 
 
 };
+
+extern ADCSampler adcSampler;
+
 
 #endif /* ADCSAMPLER_H */
 

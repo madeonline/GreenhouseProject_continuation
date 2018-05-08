@@ -85,6 +85,15 @@ class CommandHandlerClass
 
   bool getUUID(const char* commandPassed, const CommandParser& parser, Stream* pStream);
 
+  bool setTBORDERMAX(CommandParser& parser, Stream* pStream);
+  bool getTBORDERMAX(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+
+  bool setTBORDERMIN(CommandParser& parser, Stream* pStream);
+  bool getTBORDERMIN(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+
+  bool setTBORDERS(CommandParser& parser, Stream* pStream);
+  bool getTBORDERS(const char* commandPassed, const CommandParser& parser, Stream* pStream);
+
 
   bool printBackSETResult(bool isOK, const char* command, Stream* pStream);
     

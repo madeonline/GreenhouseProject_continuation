@@ -50,6 +50,8 @@ void Screen2::doSetup(TFTMenu* menu)
   Screen.addScreen(PulsesDeltaScreen::create());
   Screen.addScreen(MotoresourceScreen::create());
   Screen.addScreen(MotoresourceMaxScreen::create());
+  Screen.addScreen(BorderMaxScreen::create());
+  Screen.addScreen(BorderMinScreen::create());
   
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -759,7 +761,8 @@ void MotoresourceMaxScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
       Settings.setMotoresourceMax(0,channel1MotoresourceVal.toInt());    
       Settings.setMotoresourceMax(1,channel2MotoresourceVal.toInt());    
       Settings.setMotoresourceMax(2,channel3MotoresourceVal.toInt());    
-  }  else
+  }  
+  else
   {
     currentEditedButton = pressedButton;
     String strValToEdit = screenButtons->getLabel(currentEditedButton);
@@ -778,7 +781,7 @@ TransformerScreen::TransformerScreen() : AbstractTFTScreen("TransformerScreen")
 void TransformerScreen::doSetup(TFTMenu* menu)
 {
   // тут настраиваемся, например, можем добавлять кнопки
-  borderMaxButton = screenButtons->addButton(5, 2, 210, 30, "Порог мах.");
+  borderMaxButton = screenButtons->addButton(5, 2, 210, 30, "Порог макс.");
   borderMinButton = screenButtons->addButton(5, 37, 210, 30, "Порог мин.");
 //  reserved = screenButtons->addButton( 5, 72, 210, 30, "reserved");
 //  reserved = screenButtons->addButton(5, 107, 210, 30, "reserved");
@@ -804,6 +807,174 @@ void TransformerScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
     menu->switchToScreen("BorderMaxScreen");
   else if(pressedButton == borderMinButton)
     menu->switchToScreen("BorderMinScreen");
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// BorderMaxScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BorderMaxScreen::BorderMaxScreen() : AbstractTFTScreen("BorderMaxScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMaxScreen::onActivate()
+{
+  channel1BorderVal = Settings.getTransformerHighBorder();
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMaxScreen::doSetup(TFTMenu* menu)
+{
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+  
+  currentEditedButton = -1;
+  onActivate();
+  
+  // тут настраиваемся, например, можем добавлять кнопки
+  //reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
+  channel1Button = screenButtons->addButton(120, 30, 95, 30, channel1BorderVal.c_str());
+  backButton = screenButtons->addButton(5, 142, 100, 30, "ВЫХОД");
+  resetButton = screenButtons->addButton(113, 142, 100, 30, "СБРОС");
+
+  screenButtons->setButtonBackColor(channel1Button,VGA_BLACK);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMaxScreen::onKeyboardInput(bool enterPressed, const String& enteredValue)
+{
+  if(!enterPressed)
+    return;
+
+    if(currentEditedButton == channel1Button)
+    {
+      channel1BorderVal = enteredValue;
+      screenButtons->relabelButton(channel1Button,channel1BorderVal.c_str());
+      Settings.setTransformerHighBorder(channel1BorderVal.toInt());
+    }
+   
+  currentEditedButton = -1;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMaxScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMaxScreen::doDraw(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  uint8_t* oldFont = dc->getFont();
+
+  dc->setFont(BigRusFont);
+  dc->setColor(VGA_WHITE);
+
+  menu->print("Порог макс.",2,2);
+  menu->print("Порог:", 2, 37);
+  
+  dc->setFont(oldFont);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMaxScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("TransformerScreen");
+  else if(pressedButton == resetButton)
+  {
+      channel1BorderVal = TRANSFORMER_HIGH_DEFAULT_BORDER;
+      
+      screenButtons->relabelButton(channel1Button,channel1BorderVal.c_str(),true);
+      
+      Settings.setTransformerHighBorder(channel1BorderVal.toInt());    
+  }  
+  else
+  {
+    currentEditedButton = pressedButton;
+    String strValToEdit = screenButtons->getLabel(currentEditedButton);
+    ScreenKeyboard->show(ktDigits,strValToEdit,this,this, 8);
+  }
+    
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// BorderMinScreen
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BorderMinScreen::BorderMinScreen() : AbstractTFTScreen("BorderMinScreen")
+{
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMinScreen::onActivate()
+{
+  channel1BorderVal = Settings.getTransformerLowBorder();
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMinScreen::doSetup(TFTMenu* menu)
+{
+  screenButtons->setButtonColors(TFT_BUTTON_COLORS2);
+  
+  currentEditedButton = -1;
+  onActivate();
+  
+  // тут настраиваемся, например, можем добавлять кнопки
+  //reserved = screenButtons->addButton(5, 2, 210, 30, "reserved");
+  channel1Button = screenButtons->addButton(120, 30, 95, 30, channel1BorderVal.c_str());
+  backButton = screenButtons->addButton(5, 142, 100, 30, "ВЫХОД");
+  resetButton = screenButtons->addButton(113, 142, 100, 30, "СБРОС");
+
+  screenButtons->setButtonBackColor(channel1Button,VGA_BLACK);
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMinScreen::onKeyboardInput(bool enterPressed, const String& enteredValue)
+{
+  if(!enterPressed)
+    return;
+
+    if(currentEditedButton == channel1Button)
+    {
+      channel1BorderVal = enteredValue;
+      screenButtons->relabelButton(channel1Button,channel1BorderVal.c_str());
+      Settings.setTransformerLowBorder(channel1BorderVal.toInt());
+    }
+   
+  currentEditedButton = -1;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMinScreen::doUpdate(TFTMenu* menu)
+{
+    // тут обновляем внутреннее состояние
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMinScreen::doDraw(TFTMenu* menu)
+{
+  UTFT* dc = menu->getDC();
+  uint8_t* oldFont = dc->getFont();
+
+  dc->setFont(BigRusFont);
+  dc->setColor(VGA_WHITE);
+
+  menu->print("Порог мин.",2,2);
+  menu->print("Порог:", 2, 37);
+  
+  dc->setFont(oldFont);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void BorderMinScreen::onButtonPressed(TFTMenu* menu, int pressedButton)
+{
+  if(pressedButton == backButton)
+    menu->switchToScreen("TransformerScreen");
+  else if(pressedButton == resetButton)
+  {
+      channel1BorderVal = TRANSFORMER_LOW_DEFAULT_BORDER;
+      
+      screenButtons->relabelButton(channel1Button,channel1BorderVal.c_str(),true);
+      
+      Settings.setTransformerLowBorder(channel1BorderVal.toInt());    
+  }  
+  else
+  {
+    currentEditedButton = pressedButton;
+    String strValToEdit = screenButtons->getLabel(currentEditedButton);
+    ScreenKeyboard->show(ktDigits,strValToEdit,this,this, 8);
+  }
     
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------

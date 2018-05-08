@@ -2,6 +2,7 @@
 #include "Settings.h"
 #include "CONFIG.h"
 #include "ConfigPin.h"
+#include "ADCSampler.h"
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SettingsClass Settings;
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -123,6 +124,46 @@ void SettingsClass::updateInductiveSensors()
   inductiveSensorState1 = digitalRead(inductive_sensor1);
   inductiveSensorState2 = digitalRead(inductive_sensor2);
   inductiveSensorState3 = digitalRead(inductive_sensor3);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+uint32_t SettingsClass::getTransformerLowBorder()
+{
+  uint32_t result = 0;
+  uint8_t* writePtr = (uint8_t*)&result;
+  eeprom->read(TRANSFORMER_LOW_BORDER_STORE_ADDRESS,writePtr,sizeof(uint32_t));
+  
+  if(result == 0xFFFFFFFF)
+    result = TRANSFORMER_LOW_DEFAULT_BORDER;
+
+  return result;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+uint32_t SettingsClass::getTransformerHighBorder()
+{
+  uint32_t result = 0;
+  uint8_t* writePtr = (uint8_t*)&result;
+  eeprom->read(TRANSFORMER_HIGH_BORDER_STORE_ADDRESS,writePtr,sizeof(uint32_t));
+  
+  if(result == 0xFFFFFFFF)
+    result = TRANSFORMER_HIGH_DEFAULT_BORDER;
+
+  return result;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SettingsClass::setTransformerLowBorder(uint32_t val)
+{
+  uint8_t* writePtr = (uint8_t*)&val;
+  eeprom->write(TRANSFORMER_LOW_BORDER_STORE_ADDRESS,writePtr,sizeof(uint32_t)); 
+
+   adcSampler.setLowBorder(val);
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void SettingsClass::setTransformerHighBorder(uint32_t val)
+{
+  uint8_t* writePtr = (uint8_t*)&val;
+  eeprom->write(TRANSFORMER_HIGH_BORDER_STORE_ADDRESS,writePtr,sizeof(uint32_t));
+
+   adcSampler.setHighBorder(val);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 uint32_t SettingsClass::getMotoresource(uint8_t channelNum)

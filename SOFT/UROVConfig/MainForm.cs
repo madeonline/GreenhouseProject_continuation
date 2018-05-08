@@ -1008,6 +1008,9 @@ namespace UROVConfig
             nudPulses2.Value = 0;
             nudPulses3.Value = 0;
 
+            nudHighBorder.Value = 0;
+            nudLowBorder.Value = 0;
+
             tbControllerTime.Text = "-";
             tbFirmwareVersion.Text = "";
             tbFREERAM.Text = "";
@@ -1039,6 +1042,7 @@ namespace UROVConfig
             inSetMotoresourceCurrentToController = true;
             inSetMotoresourceMaxToController = true;
             inSetPulsesToController = true;
+            inSetBordersToController = true;
             inSetDeltaToController = true;
 
             uuidRequested = false;
@@ -1062,6 +1066,7 @@ namespace UROVConfig
                 PushCommandToQueue(GET_PREFIX + "RES_MAX", ParseAskMotoresurceMax, BeforeAskMotoresourceMax);
                 PushCommandToQueue(GET_PREFIX + "PULSES", ParseAskPulses, BeforeAskPulses);
                 PushCommandToQueue(GET_PREFIX + "DELTA", ParseAskDelta, BeforeAskDelta);
+                PushCommandToQueue(GET_PREFIX + "TBORDERS", ParseAskBorders, BeforeAskBorders);
                 GetInductiveSensors();
                 GetVoltage();
                 RequestEthalons();
@@ -1145,6 +1150,10 @@ namespace UROVConfig
         {
             this.inSetPulsesToController = true;
         }
+        private void BeforeAskBorders()
+        {
+            this.inSetBordersToController = true;
+        }
 
         private void BeforeAskMotoresourceCurrent()
         {
@@ -1208,6 +1217,23 @@ namespace UROVConfig
             nudPulses3.Value = Config.Instance.Pulses3;
         }
 
+        private void ParseAskBorders(Answer a)
+        {
+            this.inSetBordersToController = false;
+            if (a.IsOkAnswer)
+            {
+                try { Config.Instance.LowBorder = Convert.ToInt32(a.Params[1]); } catch { }
+                try { Config.Instance.HighBorder = Convert.ToInt32(a.Params[2]); } catch { }
+            }
+            else
+            {
+                Config.Instance.LowBorder = 0;
+                Config.Instance.HighBorder = 0;
+            }
+
+            nudLowBorder.Value = Config.Instance.LowBorder;
+            nudHighBorder.Value = Config.Instance.HighBorder;
+        }
         private void ParseAskMotoresurceCurrent(Answer a)
         {
             this.inSetMotoresourceCurrentToController = false;
@@ -1452,6 +1478,7 @@ namespace UROVConfig
             this.btnSetMotoresourceMax.Enabled = bConnected && !inSetMotoresourceMaxToController;
             this.btnSetPulses.Enabled = bConnected && !inSetPulsesToController;
             this.btnSetDelta.Enabled = bConnected && !inSetDeltaToController;
+            this.btnSetBorders.Enabled = bConnected && !inSetBordersToController;
 
             if (!bConnected) // порт закрыт
             {
@@ -1845,6 +1872,27 @@ namespace UROVConfig
                 nudPulses3.Value = Config.Instance.Pulses3;
 
                 MessageBox.Show("Ошибка обновления импульсов!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ParseSetBorders(Answer a)
+        {
+            inSetBordersToController = false;
+            ShowWaitCursor(false);
+
+            if (a.IsOkAnswer)
+            {
+                Config.Instance.LowBorder = Convert.ToInt32(nudLowBorder.Value);
+                Config.Instance.HighBorder = Convert.ToInt32(nudHighBorder.Value);
+
+                MessageBox.Show("Пороги трансформатора обновлёны.", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                nudLowBorder.Value = Config.Instance.LowBorder;
+                nudHighBorder.Value = Config.Instance.HighBorder;
+
+                MessageBox.Show("Ошибка обновления порогов трансформатора!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -2774,6 +2822,7 @@ namespace UROVConfig
             PushCommandToQueue(SET_PREFIX + "PULSES" + PARAM_DELIMITER + s, ParseSetPulses);
         }
 
+
         private bool inSetDeltaToController = true;
         private void btnSetDelta_Click(object sender, EventArgs e)
         {
@@ -3423,6 +3472,19 @@ namespace UROVConfig
                 ShowArchiveLog(selNode.Tag as ArchiveTreeLogItemRecord);
                 return;
             }
+        }
+
+        private bool inSetBordersToController = true;
+        private void btnSetBorders_Click(object sender, EventArgs e)
+        {
+            inSetBordersToController = true;
+            ShowWaitCursor(true);
+
+            string s = "";
+            s += Convert.ToString(nudLowBorder.Value) + PARAM_DELIMITER;
+            s += Convert.ToString(nudHighBorder.Value);
+
+            PushCommandToQueue(SET_PREFIX + "TBORDERS" + PARAM_DELIMITER + s, ParseSetBorders);
         }
     }
 

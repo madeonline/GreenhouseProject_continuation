@@ -719,6 +719,14 @@ namespace UROVConfig
         [XmlElement("pulses3")]
         public int Pulses3 { get { return pulses3; } set { pulses3 = value; } }
 
+        private int lowBorder = 0;
+        private int highBorder = 0;
+
+        [XmlElement("lowBorder")]
+        public int LowBorder { get { return lowBorder; } set { lowBorder = value; } }
+        [XmlElement("highBorder")]
+        public int HighBorder { get { return highBorder; } set { highBorder = value; } }
+
         private int delta1 = 0;
         private int delta2 = 0;
         private int delta3 = 0;
@@ -737,6 +745,9 @@ namespace UROVConfig
             this.motoresourceMax1 = c.MotoresourceMax1;
             this.motoresourceMax2 = c.MotoresourceMax2;
             this.motoresourceMax3 = c.MotoresourceMax3;
+
+            this.lowBorder = c.LowBorder;
+            this.highBorder = c.HighBorder;
 
             this.pulses1 = c.Pulses1;
             this.pulses2 = c.Pulses2;
@@ -841,6 +852,9 @@ namespace UROVConfig
             delta2 = 0;
             delta3 = 0;
 
+            lowBorder = 0;
+            highBorder = 0;
+
             controllerGUID = "";
         }
 
@@ -875,6 +889,13 @@ namespace UROVConfig
         public int Delta1 { get { return delta1; } set { delta1 = value; } }
         public int Delta2 { get { return delta2; } set { delta2 = value; } }
         public int Delta3 { get { return delta3; } set { delta3 = value; } }
+
+        private int lowBorder = 0;
+        private int highBorder = 0;
+
+        public int LowBorder { get { return lowBorder; } set { lowBorder = value; } }
+        public int HighBorder { get { return highBorder; } set { highBorder = value; } }
+
 
         private string controllerGUID = "";
         public string ControllerGUID { get { return controllerGUID; } set { controllerGUID = value; } }

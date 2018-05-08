@@ -51,6 +51,12 @@ class SettingsClass
     uint8_t getInductiveSensorState(uint8_t channelNum);
 
     String getUUID(const char* passedUUID);
+
+    uint32_t getTransformerLowBorder();
+    void setTransformerLowBorder(uint32_t val);
+
+    uint32_t getTransformerHighBorder();
+    void setTransformerHighBorder(uint32_t val);
     
   private:
 

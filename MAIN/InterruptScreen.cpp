@@ -357,7 +357,6 @@ void InterruptScreen::drawTimeBeforeInterrupt(TFTMenu* menu)
   
   uint16_t curX = 174;
   uint16_t curY = 86; 
-  uint8_t spacing = 4;
 
   uint32_t tm = timeBeforeInterrupts/1000;
   String tmCaption;
