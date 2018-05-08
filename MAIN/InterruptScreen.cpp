@@ -338,6 +338,71 @@ void InterruptScreen::computeMotoresource()
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InterruptScreen::OnTimeBeforeInterruptsBegin(uint32_t tm, bool hasTime)
+{
+  timeBeforeInterrupts = tm;
+  hasRelayTriggeredTime = hasTime;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void InterruptScreen::drawTimeBeforeInterrupt(TFTMenu* menu)
+{
+
+  UTFT* dc = menu->getDC();
+  word oldBackColor = dc->getBackColor();  
+  word oldColor = dc->getColor();
+  uint8_t* oldFont = dc->getFont();
+  dc->setFont(SmallRusFont);
+  uint8_t fontWidth = dc->getFontXsize();
+  uint8_t fontHeight = dc->getFontYsize();
+  
+  uint16_t curX = 174;
+  uint16_t curY = 86; 
+  uint8_t spacing = 4;
+
+  uint32_t tm = timeBeforeInterrupts/1000;
+  String tmCaption;
+  tmCaption = tm;
+
+  bool isGood = timeBeforeInterrupts <= (RELAY_WANT_DATA_AFTER + RELAY_DATA_GAP);
+
+  if(!hasRelayTriggeredTime)
+  {
+    isGood = false;
+    tmCaption = "ERR";
+  }
+  
+  if(isGood)
+  {
+    dc->setColor(VGA_LIME);    
+    dc->setBackColor(VGA_LIME);
+  }
+  else
+  {
+    dc->setColor(VGA_RED);    
+    dc->setBackColor(VGA_RED);
+  }
+
+  
+  uint8_t boxWidth = 30;    
+  uint8_t boxHeight = 18;
+
+  dc->fillRoundRect(curX, curY, curX + boxWidth, curY + boxHeight);
+  
+  if(isGood)
+    dc->setColor(VGA_BLACK);
+  else
+    dc->setColor(VGA_WHITE);
+
+  uint8_t captionLen = menu->print(tmCaption.c_str(),0,0,0,true);
+  uint16_t boxLeft = curX;
+  menu->print(tmCaption.c_str(), boxLeft + (boxWidth - captionLen*fontWidth)/2, curY + (boxHeight - fontHeight)/2 );  
+    
+  dc->setBackColor(oldBackColor);
+  dc->setColor(oldColor);
+  dc->setFont(oldFont); 
+  
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::drawCompareResult(TFTMenu* menu)
 {
   UTFT* dc = menu->getDC();
@@ -390,6 +455,7 @@ void InterruptScreen::doDraw(TFTMenu* menu)
   Drawing::DrawChart(this,serie1, serie2, serie3);
   drawMotoresource(menu);
   drawCompareResult(menu);
+  drawTimeBeforeInterrupt(menu);
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void InterruptScreen::onButtonPressed(TFTMenu* menu, int pressedButton)

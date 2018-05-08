@@ -19,7 +19,7 @@ CorePinScenario scene3;
 #define PULSE_PIN3 A5 // номер пина для генерации тестовых импульсов индуктивного датчика №3
 #define SIGNAL_PIN 3 // номер пина, на который будет подаваться высокий уровень нужное кол-во микросекунд (имитация срабатывания реле)
 #define SIGNAL_PIN_DURATION 5000 // длительность импульса, микросекунд
-uint32_t SIGNAL_PIN_WAIT_ARTER_RAISE = 5000; // сколько микросекунд ждать после импульса реле до начала выдачи пачек импульсов прерываний
+uint32_t SIGNAL_PIN_WAIT_AFTER_RAISE = 5000; // сколько микросекунд ждать после импульса реле до начала выдачи пачек импульсов прерываний
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CorePinScenario pulseScene1;
@@ -37,6 +37,7 @@ const int ledPin = LED_BUILTIN;    // the number of the LED pin
 void setup()
 {
   Serial.begin(115200);
+  
   pinMode(LINE1, OUTPUT);
   pinMode(LINE2, OUTPUT);
   pinMode(LINE3, OUTPUT);
@@ -190,6 +191,8 @@ void setup()
   // добавляем паузу в 20 секунд
   pulseSceneLed.add({ledPin, LOW, 20000000 });
 
+  Serial.println("READY");
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef enum
@@ -256,8 +259,8 @@ void loop()
               digitalWrite(SIGNAL_PIN, HIGH);
 
               timer = micros();
-              SIGNAL_PIN_WAIT_ARTER_RAISE = random(5000, 30000);
-              Serial.println(SIGNAL_PIN_WAIT_ARTER_RAISE);
+              SIGNAL_PIN_WAIT_AFTER_RAISE = random(5000, 30000);
+              Serial.println(SIGNAL_PIN_WAIT_AFTER_RAISE);
             }
           }
           break;
@@ -278,7 +281,7 @@ void loop()
 
         case msWaitRelayDone:
           {
-            if (micros() - timer > SIGNAL_PIN_WAIT_ARTER_RAISE)
+            if (micros() - timer > SIGNAL_PIN_WAIT_AFTER_RAISE)
             {
               state = msNormal;
               pulseScene1.reset();

@@ -27,6 +27,7 @@ class InterruptScreen : public AbstractTFTScreen, public InterruptEventSubscribe
 
   void OnInterruptRaised(const InterruptTimeList& list, uint8_t listNum, EthalonCompareResult result);
   void OnHaveInterruptData();
+  void OnTimeBeforeInterruptsBegin(uint32_t tm, bool hasRelayTime);
     
 protected:
 
@@ -47,12 +48,15 @@ private:
     uint32_t motoresourceBlinkTimer1, motoresourceBlinkTimer2, motoresourceBlinkTimer3;
     void computeMotoresource();
     void drawMotoresource(TFTMenu* menu);
+    void drawTimeBeforeInterrupt(TFTMenu* menu);
 
     InterruptTimeList list1;
     InterruptTimeList list2;
     InterruptTimeList list3;
 
     unsigned long startSeenTime;
+    uint32_t timeBeforeInterrupts;
+    bool hasRelayTriggeredTime;
 
     bool canAcceptInterruptData;
 

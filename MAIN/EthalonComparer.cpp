@@ -144,7 +144,7 @@ EthalonCompareResult EthalonComparer::Compare(InterruptTimeList& list, uint8_t c
 
 
   DBG(F("Ethalon pulses: "));
-  DBGLN(ethalon.size());
+  DBGLN(ethalonData.size());
 
   DBG(F("Catched pulses: "));
   DBGLN(list.size());

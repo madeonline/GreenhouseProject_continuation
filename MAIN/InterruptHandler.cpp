@@ -19,6 +19,9 @@ volatile uint32_t lastInterruptTime = 0;
 
 volatile uint32_t relayTriggeredTime = 0;
 volatile bool onRelayTriggeredTimer = false;
+
+volatile uint32_t timeBeforeInterruptsBegin = 0; // время от срабатывания реле защиты до первого прерывания
+volatile bool hasRelayTriggeredTime = false; // флаг, что было срабатывание реле защиты перед пачкой прерываний
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptEventSubscriber* subscriber = NULL;
 //--------------------------------------------------------------------------------------------------------------------------------------
@@ -31,8 +34,14 @@ void setInterruptFlag()
 void Interrupt1Handler()
 {
     uint32_t now = micros();
-    list1.push_back(now);
+    list1.push_back(now);    
     setInterruptFlag();
+
+  if(list1.size() < 2)
+  {
+    timeBeforeInterruptsBegin = (micros() - relayTriggeredTime);
+  }  
+    
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt2Handler()
@@ -40,6 +49,12 @@ void Interrupt2Handler()
     uint32_t now = micros();
     list2.push_back(now);
     setInterruptFlag();
+
+  if(list2.size() < 2)
+  {
+    timeBeforeInterruptsBegin = (micros() - relayTriggeredTime);
+  }  
+    
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void Interrupt3Handler()
@@ -47,6 +62,12 @@ void Interrupt3Handler()
     uint32_t now = micros();
     list3.push_back(now);
     setInterruptFlag();
+
+  if(list3.size() < 2)
+  {
+    timeBeforeInterruptsBegin = (micros() - relayTriggeredTime);
+  }  
+    
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void RelayTriggered()
@@ -54,11 +75,14 @@ void RelayTriggered()
   // запоминаем время срабатывания защиты
   relayTriggeredTime = micros();
   onRelayTriggeredTimer = true;
+  hasRelayTriggeredTime = true;
+  timeBeforeInterruptsBegin = 0;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 InterruptHandlerClass::InterruptHandlerClass()
 {
   subscriber = NULL;
+  hasAlarm = false;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
 void InterruptHandlerClass::begin()
@@ -248,13 +272,12 @@ void InterruptHandlerClass::update()
     uint32_t thisRelayTriggeredTime = relayTriggeredTime;
   interrupts();
 
-
   // проверяем факт срабатывания защиты
   if(thisOnRelayTriggeredTimer)
   {
     // было прерывание срабатывания защиты - проверяем время
-    if(micros() - thisRelayTriggeredTime > RELAY_WANT_DATA_AFTER)
-    {
+    if(micros() - thisRelayTriggeredTime >= RELAY_WANT_DATA_AFTER)
+    {      
       // время ожидания прошло
       // проверяем - если данные в одном из списков есть - ничего не делаем.
       // если ни в одном из списков нет данных - значит, это авария.
@@ -262,9 +285,23 @@ void InterruptHandlerClass::update()
       // о том, что пачки импульсов закончились.
       
       noInterrupts();
-        onRelayTriggeredTimer = false;
-        bool hasAlarm = !(list1.size() || list2.size() || list3.size());
+       onRelayTriggeredTimer = false;
+       relayTriggeredTime = micros();
+       hasAlarm = !(list1.size() || list2.size() || list3.size());
+       
+       if(hasAlarm)
+       {
+        // есть тревога, надо подождать окончания прерываний
+        thisOnInterruptSeriesTimer = true;
+        thisLastInterruptTime = micros();
+
+        onInterruptSeriesTimer = true;
+        lastInterruptTime = micros();
+
+        timeBeforeInterruptsBegin = micros() - thisRelayTriggeredTime;
+       }
       interrupts();
+      
 
       // выставляем флаг аварии, в зависимости от наличия данных в списках
       if(hasAlarm)
@@ -277,14 +314,13 @@ void InterruptHandlerClass::update()
   } // if
 
 
-  if(!thisOnInterruptSeriesTimer || inProcess)
-    return;
-
-    if(!(micros() - thisLastInterruptTime > INTERRUPT_MAX_IDLE_TIME))
-    {
+    if(!thisOnInterruptSeriesTimer || inProcess)
       return;
-    }
-
+  
+      if(!(micros() - thisLastInterruptTime > INTERRUPT_MAX_IDLE_TIME))
+      {
+        return;
+      }
     noInterrupts();
 
       inProcess = true;
@@ -397,18 +433,37 @@ void InterruptHandlerClass::update()
     // не в ответе за то, что делает сейчас обработчик - пускай сам разруливает ситуацию
     // так, как нужно ему.
 
-    bool wantToInformSubscriber = subscriber && ( (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
-
+    bool wantToInformSubscriber = ( hasAlarm || (copyList1.size() > 1) || (copyList2.size() > 1) || (copyList3.size() > 1) );
 
     if(wantToInformSubscriber)
-    {
-      
-      subscriber->OnInterruptRaised(copyList1, 0, compareRes1);
-      subscriber->OnInterruptRaised(copyList2, 1, compareRes2);      
-      subscriber->OnInterruptRaised(copyList3, 2, compareRes3);
-      
-       // сообщаем обработчику, что данные в каком-то из списков есть
-       subscriber->OnHaveInterruptData();
+    {       
+      if(subscriber)
+      {
+        noInterrupts();
+        uint32_t thisTm = timeBeforeInterruptsBegin;
+        bool thisHasRelayTriggeredTime = hasRelayTriggeredTime;
+        
+        timeBeforeInterruptsBegin = 0;
+        hasRelayTriggeredTime = false;
+        relayTriggeredTime = micros();
+        interrupts();
+
+        subscriber->OnTimeBeforeInterruptsBegin(thisTm, thisHasRelayTriggeredTime);
+                
+        subscriber->OnInterruptRaised(copyList1, 0, compareRes1);
+        subscriber->OnInterruptRaised(copyList2, 1, compareRes2);      
+        subscriber->OnInterruptRaised(copyList3, 2, compareRes3);
+        
+         // сообщаем обработчику, что данные в каком-то из списков есть
+         subscriber->OnHaveInterruptData();
+      }
+      else
+      {
+        noInterrupts();
+        timeBeforeInterruptsBegin = 0;
+        relayTriggeredTime = micros();
+        interrupts();
+      }
       
     }    
 

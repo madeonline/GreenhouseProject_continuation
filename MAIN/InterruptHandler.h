@@ -47,6 +47,8 @@ struct InterruptEventSubscriber
 
   // вызывается, когда есть хотя бы один список с прерываниями - закончен
   virtual void OnHaveInterruptData() = 0;
+
+  virtual void OnTimeBeforeInterruptsBegin(uint32_t tm, bool hasTime) = 0;
 };
 //--------------------------------------------------------------------------------------------------------------------------------------
 class InterruptHandlerClass
@@ -60,6 +62,8 @@ class InterruptHandlerClass
    void setSubscriber(InterruptEventSubscriber* h);
 
 private:
+
+  bool hasAlarm;
 
   static void normalizeList(InterruptTimeList& list);
 
