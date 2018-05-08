@@ -3266,7 +3266,7 @@ namespace UROVConfig
 
         private void btnUploadEthalon_Click(object sender, EventArgs e)
         {
-            UploadFileDialog ufd = new UploadFileDialog();
+            UploadFileDialog ufd = new UploadFileDialog(this);
             if(ufd.ShowDialog() == DialogResult.OK)
             {
                 string sourcefilename = ufd.GetSelectedFileName();

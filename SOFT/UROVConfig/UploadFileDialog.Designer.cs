@@ -31,13 +31,11 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.filePath = new System.Windows.Forms.TextBox();
-            this.btnSelectFile = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.nudChannelNumber = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.cbRodMove = new System.Windows.Forms.ComboBox();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.treeView = new System.Windows.Forms.TreeView();
             ((System.ComponentModel.ISupportInitialize)(this.nudChannelNumber)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,7 +44,7 @@
             this.btnOK.BackColor = System.Drawing.Color.LightGreen;
             this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOK.ForeColor = System.Drawing.Color.Black;
-            this.btnOK.Location = new System.Drawing.Point(174, 141);
+            this.btnOK.Location = new System.Drawing.Point(174, 326);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(161, 37);
             this.btnOK.TabIndex = 6;
@@ -60,7 +58,7 @@
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.ForeColor = System.Drawing.Color.Black;
-            this.btnCancel.Location = new System.Drawing.Point(341, 141);
+            this.btnCancel.Location = new System.Drawing.Point(341, 326);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(82, 37);
             this.btnCancel.TabIndex = 7;
@@ -77,32 +75,11 @@
             this.label1.TabIndex = 8;
             this.label1.Text = "Выберите файл эталона:";
             // 
-            // filePath
-            // 
-            this.filePath.Location = new System.Drawing.Point(16, 33);
-            this.filePath.Name = "filePath";
-            this.filePath.ReadOnly = true;
-            this.filePath.Size = new System.Drawing.Size(404, 20);
-            this.filePath.TabIndex = 9;
-            // 
-            // btnSelectFile
-            // 
-            this.btnSelectFile.BackColor = System.Drawing.Color.LightGreen;
-            this.btnSelectFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSelectFile.ForeColor = System.Drawing.Color.Black;
-            this.btnSelectFile.Location = new System.Drawing.Point(338, 59);
-            this.btnSelectFile.Name = "btnSelectFile";
-            this.btnSelectFile.Size = new System.Drawing.Size(82, 25);
-            this.btnSelectFile.TabIndex = 10;
-            this.btnSelectFile.Text = "Выбрать";
-            this.btnSelectFile.UseVisualStyleBackColor = false;
-            this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(13, 99);
+            this.label2.Location = new System.Drawing.Point(13, 284);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 13);
             this.label2.TabIndex = 11;
@@ -110,7 +87,7 @@
             // 
             // nudChannelNumber
             // 
-            this.nudChannelNumber.Location = new System.Drawing.Point(102, 97);
+            this.nudChannelNumber.Location = new System.Drawing.Point(102, 282);
             this.nudChannelNumber.Maximum = new decimal(new int[] {
             3,
             0,
@@ -134,7 +111,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(191, 99);
+            this.label3.Location = new System.Drawing.Point(191, 284);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(102, 13);
             this.label3.TabIndex = 13;
@@ -147,14 +124,20 @@
             this.cbRodMove.Items.AddRange(new object[] {
             "вверх",
             "вниз"});
-            this.cbRodMove.Location = new System.Drawing.Point(299, 96);
+            this.cbRodMove.Location = new System.Drawing.Point(299, 281);
             this.cbRodMove.Name = "cbRodMove";
             this.cbRodMove.Size = new System.Drawing.Size(121, 21);
             this.cbRodMove.TabIndex = 14;
             // 
-            // openFileDialog
+            // treeView
             // 
-            this.openFileDialog.Filter = "Файлы эталонов|*.ETL";
+            this.treeView.FullRowSelect = true;
+            this.treeView.HideSelection = false;
+            this.treeView.Location = new System.Drawing.Point(12, 33);
+            this.treeView.Name = "treeView";
+            this.treeView.Size = new System.Drawing.Size(408, 242);
+            this.treeView.TabIndex = 15;
+            this.treeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeSelect);
             // 
             // UploadFileDialog
             // 
@@ -163,13 +146,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(437, 195);
+            this.ClientSize = new System.Drawing.Size(437, 375);
+            this.Controls.Add(this.treeView);
             this.Controls.Add(this.cbRodMove);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.nudChannelNumber);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.btnSelectFile);
-            this.Controls.Add(this.filePath);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
@@ -194,12 +176,10 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox filePath;
-        private System.Windows.Forms.Button btnSelectFile;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
         public System.Windows.Forms.NumericUpDown nudChannelNumber;
         public System.Windows.Forms.ComboBox cbRodMove;
+        private System.Windows.Forms.TreeView treeView;
     }
 }

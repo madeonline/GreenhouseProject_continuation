@@ -2238,7 +2238,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Panel plSection;
-        private System.Windows.Forms.TreeView treeView;
         private System.Windows.Forms.Timer tmDateTime;
         private System.Windows.Forms.ToolStripButton btnSetDateTime;
         private System.Windows.Forms.ListView lvLog;
@@ -2396,6 +2395,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Etl1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Compare1;
         private System.Windows.Forms.DataGridViewButtonColumn Btn1;
+        public System.Windows.Forms.TreeView treeView;
     }
 }
 
