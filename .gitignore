@@ -25,3 +25,26 @@
 
 *.pdb
 
+/LOGS
+/MAIN
+/MeandrSAMD21G18A
+/MeandrSAMD21G18A_LoRa_Receiver
+/SOFT
+/Test_Interrupt
+/UROV19_02
+/DOC/Схемы формирователя сигналов
+/DOC/LoRaSenderTestDima.ino
+/DOC/Thumbs.db
+/DOC/UROV_4_1.PDF
+/DOC/UROV_display_ LGDP4524_1.PDF
+/DOC/Лог 21_03_18.txt
+/DOC/Пример клавиатуры.txt
+/DOC/Программа по прерыванию.txt
+/DOC/Список поддерживаемых команд.doc
+/DOC/Структура меню УРОВ.txt
+/DOC/Тестер SAMD21G18A.png
+/DOC/ТЗ  на программное обеспечение  УРОВ.doc
+/DOC/ТЗ на март.docx
+/DOC/УРОВ верх.png
+/DOC/УРОВ низ.png
+/DOC/Перечень работ по программированию УРОВ.doc
