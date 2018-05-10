@@ -259,7 +259,7 @@ void loop()
               digitalWrite(SIGNAL_PIN, HIGH);
 
               timer = micros();
-              SIGNAL_PIN_WAIT_AFTER_RAISE = random(5000, 30000);
+              SIGNAL_PIN_WAIT_AFTER_RAISE = random(5000, 50000);
               Serial.println(SIGNAL_PIN_WAIT_AFTER_RAISE);
             }
           }
