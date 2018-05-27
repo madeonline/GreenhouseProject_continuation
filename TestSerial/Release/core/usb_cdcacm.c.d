@@ -1,4 +1,4 @@
-C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericSTM32F103Z\Release\core\usb_cdcacm.c.o: \
+C:\Users\Alex\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_mapleMini\Release\core\usb_cdcacm.c.o: \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\libmaple\usb\stm32f1\usb_cdcacm.c \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/usb_cdcacm.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/libmaple_types.h \

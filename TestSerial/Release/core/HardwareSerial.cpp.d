@@ -1,4 +1,4 @@
-C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericSTM32F103Z\Release\core\HardwareSerial.cpp.o: \
+C:\Users\Alex\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_mapleMini\Release\core\HardwareSerial.cpp.o: \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\HardwareSerial.cpp \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\HardwareSerial.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/libmaple_types.h \
@@ -26,7 +26,7 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericS
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/stm32f1/include/series/nvic.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/adc.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/stm32f1/include/series/adc.h \
- C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\variants\generic_stm32f103z/board/board.h \
+ C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\variants\maple_mini/board/board.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\Stream.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/usart.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/ring_buffer.h \

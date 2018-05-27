@@ -1,4 +1,4 @@
-C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericSTM32F103Z\Release\core\tone.cpp.o: \
+C:\Users\Alex\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_mapleMini\Release\core\tone.cpp.o: \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\tone.cpp \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\Arduino.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\wirish.h \
@@ -27,7 +27,7 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericS
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/stm32f1/include/series/nvic.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/adc.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/stm32f1/include/series/adc.h \
- C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\variants\generic_stm32f103z/board/board.h \
+ C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\variants\maple_mini/board/board.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple/io.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple/bit_constants.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple/pwm.h \
@@ -49,4 +49,4 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericS
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple/WCharacter.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple/tone.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple/Arduino.h \
- C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\variants\generic_stm32f103z/variant.h
+ C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\variants\maple_mini/variant.h

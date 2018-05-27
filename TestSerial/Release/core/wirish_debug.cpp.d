@@ -1,4 +1,4 @@
-C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericSTM32F103Z\Release\core\wirish_debug.cpp.o: \
+C:\Users\Alex\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_mapleMini\Release\core\wirish_debug.cpp.o: \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\stm32f1\wirish_debug.cpp \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple/wirish_debug.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/gpio.h \

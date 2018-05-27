@@ -1,4 +1,4 @@
-C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericSTM32F103Z\Release\core\HardwareTimer.cpp.o: \
+C:\Users\Alex\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_mapleMini\Release\core\HardwareTimer.cpp.o: \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\HardwareTimer.cpp \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\HardwareTimer.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/timer.h \
@@ -16,7 +16,7 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericS
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/stm32f1/include/series/nvic.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\ext_interrupts.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\wirish_math.h \
- C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\variants\generic_stm32f103z/board/board.h \
+ C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\variants\maple_mini/board/board.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/dma.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/stm32f1/include/series/dma.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/dma_common.h

@@ -22,12 +22,21 @@ This example code is in the public domain.
 void setup() {
 	//Initialize serial and wait for port to open:
 	Serial.begin(9600);
-	while (!Serial) {
-		; // wait for serial port to connect. Needed for native USB port only
-	}
+	//delay(3000);
+	//while (!Serial) {
+	//	; // wait for serial port to connect. Needed for native USB port only
+	//}
 
 	// prints title with ending line break
 	Serial.println("ASCII Table ~ Character Map");
+	//Initialize serial and wait for port to open:
+	Serial1.begin(9600);
+	while (!Serial1) {
+		; // wait for serial port to connect. Needed for native USB port only
+	}
+	delay(3000);
+	// prints title with ending line break
+	Serial1.println("ASCII Table ~ Serial1");
 }
 
 // first visible ASCIIcharacter '!' is number 33:

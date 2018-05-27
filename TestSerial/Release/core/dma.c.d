@@ -1,4 +1,4 @@
-C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_genericSTM32F103Z\Release\core\dma.c.o: \
+C:\Users\Alex\AppData\Local\Temp\VMBuilds\TestSerial\Arduino_STM32_mapleMini\Release\core\dma.c.o: \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\cores\maple\libmaple\dma.c \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/include/libmaple/dma.h \
  C:\arduino-1.8.5\hardware\Arduino_STM32\STM32F1\system/libmaple/stm32f1/include/series/dma.h \
