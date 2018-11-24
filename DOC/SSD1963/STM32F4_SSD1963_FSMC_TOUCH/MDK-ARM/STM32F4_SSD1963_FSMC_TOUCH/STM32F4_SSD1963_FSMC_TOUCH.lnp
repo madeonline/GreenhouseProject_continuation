@@ -1,4 +1,4 @@
---cpu Cortex-M4.fp
+--cpu=Cortex-M4.fp
 "stm32f4_ssd1963_fsmc_touch\startup_stm32f407xx.o"
 "stm32f4_ssd1963_fsmc_touch\stm32f4xx_hal_spi.o"
 "stm32f4_ssd1963_fsmc_touch\stm32f4xx_hal_flash_ramfunc.o"
