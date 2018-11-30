@@ -1,0 +1,244 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Documents and Settings\Administrator\Desktop\New_SSD1963\SSD1963.uvproj
+Project File Date:  08/29/2013
+
+<h2>Output:</h2>
+Build target 'SSD1963'
+compiling stm32f4xx_it.c...
+System\stm32f4xx_it.c(25): error:  #5: cannot open source input file "stm32f4xx_it.h": No such file or directory
+compiling system_stm32f4xx.c...
+compiling main.c...
+compiling SSD1963.c...
+Libraries\SSD1963\Src\SSD1963.c(551): warning:  #177-D: variable "counter" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963.c(580): warning:  #1-D: last line of file ends without a newline
+compiling SSD1963_api.c...
+.\Libraries\SSD1963\Inc\SSD1963_api.h(21): warning:  #1-D: last line of file ends without a newline
+.\Libraries\SSD1963\Inc\SSD1963_font.h(1): warning:  #83-D: type qualifier specified more than once
+Libraries\SSD1963\Src\SSD1963_api.c(270): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(299): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(341): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(321): warning:  #177-D: variable "i" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(322): warning:  #177-D: variable "difference" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(375): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(436): warning:  #1-D: last line of file ends without a newline
+Libraries\SSD1963\Src\SSD1963_api.c(297): warning: C4017W: color may be used before being set
+Libraries\SSD1963\Src\SSD1963_api.c(329): warning: C4017W: color may be used before being set
+".\SSD1963.axf" - 1 Errors, 13 Warning(s).
+Target not created
+Build target 'SSD1963'
+compiling stm32f4xx_it.c...
+System\stm32f4xx_it.c(26): error:  #5: cannot open source input file "main.h": No such file or directory
+compiling system_stm32f4xx.c...
+compiling main.c...
+compiling SSD1963.c...
+Libraries\SSD1963\Src\SSD1963.c(551): warning:  #177-D: variable "counter" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963.c(580): warning:  #1-D: last line of file ends without a newline
+compiling SSD1963_api.c...
+.\Libraries\SSD1963\Inc\SSD1963_api.h(21): warning:  #1-D: last line of file ends without a newline
+.\Libraries\SSD1963\Inc\SSD1963_font.h(1): warning:  #83-D: type qualifier specified more than once
+Libraries\SSD1963\Src\SSD1963_api.c(270): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(299): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(341): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(321): warning:  #177-D: variable "i" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(322): warning:  #177-D: variable "difference" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(375): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(436): warning:  #1-D: last line of file ends without a newline
+Libraries\SSD1963\Src\SSD1963_api.c(297): warning: C4017W: color may be used before being set
+Libraries\SSD1963\Src\SSD1963_api.c(329): warning: C4017W: color may be used before being set
+".\SSD1963.axf" - 1 Errors, 13 Warning(s).
+Target not created
+Build target 'SSD1963'
+compiling stm32f4xx_it.c...
+System\stm32f4xx_it.c(141): warning:  #223-D: function "TimingDelay_Decrement" declared implicitly
+linking...
+.\SSD1963.axf: Error: L6320W: Ignoring --entry command. Cannot find argument 'Reset_Handler'.
+.\SSD1963.axf: Warning: L6320W: Ignoring --first command. Cannot find argument '__Vectors'.
+".\SSD1963.axf" - 1 Errors, 2 Warning(s).
+Target not created
+Build target 'SSD1963'
+compiling stm32f4xx_it.c...
+System\stm32f4xx_it.c(141): warning:  #223-D: function "TimingDelay_Decrement" declared implicitly
+linking...
+.\SSD1963.axf: Error: L6320W: Ignoring --entry command. Cannot find argument 'Reset_Handler'.
+.\SSD1963.axf: Warning: L6320W: Ignoring --first command. Cannot find argument '__Vectors'.
+".\SSD1963.axf" - 1 Errors, 2 Warning(s).
+Target not created
+Build target 'SSD1963'
+linking...
+.\SSD1963.axf: Error: L6320W: Ignoring --entry command. Cannot find argument 'Reset_Handler'.
+.\SSD1963.axf: Warning: L6320W: Ignoring --first command. Cannot find argument '__Vectors'.
+".\SSD1963.axf" - 1 Errors, 1 Warning(s).
+Target not created
+Rebuild target 'SSD1963'
+compiling stm32f4xx_it.c...
+System\stm32f4xx_it.c(141): warning:  #223-D: function "TimingDelay_Decrement" declared implicitly
+compiling system_stm32f4xx.c...
+compiling main.c...
+compiling SSD1963.c...
+Libraries\SSD1963\Src\SSD1963.c(551): warning:  #177-D: variable "counter" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963.c(580): warning:  #1-D: last line of file ends without a newline
+compiling SSD1963_api.c...
+.\Libraries\SSD1963\Inc\SSD1963_api.h(21): warning:  #1-D: last line of file ends without a newline
+.\Libraries\SSD1963\Inc\SSD1963_font.h(1): warning:  #83-D: type qualifier specified more than once
+Libraries\SSD1963\Src\SSD1963_api.c(270): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(299): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(341): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(321): warning:  #177-D: variable "i" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(322): warning:  #177-D: variable "difference" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(375): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(436): warning:  #1-D: last line of file ends without a newline
+Libraries\SSD1963\Src\SSD1963_api.c(297): warning: C4017W: color may be used before being set
+Libraries\SSD1963\Src\SSD1963_api.c(329): warning: C4017W: color may be used before being set
+linking...
+.\SSD1963.axf: Error: L6320W: Ignoring --entry command. Cannot find argument 'Reset_Handler'.
+.\SSD1963.axf: Warning: L6320W: Ignoring --first command. Cannot find argument '__Vectors'.
+".\SSD1963.axf" - 1 Errors, 15 Warning(s).
+Target not created
+Rebuild target 'SSD1963'
+compiling system_stm32f4xx.c...
+assembling startup_stm32f40xx.s...
+compiling main.c...
+compiling SSD1963.c...
+Libraries\SSD1963\Src\SSD1963.c(551): warning:  #177-D: variable "counter" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963.c(580): warning:  #1-D: last line of file ends without a newline
+compiling SSD1963_api.c...
+.\Libraries\SSD1963\Inc\SSD1963_api.h(21): warning:  #1-D: last line of file ends without a newline
+.\Libraries\SSD1963\Inc\SSD1963_font.h(1): warning:  #83-D: type qualifier specified more than once
+Libraries\SSD1963\Src\SSD1963_api.c(270): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(299): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(341): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(321): warning:  #177-D: variable "i" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(322): warning:  #177-D: variable "difference" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(375): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(436): warning:  #1-D: last line of file ends without a newline
+Libraries\SSD1963\Src\SSD1963_api.c(297): warning: C4017W: color may be used before being set
+Libraries\SSD1963\Src\SSD1963_api.c(329): warning: C4017W: color may be used before being set
+linking...
+.\SSD1963.axf: Error: L6218E: Undefined symbol GPIO_Init (referred from ssd1963.o).
+.\SSD1963.axf: Error: L6218E: Undefined symbol GPIO_ResetBits (referred from ssd1963.o).
+.\SSD1963.axf: Error: L6218E: Undefined symbol GPIO_SetBits (referred from ssd1963.o).
+.\SSD1963.axf: Error: L6218E: Undefined symbol RCC_APB2PeriphClockCmd (referred from ssd1963.o).
+".\SSD1963.axf" - 4 Errors, 13 Warning(s).
+Target not created
+Rebuild target 'SSD1963'
+compiling system_stm32f4xx.c...
+assembling startup_stm32f40xx.s...
+compiling stm32f4xx_gpio.c...
+Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(81): error:  #5: cannot open source input file "stm32f4xx_conf.h": No such file or directory
+compiling stm32f4xx_rcc.c...
+Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(57): error:  #5: cannot open source input file "stm32f4xx_conf.h": No such file or directory
+compiling main.c...
+compiling SSD1963.c...
+Libraries\SSD1963\Src\SSD1963.c(551): warning:  #177-D: variable "counter" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963.c(580): warning:  #1-D: last line of file ends without a newline
+compiling SSD1963_api.c...
+.\Libraries\SSD1963\Inc\SSD1963_api.h(21): warning:  #1-D: last line of file ends without a newline
+.\Libraries\SSD1963\Inc\SSD1963_font.h(1): warning:  #83-D: type qualifier specified more than once
+Libraries\SSD1963\Src\SSD1963_api.c(270): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(299): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(341): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(321): warning:  #177-D: variable "i" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(322): warning:  #177-D: variable "difference" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(375): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(436): warning:  #1-D: last line of file ends without a newline
+Libraries\SSD1963\Src\SSD1963_api.c(297): warning: C4017W: color may be used before being set
+Libraries\SSD1963\Src\SSD1963_api.c(329): warning: C4017W: color may be used before being set
+".\SSD1963.axf" - 2 Errors, 13 Warning(s).
+Target not created
+Rebuild target 'SSD1963'
+compiling system_stm32f4xx.c...
+assembling startup_stm32f40xx.s...
+compiling stm32f4xx_gpio.c...
+Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c(81): error:  #5: cannot open source input file "stm32f4xx_conf.h": No such file or directory
+compiling stm32f4xx_rcc.c...
+Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c(57): error:  #5: cannot open source input file "stm32f4xx_conf.h": No such file or directory
+compiling main.c...
+compiling SSD1963.c...
+Libraries\SSD1963\Src\SSD1963.c(551): warning:  #177-D: variable "counter" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963.c(580): warning:  #1-D: last line of file ends without a newline
+compiling SSD1963_api.c...
+.\Libraries\SSD1963\Inc\SSD1963_api.h(21): warning:  #1-D: last line of file ends without a newline
+.\Libraries\SSD1963\Inc\SSD1963_font.h(1): warning:  #83-D: type qualifier specified more than once
+Libraries\SSD1963\Src\SSD1963_api.c(270): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(299): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(341): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(321): warning:  #177-D: variable "i" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(322): warning:  #177-D: variable "difference" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(375): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(436): warning:  #1-D: last line of file ends without a newline
+Libraries\SSD1963\Src\SSD1963_api.c(297): warning: C4017W: color may be used before being set
+Libraries\SSD1963\Src\SSD1963_api.c(329): warning: C4017W: color may be used before being set
+".\SSD1963.axf" - 2 Errors, 13 Warning(s).
+Target not created
+Rebuild target 'SSD1963'
+compiling system_stm32f4xx.c...
+assembling startup_stm32f40xx.s...
+compiling stm32f4xx_gpio.c...
+compiling stm32f4xx_rcc.c...
+compiling main.c...
+compiling SSD1963.c...
+Libraries\SSD1963\Src\SSD1963.c(551): warning:  #177-D: variable "counter" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963.c(580): warning:  #1-D: last line of file ends without a newline
+compiling SSD1963_api.c...
+.\Libraries\SSD1963\Inc\SSD1963_api.h(21): warning:  #1-D: last line of file ends without a newline
+.\Libraries\SSD1963\Inc\SSD1963_font.h(1): warning:  #83-D: type qualifier specified more than once
+Libraries\SSD1963\Src\SSD1963_api.c(270): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(299): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(341): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(321): warning:  #177-D: variable "i" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(322): warning:  #177-D: variable "difference" was declared but never referenced
+Libraries\SSD1963\Src\SSD1963_api.c(375): warning:  #223-D: function "LCD_SetArea" declared implicitly
+Libraries\SSD1963\Src\SSD1963_api.c(436): warning:  #1-D: last line of file ends without a newline
+Libraries\SSD1963\Src\SSD1963_api.c(297): warning: C4017W: color may be used before being set
+Libraries\SSD1963\Src\SSD1963_api.c(329): warning: C4017W: color may be used before being set
+linking...
+Program Size: Code=6736 RO-data=424 RW-data=48 ZI-data=1024  
+".\SSD1963.axf" - 0 Errors, 13 Warning(s).
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+
+Cannot load driver 'C:\Keil\ARM\STLink\ST-LINKIII-KEIL.dll'.
+
+Possible Reasons:
+ - Driver DLL could not be found in the specified path
+ - Driver DLL requires additional DLL's which are not installed
+ - Required Hardware Drivers are not installed
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+
+Cannot load driver 'C:\Keil\ARM\STLink\ST-LINKIII-KEIL.dll'.
+
+Possible Reasons:
+ - Driver DLL could not be found in the specified path
+ - Driver DLL requires additional DLL's which are not installed
+ - Required Hardware Drivers are not installed
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+
+Cannot load driver 'C:\Keil\ARM\STLink\ST-LINKIII-KEIL.dll'.
+
+Possible Reasons:
+ - Driver DLL could not be found in the specified path
+ - Driver DLL requires additional DLL's which are not installed
+ - Required Hardware Drivers are not installed
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+
+Cannot load driver 'C:\Keil\ARM\STLink\ST-LINKIII-KEIL.dll'.
+
+Possible Reasons:
+ - Driver DLL could not be found in the specified path
+ - Driver DLL requires additional DLL's which are not installed
+ - Required Hardware Drivers are not installed
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+Load "C:\\Documents and Settings\\Administrator\\Desktop\\New_SSD1963\\SSD1963.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...

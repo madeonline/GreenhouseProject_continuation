@@ -1,2 +1,0 @@
-Dependencies for Project 'SSD1963', Target 'Target 1': (DO NOT MODIFY !)
-F (.\startup_stm32f40xx.s)(0x51C7F5CE)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx--list .\startup_stm32f40xx.lst --xref -o .\startup_stm32f40xx.o --depend .\startup_stm32f40xx.d)
