@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -g -O1 -c -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -DSTM32F103ZE -DSTM32F10X_HD -ID:\2 GIT STM32F103ZET6\Examples\STM32F103-master\STM32F103-master\Example_USART1\cmsis_boot -ID:\2 GIT STM32F103ZET6\Examples\STM32F103-master\STM32F103-master\Example_USART1\stm_lib\inc -ID:\2 GIT STM32F103ZET6\Examples\STM32F103-master\STM32F103-master\Example_USART1\stm_lib -ID:\2 GIT STM32F103ZET6\Examples\STM32F103-master\STM32F103-master -ID:\2 GIT STM32F103ZET6\Examples\STM32F103-master\STM32F103-master\Example_USART1 -ID:\2 GIT STM32F103ZET6\Examples\STM32F103-master\STM32F103-master\Example_USART1\cmsis">
+      <target file="stm32f10x_rcc.o" lastModified="16763ed147c">
+         <source file="..\..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="16555e2797a"/>
+      </target>
+      <target file="startup_stm32f10x_md.o" lastModified="16763ed11db">
+         <source file="..\..\..\cmsis_boot\startup\startup_stm32f10x_md.c" lastModified="16555e27968"/>
+      </target>
+      <target file="misc.o" lastModified="16763ed162b">
+         <source file="..\..\..\stm_lib\src\misc.c" lastModified="16555e27977"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="16763ed117b">
+         <source file="..\..\..\cmsis_boot\system_stm32f10x.c" lastModified="16555e27970"/>
+      </target>
+      <target file="stm32f10x_usart.o" lastModified="16763ed152a">
+         <source file="..\..\..\stm_lib\src\stm32f10x_usart.c" lastModified="16555e2797b"/>
+      </target>
+      <target file="syscalls.o" lastModified="16763ed15a6">
+         <source file="..\..\..\syscalls\syscalls.c" lastModified="16555e2797c"/>
+      </target>
+      <target file="main.o" lastModified="16763ed13d8">
+         <source file="..\..\..\main.c" lastModified="16763ebde7b"/>
+      </target>
+      <target file="stm32f10x_gpio.o" lastModified="16763ed1266">
+         <source file="..\..\..\stm_lib\src\stm32f10x_gpio.c" lastModified="16555e27978"/>
+      </target>
+   </processor>
+</history>
