@@ -187,8 +187,8 @@ int main(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-	GPIO_ResetBits(GPIOE, GPIO_Pin_2); // Set C13 to Low level ("0")
-
+	//GPIO_ResetBits(GPIOE, GPIO_Pin_2); // Set C13 to Low level ("0")
+	GPIO_SetBits(GPIOE, GPIO_Pin_2);
     // Initialize USART
     usart_init();
     USARTSend(" Hello.\r\nUSART1 is ready.\r\n");

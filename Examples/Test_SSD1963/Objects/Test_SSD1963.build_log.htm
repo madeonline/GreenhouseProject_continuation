@@ -5,7 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: µVision V5.24.2.0
 Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+<<<<<<< HEAD
 License Information: Alex Mos, NTMP, LIC=50DY8-3C8TK-04WSQ-N4U0G-NL02G-G1C79
+=======
+License Information: Alex Mos, NTMP, LIC=MGXGK-ZN6DZ-8YWVV-P729Y-SG49V-7N71N
+>>>>>>> 985aeeab8e2af575a129297c0390dc0c6e2c00d2
  
 Tool Versions:
 Toolchain:       MDK-ARM Professional  Version: 5.24.1
@@ -22,6 +26,7 @@ Dialog DLL:      TCM.DLL V1.32.0.0
  
 <h2>Project:</h2>
 D:\2 GIT STM32F103ZET6\Examples\Test_SSD1963\Test_SSD1963.uvprojx
+<<<<<<< HEAD
 Project File Date:  12/06/2018
 
 <h2>Output:</h2>
@@ -31,6 +36,34 @@ compiling main.c...
 linking...
 Program Size: Code=7408 RO-data=556 RW-data=5616 ZI-data=1632  
 ".\Objects\Test_SSD1963.axf" - 0 Error(s), 0 Warning(s).
+=======
+Project File Date:  11/30/2018
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Rebuild target 'Target 1'
+compiling main.c...
+main.c(116): error:  #20: identifier "amp" is undefined
+      fsmc.FSMC_ReadWriteTimingStruct = &amp;fsmcTiming;
+main.c(116): warning:  #174-D: expression has no effect
+      fsmc.FSMC_ReadWriteTimingStruct = &amp;fsmcTiming;
+main.c: 1 warning, 1 error
+compiling stm32f10x_dma.c...
+compiling misc.c...
+compiling RTX_Config.c...
+compiling rtx_lib.c...
+compiling stm32f10x_fsmc.c...
+compiling stm32f10x_gpio.c...
+compiling stm32f10x_rtc.c...
+compiling stm32f10x_rcc.c...
+compiling stm32f10x_spi.c...
+compiling stm32f10x_tim.c...
+assembling startup_stm32f10x_hd.s...
+compiling GPIO_STM32F10x.c...
+compiling DMA_STM32F10x.c...
+compiling system_stm32f10x.c...
+".\Objects\Test_SSD1963.axf" - 1 Error(s), 1 Warning(s).
+>>>>>>> 985aeeab8e2af575a129297c0390dc0c6e2c00d2
 
 <h2>Software Packages used:</h2>
 
@@ -72,18 +105,28 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: Keil::Device:StdPeriph Drivers:TIM:3.5.0
+<<<<<<< HEAD
       Include file:  Device\StdPeriph_Driver\inc\stm32f10x_tim.h
       Source file:   Device\StdPeriph_Driver\src\stm32f10x_tim.c
 
    * Component: Keil::Device:StdPeriph Drivers:SPI:3.5.0
       Source file:   Device\StdPeriph_Driver\src\stm32f10x_spi.c
       Include file:  Device\StdPeriph_Driver\inc\stm32f10x_spi.h
+=======
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_tim.c
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_tim.h
+
+   * Component: Keil::Device:StdPeriph Drivers:SPI:3.5.0
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_spi.h
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_spi.c
+>>>>>>> 985aeeab8e2af575a129297c0390dc0c6e2c00d2
 
    * Component: Keil::Device:StdPeriph Drivers:RTC:3.5.0
       Include file:  Device\StdPeriph_Driver\inc\stm32f10x_rtc.h
       Source file:   Device\StdPeriph_Driver\src\stm32f10x_rtc.c
 
    * Component: Keil::Device:StdPeriph Drivers:RCC:3.5.0
+<<<<<<< HEAD
       Source file:   Device\StdPeriph_Driver\src\stm32f10x_rcc.c
       Include file:  Device\StdPeriph_Driver\inc\stm32f10x_rcc.h
 
@@ -97,6 +140,21 @@ Package Vendor: Keil
       Source file:   Device\StdPeriph_Driver\templates\stm32f10x_conf.h
       Source file:   Device\StdPeriph_Driver\src\misc.c
       Include file:  Device\StdPeriph_Driver\templates\stm32f10x_it.h
+=======
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_rcc.h
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_rcc.c
+
+   * Component: Keil::Device:StdPeriph Drivers:GPIO:3.5.0
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_gpio.c
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_gpio.h
+
+   * Component: Keil::Device:StdPeriph Drivers:Framework:3.5.1
+      Source file:   Device\StdPeriph_Driver\templates\stm32f10x_it.c
+      Include file:  Device\StdPeriph_Driver\templates\stm32f10x_it.h
+      Source file:   Device\StdPeriph_Driver\templates\stm32f10x_conf.h
+      Include file:  Device\StdPeriph_Driver\inc\misc.h
+      Source file:   Device\StdPeriph_Driver\src\misc.c
+>>>>>>> 985aeeab8e2af575a129297c0390dc0c6e2c00d2
 
    * Component: Keil::Device:StdPeriph Drivers:FSMC:3.5.0
       Include file:  Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h
@@ -107,6 +165,7 @@ Package Vendor: Keil
       Source file:   Device\StdPeriph_Driver\src\stm32f10x_dma.c
 
    * Component: Keil::Device:Startup:1.0.0
+<<<<<<< HEAD
       Source file:   Device\Source\ARM\startup_stm32f10x_hd.s
       Source file:   Device\Source\ARM\STM32F1xx_OPT.s
       Include file:  RTE_Driver\Config\RTE_Device.h
@@ -115,12 +174,23 @@ Package Vendor: Keil
    * Component: Keil::Device:GPIO:1.3
       Source file:   RTE_Driver\GPIO_STM32F10x.c
       Include file:  RTE_Driver\GPIO_STM32F10x.h
+=======
+      Source file:   Device\Source\system_stm32f10x.c
+      Source file:   Device\Source\ARM\startup_stm32f10x_hd.s
+      Include file:  RTE_Driver\Config\RTE_Device.h
+      Source file:   Device\Source\ARM\STM32F1xx_OPT.s
+
+   * Component: Keil::Device:GPIO:1.3
+      Include file:  RTE_Driver\GPIO_STM32F10x.h
+      Source file:   RTE_Driver\GPIO_STM32F10x.c
+>>>>>>> 985aeeab8e2af575a129297c0390dc0c6e2c00d2
 
    * Component: Keil::Device:DMA:1.2
       Source file:   RTE_Driver\DMA_STM32F10x.c
       Include file:  RTE_Driver\DMA_STM32F10x.h
 
    * Component: ARM::CMSIS:RTOS2:Keil RTX5:Library:5.1.0
+<<<<<<< HEAD
       Source file:   CMSIS\RTOS2\RTX\Source\rtx_lib.c
       Include file:  CMSIS\RTOS2\RTX\Include\rtx_os.h
       Include file:  CMSIS\RTOS2\RTX\Config\RTX_Config.h
@@ -134,12 +204,32 @@ Package Vendor: Keil
       Source file:   CMSIS\RTOS2\RTX\Template\Semaphore.c
       Source file:   CMSIS\RTOS2\RTX\Config\RTX_Config.c
       Source file:   CMSIS\RTOS2\RTX\Template\Events.c
+=======
+      Source file:   CMSIS\RTOS2\RTX\Template\Mutex.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Semaphore.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Thread.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Timer.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Events.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_lib.c
+      Include file:  CMSIS\RTOS2\RTX\Include\rtx_os.h
+      Include file:  CMSIS\RTOS2\RTX\Config\RTX_Config.h
+      Source file:   CMSIS\RTOS2\RTX\Config\RTX_Config.c
+      Source file:   CMSIS\RTOS2\RTX\Template\main.c
+      Source file:   CMSIS\RTOS2\RTX\Template\MemPool.c
+      Source file:   CMSIS\RTOS2\RTX\Template\MsgQueue.c
+      Library file:  CMSIS\RTOS2\RTX\Library\ARM\RTX_CM3.lib
+>>>>>>> 985aeeab8e2af575a129297c0390dc0c6e2c00d2
 
    * Component: ARM::CMSIS:CORE:5.0.1
 
    * Component: ::CMSIS:RTOS2:2.1.0 (API)
       Include file:  CMSIS\RTOS2\Include\cmsis_os2.h
+<<<<<<< HEAD
 Build Time Elapsed:  00:00:01
+=======
+Target not created.
+Build Time Elapsed:  00:00:05
+>>>>>>> 985aeeab8e2af575a129297c0390dc0c6e2c00d2
 </pre>
 </body>
 </html>
