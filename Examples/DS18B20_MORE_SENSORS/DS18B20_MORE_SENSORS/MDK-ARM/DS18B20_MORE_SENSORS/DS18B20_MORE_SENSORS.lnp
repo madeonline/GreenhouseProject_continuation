@@ -1,0 +1,24 @@
+--cpu Cortex-M3
+"ds18b20_more_sensors\ds18b20.o"
+"ds18b20_more_sensors\main.o"
+"ds18b20_more_sensors\stm32f1xx_it.o"
+"ds18b20_more_sensors\stm32f1xx_hal_msp.o"
+"ds18b20_more_sensors\system_stm32f1xx.o"
+"ds18b20_more_sensors\stm32f1xx_hal_gpio_ex.o"
+"ds18b20_more_sensors\stm32f1xx_hal_tim.o"
+"ds18b20_more_sensors\stm32f1xx_hal_tim_ex.o"
+"ds18b20_more_sensors\stm32f1xx_hal_uart.o"
+"ds18b20_more_sensors\stm32f1xx_hal.o"
+"ds18b20_more_sensors\stm32f1xx_hal_rcc.o"
+"ds18b20_more_sensors\stm32f1xx_hal_rcc_ex.o"
+"ds18b20_more_sensors\stm32f1xx_hal_gpio.o"
+"ds18b20_more_sensors\stm32f1xx_hal_dma.o"
+"ds18b20_more_sensors\stm32f1xx_hal_cortex.o"
+"ds18b20_more_sensors\stm32f1xx_hal_pwr.o"
+"ds18b20_more_sensors\stm32f1xx_hal_flash.o"
+"ds18b20_more_sensors\stm32f1xx_hal_flash_ex.o"
+"ds18b20_more_sensors\startup_stm32f103xb.o"
+--library_type=microlib --strict --scatter "DS18B20_MORE_SENSORS\DS18B20_MORE_SENSORS.sct"
+--diag_suppress=L6329 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "DS18B20_MORE_SENSORS.map" -o DS18B20_MORE_SENSORS\DS18B20_MORE_SENSORS.axf
