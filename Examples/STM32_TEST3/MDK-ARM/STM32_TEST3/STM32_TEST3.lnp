@@ -1,0 +1,26 @@
+--cpu Cortex-M3
+"stm32_test3\startup_stm32f103xe.o"
+"stm32_test3\ds18b20.o"
+"stm32_test3\main.o"
+"stm32_test3\stm32f1xx_it.o"
+"stm32_test3\stm32f1xx_hal_msp.o"
+"stm32_test3\stm32f1xx_hal_gpio_ex.o"
+"stm32_test3\stm32f1xx_ll_fsmc.o"
+"stm32_test3\stm32f1xx_hal_sram.o"
+"stm32_test3\stm32f1xx_hal_tim.o"
+"stm32_test3\stm32f1xx_hal_tim_ex.o"
+"stm32_test3\stm32f1xx_hal_uart.o"
+"stm32_test3\stm32f1xx_hal.o"
+"stm32_test3\stm32f1xx_hal_rcc.o"
+"stm32_test3\stm32f1xx_hal_rcc_ex.o"
+"stm32_test3\stm32f1xx_hal_gpio.o"
+"stm32_test3\stm32f1xx_hal_dma.o"
+"stm32_test3\stm32f1xx_hal_cortex.o"
+"stm32_test3\stm32f1xx_hal_pwr.o"
+"stm32_test3\stm32f1xx_hal_flash.o"
+"stm32_test3\stm32f1xx_hal_flash_ex.o"
+"stm32_test3\system_stm32f1xx.o"
+--library_type=microlib --strict --scatter "STM32_TEST3\STM32_TEST3.sct"
+--diag_suppress=L6329 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "STM32_TEST3.map" -o STM32_TEST3\STM32_TEST3.axf

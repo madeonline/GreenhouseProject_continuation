@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>TestSTM32</name>
+=======
+	<name>ssd1963_example</name>
+>>>>>>> adff2364c84f0540caf34976b289096bb0ea6ca8
 	<comment></comment>
 	<projects>
 	</projects>
@@ -20,8 +24,13 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.cdt.core.cnature</nature>
+<<<<<<< HEAD
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+=======
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+>>>>>>> adff2364c84f0540caf34976b289096bb0ea6ca8
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
 </projectDescription>
