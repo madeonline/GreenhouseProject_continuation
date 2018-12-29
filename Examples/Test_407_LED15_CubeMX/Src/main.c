@@ -125,10 +125,10 @@ int main(void)
 	  {
 		  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_15, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_13, GPIO_PIN_RESET);
-		  HAL_Delay(500);
+		  HAL_Delay(300);
 		  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_15, GPIO_PIN_RESET);
 		  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_13, GPIO_PIN_SET);
-		  HAL_Delay(500);
+		  HAL_Delay(300);
 	  }
   }
   /* USER CODE END 3 */
