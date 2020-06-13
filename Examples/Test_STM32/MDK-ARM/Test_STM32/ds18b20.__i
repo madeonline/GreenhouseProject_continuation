@@ -1,6 +1,0 @@
--c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include --C99
--I.\RTE\_Test_STM32
--IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
--IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include
--D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE
--o test_stm32\ds18b20.o --omf_browse test_stm32\ds18b20.crf --depend test_stm32\ds18b20.d "C:\Users\moseichuk\Downloads\DS18B20_MORE_SENSORS\DS18B20_MORE_SENSORS\Src\ds18b20.c"

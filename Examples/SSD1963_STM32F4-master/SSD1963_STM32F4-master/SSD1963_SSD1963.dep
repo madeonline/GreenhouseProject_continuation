@@ -1,131 +1,0 @@
-Dependencies for Project 'SSD1963', Target 'SSD1963': (DO NOT MODIFY !)
-F (.\System\system_stm32f4xx.c)(0x52174599)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I.\Inc -I.\Libraries\SSD1963\Inc -I.\Libraries\STM32F4xx_StdPeriph_Driver\inc-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DSTM32F40XX-o .\system_stm32f4xx.o --omf_browse .\system_stm32f4xx.crf --depend .\system_stm32f4xx.d)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\stm32f4xx.h)(0x51C7F638)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C7FB9A)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7FD94)
-I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4_simd.h)(0x51C7FB9A)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\system_stm32f4xx.h)(0x51C7F638)
-F (.\startup_stm32f40xx.s)(0x521F8602)()
-F (.\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c)(0x5218FCF9)()
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_gpio.h)(0x5218E9B7)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\stm32f4xx.h)(0x51C7F638)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C7FB9A)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7FD94)
-I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4_simd.h)(0x51C7FB9A)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\system_stm32f4xx.h)(0x51C7F638)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rcc.h)(0x521E475A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\System\stm32f4xx_conf.h)(0x4EAA5A68)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_adc.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_crc.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_cryp.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dbgmcu.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_exti.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_flash.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_hash.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_i2c.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_iwdg.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_pwr.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rng.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rtc.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sdio.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_spi.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_syscfg.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_tim.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x4EAA5A4A)
-F (.\Libraries\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c)(0x521E4752)()
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rcc.h)(0x521E475A)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\stm32f4xx.h)(0x51C7F638)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C7FB9A)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7FD94)
-I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4_simd.h)(0x51C7FB9A)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\system_stm32f4xx.h)(0x51C7F638)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\System\stm32f4xx_conf.h)(0x4EAA5A68)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_adc.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_crc.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_cryp.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dbgmcu.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_exti.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_flash.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_hash.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_gpio.h)(0x5218E9B7)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_i2c.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_iwdg.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_pwr.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rng.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rtc.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sdio.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_spi.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_syscfg.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_tim.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x4EAA5A4A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x4EAA5A4A)
-F (.\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rcc.h)(0x521E475A)()
-F (.\Src\main.c)(0x521F29E1)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I.\Inc -I.\Libraries\SSD1963\Inc -I.\Libraries\STM32F4xx_StdPeriph_Driver\inc-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DSTM32F40XX-o .\main.o --omf_browse .\main.crf --depend .\main.d)
-I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C7FD94)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\stm32f4xx.h)(0x51C7F638)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C7FB9A)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7FD94)
-I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4_simd.h)(0x51C7FB9A)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\system_stm32f4xx.h)(0x51C7F638)
-I (C:\Keil\ARM\RV31\INC\rtl.h)(0x51C80156)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_gpio.h)(0x5218E9B7)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rcc.h)(0x521E475A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963.h)(0x521E4A20)
-I (C:\Keil\ARM\ARMCC\include\stdbool.h)(0x51C7FD94)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963_Configuration.h)(0x4BE6CA94)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963_CMD.h)(0x4BE06408)
-F (.\Libraries\SSD1963\Inc\SSD1963.h)(0x521E4A20)()
-F (.\Libraries\SSD1963\Inc\SSD1963_api.h)(0x521E563D)()
-F (.\Libraries\SSD1963\Inc\SSD1963_CMD.h)(0x4BE06408)()
-F (.\Libraries\SSD1963\Inc\SSD1963_Configuration.h)(0x4BE6CA94)()
-F (.\Libraries\SSD1963\Inc\SSD1963_font.h)(0x5218CC87)()
-F (.\Libraries\SSD1963\Src\SSD1963.c)(0x5218FC96)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I.\Inc -I.\Libraries\SSD1963\Inc -I.\Libraries\STM32F4xx_StdPeriph_Driver\inc-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DSTM32F40XX-o .\ssd1963.o --omf_browse .\ssd1963.crf --depend .\ssd1963.d)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\stm32f4xx.h)(0x51C7F638)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C7FB9A)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7FD94)
-I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4_simd.h)(0x51C7FB9A)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\system_stm32f4xx.h)(0x51C7F638)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_gpio.h)(0x5218E9B7)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rcc.h)(0x521E475A)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963.h)(0x521E4A20)
-I (C:\Keil\ARM\ARMCC\include\stdbool.h)(0x51C7FD94)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963_Configuration.h)(0x4BE6CA94)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963_CMD.h)(0x4BE06408)
-F (.\Libraries\SSD1963\Src\SSD1963_api.c)(0x5218EB74)(-c --cpu Cortex-M4.fp -D__EVAL -D__MICROLIB -g -O3 --apcs=interwork -I.\Inc -I.\Libraries\SSD1963\Inc -I.\Libraries\STM32F4xx_StdPeriph_Driver\inc-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\ST\STM32F4xx-DHSE_VALUE="8000000" -DSTM32F40XX-o .\ssd1963_api.o --omf_browse .\ssd1963_api.crf --depend .\ssd1963_api.d)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\stm32f4xx.h)(0x51C7F638)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4.h)(0x51C7FB9A)
-I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C7FD94)
-I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x51C7FB9A)
-I (C:\Keil\ARM\CMSIS\Include\core_cm4_simd.h)(0x51C7FB9A)
-I (C:\Keil\ARM\Inc\ST\STM32F4xx\system_stm32f4xx.h)(0x51C7F638)
-I (C:\Keil\ARM\ARMCC\include\stdbool.h)(0x51C7FD94)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_gpio.h)(0x5218E9B7)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963.h)(0x521E4A20)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963_Configuration.h)(0x4BE6CA94)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963_CMD.h)(0x4BE06408)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963_api.h)(0x521E563D)
-I (C:\Documents and Settings\Administrator\Desktop\New_SSD1963\Libraries\SSD1963\Inc\SSD1963_font.h)(0x5218CC87)

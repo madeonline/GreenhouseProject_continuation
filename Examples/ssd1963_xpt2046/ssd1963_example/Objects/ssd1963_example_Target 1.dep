@@ -1,107 +1,0 @@
-Dependencies for Project 'ssd1963_example', Target 'Target 1': (DO NOT MODIFY !)
-F (.\font8x8.c)(0x57989735)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD-o .\objects\font8x8.o --omf_browse .\objects\font8x8.crf --depend .\objects\font8x8.d)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h)(0x58257EBC)
-I (.\RTE\_Target_1\RTE_Components.h)(0x5BFFCEC6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm3.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\system_stm32f10x.h)(0x58257EBC)
-I (.\RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\misc.h)(0x52FA3F80)
-F (.\main.c)(0x5C1CC8AF)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
-I (ssd1963_fsmc.h)(0x5BFFD643)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h)(0x58257EBC)
-I (.\RTE\_Target_1\RTE_Components.h)(0x5BFFCEC6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm3.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\system_stm32f10x.h)(0x58257EBC)
-I (.\RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\misc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588BC994)
-I (xpt2046_spi.h)(0x57AB12D5)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x588BC994)
-F (.\ssd1963_fsmc.c)(0x57A353A1)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD-o .\objects\ssd1963_fsmc.o --omf_browse .\objects\ssd1963_fsmc.crf --depend .\objects\ssd1963_fsmc.d)
-I (ssd1963_fsmc.h)(0x5BFFD643)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h)(0x58257EBC)
-I (.\RTE\_Target_1\RTE_Components.h)(0x5BFFCEC6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm3.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\system_stm32f10x.h)(0x58257EBC)
-I (.\RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\misc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x588BC994)
-F (.\xpt2046_spi.c)(0x57AC7957)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD-o .\objects\xpt2046_spi.o --omf_browse .\objects\xpt2046_spi.crf --depend .\objects\xpt2046_spi.d)
-I (xpt2046_spi.h)(0x57AB12D5)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h)(0x58257EBC)
-I (.\RTE\_Target_1\RTE_Components.h)(0x5BFFCEC6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm3.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\system_stm32f10x.h)(0x58257EBC)
-I (.\RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\misc.h)(0x52FA3F80)
-F (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\src\misc.c)(0x52FA3F80)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD-o .\objects\misc.o --omf_browse .\objects\misc.crf --depend .\objects\misc.d)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\misc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h)(0x58257EBC)
-I (.\RTE\_Target_1\RTE_Components.h)(0x5BFFCEC6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm3.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\system_stm32f10x.h)(0x58257EBC)
-I (.\RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h)(0x52FA3F80)
-F (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\src\stm32f10x_fsmc.c)(0x52FA3F80)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD-o .\objects\stm32f10x_fsmc.o --omf_browse .\objects\stm32f10x_fsmc.crf --depend .\objects\stm32f10x_fsmc.d)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h)(0x58257EBC)
-I (.\RTE\_Target_1\RTE_Components.h)(0x5BFFCEC6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm3.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\system_stm32f10x.h)(0x58257EBC)
-I (.\RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\misc.h)(0x52FA3F80)
-F (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\src\stm32f10x_rcc.c)(0x52FA3F80)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD-o .\objects\stm32f10x_rcc.o --omf_browse .\objects\stm32f10x_rcc.crf --depend .\objects\stm32f10x_rcc.d)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h)(0x58257EBC)
-I (.\RTE\_Target_1\RTE_Components.h)(0x5BFFCEC6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm3.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\system_stm32f10x.h)(0x58257EBC)
-I (.\RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\misc.h)(0x52FA3F80)
-F (RTE\Device\STM32F103VE\RTE_Device.h)(0x5C13B4A4)()
-F (RTE\Device\STM32F103VE\startup_stm32f10x_hd.s)(0x4F1E829C)(--cpu Cortex-M3 -g --apcs=interwork -I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "STM32F10X_HD SETA 1"--list .\listings\startup_stm32f10x_hd.lst --xref -o .\objects\startup_stm32f10x_hd.o --depend .\objects\startup_stm32f10x_hd.d)
-F (RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)()
-F (RTE\Device\STM32F103VE\system_stm32f10x.c)(0x4F1E829C)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\STM32F103VE-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="524" -D_RTE_ -DSTM32F10X_HD-o .\objects\system_stm32f10x.o --omf_browse .\objects\system_stm32f10x.crf --depend .\objects\system_stm32f10x.d)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h)(0x58257EBC)
-I (.\RTE\_Target_1\RTE_Components.h)(0x5BFFCEC6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm3.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\system_stm32f10x.h)(0x58257EBC)
-I (.\RTE\Device\STM32F103VE\stm32f10x_conf.h)(0x53B6B672)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_fsmc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\stm32f10x_rcc.h)(0x52FA3F80)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc\misc.h)(0x52FA3F80)
