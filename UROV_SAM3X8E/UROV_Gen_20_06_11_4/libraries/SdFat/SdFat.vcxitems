@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding ="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup Label="Globals" >
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{6286bce0-f797-40ea-ad98-d06618743ad8}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\MinimumSerial.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\FatFile.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\FatFileLFN.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\FatFilePrint.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\FatFileSFN.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\FatVolume.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\FmtNumber.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\fstream.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\istream.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\ostream.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\FatLib\StdioStream.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\SdCard\SdioCardEX.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\SdCard\SdioTeensy.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\SdCard\SdSpiCard.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\SdCard\SdSpiCardEX.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\SpiDriver\SdSpiESP8266.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\SpiDriver\SdSpiSAM3X.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\SpiDriver\SdSpiSTM32.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\SpiDriver\SdSpiTeensy3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\BlockDriver.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FreeStack.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\MinimumSerial.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SdFat.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SdFatConfig.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SysCall.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\ArduinoFiles.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\ArduinoStream.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\BaseBlockDriver.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\bufstream.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\FatApiConstants.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\FatFile.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\FatFileSystem.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\FatLib.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\FatLibConfig.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\FatStructs.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\FatVolume.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\FmtNumber.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\fstream.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\ios.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\iostream.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\istream.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\ostream.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\FatLib\StdioStream.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SdCard\SdInfo.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SdCard\SdioCard.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SdCard\SdSpiCard.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\DigitalPin.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\SdSpiBaseDriver.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\SdSpiDriver.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\SoftSPI.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\AvrDevelopersGpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\BobuinoGpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\GpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\LeonardoGpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\MegaGpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\SleepingBeautyGpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\Standard1284GpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\Teensy2GpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\Teensy2ppGpioPinMap.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\SpiDriver\boards\UnoGpioPinMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)library.properties" />
+<Text Include="$(MSBuildThisFileDirectory)vs-readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory).gitattributes" />
+<None Include="$(MSBuildThisFileDirectory).gitignore" />
+<None Include="$(MSBuildThisFileDirectory)LICENSE.md" />
+<None Include="$(MSBuildThisFileDirectory)README.md" />
+  </ItemGroup>
+</Project>
