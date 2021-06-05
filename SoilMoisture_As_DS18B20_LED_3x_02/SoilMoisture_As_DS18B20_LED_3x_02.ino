@@ -79,7 +79,7 @@ int SOIL_MOISTURE_100_PERCENT = 650;         // значение АЦП для 1
 #define LED1_GREEN 10                             // Светодиод индикации высокой влажности
 #define LED2_RED 9                                // Светодиод индикации низкой влажности
 #define LED3_BLUE 8                               // Светодиод индикации средней влажности
-#define REED_SWITCH 7                            // Геркон калибровки датчика влажности
+#define REED_SWITCH 11                            // Геркон калибровки датчика влажности
 
 #define COMMON_ANODE
 #define COLOR_NONE LOW, LOW, LOW
@@ -94,9 +94,8 @@ int SOIL_MOISTURE_100_PERCENT = 650;         // значение АЦП для 1
 
 // указываем 0xA0 - как тип данных влажности почвы, в остальном - датчик ведёт себя ровно так же, как DS18B20
 //auto ds18b20 = DS18B20(DS18B20::family_code, 0x00, 0x00, 0xB2, 0x18, 0xDA, 0x09);   // DS18B20: 9-12bit, -55 -  +85 degC
-byte num_module = 0x05;
+byte num_module = 0x00;  // Индивидуальный номер датчика. Каждому датчику необходимо присваивать индивидуальный номер в диапазоне 0х00  - 0хFF.
 auto ds18b20 = DS18B20(/*DS18B20::family_code*/0xA0, 0x00, 0x00, 0xB2, 0x18, 0xDA, num_module);   // DS18B20: 9-12bit, -55 -  +85 degC
-auto ds2433 = DS2433(DS2433::family_code, 0x00, 0x00, 0x33, 0x24, 0xDA, 0x00);
 
 
 //----------------------------------------------------------------------------------------------------------------
@@ -308,19 +307,26 @@ void EEPROM_int_write(int addr, int num)
 
 void sensor_calibration()
 {
+	setColor(COLOR_GREEN);
+	delay(1000);
 
 	blink_LED(15, 1, 100);  // 1 - RED, 2 - BLUE, 3 - GREEN
 
 	int val0 = analogRead(SENSOR_PIN);
-	EEPROM_int_write(address_SOIL_MOISTURE_0_PERCENT, val0);
+	//EEPROM_int_write(address_SOIL_MOISTURE_0_PERCENT, val0);
+	Serial.print("SOIL_MOISTURE_0_PERCENT = ");
+	Serial.println(val0);
 	blink_LED(5, 3, 300);  // 1 - RED, 2 - BLUE, 3 - GREEN
 	delay(1000);
 	blink_LED(15, 2, 100);  // 1 - RED, 2 - BLUE, 3 - GREEN
 	int val100 = analogRead(SENSOR_PIN);
-	EEPROM_int_write(address_SOIL_MOISTURE_100_PERCENT, val100);
+//	EEPROM_int_write(address_SOIL_MOISTURE_100_PERCENT, val100);
+	Serial.print("SOIL_MOISTURE_100_PERCENT = ");
+	Serial.println(val100);
 	delay(1000);
 	calibration_OK = 0x55;
 	EEPROM.write(address_calibr, calibration_OK);
+	Serial.println("Calibration complete");
 
 	delay(1000);
 	while (digitalRead(REED_SWITCH)==LOW) 
@@ -331,23 +337,49 @@ void sensor_calibration()
 		delay(300);
 	}
 
-	if (val0 != val100)
+	//if (val0 != val100)
+	//{
+	//	calibration = false;
+	//	SOIL_MOISTURE_0_PERCENT = EEPROM_int_read(address_SOIL_MOISTURE_0_PERCENT);
+	//	SOIL_MOISTURE_100_PERCENT = EEPROM_int_read(address_SOIL_MOISTURE_100_PERCENT);
+	//	setColor(COLOR_GREEN);
+	//	Serial.print("SOIL_MOISTURE_0_PERCENT = ");
+	//	Serial.println(SOIL_MOISTURE_0_PERCENT);
+	//	Serial.print("SOIL_MOISTURE_100_PERCENT = ");
+	//	Serial.println(SOIL_MOISTURE_100_PERCENT);
+	//	Serial.println();
+	//	delay(2000);
+	//}
+	//else
+	//{
+	//	blink_LED(50, 1, 50);  // 1 - RED, 2 - BLUE, 3 - GREEN
+	//}
+
+	if (val0 <= val100 +5 && val0 >= val100 - 5)
 	{
+		Serial.println("Calibration failed");
+		blink_LED(50, 1, 50);  // 1 - RED, 2 - BLUE, 3 - GREEN
+	}
+	else
+	{
+		Serial.println("Successful calibration");
 		calibration = false;
+		EEPROM_int_write(address_SOIL_MOISTURE_0_PERCENT, val0);
+		EEPROM_int_write(address_SOIL_MOISTURE_100_PERCENT, val100);
+
 		SOIL_MOISTURE_0_PERCENT = EEPROM_int_read(address_SOIL_MOISTURE_0_PERCENT);
 		SOIL_MOISTURE_100_PERCENT = EEPROM_int_read(address_SOIL_MOISTURE_100_PERCENT);
 		setColor(COLOR_GREEN);
+		Serial.println("Parameters saved");
 		Serial.print("SOIL_MOISTURE_0_PERCENT = ");
 		Serial.println(SOIL_MOISTURE_0_PERCENT);
 		Serial.print("SOIL_MOISTURE_100_PERCENT = ");
 		Serial.println(SOIL_MOISTURE_100_PERCENT);
 		Serial.println();
 		delay(2000);
+
 	}
-	else
-	{
-		blink_LED(25, 1, 50);  // 1 - RED, 2 - BLUE, 3 - GREEN
-	}
+
 
 }
 
