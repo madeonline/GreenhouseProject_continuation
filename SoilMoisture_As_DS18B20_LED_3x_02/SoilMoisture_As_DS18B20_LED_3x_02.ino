@@ -337,24 +337,6 @@ void sensor_calibration()
 		delay(300);
 	}
 
-	//if (val0 != val100)
-	//{
-	//	calibration = false;
-	//	SOIL_MOISTURE_0_PERCENT = EEPROM_int_read(address_SOIL_MOISTURE_0_PERCENT);
-	//	SOIL_MOISTURE_100_PERCENT = EEPROM_int_read(address_SOIL_MOISTURE_100_PERCENT);
-	//	setColor(COLOR_GREEN);
-	//	Serial.print("SOIL_MOISTURE_0_PERCENT = ");
-	//	Serial.println(SOIL_MOISTURE_0_PERCENT);
-	//	Serial.print("SOIL_MOISTURE_100_PERCENT = ");
-	//	Serial.println(SOIL_MOISTURE_100_PERCENT);
-	//	Serial.println();
-	//	delay(2000);
-	//}
-	//else
-	//{
-	//	blink_LED(50, 1, 50);  // 1 - RED, 2 - BLUE, 3 - GREEN
-	//}
-
 	if (val0 <= val100 +5 && val0 >= val100 - 5)
 	{
 		Serial.println("Calibration failed");
