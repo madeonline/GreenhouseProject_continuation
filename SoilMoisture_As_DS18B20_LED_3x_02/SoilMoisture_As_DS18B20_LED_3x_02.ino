@@ -79,7 +79,7 @@ int SOIL_MOISTURE_100_PERCENT = 650;         // значение АЦП для 1
 #define LED1_GREEN 10                             // Светодиод индикации высокой влажности
 #define LED2_RED 9                                // Светодиод индикации низкой влажности
 #define LED3_BLUE 8                               // Светодиод индикации средней влажности
-#define REED_SWITCH 11                            // Геркон калибровки датчика влажности
+#define REED_SWITCH 7                            // Геркон калибровки датчика влажности
 
 #define COMMON_ANODE
 #define COLOR_NONE LOW, LOW, LOW
