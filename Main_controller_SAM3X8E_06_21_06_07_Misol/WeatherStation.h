@@ -7,6 +7,7 @@ class WeatherStationClass
   private:
    // int16_t pin;
    // static void read_input();
+	  int calc_REG_Array();
     
   public:
     WeatherStationClass();

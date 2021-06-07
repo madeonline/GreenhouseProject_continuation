@@ -8,6 +8,7 @@
 // Объявляем переменные и константы:
 iarduino_I2C_connect I2C2;                            // объявляем переменную для работы c библиотекой iarduino_I2C_connect
 byte           REG_Array[12];                         // объявляем массив, данные которого будут доступны для чтения/записи по шине I2C
+byte           REG_Array1[15];                        // объявляем массив, данные которого будут доступны для чтения/записи по шине I2C
 //=============================================================================================================================
 
 uint8_t count = 0;
@@ -30,7 +31,7 @@ void setup()
 //Wire.setClock(400000);                              // устанавливаем скорость передачи данных по шине I2C = 400кБит/с
   Wire.setClock(100000);                              // устанавливаем скорость передачи данных по шине I2C = 100кБит/с
   Wire.begin(0x01);                                   // инициируем подключение к шине I2C в качестве ведомого (slave) устройства, с указанием своего адреса на шине.
-  I2C2.begin(REG_Array);                              // инициируем возможность чтения/записи данных по шине I2C, из/в указываемый массив
+  I2C2.begin(REG_Array1);                              // инициируем возможность чтения/записи данных по шине I2C, из/в указываемый массив
   pinMode(rxPin, INPUT_PULLUP);
   pinMode(Led, OUTPUT);
   digitalWrite(Led, HIGH);
@@ -72,8 +73,10 @@ void loop()
 		Serial.print("calc_CRC2: ");
 		Serial.println(Calc_CRC2);
 
-		REG_Array[10] = crc;             //   Записать принятую контрольную сумму в массив  
-		REG_Array[11] = Calc_CRC;        //   Записать расчетную контрольную сумму в массив  
+		REG_Array1[12] = crc;             //   Записать принятую контрольную сумму в массив 
+		REG_Array1[13] = Calc_CRC;        //   Записать расчетную контрольную сумму в массив  
+		REG_Array[10] = crc;              //   Записать принятую контрольную сумму в массив  
+		REG_Array[11] = Calc_CRC;         //   Записать расчетную контрольную сумму в массив  
 	
 
 		if (tmp == 0xF5 && crc == Calc_CRC && crc == Calc_CRC2)
@@ -103,8 +106,7 @@ void loop()
 
 			REG_Array[1] = temp_tmp>>8;          //   Записать старший байт температуры в массив  
 			REG_Array[2] = temp_tmp;             //   Записать младший байт температуры в массив  
-
-
+	
 			//============Влажность=====================
 			uint8_t hum = 0;
 			uint8_t hum1 = 0;
@@ -223,7 +225,7 @@ void loop()
 
 			Serial.print("\n\n");
 			//====================================== тестовый код отображения двух посылок ===================================================================
-			Serial.print("      ID  \t\t            P  \t   Direct      Temp \t      Humidity     \t Wind        \t\t     Rain \tCRC");
+			Serial.print("    ID  \t\t            P  \t   Direct      Temp \t      Humidity     \t Wind        \t\t     Rain \tCRC");
 			Serial.print("\n");
 			for (uint8_t i = 0; i < 112; i++)
 			{
@@ -247,7 +249,12 @@ void loop()
 			//==================================================================================================================================================
 
 			Serial.print("\n\n");
-			REG_Array[9] = true;             //   Записать состояние флага наличия новых данных в массив  
+			REG_Array[9]   = true;         //   Записать состояние флага наличия новых данных в массив  
+			REG_Array1[14] = true;         //   Записать состояние флага наличия новых данных в массив  
+
+				//byte calc_REG = calc_REG_Array();
+			Serial.print("REG_Array - ");
+			Serial.println(calc_REG_Array());
 		}
 		delay(10);
 		res[0] = 0;
@@ -334,6 +341,7 @@ int calc_CRC()
 				tmp_byte <<= 1; //смещаем влево
 				tmp_byte |= res[8 * j + i] & 1; //прибавляем младший бит
 			}
+			REG_Array1[j] = tmp_byte;
 			tmp_result = tmp_result + tmp_byte;
 		}
 	}
@@ -360,3 +368,18 @@ int calc_CRC2()
 	return (tmp_result & 0xFF);
 }
 
+int calc_REG_Array()
+{
+	uint8_t tmp_byte = 0;
+	uint16_t tmp_result = 0;
+	if (tmp == 0xF5)
+	{
+		for (uint8_t j = 0; j < 12; j++)
+		{
+			tmp_byte = 0;
+			tmp_byte = REG_Array1[j];
+			tmp_result = tmp_result + tmp_byte;
+		}
+	}
+	return (tmp_result & 0xFF);
+}

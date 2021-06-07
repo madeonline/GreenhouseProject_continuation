@@ -16,9 +16,9 @@
 #include "WaterTankModule.h"
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 UniRegDispatcher UniDispatcher;
-UniScratchpadClass UniScratchpad; // наш пишичитай скратчпада
-UniClientsFactory UniFactory; // наша фабрика клиентов
-UniRawScratchpad SHARED_SCRATCHPAD; // общий скратчпад для классов опроса модулей, висящих на линиях
+UniScratchpadClass UniScratchpad;           // наш пишичитай скратчпада
+UniClientsFactory UniFactory;               // наша фабрика клиентов
+UniRawScratchpad SHARED_SCRATCHPAD;         // общий скратчпад для классов опроса модулей, висящих на линиях
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 void ProcessPinsMap(uint8_t index, uint8_t* data)
 {
@@ -35,7 +35,7 @@ void ProcessPinsMap(uint8_t index, uint8_t* data)
 
   uint16_t startIndex = VIRTUAL_PIN_START_NUMBER +(8ul*index);
 
-  if(startIndex > 120) // что-то пошло не так
+  if(startIndex > 120)               // что-то пошло не так
     return;
 
   int endIndex = startIndex + 8;

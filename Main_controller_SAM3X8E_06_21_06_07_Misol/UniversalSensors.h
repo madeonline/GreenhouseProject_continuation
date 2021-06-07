@@ -6,10 +6,10 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 // команды
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
-#define UNI_START_MEASURE 0x44 // запустить конвертацию
-#define UNI_READ_SCRATCHPAD 0xBE // прочитать скратчпад
-#define UNI_WRITE_SCRATCHPAD  0x4E // записать скратчпад
-#define UNI_SAVE_EEPROM 0x25 // сохранить настройки в EEPROM
+#define UNI_START_MEASURE 0x44       // запустить конвертацию
+#define UNI_READ_SCRATCHPAD 0xBE     // прочитать скратчпад
+#define UNI_WRITE_SCRATCHPAD  0x4E   // записать скратчпад
+#define UNI_SAVE_EEPROM 0x25         // сохранить настройки в EEPROM
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 // максимальное кол-во датчиков в универсальном модуле
@@ -28,50 +28,50 @@
 #pragma pack(push,1)
 typedef struct
 {
-  byte packet_type; // тип пакета
-  byte packet_subtype; // подтип пакета
-  byte config; // конфигурация
-  byte controller_id; // ID контроллера, к которому привязан модуль
-  byte rf_id; // идентификатор RF-канала модуля
+  byte packet_type;           // тип пакета
+  byte packet_subtype;        // подтип пакета
+  byte config;                // конфигурация
+  byte controller_id;         // ID контроллера, к которому привязан модуль
+  byte rf_id;                 // идентификатор RF-канала модуля
   
-} UniScratchpadHead; // голова скратчпада, общая для всех типов модулей
+} UniScratchpadHead;          // голова скратчпада, общая для всех типов модулей
 #pragma pack(pop)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
 {
-  UniScratchpadHead head; // голова
-  byte data[24]; // сырые данные
-  byte crc8; // контрольная сумма
+  UniScratchpadHead head;     // голова
+  byte data[24];              // сырые данные
+  byte crc8;                  // контрольная сумма
   
-} UniRawScratchpad; // "сырой" скратчпад, байты данных могут меняться в зависимости от типа модуля
+} UniRawScratchpad;           // "сырой" скратчпад, байты данных могут меняться в зависимости от типа модуля
 #pragma pack(pop)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef enum
 {
-  slotEmpty, // пустой слот, без настроек
-  slotWindowLeftChannel, // настройки привязки к левому каналу одного окна
-  slotWindowRightChannel, // настройки привязки к правому каналу одного окна
-  slotWateringChannel, // настройки привязки к статусу канала полива 
-  slotLightChannel, // настройки привязки к статусу канала досветки
-  slotPin // настройки привязки к статусу пина
+  slotEmpty,                  // пустой слот, без настроек
+  slotWindowLeftChannel,      // настройки привязки к левому каналу одного окна
+  slotWindowRightChannel,     // настройки привязки к правому каналу одного окна
+  slotWateringChannel,        // настройки привязки к статусу канала полива 
+  slotLightChannel,           // настройки привязки к статусу канала досветки
+  slotPin                     // настройки привязки к статусу пина
   
-} UniSlotType; // тип слота, для которого указаны настройки
+} UniSlotType;                // тип слота, для которого указаны настройки
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
 {
-  byte slotType; // тип слота, одно из значений UniSlotType 
-  byte slotLinkedData; // данные, привязанные к слоту мастером, должны хранится слейвом без изменений
-  byte slotStatus; // статус слота (HIGH или LOW)
+  byte slotType;              // тип слота, одно из значений UniSlotType 
+  byte slotLinkedData;        // данные, привязанные к слоту мастером, должны хранится слейвом без изменений
+  byte slotStatus;            // статус слота (HIGH или LOW)
   
-} UniSlotData; // данные одного слота настроек универсального модуля 
+} UniSlotData;                // данные одного слота настроек универсального модуля 
 #pragma pack(pop)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
 {
-  UniSlotData slots[8]; // слоты настроек
+  UniSlotData slots[8];         // слоты настроек
   
 } UniExecutionModuleScratchpad; // скратчпад исполнительного модуля
 #pragma pack(pop)
@@ -79,11 +79,11 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-  byte index; // индекс датчика
-  byte type; // тип датчика
-  byte data[4]; // данные датчика
+  byte index;                  // индекс датчика
+  byte type;                   // тип датчика
+  byte data[4];                // данные датчика
   
-} UniSensorData; // данные с датчика универсального модуля
+} UniSensorData;               // данные с датчика универсального модуля
 #pragma pack(pop)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
@@ -97,32 +97,32 @@ typedef struct
   byte reserved;
   UniSensorData sensors[MAX_UNI_SENSORS];
    
-} UniSensorsScratchpad; // скратчпад модуля с датчиками
+} UniSensorsScratchpad;         // скратчпад модуля с датчиками
 #pragma pack(pop)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
 {
-  byte sensorType; // тип датчика
-  byte sensorData[2]; // данные датчика
+  byte sensorType;            // тип датчика
+  byte sensorData[2];         // данные датчика
    
-} UniNextionData; // данные для отображения на Nextion
+} UniNextionData;             // данные для отображения на Nextion
 #pragma pack(pop)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
 {
-  uint8_t reserved[3]; // резерв, добитие до 24 байт
+  uint8_t reserved[3];       // резерв, добитие до 24 байт
   uint8_t controllerStatus;
   uint8_t nextionStatus1;
   uint8_t nextionStatus2;  
-  uint8_t openTemperature; // температура открытия окон
-  uint8_t closeTemperature; // температура закрытия окон
+  uint8_t openTemperature;   // температура открытия окон
+  uint8_t closeTemperature;  // температура закрытия окон
 
-  uint8_t dataCount; // кол-во записанных показаний с датчиков
-  UniNextionData data[5]; // показания с датчиков
+  uint8_t dataCount;         // кол-во записанных показаний с датчиков
+  UniNextionData data[5];    // показания с датчиков
   
-} UniNextionScratchpad; // скратчпад выносного модуля Nextion
+} UniNextionScratchpad;      // скратчпад выносного модуля Nextion
 #pragma pack(pop)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 // класс для работы со скратчпадом, представляет основные функции, никак не изменяет переданный скратчпад до вызова функции read и функции write.
@@ -132,18 +132,18 @@ class UniScratchpadClass
   public:
     UniScratchpadClass();
 
-    void begin(byte pin,UniRawScratchpad* scratch); // привязываемся к пину и куску памяти, куда будем писать данные
-    bool read(); // читаем скратчпад
-    bool write(); // пишем скратчпад
-    bool save(); // сохраняем скратчпад в EEPROM модуля
-    bool startMeasure(); // запускаем конвертацию
+    void begin(byte pin,UniRawScratchpad* scratch);  // привязываемся к пину и куску памяти, куда будем писать данные
+    bool read();                                     // читаем скратчпад
+    bool write();                                    // пишем скратчпад
+    bool save();                                     // сохраняем скратчпад в EEPROM модуля
+    bool startMeasure();                             // запускаем конвертацию
 
   private:
 
     byte pin;
     UniRawScratchpad* scratchpad;
 
-    bool canWork(); // проверяем, можем ли работать
+    bool canWork();                                  // проверяем, можем ли работать
   
 };
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -153,58 +153,58 @@ class UniScratchpadClass
 
 структура скратчпада модуля с датчиками:
 
-packet_type - 1 байт, тип пакета (прописано значение 1)
-packet_subtype - 1 байт, подтип пакета (прописано значение 0)
-config - 1 байт, конфигурация (бит 0 - вкл/выкл передатчик, бит 1 - поддерживается ли фактор калибровки)
-controller_id - 1 байт, идентификатор контроллера, к которому привязан модуль
-rf_id - 1 байт, уникальный идентификатор модуля
-battery_status - 1 байт, статус заряда батареи
+packet_type         - 1 байт, тип пакета (прописано значение 1)
+packet_subtype      - 1 байт, подтип пакета (прописано значение 0)
+config              - 1 байт, конфигурация (бит 0 - вкл/выкл передатчик, бит 1 - поддерживается ли фактор калибровки)
+controller_id       - 1 байт, идентификатор контроллера, к которому привязан модуль
+rf_id               - 1 байт, уникальный идентификатор модуля
+battery_status      - 1 байт, статус заряда батареи
 calibration_factor1 - 1 байт, фактор калибровки
 calibration_factor2 - 1 байт, фактор калибровки
-query_interval - 1 байт, интервал обновления показаний (старшие 4 бита - минуты, младшие 4 бита - секунды)
-reserved - 2 байт, резерв
-index1 - 1 байт, индекс первого датчика в системе
-type1 - 1 байт, тип первого датчика
-data1 - 4 байта, данные первого датчика
-index2 - 1 байт
-type2 - 1 байт
-data2 - 4 байта
-index3 - 1 байт
-type3 - 1 байт
-data3 - 4 байта
-crc8 - 1 байт, контрольная сумма скратчпада
+query_interval      - 1 байт, интервал обновления показаний (старшие 4 бита - минуты, младшие 4 бита - секунды)
+reserved            - 2 байт, резерв
+index1              - 1 байт, индекс первого датчика в системе
+type1               - 1 байт, тип первого датчика
+data1               - 4 байта, данные первого датчика
+index2              - 1 байт
+type2               - 1 байт
+data2               - 4 байта
+index3              - 1 байт
+type3               - 1 байт
+data3               - 4 байта
+crc8                - 1 байт, контрольная сумма скратчпада
 
 */
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef enum
 {
-  uniNone = 0, // ничего нет
-  uniTemp = 1, // только температура, значащие - два байта
-  uniHumidity = 2, // влажность (первые два байта), температура (вторые два байта) 
-  uniLuminosity = 3, // освещённость, 4 байта
-  uniSoilMoisture = 4, // влажность почвы (два байта)
-  uniPH = 5, // pH (два байта)
-  uniPinsMap = 6, // карта пинов (4 байта)
+  uniNone = 0,          // ничего нет
+  uniTemp = 1,          // только температура, значащие - два байта
+  uniHumidity = 2,      // влажность (первые два байта), температура (вторые два байта) 
+  uniLuminosity = 3,    // освещённость, 4 байта
+  uniSoilMoisture = 4,  // влажность почвы (два байта)
+  uniPH = 5,            // pH (два байта)
+  uniPinsMap = 6,       // карта пинов (4 байта)
   
-} UniSensorType; // тип датчика
+} UniSensorType;        // тип датчика
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef struct
 {
- OneState* State1; // первое внутреннее состояние в контроллере
- OneState* State2; // второе внутреннее состояние в контроллере  
+ OneState* State1;      // первое внутреннее состояние в контроллере
+ OneState* State2;      // второе внутреннее состояние в контроллере  
  
 } UniSensorState; // состояние для датчика, максимум два (например, для влажности надо ещё и температуру тянуть)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef enum
 {
-  uniSensorsClient = 1, // packet_type == 1
-  uniNextionClient = 2, // packet_type == 2
-  uniExecutionClient = 3, // packet_type == 3
-  uniWindRainClient = 4, // packet_type == 4
+  uniSensorsClient       = 1, // packet_type == 1
+  uniNextionClient       = 2, // packet_type == 2
+  uniExecutionClient     = 3, // packet_type == 3
+  uniWindRainClient      = 4, // packet_type == 4
   uniSunControllerClient = 5, // packet_type == 5
-  uniWaterTankClient = 6, // packet_type == 6
+  uniWaterTankClient     = 6, // packet_type == 6
   
-} UniClientType; // тип клиента
+} UniClientType;  // тип клиента
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
@@ -212,14 +212,14 @@ typedef struct
   uint8_t windDirection;
   uint32_t windSpeed;
   bool hasRain;
-  uint8_t reserved[17]; // добитие до 23 байт
+  uint8_t reserved[17];  // добитие до 23 байт
 
 } WindRainDataPacket;
 #pragma pack(pop)
 //----------------------------------------------------------------------------------------------------------------
-#define NO_DECLINATION_DATA -5000 // нет информации по склонению
-#define NO_DIRECTION_DATA -10000 // нет информации по направлению
-#define NO_HEADING_DATA -10000 // нет информации по heading
+#define NO_DECLINATION_DATA  -5000 // нет информации по склонению
+#define NO_DIRECTION_DATA   -10000 // нет информации по направлению
+#define NO_HEADING_DATA     -10000 // нет информации по heading
 //----------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 struct SunControllerDataPacket // данные, которые мы храним у себя и отправляем контроллеру теплицы отсюда (размер структуры должен быть 23 байта !!!)
@@ -244,13 +244,13 @@ struct SunControllerDataPacket // данные, которые мы храним
   int8_t T5whole;
   uint8_t T5fract;
   
-  int16_t angle; // наклон от горизонта
-  int16_t direction; // направление в градусах, от севера
-  int32_t luminosity; // показание засветки
+  int16_t angle;            // наклон от горизонта
+  int16_t direction;        // направление в градусах, от севера
+  int32_t luminosity;       // показание засветки
   int16_t heading;
   
   
-  uint8_t reserved[3]; // добитие до 23 байт
+  uint8_t reserved[3];      // добитие до 23 байт
 
   SunControllerDataPacket()
   {
@@ -288,26 +288,26 @@ class UniRegDispatcher
     // возвращает кол-во зарегистрированных универсальных модулей нужного типа
     uint8_t GetUniSensorsCount(UniSensorType type);
 
-    uint8_t GetControllerID(); // возвращает уникальный ID контроллера
+    uint8_t GetControllerID();                  // возвращает уникальный ID контроллера
 
-    void SaveState(); // сохраняет текущее состояние
+    void SaveState();                           // сохраняет текущее состояние
 
-    uint8_t GetRFChannel(); // возвращает текущий канал для nRF
-    void SetRFChannel(uint8_t channel); // устанавливает канал для nRF
+    uint8_t GetRFChannel();                     // возвращает текущий канал для nRF
+    void SetRFChannel(uint8_t channel);         // устанавливает канал для nRF
 
 
  private:
 
-    void ReadState(); // читает последнее запомненное состояние
-    void RestoreState(); // восстанавливает последнее запомненное состояние
+    void ReadState();                          // читает последнее запомненное состояние
+    void RestoreState();                       // восстанавливает последнее запомненное состояние
 
 
     // модули разного типа, для быстрого доступа к ним
-    AbstractModule* temperatureModule; // модуль температуры
-    AbstractModule* humidityModule; // модуль влажности
-    AbstractModule* luminosityModule; // модуль освещенности
-    AbstractModule* soilMoistureModule; // модуль влажности почвы
-    AbstractModule* phModule; // модуль контроля pH
+    AbstractModule* temperatureModule;      // модуль температуры
+    AbstractModule* humidityModule;         // модуль влажности
+    AbstractModule* luminosityModule;       // модуль освещенности
+    AbstractModule* soilMoistureModule;     // модуль влажности почвы
+    AbstractModule* phModule;               // модуль контроля pH
 
     // жёстко указанные в прошивке датчики
     uint8_t hardCodedTemperatureCount;
@@ -335,8 +335,8 @@ extern UniRegDispatcher UniDispatcher; // экземпляр класса дис
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 typedef enum
 {
-    ssOneWire // с линии 1-Wire
-  , ssRadio // по радиоканаду
+    ssOneWire          // с линии 1-Wire
+  , ssRadio            // по радиоканалу
   
 } UniScratchpadSource; // откуда был получен скратчпад
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -450,19 +450,19 @@ struct UniNextionWaitScreenData
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 enum 
 {
-  RS485ControllerStatePacket = 1, 
-  RS485SensorDataPacket = 2, 
-  RS485WindowsPositionPacket = 3,
-  RS485RequestCommandsPacket = 4,
-  RS485CommandsToExecuteReceipt = 5,
+  RS485ControllerStatePacket      = 1, 
+  RS485SensorDataPacket           = 2, 
+  RS485WindowsPositionPacket      = 3,
+  RS485RequestCommandsPacket      = 4,
+  RS485CommandsToExecuteReceipt   = 5,
   RS485SensorDataForRemoteDisplay = 6,
-  RS485SettingsForRemoteDisplay = 7,
-  RS485WindRainData = 8, // запрос данных по дождю, скорости, направлению ветра
-  RS485SunControllerData = 9, // пакет с данными контроллера солнечной установки
-  RS485WaterTankCommands = 10, // пакет с командами для модуля контроля бака воды
-  RS485WaterTankSettings = 11, // пакет с настройками для модуля контроля уровня бака
-  RS485WaterTankRequestData = 12, // пакет с запросом данных по баку с водой
-  RS485WaterTankDataAnswer = 13,  // пакет с ответом на запрос данных по баку с водой
+  RS485SettingsForRemoteDisplay   = 7,
+  RS485WindRainData               = 8,  // запрос данных по дождю, скорости, направлению ветра
+  RS485SunControllerData          = 9,  // пакет с данными контроллера солнечной установки
+  RS485WaterTankCommands         = 10,  // пакет с командами для модуля контроля бака воды
+  RS485WaterTankSettings         = 11,  // пакет с настройками для модуля контроля уровня бака
+  RS485WaterTankRequestData      = 12,  // пакет с запросом данных по баку с водой
+  RS485WaterTankDataAnswer       = 13,  // пакет с ответом на запрос данных по баку с водой
   
 };
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -497,10 +497,10 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-  byte moduleNumber; // номер модуля, от 1 до 4-х
-  byte windowsSupported; // сколько окон поддерживает модуль (максимум - 16)
-  byte windowsStatus[20]; // массив состояний окон
-  byte reserved; // добитие до 23 байт
+  byte moduleNumber;         // номер модуля, от 1 до 4-х
+  byte windowsSupported;     // сколько окон поддерживает модуль (максимум - 16)
+  byte windowsStatus[20];    // массив состояний окон
+  byte reserved;             // добитие до 23 байт
   
 } WindowFeedbackPacket;
 #pragma pack(pop)
@@ -522,17 +522,17 @@ enum // команды с модуля управления
   emCommandPinOff,            // выключить пин
   emCommandAutoMode,          // перейти в автоматический режим работы
   emCommandWindowsAutoMode,   // автоматический режим работы окон
-  emCommandWindowsManualMode,   // ручной режим работы окон
-  emCommandWaterAutoMode,   // автоматический режим работы полива
+  emCommandWindowsManualMode, // ручной режим работы окон
+  emCommandWaterAutoMode,     // автоматический режим работы полива
   emCommandWaterManualMode,   // ручной режим работы полива
-  emCommandLightAutoMode,   // автоматический режим работы досветки
+  emCommandLightAutoMode,     // автоматический режим работы досветки
   emCommandLightManualMode,   // ручной режим работы досветки
-  emCommandSetOpenTemp, // установить температуру открытия
-  emCommandSetCloseTemp, // установить температуру закрытия
+  emCommandSetOpenTemp,       // установить температуру открытия
+  emCommandSetCloseTemp,      // установить температуру закрытия
   emCommandSetMotorsInterval, // установить интервал работы моторов
-  emCommandStartScene, // запустить сценарий
-  emCommandStopScene, // остановить сценарий
-  emCommandWaterSkip, // пропустить полив на сегодня    
+  emCommandStartScene,        // запустить сценарий
+  emCommandStopScene,         // остановить сценарий
+  emCommandWaterSkip,         // пропустить полив на сегодня    
     
 };
 //----------------------------------------------------------------------------------------------------------------
@@ -549,47 +549,47 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-  byte moduleID; // ID модуля, от которого пришла команда
-  CommandToExecute commands[7]; // 21 байт
-  byte reserved; // добитие до 23 байт
+  byte moduleID;                 // ID модуля, от которого пришла команда
+  CommandToExecute commands[7];  // 21 байт
+  byte reserved;                 // добитие до 23 байт
   
-} CommandsToExecutePacket; // пакет с командами на выполнение
+} CommandsToExecutePacket;       // пакет с командами на выполнение
 #pragma pack(pop)
 //----------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
 {
-  uint8_t type; // тип датчика
-  uint8_t data[4]; // данные датчика
+  uint8_t type;                 // тип датчика
+  uint8_t data[4];              // данные датчика
   
-} RemoteDisplaySensorData; // данные одного датчика для выносного дисплея
+} RemoteDisplaySensorData;      // данные одного датчика для выносного дисплея
 #pragma pack(pop)
 //----------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
 {
-  uint8_t firstOrLastPacket; // признак начала/окончания всех данных (0 - нет данных, 1 - начало данных, 2 - окончание данных)
-  uint8_t sensorsInPacket; // кол-во датчиков в пакете
-  uint8_t hasDataFlags; // флаги, с каких датчиков в пакете есть показания
+  uint8_t firstOrLastPacket;       // признак начала/окончания всех данных (0 - нет данных, 1 - начало данных, 2 - окончание данных)
+  uint8_t sensorsInPacket;         // кол-во датчиков в пакете
+  uint8_t hasDataFlags;            // флаги, с каких датчиков в пакете есть показания
   RemoteDisplaySensorData data[4]; // данные датчиков
   
-} RemoteDisplaySensorsPacket; // пакет показаний датчиков для выносного дисплея
+} RemoteDisplaySensorsPacket;      // пакет показаний датчиков для выносного дисплея
 #pragma pack(pop)
 //----------------------------------------------------------------------------------------------------------------
 #pragma pack(push,1)
 typedef struct
 {
-  uint8_t openTemp; // температура открытия
-  uint8_t closeTemp; // температура закрытия
-  uint16_t interval; // интервал работы моторов
-  uint8_t isWindowsOpen; // открыты ли окна
+  uint8_t openTemp;         // температура открытия
+  uint8_t closeTemp;        // температура закрытия
+  uint16_t interval;        // интервал работы моторов
+  uint8_t isWindowsOpen;    // открыты ли окна
   uint8_t isWindowAutoMode; // автоматический режим работы окон?
-  uint16_t windowsStatus; // статус окон по каналам (1 - открыто, 0 - закрыто)
-  uint8_t isWaterOn; // включен ли полив?
-  uint8_t isWaterAutoMode; // автоматический режим работы полива?
-  uint8_t isLightOn; // включена ли досветка
-  uint8_t isLightAutoMode; // автоматический режим работы досветки?
-  uint8_t reserved[11]; // добитие до 23 байт
+  uint16_t windowsStatus;   // статус окон по каналам (1 - открыто, 0 - закрыто)
+  uint8_t isWaterOn;        // включен ли полив?
+  uint8_t isWaterAutoMode;  // автоматический режим работы полива?
+  uint8_t isLightOn;        // включена ли досветка
+  uint8_t isLightAutoMode;  // автоматический режим работы досветки?
+  uint8_t reserved[11];     // добитие до 23 байт
 
   
 } RemoteDisplaySettingsPacket; // данные настроек для выносного дисплея
@@ -611,16 +611,16 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-  byte sensorType; // тип датчика
-  byte sensorIndex; // зарегистрированный в системе индекс
+  byte sensorType;         // тип датчика
+  byte sensorIndex;        // зарегистрированный в системе индекс
   byte badReadingAttempts; // кол-во неудачных чтений с датчика
   
-} RS485QueueItem; // запись в очереди на чтение показаний из шины
+} RS485QueueItem;          // запись в очереди на чтение показаний из шины
 #pragma pack(pop)
 //----------------------------------------------------------------------------------------------------------------
 typedef Vector<RS485QueueItem> RS485Queue; // очередь к опросу
 //----------------------------------------------------------------------------------------------------------------
-class UniRS485Gate // класс для работы универсальных модулей через RS-485
+class UniRS485Gate        // класс для работы универсальных модулей через RS-485
 {
   public:
     UniRS485Gate();
@@ -654,10 +654,10 @@ class UniRS485Gate // класс для работы универсальных 
 
     void executeCommands(const RS485Packet& packet);
 
-  #ifdef USE_UNIVERSAL_MODULES // если комплимся с поддержкой универсальных модулей - тогда обрабатываем очередь
+  #ifdef USE_UNIVERSAL_MODULES       // если комплимся с поддержкой универсальных модулей - тогда обрабатываем очередь
 
     bool isInOnlineQueue(const RS485QueueItem& item);
-    RS485Queue sensorsOnlineQueue; // очередь датчиков, с которых были показания
+    RS485Queue sensorsOnlineQueue;   // очередь датчиков, с которых были показания
     RS485Queue queue;
     byte currentQueuePos;
     unsigned long sensorsTimer;
@@ -730,11 +730,11 @@ class UniNRFGate
 #pragma pack(push,1)
 typedef struct
 {
-  byte controller_id; // ID контроллера, который выплюнул в эфир пакет
-  byte packetType; // тип пакета
-  byte valveCommand; // флаг - включить клапан бака воды или выключить
-  byte reserved[26]; // резерв, добитие до 30 байт
-  byte crc8; // контрольная сумма
+  byte controller_id;       // ID контроллера, который выплюнул в эфир пакет
+  byte packetType;          // тип пакета
+  byte valveCommand;        // флаг - включить клапан бака воды или выключить
+  byte reserved[26];        // резерв, добитие до 30 байт
+  byte crc8;                // контрольная сумма
   
 } NRFWaterTankExecutionPacket; // пакет с командами для модуля контроля бака воды
 #pragma pack(pop)
@@ -742,14 +742,14 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-  byte controller_id; // ID контроллера, который выплюнул в эфир пакет
-  byte packetType; // тип пакета
-  byte level; // уровень срабатывания датчиков
-  uint32_t maxWorkTime; // максимальное время работы, секунд
-  uint16_t distanceEmpty; // расстояние до пустого бака, см
-  uint16_t distanceFull; // расстояние до полного бака, см              
-  byte reserved[18]; // резерв, добитие до 30 байт
-  byte crc8; // контрольная сумма
+  byte controller_id;       // ID контроллера, который выплюнул в эфир пакет
+  byte packetType;          // тип пакета
+  byte level;               // уровень срабатывания датчиков
+  uint32_t maxWorkTime;     // максимальное время работы, секунд
+  uint16_t distanceEmpty;   // расстояние до пустого бака, см
+  uint16_t distanceFull;    // расстояние до полного бака, см              
+  byte reserved[18];        // резерв, добитие до 30 байт
+  byte crc8;                // контрольная сумма
     
 } NRFWaterTankSettingsPacket; // пакет с настройками для модуля контроля бака воды
 #pragma pack(pop)
@@ -757,10 +757,10 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-  uint8_t valveState; // статус клапана наполнения бочки
-  uint8_t fillStatus; // статус наполнения (0-100%)
-  uint8_t errorFlag;  // флаг наличия ошибки
-  uint8_t errorType;  // тип ошибки
+  uint8_t valveState;   // статус клапана наполнения бочки
+  uint8_t fillStatus;   // статус наполнения (0-100%)
+  uint8_t errorFlag;    // флаг наличия ошибки
+  uint8_t errorType;    // тип ошибки
   uint8_t reserved[19]; // добитие до 23 байт
 
 } WaterTankDataPacket;
@@ -778,11 +778,11 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-  uint8_t level; // флаг - включить клапан бака воды или выключить
+  uint8_t level;             // флаг - включить клапан бака воды или выключить
   uint32_t maxWorkTime;
   uint32_t distanceEmpty;
   uint32_t distanceFull;
-  uint8_t reserved[14]; // добитие до 23 байт
+  uint8_t reserved[14];      // добитие до 23 байт
 
 } RS485WaterTankSettingsPacket;
 #pragma pack(pop)
@@ -796,11 +796,11 @@ typedef struct
 #pragma pack(push,1)
 typedef struct
 {
-  byte controller_id; // ID контроллера, который выплюнул в эфир пакет
-  byte packetType; // тип пакета
-  ControllerState state; // состояние контроллера
-  byte reserved[4]; // резерв, добитие до 30 байт
-  byte crc8; // контрольная сумма
+  byte controller_id;        // ID контроллера, который выплюнул в эфир пакет
+  byte packetType;           // тип пакета
+  ControllerState state;     // состояние контроллера
+  byte reserved[4];          // резерв, добитие до 30 байт
+  byte crc8;                 // контрольная сумма
   
 } LoRaControllerStatePacket; // пакет с состоянием контроллера
 #pragma pack(pop)
@@ -809,10 +809,10 @@ typedef struct
 typedef struct
 {
   
-  byte sensorType; // тип датчика
-  byte sensorIndex; // зарегистрированный в системе индекс
-  uint16_t queryInterval; // интервал между получениями информации с датчика
-  unsigned long gotLastDataAt; // колда были получены последние данные
+  byte sensorType;              // тип датчика
+  byte sensorIndex;             // зарегистрированный в системе индекс
+  uint16_t queryInterval;       // интервал между получениями информации с датчика
+  unsigned long gotLastDataAt;  // колда были получены последние данные
   
 } LoRaQueueItem;
 #pragma pack(pop)
@@ -903,12 +903,12 @@ class UniRegistrationLine
   public:
     UniRegistrationLine(byte pin);
 
-    bool IsModulePresent(); // проверяет, есть ли модуль на линии
-    void CopyScratchpad(UniRawScratchpad* dest); // копирует скратчпад в другой
+    bool IsModulePresent();                            // проверяет, есть ли модуль на линии
+    void CopyScratchpad(UniRawScratchpad* dest);       // копирует скратчпад в другой
 
-    bool SetScratchpadData(UniRawScratchpad* src); // копирует данные из переданного скратчпада во внутренний
+    bool SetScratchpadData(UniRawScratchpad* src);     // копирует данные из переданного скратчпада во внутренний
 
-    void Register(); // регистрирует универсальный модуль в системе
+    void Register();                                   // регистрирует универсальный модуль в системе
 
   private:
 
