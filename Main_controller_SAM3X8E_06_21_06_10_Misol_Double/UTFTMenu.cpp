@@ -17947,12 +17947,7 @@ TFTIdleScreen::TFTIdleScreen() : AbstractTFTScreen()
     providerNameLength = 0;
   #endif
 
-  #ifdef USE_WIFI_MODULE
-    connectedToRouter = false;
-    wifiSignalQuality = 0;
-  #endif
-
-  #if (TARGET_BOARD == DUE_BOARD) && defined(PROTECT_ENABLED)
+   #if (TARGET_BOARD == DUE_BOARD) && defined(PROTECT_ENABLED)
   unrTimer = 0;
   rCopy = false;
   #endif
@@ -17961,6 +17956,10 @@ TFTIdleScreen::TFTIdleScreen() : AbstractTFTScreen()
     lastLoraRSSI = -120;
   #endif
 
+#ifdef USE_WIFI_MODULE
+	connectedToRouter = false;
+	wifiSignalQuality = 0;
+#endif
 
   // USE_WATER_TANK_MODULE
   fillTankButton = 0xFF;
@@ -18570,6 +18569,8 @@ void TFTIdleScreen::drawUptimeMinutes(TFTMenu* menuManager)
   int left = (screenWidth - (textLen*fontWidth)) - 20;
   int top = screenHeight - (fontHeight + 4);
   menuManager->getRusPrinter()->print(dt_buff,left,top);
+  menuManager->getRusPrinter()->print(PROGRAM_VERSION, 305, top);
+
   yield();
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -19894,7 +19895,7 @@ int TFTIdleScreen::drawWiFiIcons(TFTMenu* menuManager, int curIconRightMargin, b
    bool fillSegment2 = false;
    bool fillSegment3 = false;
    bool fillSegment4 = false;
-
+   //int textLen = menuManager->getRusPrinter()->utf8_strlen(dt_buff);
    if(qualityChanged)
    {
 
@@ -20024,20 +20025,35 @@ int TFTIdleScreen::drawWiFiIcons(TFTMenu* menuManager, int curIconRightMargin, b
     // теперь рисуем иконку WIFI
     dc->setFont(SmallRusFont);
     int fontWidth = dc->getFontXsize();
+	
     initialLeft -= 14;
-    initialLeft -= fontWidth*4;
-    
+  
     if(connectChanged)
-    {   
+    {
+
+		String staIP;
+		String apIP;
+		String WiFi_IP;
+		if (ESP.getIP(staIP, apIP))  // Получить IP адрес
+		{
+			WiFi_IP = " IP";
+			WiFi_IP += staIP;
+		}
+
+		int textLenIP = WiFi_IP.length();  // Вычислить длину IP адреса
+
+		initialLeft -= fontWidth * (4 + textLenIP);
+
         String strToDraw;
         strToDraw = F("WIFI");
-        
+		strToDraw += WiFi_IP;
+
         dc->setColor(INFO_BOX_CAPTION_COLOR);
         dc->setBackColor(TFT_BACK_COLOR);
     
         if(connectedToRouter)
         {
-          dc->fillRect(initialLeft,initialTop,initialLeft+fontWidth*4+6,initialTop+signalHeight);
+          dc->fillRect(initialLeft,initialTop,initialLeft+fontWidth* (4 + textLenIP) +6,initialTop+signalHeight);
           dc->setColor(SENSOR_BOX_FONT_COLOR);
           dc->setBackColor(INFO_BOX_CAPTION_COLOR);
         }
@@ -20045,10 +20061,10 @@ int TFTIdleScreen::drawWiFiIcons(TFTMenu* menuManager, int curIconRightMargin, b
         {
           dc->setColor(TFT_BACK_COLOR);
           dc->setBackColor(TFT_BACK_COLOR);
-          dc->fillRect(initialLeft,initialTop,initialLeft+fontWidth*4+6,initialTop+signalHeight);
+          dc->fillRect(initialLeft,initialTop,initialLeft+fontWidth* (4 + textLenIP) +6,initialTop+signalHeight);
           yield();
           dc->setColor(INFO_BOX_CAPTION_COLOR);
-          dc->drawRect(initialLeft,initialTop,initialLeft+fontWidth*4+6,initialTop+signalHeight);
+          dc->drawRect(initialLeft,initialTop,initialLeft+fontWidth* (4 + textLenIP) +6,initialTop+signalHeight);
         }
         
         menuManager->getRusPrinter()->print(strToDraw.c_str(),initialLeft+5,initialTop+5);
@@ -20059,7 +20075,6 @@ int TFTIdleScreen::drawWiFiIcons(TFTMenu* menuManager, int curIconRightMargin, b
 
     dc->setFont(BigRusFont);
     return initialLeft - 10;
-  
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #endif // USE_WIFI_MODULE
@@ -20146,17 +20161,6 @@ void TFTIdleScreen::update(TFTMenu* menuManager)
     curIconRightMargin = drawGSMIcons(menuManager,curIconRightMargin,sigChanges, gprsChanges);
   #endif  
 
-  #ifdef USE_WIFI_MODULE
-    bool conToRouter = ESP.isConnectedToRouter();
-    bool conChanges = connectedToRouter != conToRouter;
-    connectedToRouter = conToRouter;
-
-    uint8_t wifiQ = ESP.getSignalQuality();
-    bool wifiQChanges = wifiQ != wifiSignalQuality;
-    wifiSignalQuality = wifiQ;
-    curIconRightMargin = drawWiFiIcons(menuManager,curIconRightMargin,conChanges, wifiQChanges);
-  #endif
-
   #ifdef USE_LORA_GATE
     int curRSSI = loraGate.getRSSI();
     bool rssiChanged = curRSSI != lastLoraRSSI;
@@ -20168,6 +20172,16 @@ void TFTIdleScreen::update(TFTMenu* menuManager)
     curIconRightMargin = drawPressure(menuManager,curIconRightMargin);
   #endif
 
+#ifdef USE_WIFI_MODULE
+	bool conToRouter = ESP.isConnectedToRouter();
+	bool conChanges = connectedToRouter != conToRouter;
+	connectedToRouter = conToRouter;
+
+	uint8_t wifiQ = ESP.getSignalQuality();
+	bool wifiQChanges = wifiQ != wifiSignalQuality;
+	wifiSignalQuality = wifiQ;
+	curIconRightMargin = drawWiFiIcons(menuManager, curIconRightMargin, conChanges, wifiQChanges);
+#endif
   // Смотрим, какая кнопка нажата
   int pressed_button = screenButtons->checkButtons(ButtonPressed,ButtonReleased);
 
@@ -20488,7 +20502,6 @@ void TFTIdleScreen::draw(TFTMenu* menuManager)
   dc->setFont(SmallRusFont);
   dc->setColor(INFO_BOX_CAPTION_COLOR);
   dc->setBackColor(TFT_BACK_COLOR);
-  menuManager->getRusPrinter()->print(PROGRAM_VERSION,10,14);
   dc->setFont(oldFont);    
 
 
@@ -20500,10 +20513,6 @@ void TFTIdleScreen::draw(TFTMenu* menuManager)
     curIconRightMargin = drawGSMIcons(menuManager,curIconRightMargin,true,true);
   #endif
 
-  #ifdef USE_WIFI_MODULE
-    curIconRightMargin = drawWiFiIcons(menuManager,curIconRightMargin,true,true);
-  #endif
-
   #ifdef USE_LORA_GATE
     curIconRightMargin = drawLoRaIcons(menuManager,curIconRightMargin,true,true);
   #endif
@@ -20512,6 +20521,9 @@ void TFTIdleScreen::draw(TFTMenu* menuManager)
     curIconRightMargin = drawPressure(menuManager,curIconRightMargin);
   #endif
 
+#ifdef USE_WIFI_MODULE
+	curIconRightMargin = drawWiFiIcons(menuManager, curIconRightMargin, true, true);
+#endif
   drawUptimeMinutes(menuManager);
 
   drawCalled = true;

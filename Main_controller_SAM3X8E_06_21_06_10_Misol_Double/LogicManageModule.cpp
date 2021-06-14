@@ -1191,7 +1191,7 @@ void RainSensor::setHasRain(bool b)
 
   RainSensorBinding bnd = HardwareBinding->GetRainSensorBinding();
   
-  if(!(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol)) // режим работы - не выносной модуль или метеостанция типа Misol
+  if(!(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol_WS0232 || bnd.WorkMode == wrsMisol_WN5300CA)) // режим работы - не выносной модуль или метеостанция типа Misol
   {
     lastDataAt = millis(); 
     return;
@@ -1246,7 +1246,7 @@ void RainSensor::update()
 
   RainSensorBinding bnd = HardwareBinding->GetRainSensorBinding();
 
-  if(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol) // датчик подключен через выносной модуль или метеостанцию типа Misol
+  if(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol_WS0232 || bnd.WorkMode == wrsMisol_WN5300CA) // датчик подключен через выносной модуль или метеостанцию типа Misol
   {
     if((millis() - lastDataAt) > 2ul*WIND_RAIN_UPDATE_INTERVAL)
     {
@@ -6521,35 +6521,40 @@ void WindSensor::setup()
 
   WindSensorBinding bnd = HardwareBinding->GetWindSensorBinding();
 
-  if(bnd.WorkMode == wrsDirect) // датчик прикреплён напрямую к контроллеру
-  {
-    if(bnd.Pin != UNBINDED_PIN)
-    {
-        if(EEPROMSettingsModule::SafePin(bnd.Pin))
-        {
-          attachInterrupt(digitalPinToInterrupt(bnd.Pin),pulse,WIND_SENSOR_INT_LEVEL);
-        }
-    }
+	if(bnd.WorkMode == wrsDirect) // датчик прикреплён напрямую к контроллеру
+	{
+	if(bnd.Pin != UNBINDED_PIN)
+	{
+		if(EEPROMSettingsModule::SafePin(bnd.Pin))
+		{
+			attachInterrupt(digitalPinToInterrupt(bnd.Pin),pulse,WIND_SENSOR_INT_LEVEL);
+		}
+	}
 
-    compassSamples = new CompassPoints[bnd.NumSamples];
-    for(uint8_t i=0;i<bnd.NumSamples;i++)
-    {
-      compassSamples[i] = cpUnknown;
-    }
+	compassSamples = new CompassPoints[bnd.NumSamples];
+	for(uint8_t i=0;i<bnd.NumSamples;i++)
+	{
+		compassSamples[i] = cpUnknown;
+	}
     
-  } // if(bnd.WorkMode == wrsDirect)
-  else
-  if(bnd.WorkMode == wrsMisol) // работаем через метеостанцию типа Misol
-  {
-    if(bnd.Pin != UNBINDED_PIN)
-    {
-        if(EEPROMSettingsModule::SafePin(bnd.Pin))
-        {
-          WeatherStation.setup(bnd.Pin);
-        }
-    }    
-  } // if(bnd.WorkMode == wrsMisol)
-  
+	} // if(bnd.WorkMode == wrsDirect)
+	else
+	if(bnd.WorkMode == wrsMisol_WS0232) // работаем через метеостанцию типа Misol WS0232 
+	{
+		if(bnd.Pin != UNBINDED_PIN)
+		{
+			WeatherStation.setup_WS0232(bnd.Pin);
+		}    
+	} // if(bnd.WorkMode == wrsMisol_WS0232)
+	else
+	if (bnd.WorkMode == wrsMisol_WN5300CA) // работаем через метеостанцию типа Misol WN5300CA
+	{
+		if (bnd.Pin != UNBINDED_PIN)
+		{
+			WeatherStation.setup_WN5300CA(bnd.Pin);
+		}
+	} // if(bnd.WorkMode == wrsMisol_WN5300CA)
+
 
 	lastDataAt = millis();
 }
@@ -6564,7 +6569,7 @@ void WindSensor::setWindSpeed(uint32_t ws)
   // установка скорости ветра извне, может применяться только тогда, когда режим работы - внешний модуль!!!
   
   WindSensorBinding bnd = HardwareBinding->GetWindSensorBinding();
-  if(!(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol)) // не через внешний модуль работаем и не верез метеостанцию типа Misol
+  if(!(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol_WS0232 || bnd.WorkMode == wrsMisol_WN5300CA)) // не через внешний модуль работаем и не через метеостанцию типа Misol
   {
     lastDataAt = millis(); 
     return;
@@ -6579,7 +6584,7 @@ void WindSensor::setWindDirection(CompassPoints cp)
   // установка направления ветра извне, может применяться только тогда, когда режим работы - внешний модуль!!!
   
   WindSensorBinding bnd = HardwareBinding->GetWindSensorBinding();
-  if(!(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol)) // не через внешний модуль работаем и не верез метеостанцию типа Misol
+  if(!(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol_WS0232 || bnd.WorkMode == wrsMisol_WN5300CA)) // не через внешний модуль работаем и не верез метеостанцию типа Misol
   {
     lastDataAt = millis(); 
     return;
@@ -6688,9 +6693,9 @@ void WindSensor::update()
 
  } // if(bnd.WorkMode == wrsDirect)
  else
- if(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol) // датчик прикреплён на выносной модуль или работаем через метеостанцию типа Misol
+ if(bnd.WorkMode == wrsExternalModule || bnd.WorkMode == wrsMisol_WS0232 || bnd.WorkMode == wrsMisol_WN5300CA) // датчик прикреплён на выносной модуль или работаем через метеостанцию типа Misol
  {
-    if(bnd.WorkMode == wrsMisol) // если работаем через метеостанцию - обновляем её
+    if(bnd.WorkMode == wrsMisol_WS0232 || bnd.WorkMode == wrsMisol_WN5300CA) // если работаем через метеостанцию - обновляем её
     {
       WeatherStation.update();
     }
