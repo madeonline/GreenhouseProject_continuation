@@ -45,25 +45,85 @@ volatile unsigned int lolen, hilen, state;
 uint16_t tmp = 0;  // Получить ID станции
 
 #define rxPin 2
-#define Led 10
+
 #define MAX_DELTA 140
+
+#define COMMON_ANODE
+
+#define LED_RED         9   //  Светодиод индикации отсутствия приема пакета данных с метеостанции
+#define LED_GREEN       8   //  Светодиод индикации нормальной работы системы
+#define LED_BLUE        10  //  Светодиод индикации приема пакета данных с метеостанции
+
+#define COLOR_NONE LOW, LOW, LOW
+#define COLOR_RED HIGH, LOW, LOW
+#define COLOR_GREEN LOW, HIGH, LOW
+#define COLOR_BLUE LOW, LOW, HIGH
+
+unsigned long packet_Millis = 0;             // Время индикации приема пакета
+unsigned long false_Millis  = 0;             // Время индикации отсутсвия приема пакета
+const long interval_packet  = 1000;          // Время индикации приема пакета
+const long interval_false   = 100000;        // Время индикации отсутсвия приема пакета
+bool packet_on              = false;
+
+void setColor(bool red, bool green, bool blue)       // Включение цвета свечения трехцветного светодиода.
+{
+#ifdef COMMON_ANODE
+	red = !red;
+	green = !green;
+	blue = !blue;
+#endif
+	digitalWrite(LED_RED, red);
+	digitalWrite(LED_GREEN, green);
+	digitalWrite(LED_BLUE, blue);
+}
+
 
 
 void setup()
 {
   Serial.begin(115200);
+
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
+
+  setColor(COLOR_GREEN);
+  delay(500);
+  setColor(COLOR_RED);
+  delay(500);
+  setColor(COLOR_BLUE);
+  delay(500);
+  setColor(COLOR_GREEN);
+
 //Wire.setClock(400000);                              // устанавливаем скорость передачи данных по шине I2C = 400кБит/с
   Wire.setClock(100000);                              // устанавливаем скорость передачи данных по шине I2C = 100кБит/с
   Wire.begin(0x01);                                   // инициируем подключение к шине I2C в качестве ведомого (slave) устройства, с указанием своего адреса на шине.
   I2C2.begin(REG_Array);                              // инициируем возможность чтения/записи данных по шине I2C, из/в указываемый массив
   pinMode(rxPin, INPUT_PULLUP);
-  pinMode(Led, OUTPUT);
-  digitalWrite(Led, HIGH);
   attachInterrupt(0, read_input, CHANGE);             // 
   Serial.println("Setup END\n");
 }
 void loop()
 {
+
+	unsigned long currentMillis = millis();
+
+	if (currentMillis - false_Millis >= interval_false)
+	{
+		// save the last time you blinked the LED
+		false_Millis = currentMillis;
+		setColor(COLOR_RED);
+
+	}
+
+	if (currentMillis - packet_Millis >= interval_packet && packet_on == true)
+	{
+		false_Millis = currentMillis;
+		packet_on = false;
+		setColor(COLOR_GREEN);
+	}
+
+
 	if (flag == 1) //если были данные
 	{
 		tmp = 0;  // Получить ID станции
@@ -265,23 +325,22 @@ void loop()
 
 				//byte calc_REG = calc_REG_Array();
 			Serial.print("REG_Array - ");
-			Serial.println(calc_REG_Array());
+			Serial.println(calc_REG_Array()); 
 		}
 		delay(10);
 		res[0] = 0;
 		flag = 0;
 		count = 0;
+
+
+		packet_Millis = currentMillis;
+		packet_on = true;
+		setColor(COLOR_BLUE);
+
 		interrupts();
 	}
 
-	if (REG_Array[14] == true)
-	{
-		digitalWrite(Led, LOW);
-	}
-	else
-	{
-		digitalWrite(Led, HIGH);
-	}
+	
 
 }
 

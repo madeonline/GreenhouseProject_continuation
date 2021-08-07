@@ -50,7 +50,25 @@ uint16_t tmp = 0;  // Получить ID станции
 #define PREAMBLE_HIGH   500 //  Среднее HIGH в преамбуле, мкс
 #define PRECISION       80  //  Точность при отклонении от длинысигнала в мкс., чем меньше число, тем строже фильтр, не реккомендуется выставлять менее 50 мкс.
 #define BIT_COUNT       80  //  Количество ожидаемых бит данных
-#define LED             13  //  Светодиод индикации приема пакета данных с метеостанции
+
+
+#define COMMON_ANODE
+
+#define LED_RED         9   //  Светодиод индикации отсутствия приема пакета данных с метеостанции
+#define LED_GREEN       8   //  Светодиод индикации нормальной работы системы
+#define LED_BLUE        10  //  Светодиод индикации приема пакета данных с метеостанции
+
+#define COLOR_NONE LOW, LOW, LOW
+#define COLOR_RED HIGH, LOW, LOW
+#define COLOR_GREEN LOW, HIGH, LOW
+#define COLOR_BLUE LOW, LOW, HIGH
+
+unsigned long packet_Millis = 0;             // Время индикации приема пакета
+unsigned long false_Millis = 0;              // Время индикации отсутсвия приема пакета
+const long interval_packet = 1000;           // Время индикации приема пакета
+const long interval_false  = 100000;         // Время индикации отсутсвия приема пакета
+bool packet_on = false; 
+
 
 byte TxType;            //  Тип передатчика
 byte SecurityCode;      //  Код безопасности
@@ -90,13 +108,40 @@ volatile uint32_t Te2_3;
 
 bool meteoCorrentData;                        //  Признак получения корректных данных с метеостанции
 
+
+void setColor(bool red, bool green, bool blue)       // Включение цвета свечения трехцветного светодиода.
+{
+#ifdef COMMON_ANODE
+	red = !red;
+	green = !green;
+	blue = !blue;
+#endif
+	digitalWrite(LED_RED, red);
+	digitalWrite(LED_GREEN, green);
+	digitalWrite(LED_BLUE, blue);
+}
+
+
+
+
+
 void setup() 
 {
   Serial.begin(115200);
-  pinMode(LED, OUTPUT);
-  digitalWrite(LED, LOW);
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
+ 
+  setColor(COLOR_GREEN);
+  delay(500);
+  setColor(COLOR_RED);
+  delay(500);
+  setColor(COLOR_BLUE);
+  delay(500);
+  setColor(COLOR_GREEN);
+
   Wire.begin(0x01);                                                            // инициируем подключение к шине I2C в качестве ведомого (slave) устройства, с указанием своего адреса на шине.
-  I2C2.begin(REG_Array);                                                      // инициируем возможность чтения/записи данных по шине I2C, из/в указываемый массив
+  I2C2.begin(REG_Array);                                                       // инициируем возможность чтения/записи данных по шине I2C, из/в указываемый массив
   pinMode(RXB_DATA, INPUT_PULLUP);                                             //  Маркируем порт, как порт для прерываний
   attachInterrupt(digitalPinToInterrupt(RXB_DATA), meteoInterrupt, CHANGE);    //  Подключаем обработку прерываний
   Serial.println("Init OK");
@@ -104,6 +149,25 @@ void setup()
 // Основной цикл
 void loop() 
 {
+
+	unsigned long currentMillis = millis();
+
+	if (currentMillis - false_Millis >= interval_false)
+	{
+		// save the last time you blinked the LED
+		false_Millis = currentMillis;
+		setColor(COLOR_RED);
+
+	}
+	
+	if (currentMillis - packet_Millis >= interval_packet && packet_on == true)
+	{
+		false_Millis = currentMillis;
+		packet_on = false;
+		setColor(COLOR_GREEN);
+	}
+
+
   if (meteoListening == false) 
   {
     // Включаем обработку показаний с метеостанции
@@ -130,12 +194,13 @@ void loop()
         Serial.print("calc_REG_Array - ");
         Serial.print(REG_Array[12]);
 
-		REG_Array[14] = 1;             // Записать подтверждение готовности пакета к передаче
+		REG_Array[14] = 1;                 // Записать подтверждение готовности пакета к передаче
 
 		meteoCorrentData = false;          //  Обнуляем признак получения данных с метеостанции
 
-		led_send = !led_send;
-		digitalWrite(LED, led_send);
+		packet_Millis = currentMillis;
+		packet_on = true;
+		setColor(COLOR_BLUE);
     }
     meteoListening = true;
   }
