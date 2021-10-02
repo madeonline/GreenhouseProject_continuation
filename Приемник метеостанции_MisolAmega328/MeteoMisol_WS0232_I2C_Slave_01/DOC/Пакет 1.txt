@@ -1,0 +1,50 @@
+ID: F5
+received CRC: 148
+calc_CRC: 148
+calc_CRC2: 148
+0
+11101011
+
+Temperature: 23.5C
+Humidity: 45%
+Wind: 0.00m/s
+Direction: Error
+Rain pulse: 0
+
+
+    ID  		            P  	   Direct      Temp 	      Humidity     	 Wind        		     Rain 	CRC
+11110101 10000001 00010100 00000001 11110000 11101011 00101101 00000000 00000000 00000000 00000001 00000000 10010100 00110100
+11110101 10000001 00010100 00000001 11110000 11101011 00101101 00000000 00000000 00000000 00000001 00000000 10010100 00110100
+
+REG_Array - 148
+
+
+
+
+
+
+Пакет от станции WN5300CA
+
+
+Ручной разбор двойной посылки
+
+   
+
+            3       11 13          23       31       39       47                63 64  67   71       79 
+11111111 1010 01101101 00 10 01100101 00100001 00000000 00000000 00000000 00000000  0 000 0101 00011110
+
+
+
+        3,4
+Data:  1010      01101101            00           10 01100101 00100001 0000000000000000000000000000000000000101 00011110
+TX Type: A | Security Code: 6D | Low Battary: 0 | Temperature: 21.3*C | Humidity: 33% | Wind EES: speed: 0.0 m/s, gust: 0.0 m/s | Rain: 0 | CRC: 11110 -> 0x1E
+Pressure = 0 мм рт. ст.
+Data:  10100110110100100110010100100001000000000000000000000000000000000000010100011110
+TX Type: A | Security Code: 6D | Low Battary: 0 | Temperature: 21.3*C | Humidity: 33% | Wind EES: speed: 0.0 m/s, gust: 0.0 m/s | Rain: 0 | CRC: 11110 -> 0x1E
+Pressure = 0 мм рт. ст.
+Data:  10100110110100100110010100100001000000000000000000000000000000000000010100011110
+TX Type: A | Security Code: 6D | Low Battary: 0 | Temperature: 21.3*C | Humidity: 33% | Wind EES: speed: 0.0 m/s, gust: 0.0 m/s | Rain: 0 | CRC: 11110 -> 0x1E
+Pressure = 0 мм рт. ст.
+Data:  10100110110100100110010100100001000000000000000000000000000000000000010100011110
+TX Type: A | Security Code: 6D | Low Battary: 0 | Temperature: 21.3*C | Humidity: 33% | Wind EES: speed: 0.0 m/s, gust: 0.0 m/s | Rain: 0 | CRC: 11110 -> 0x1E
+Pressure = 0 мм рт. ст.
