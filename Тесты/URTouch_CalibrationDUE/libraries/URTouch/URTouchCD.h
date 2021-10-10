@@ -31,16 +31,9 @@
 #define CAL_S 0x8031F1DFUL
 */
 
-/*
 // 7'' TFT
 #define CAL_X 0x0011CFA8UL
 #define CAL_Y 0x0060CF6FUL
-#define CAL_S 0x8031F1DFUL
-*/
-
-// 7'' TFT
-#define CAL_X 0x000FCFA8UL
-#define CAL_Y 0x005C8F6BUL
 #define CAL_S 0x8031F1DFUL
 
 /*
