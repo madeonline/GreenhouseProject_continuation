@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<AlertRulesSaver xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <rules>
+    <rule>
+      <IsAlarm>false</IsAlarm>
+      <name>TSON</name>
+      <linked_to>STATE</linked_to>
+      <spy_to>TEMP</spy_to>
+      <sensor>5</sensor>
+      <operand>&gt;=</operand>
+      <target>45</target>
+      <start>0</start>
+      <work>0</work>
+      <daymask>255</daymask>
+      <linked_rules />
+      <command>CTSET=PIN|45|ON</command>
+    </rule>
+    <rule>
+      <IsAlarm>false</IsAlarm>
+      <name>TSOFF</name>
+      <linked_to>STATE</linked_to>
+      <spy_to>TEMP</spy_to>
+      <sensor>5</sensor>
+      <operand>&lt;=</operand>
+      <target>40</target>
+      <start>0</start>
+      <work>0</work>
+      <daymask>255</daymask>
+      <linked_rules />
+      <command>CTSET=PIN|45|OFF</command>
+    </rule>
+  </rules>
+</AlertRulesSaver>
