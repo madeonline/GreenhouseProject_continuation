@@ -2,10 +2,12 @@
 #include "ModuleController.h"
 #include "EEPROMSettingsModule.h"
 #include "InteropStream.h"
+
 //--------------------------------------------------------------------------------------------------------------------------------------
 void OneWireEmulationModule::Setup()
 {
   // настройка модуля тут
+
    lineManager.begin(DS18B20_EMULATION_STORE_ADDRESS);
    lineManager.beginConversion();
 //   lineManager.beginSetResolution();
@@ -32,6 +34,16 @@ void OneWireEmulationModule::Setup()
 //      State.AddState(StateTemperature,sensorCounter);
       
        // добавляем привязку
+
+//#ifdef ONE_WIRE_EMULATION_MODULE_DEBUG
+//	  SerialUSB.print("Pin -");
+//	  SerialUSB.println(pin);
+//	  SerialUSB.print("SensorCounter -");
+//	  SerialUSB.println(sensorCounter);
+//#endif
+//
+
+
       lineManager.addBinding(pin,sensorCounter);
   
       WORK_STATUS.PinMode(pin,INPUT,false);
@@ -47,17 +59,19 @@ void OneWireEmulationModule::Setup()
 //--------------------------------------------------------------------------------------------------------------------------------------
 void OneWireEmulationModule::Update()
 { 
-  // обновление модуля тут
+   // обновление модуля тут
+
   static uint32_t updateTimer = 0;
   if(millis() - updateTimer >= 5000)
   {
     // опрашиваем наши датчики
+
     DS18B20EmulationBinding bnd = HardwareBinding->GetDS18B20EmulationBinding();
 
   // запускаем конвертацию датчиков, игнорируя повторные вызовы для одной линии
    lineManager.beginConversion();
 
-   for(size_t i=0;i<sizeof(bnd.Pin);i++)
+   for(size_t i=0;i<sizeof(bnd.Pin);i++) 
    {
       uint8_t pin = bnd.Pin[i];
       
@@ -72,10 +86,21 @@ void OneWireEmulationModule::Update()
       }
       
       lineManager.startConversion(pin);
+#ifdef ONE_WIRE_EMULATION_MODULE_DEBUG
+	  SerialUSB.print("N-");
+	  SerialUSB.print(i);
+	  SerialUSB.print(" Pin -");
+	  SerialUSB.print(bnd.Pin[i]);
+	  SerialUSB.print(" Type -");
+	  SerialUSB.print(bnd.Type[i]);
+	  SerialUSB.print(" Index -");
+	  SerialUSB.println(bnd.Index[i]);
+#endif
+
    } // for
 
    // теперь сканируем линии
-   lineManager.beginScan();
+   lineManager.beginScan(); // обнулить scanList.empty();   scanResults.empty();
    
    for(size_t i=0;i<sizeof(bnd.Pin);i++)
    {
@@ -274,5 +299,3 @@ bool  OneWireEmulationModule::ExecCommand(const Command& command, bool wantAnswe
   return true;
 }
 //--------------------------------------------------------------------------------------------------------------------------------------
-
-

@@ -156,8 +156,8 @@
     <Level>0</Level>
   </Heat>
   <Light>
-    <LinkType>0</LinkType>
-    <MCPAddress>0</MCPAddress>
+    <LinkType>2</LinkType>
+    <MCPAddress>6</MCPAddress>
     <Sensors>
       <int>1</int>
       <int>0</int>
@@ -165,7 +165,7 @@
       <int>0</int>
     </Sensors>
     <LampRelays>
-      <int>255</int>
+      <int>15</int>
       <int>255</int>
       <int>255</int>
       <int>255</int>
@@ -174,7 +174,7 @@
       <int>255</int>
       <int>255</int>
     </LampRelays>
-    <Level>0</Level>
+    <Level>1</Level>
     <AveragingEnabled>0</AveragingEnabled>
     <AveragingSamples>10</AveragingSamples>
     <HarboringEnabled>0</HarboringEnabled>
@@ -187,10 +187,10 @@
     <Pin>255</Pin>
     <Level>1</Level>
     <ResetInterval>120</ResetInterval>
-    <WorkMode>2</WorkMode>
+    <WorkMode>4</WorkMode>
   </Rain>
   <Wind>
-    <Pin>255</Pin>
+    <Pin>188</Pin>
     <DirectionPin>255</DirectionPin>
     <SpeedCoeff>34</SpeedCoeff>
     <EastAdcFrom>297</EastAdcFrom>
@@ -203,7 +203,7 @@
     <NorthAdcTo>1799</NorthAdcTo>
     <Histeresis>50</Histeresis>
     <NumSamples>10</NumSamples>
-    <WorkMode>2</WorkMode>
+    <WorkMode>4</WorkMode>
   </Wind>
   <Buzzer>
     <LinkType>0</LinkType>
@@ -242,7 +242,7 @@
       <int>55</int>
       <int>56</int>
       <int>57</int>
-      <int>255</int>
+      <int>73</int>
       <int>255</int>
       <int>255</int>
       <int>255</int>
@@ -282,8 +282,8 @@
   </Diodes>
   <Windows>
     <LinkType>2</LinkType>
-    <MCPAddress1>1</MCPAddress1>
-    <MCPAddress2>0</MCPAddress2>
+    <MCPAddress1>4</MCPAddress1>
+    <MCPAddress2>255</MCPAddress2>
     <Level>0</Level>
     <ManageMode>1</ManageMode>
     <WindowsPins>
@@ -299,8 +299,8 @@
       <int>9</int>
       <int>10</int>
       <int>11</int>
-      <int>255</int>
-      <int>255</int>
+      <int>12</int>
+      <int>13</int>
       <int>255</int>
       <int>255</int>
       <int>255</int>
@@ -332,40 +332,40 @@
     <MCPAddress2>0</MCPAddress2>
     <Level>0</Level>
     <EndstopOpenPins>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
     </EndstopOpenPins>
     <EndstopClosePins>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
-      <int>255</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
+      <int>0</int>
     </EndstopClosePins>
   </Endstops>
   <Soil>
@@ -374,8 +374,8 @@
     <PowerPin>255</PowerPin>
     <Level>0</Level>
     <PowerOnDelay>200</PowerOnDelay>
-    <Soil100Percent>450</Soil100Percent>
-    <Soil0Percent>1023</Soil0Percent>
+    <Soil100Percent>300</Soil100Percent>
+    <Soil0Percent>870</Soil0Percent>
     <NoDataBorder>100</NoDataBorder>
     <SensorType>
       <int>0</int>
@@ -406,8 +406,8 @@
     <StrobeLevel>0</StrobeLevel>
     <DHTReadDelay>40</DHTReadDelay>
     <Pin1>
-      <int>11</int>
-      <int>12</int>
+      <int>58</int>
+      <int>0</int>
       <int>0</int>
       <int>0</int>
       <int>0</int>
@@ -431,7 +431,7 @@
     </Pin2>
     <Type>
       <int>2</int>
-      <int>2</int>
+      <int>5</int>
       <int>0</int>
       <int>0</int>
       <int>0</int>
@@ -457,29 +457,29 @@
     <ChannelsMCPAddress>3</ChannelsMCPAddress>
     <Level>0</Level>
     <PumpLinkType>2</PumpLinkType>
-    <PumpMCPAddress>7</PumpMCPAddress>
-    <PumpPin>13</PumpPin>
-    <Pump2LinkType>2</Pump2LinkType>
-    <Pump2MCPAddress>7</Pump2MCPAddress>
-    <Pump2Pin>14</Pump2Pin>
+    <PumpMCPAddress>6</PumpMCPAddress>
+    <PumpPin>14</PumpPin>
+    <Pump2LinkType>0</Pump2LinkType>
+    <Pump2MCPAddress>6</Pump2MCPAddress>
+    <Pump2Pin>10</Pump2Pin>
     <PumpLevel>1</PumpLevel>
-    <Pump2StartChannel>7</Pump2StartChannel>
+    <Pump2StartChannel>8</Pump2StartChannel>
     <SaveInterval>2</SaveInterval>
     <RelaysPins>
-      <int>0</int>
-      <int>1</int>
-      <int>2</int>
-      <int>3</int>
-      <int>4</int>
-      <int>5</int>
-      <int>6</int>
-      <int>7</int>
       <int>8</int>
       <int>9</int>
       <int>10</int>
       <int>11</int>
       <int>12</int>
       <int>13</int>
+      <int>14</int>
+      <int>15</int>
+      <int>255</int>
+      <int>255</int>
+      <int>255</int>
+      <int>255</int>
+      <int>255</int>
+      <int>255</int>
       <int>255</int>
       <int>255</int>
     </RelaysPins>
@@ -529,106 +529,106 @@
     <DisplayType>0</DisplayType>
   </TFT>
   <Flow>
-    <Flow1>255</Flow1>
+    <Flow1>69</Flow1>
     <Flow2>255</Flow2>
     <SaveDelta>10</SaveDelta>
   </Flow>
   <TFTSensors>
     <Type>1</Type>
+    <Index>0</Index>
+    <Caption>^ Секция N1</Caption>
+  </TFTSensors>
+  <TFTSensors>
+    <Type>1</Type>
     <Index>1</Index>
-    <Caption>^ Теплица N1</Caption>
+    <Caption>^ Секция N2</Caption>
   </TFTSensors>
   <TFTSensors>
-    <Type>1</Type>
-    <Index>2</Index>
-    <Caption>^ Теплица N2</Caption>
-  </TFTSensors>
-  <TFTSensors>
-    <Type>1</Type>
+    <Type>2</Type>
     <Index>0</Index>
     <Caption>^ Улица</Caption>
   </TFTSensors>
   <TFTSensors>
-    <Type>3</Type>
+    <Type>6</Type>
     <Index>0</Index>
-    <Caption>Влажн воздух N1</Caption>
-  </TFTSensors>
-  <TFTSensors>
-    <Type>3</Type>
-    <Index>1</Index>
-    <Caption>Влажн воздух N2</Caption>
+    <Caption>Влажн.Секция1</Caption>
   </TFTSensors>
   <TFTSensors>
     <Type>4</Type>
     <Index>0</Index>
-    <Caption>Освещение</Caption>
+    <Caption>Освещенность</Caption>
   </TFTSensors>
   <TFTSensors>
-    <Type>6</Type>
+    <Type>3</Type>
     <Index>0</Index>
-    <Caption>Влажн.почвы N1</Caption>
+    <Caption>Влажн.Улица</Caption>
   </TFTSensors>
   <TFTSensors>
-    <Type>6</Type>
+    <Type>0</Type>
+    <Index>0</Index>
+    <Caption>Влажн. почвы N1</Caption>
+  </TFTSensors>
+  <TFTSensors>
+    <Type>0</Type>
     <Index>1</Index>
-    <Caption>Влажн.почвы N2</Caption>
+    <Caption>Влажн. почвы N2</Caption>
   </TFTSensors>
   <TFTSensors>
-    <Type>6</Type>
+    <Type>0</Type>
     <Index>2</Index>
-    <Caption>Влажн.почвы N3</Caption>
+    <Caption>Влажн. почвы N3</Caption>
   </TFTSensors>
   <TFTSensors>
-    <Type>6</Type>
+    <Type>0</Type>
     <Index>3</Index>
-    <Caption>Влажн.почвы N4</Caption>
+    <Caption>Влажн. почвы N4</Caption>
   </TFTSensors>
   <TFTSensors>
-    <Type>6</Type>
+    <Type>0</Type>
     <Index>4</Index>
-    <Caption>Влажн.почвы N5</Caption>
+    <Caption>Влажн. почвы N5</Caption>
   </TFTSensors>
   <TFTSensors>
-    <Type>6</Type>
+    <Type>0</Type>
     <Index>5</Index>
-    <Caption>Влажн.почвы N6</Caption>
+    <Caption>Влажн. почвы N6</Caption>
   </TFTSensors>
   <WPower>
     <LinkType>2</LinkType>
-    <MCPAddress>7</MCPAddress>
-    <Pin>15</Pin>
+    <MCPAddress>6</MCPAddress>
+    <Pin>13</Pin>
     <Level>1</Level>
-    <PowerOnDelay>1000</PowerOnDelay>
-    <PowerOffDelay>1000</PowerOffDelay>
-    <LinkedChannels>63</LinkedChannels>
+    <PowerOnDelay>1</PowerOnDelay>
+    <PowerOffDelay>0</PowerOffDelay>
+    <LinkedChannels>65535</LinkedChannels>
     <WateringChannels>16383</WateringChannels>
     <DoorBinding>3</DoorBinding>
   </WPower>
   <Door>
     <LinkType>2</LinkType>
-    <MCPAddress>1</MCPAddress>
-    <Pin1>12</Pin1>
-    <Pin2>13</Pin2>
-    <Level>0</Level>
-    <DriveType>0</DriveType>
-  </Door>
-  <Door>
-    <LinkType>2</LinkType>
-    <MCPAddress>1</MCPAddress>
+    <MCPAddress>4</MCPAddress>
     <Pin1>14</Pin1>
     <Pin2>15</Pin2>
     <Level>0</Level>
     <DriveType>0</DriveType>
   </Door>
+  <Door>
+    <LinkType>0</LinkType>
+    <MCPAddress>0</MCPAddress>
+    <Pin1>255</Pin1>
+    <Pin2>255</Pin2>
+    <Level>0</Level>
+    <DriveType>0</DriveType>
+  </Door>
   <WIntervals>
     <Interval>
-      <int>15</int>
-      <int>12</int>
-      <int>15</int>
-      <int>15</int>
-      <int>12</int>
-      <int>15</int>
-      <int>-1</int>
+      <int>20</int>
+      <int>20</int>
+      <int>20</int>
+      <int>20</int>
+      <int>20</int>
+      <int>20</int>
+      <int>20</int>
       <int>-1</int>
       <int>-1</int>
       <int>-1</int>
@@ -642,8 +642,8 @@
   </WIntervals>
   <WireEmul>
     <Pin>
-      <int>255</int>
-      <int>255</int>
+      <int>11</int>
+      <int>12</int>
       <int>255</int>
       <int>255</int>
       <int>255</int>
@@ -664,8 +664,8 @@
       <int>255</int>
     </Pin>
     <Type>
-      <int>0</int>
-      <int>0</int>
+      <int>2</int>
+      <int>2</int>
       <int>0</int>
       <int>0</int>
       <int>0</int>
@@ -686,8 +686,8 @@
       <int>0</int>
     </Type>
     <Index>
-      <int>255</int>
-      <int>255</int>
+      <int>0</int>
+      <int>1</int>
       <int>255</int>
       <int>255</int>
       <int>255</int>
@@ -713,7 +713,7 @@
     <Level>0</Level>
     <MaxWorkTime>600</MaxWorkTime>
     <DistanceEmpty>100</DistanceEmpty>
-    <DistanceFull>10</DistanceFull>
+    <DistanceFull>50</DistanceFull>
   </WaterTank>
   <ECSettings>
     <LinkType>0</LinkType>

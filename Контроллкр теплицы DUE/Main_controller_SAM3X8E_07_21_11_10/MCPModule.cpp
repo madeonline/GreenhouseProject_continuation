@@ -94,7 +94,7 @@ bool  MCPModule::ExecCommand(const Command& command, bool wantAnswer)
         byte mcpNumber = atoi(command.GetArg(2));
         byte mcpChannel = atoi(command.GetArg(3));
         String levelOrMode = command.GetArg(4);
-        byte level = (levelOrMode == STATE_ON || levelOrMode == STATE_ON_ALT) ? HIGH : LOW;
+  		byte level = (levelOrMode == STATE_ON || levelOrMode == STATE_ON_ALT) ? LOW : HIGH;
 
         if(cmd == F("SPI")) // CTSET=MCP|SPI|operation|mcpNumber|mcpChannel|levelOrMode, where "operation" == MODE or WRITE
         {

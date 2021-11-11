@@ -36,10 +36,10 @@
  После всех указанных действий проект готов к загрузке. Если что-то не получается, то: 1) всегда есть форум 2) во всяком софте есть ошибки 3) наверняка
  вы что-то недопоняли или делаете не так. Для утрясания всего этого добра есть форум, и раз вы пользуетесь этим проектом - вы уже знаете, где идёт обсуждение ;)
 
- Но уж если не знаете - пишите на spywarrior@gmail.com, я вам кину ссылку на обсуждение. Только помните: я делаю этот проект в свободное время, и физически не 
+ Но уж если не знаете - пишите на promavto@ntmp.ru или spywarrior@gmail.com, я вам кину ссылку на обсуждение. Только помните: я делаю этот проект в свободное время, и физически не 
  способен удовлетворить все ваши потребности, ответить на тысячу вопросов сразу и т.п. Короче, такт и понимание - приветствуются.
 
- (с) Порохня Дмитрий, 2015-2020.
+ (с) Порохня Дмитрий, Мосейчук Александр 2015-2021.
  
 */
  
@@ -415,6 +415,29 @@ void resetI2C()
       doResetI2C(SCL1, SDA1);     
  #endif 
 }
+//--------------------------------------------------------------------------------------------------------------------------------
+// Принудительная очистка внешней памяти настроек в EEPROM
+
+bool extended_EEPROM_reset = false;
+void clearExtenderEEPRON()
+{
+	pinMode(PIN_EXTENDED_EEPROM_RESET, INPUT);
+	int var = 0;
+
+	while (digitalRead(PIN_EXTENDED_EEPROM_RESET)==LOW) 
+	{
+		// выполнить что-то, повторив N раз
+		var++;
+		delay(1000);
+		if (var > 10)
+		{
+			extended_EEPROM_reset = true;
+			break;
+		}
+
+	}
+
+}
 
 //--------------------------------------------------------------------------------------------------------------------------------
 void setup() 
@@ -424,10 +447,11 @@ void setup()
 
   Serial.begin(SERIAL_BAUD_RATE);      // запускаем Serial на нужной скорости
   SerialUSB.begin(SERIAL_BAUD_RATE);   // запускаем Serial на нужной скорости
-
+  delay(1000);                         //ждём инициализации SerialUSB
 #if (TARGET_BOARD == DUE_BOARD)
-  while(!Serial); // ждём инициализации Serial
+  while(!Serial);                      // ждём инициализации Serial
 #endif
+
 
   START_LOG(1);
 
@@ -760,10 +784,11 @@ void setup()
     }
   #endif // SD_USED
   
+ clearExtenderEEPRON();   // Проверить нажатие принудительной очистки внешней EEPROM
 
   // тут проверяем на инициализацию EEPROM
   uint8_t controlByte = MemRead(0);
-  if(controlByte != MEM_CONTROL_BYTE)
+  if(controlByte != MEM_CONTROL_BYTE || extended_EEPROM_reset == true)
   {
       #ifdef USE_TFT_MODULE
         TFTScreen->switchToScreen("MEMINIT");
@@ -774,6 +799,7 @@ void setup()
         Serial.println(F("Please restart controller."));
         while(1);       
       #endif
+		extended_EEPROM_reset = false;
   }
 
   // пискнем при старте, если есть баззер

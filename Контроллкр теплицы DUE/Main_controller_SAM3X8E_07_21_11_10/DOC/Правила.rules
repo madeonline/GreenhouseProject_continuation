@@ -8,7 +8,7 @@
       <spy_to>TEMP</spy_to>
       <sensor>4</sensor>
       <operand>&gt;=</operand>
-      <target>45</target>
+      <target>40</target>
       <start>0</start>
       <work>0</work>
       <daymask>255</daymask>
@@ -22,7 +22,7 @@
       <spy_to>TEMP</spy_to>
       <sensor>4</sensor>
       <operand>&lt;=</operand>
-      <target>40</target>
+      <target>35</target>
       <start>0</start>
       <work>0</work>
       <daymask>255</daymask>

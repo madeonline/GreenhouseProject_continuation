@@ -8,7 +8,7 @@ class OneWireEmulationModule : public AbstractModule // заготовка дл�
   private:
 
     DS18B20Dispatcher lineManager;
-  
+
   public:
     OneWireEmulationModule() : AbstractModule("1WEMUL") {}
 

@@ -97,7 +97,7 @@ void WeatherStationClass::setup_WS0232(int16_t _ID_Misol)
    currentMillis = millis();
 
    #ifdef MISOL_DEBUG
-	   SerialUSB.println("Misol WS0232 setup OK!");
+	   SerialUSB.println("Misol WS0232 setup End!");
 	   SerialUSB.print("Misol ID -");
 	   SerialUSB.println(_ID_Misol_WS0232,HEX);
    #endif
@@ -121,7 +121,7 @@ void WeatherStationClass::setup_WN5300CA(int16_t _ID_Misol)
 	currentMillis = millis();
 
     #ifdef MISOL_DEBUG
-		SerialUSB.println("Misol WN5300CA setup OK!");
+		SerialUSB.println("Misol WN5300CA setup End!");
 		SerialUSB.print("Misol ID -");
 		SerialUSB.println(_ID_Misol_WN5300CA, HEX);
     #endif
@@ -176,7 +176,7 @@ void WeatherStationClass::update()
 
 			}
 			crc = REG_Array1[12];                              // Считываем принятую контрольную сумму из пакета
-			if (crc == calc_REG_Array())                      // Если данные верны - завершить попытки чтения данных
+			if (crc == calc_REG_Array())                       // Если данные верны - завершить попытки чтения данных
 			{
 				#ifdef MISOL_DEBUG
 					SerialUSB.print("count receive - ");
@@ -192,6 +192,10 @@ void WeatherStationClass::update()
 					SerialUSB.println(_ID_Misol_WN5300CA, HEX);
 				#endif
 					stationID = REG_Array1[0];              // Считываем ID станции
+#ifdef MISOL_DEBUG
+					SerialUSB.print("Misol WN5300CA ID -");
+					SerialUSB.println(stationID, HEX);
+#endif
 				break;
 			}
 			var++;

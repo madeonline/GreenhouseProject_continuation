@@ -173,7 +173,7 @@ void SoilMoistureModule::readFromSensors()
         
         switch(type)
         {
-          case ANALOG_SOIL_MOISTURE: // аналоговый датчик влажности почвы
+          case ANALOG_SOIL_MOISTURE:      // аналоговый датчик влажности почвы
           {
               int val = analogRead(pin);
               int rawADC = val;
@@ -233,8 +233,10 @@ void SoilMoistureModule::readFromSensors()
           break; // ANALOG_SOIL_MOISTURE
 
           case FREQUENCY_SOIL_MOISTURE: // частотный датчик влажности почвы
-          {
-           // SerialUSB.println("Update frequency sensors...");
+        {
+            #ifdef SOIL_MOISTURE_MODULE_DEBUG
+                SerialUSB.println("Update frequency sensors...");
+            #endif
             
             Humidity h;
 
@@ -242,9 +244,11 @@ void SoilMoistureModule::readFromSensors()
 
             if(!highTime) // ALWAYS HIGH,  BUS ERROR
             {
-             // SerialUSB.println("BUS ERROR, NO HIGH TIME");
-              State.UpdateState(StateSoilMoisture,sensorCntr,(void*)&h);
-              sensorCntr++;
+                #ifdef SOIL_MOISTURE_MODULE_DEBUG
+                     SerialUSB.println("BUS ERROR, NO HIGH TIME");
+                #endif
+                State.UpdateState(StateSoilMoisture,sensorCntr,(void*)&h);
+                sensorCntr++;
             }
             else
             {
@@ -254,7 +258,10 @@ void SoilMoistureModule::readFromSensors()
 
               if(!lowTime || !highTime)
               {
-               // SerialUSB.println("BUS ERROR, NO LOW OR HIGH TIME");
+                #ifdef SOIL_MOISTURE_MODULE_DEBUG
+                   SerialUSB.println("BUS ERROR, NO LOW OR HIGH TIME");
+                #endif
+               //              
                 // BUS ERROR
                 State.UpdateState(StateSoilMoisture,sensorCntr,(void*)&h);
                 sensorCntr++;
@@ -272,9 +279,10 @@ void SoilMoistureModule::readFromSensors()
                 State.UpdateState(StateSoilMoisture,sensorCntr,(void*)&h);
                 sensorCntr++;
 
-                //SerialUSB.print("Moisture is: ");
-               // SerialUSB.println(h);
-
+                #ifdef SOIL_MOISTURE_MODULE_DEBUG
+                    SerialUSB.print("Moisture is: ");
+                    SerialUSB.println(h);
+                #endif
               }
 
             } // else           

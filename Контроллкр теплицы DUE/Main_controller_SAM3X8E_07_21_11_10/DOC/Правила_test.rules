@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<AlertRulesSaver xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <rules>
+    <rule>
+      <IsAlarm>false</IsAlarm>
+      <name>TSON</name>
+      <linked_to>STATE</linked_to>
+      <spy_to>TEMP</spy_to>
+      <sensor>4</sensor>
+      <operand>&gt;=</operand>
+      <target>40</target>
+      <start>0</start>
+      <work>0</work>
+      <daymask>255</daymask>
+      <linked_rules />
+      <command>CTSET=PIN|45|ON</command>
+    </rule>
+    <rule>
+      <IsAlarm>false</IsAlarm>
+      <name>TSOFF</name>
+      <linked_to>STATE</linked_to>
+      <spy_to>TEMP</spy_to>
+      <sensor>4</sensor>
+      <operand>&lt;=</operand>
+      <target>35</target>
+      <start>0</start>
+      <work>0</work>
+      <daymask>255</daymask>
+      <linked_rules />
+      <command>CTSET=PIN|45|OFF</command>
+    </rule>
+    <rule>
+      <IsAlarm>false</IsAlarm>
+      <name>VLAG1</name>
+      <linked_to>SOIL</linked_to>
+      <spy_to>SOIL</spy_to>
+      <sensor>0</sensor>
+      <operand>&gt;=</operand>
+      <target>60</target>
+      <start>0</start>
+      <work>0</work>
+      <daymask>255</daymask>
+      <linked_rules />
+      <command>CTSET=MCP|SPI|WRITE|1|0|ON</command>
+    </rule>
+    <rule>
+      <IsAlarm>false</IsAlarm>
+      <name>VLAG2</name>
+      <linked_to>SOIL</linked_to>
+      <spy_to>SOIL</spy_to>
+      <sensor>0</sensor>
+      <operand>&lt;=</operand>
+      <target>40</target>
+      <start>0</start>
+      <work>0</work>
+      <daymask>255</daymask>
+      <linked_rules />
+      <command>CTSET=MCP|SPI|WRITE|1|0|OFF</command>
+    </rule>
+    <rule>
+      <IsAlarm>false</IsAlarm>
+      <name>VLVO1</name>
+      <linked_to>HUMIDITY</linked_to>
+      <spy_to>HUMIDITY</spy_to>
+      <sensor>0</sensor>
+      <operand>&gt;=</operand>
+      <target>70</target>
+      <start>0</start>
+      <work>0</work>
+      <daymask>255</daymask>
+      <linked_rules />
+      <command>CTSET=MCP|SPI|WRITE|1|1|ON</command>
+    </rule>
+    <rule>
+      <IsAlarm>false</IsAlarm>
+      <name>VLVO2</name>
+      <linked_to>HUMIDITY</linked_to>
+      <spy_to>HUMIDITY</spy_to>
+      <sensor>0</sensor>
+      <operand>&lt;=</operand>
+      <target>50</target>
+      <start>0</start>
+      <work>0</work>
+      <daymask>255</daymask>
+      <linked_rules />
+      <command>CTSET=MCP|SPI|WRITE|1|1|OFF</command>
+    </rule>
+  </rules>
+</AlertRulesSaver>
