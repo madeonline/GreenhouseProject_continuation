@@ -1,0 +1,564 @@
+BODY {
+  font-family: Verdana;
+  font-size:14px;
+  padding-left:20px;
+  padding-right:20px;
+}
+
+input[type=text]:not(.ui-spinner-input), select, textarea {
+    width: 100%; /* Full width */
+    padding: 8px; /* Some padding */  
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 4px; /* Rounded borders */
+    box-sizing: border-box; /* Make sure that padding and width stays in place */
+    margin-top: 4px; /* Add a top margin */
+    margin-bottom: 12px; /* Bottom margin */
+    resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+
+
+.state_off {
+  color:#808080;
+}
+
+.state_on {
+  color:#4caf50;
+}
+
+#controller_date_time {
+  font-family: Courier;
+  font-size:14px;
+  line-height:40px;
+  vertical-align:bottom;
+}
+
+.info-success {
+background-color: #ddffdd;
+border-left: 6px solid #4caf50;
+padding:6px;
+padding-left:12px;
+
+}
+
+.info-info {
+background-color: #e7f3fe;
+border-left: 6px solid #2196f3;
+padding:6px;
+padding-left:12px;
+
+}
+
+.bottom-spacer {
+  margin-bottom:20px;
+}
+
+ul.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    margin-bottom:20px;
+}
+
+ul.navbar > li {
+    float: left;
+}
+
+ul.navbar > li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.navbar >li a:hover:not(.active) {
+    background-color: #111;
+}
+
+ul.navbar > li.active {
+    background-color: #4CAF50;
+}
+
+
+.innerh {
+  color:#fff;
+  background-color:#555;
+  padding: 0px 12px 1px 12px;
+}
+
+H1, H2, H3, H4, H5, H6 {
+margin-top: 0px;
+/*padding:8px;
+background-color: #F0F0F0;
+padding-left:10px;
+*/
+border-bottom: 1px solid #d0d0d0;
+font-family: Arial;
+}
+
+
+LEGEND {
+font-weight:bold;
+font-size:150%;
+padding-left:10px;
+padding-right:10px;
+}
+
+LABEL {
+  cursor: pointer;
+}
+
+.ui-widget-footer {
+  background-color: #DFDFDF;
+}
+
+.popup_date {
+  text-align: right;
+  font-size: 80%;
+  margin-top:6px;
+}
+
+.water-channel-button 
+{
+  /*display: block !important;*/
+  padding:4px !important;
+  margin-right:4px !important;
+  margin-top:4px !important;
+}
+
+.pin-button 
+{
+  /*display: block !important;*/
+  padding:8px !important;
+  margin-right:4px !important;
+  margin-top:4px !important;
+  min-width: 60px !important;
+}
+
+.pin-button-parent {
+  display: inline-block;
+}
+
+.pin-close-icon {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+    cursor: pointer;
+    z-order: 1000000;
+    position:relative;
+    top:5px;
+    right:20px;
+    width:16px;
+    height:16px;
+    background-color:transparent;
+    border:1px solid transparent;
+    visibility:hidden;
+}
+.pin-close-icon:hover {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#ccc;
+    color:#fff;
+    cursor: pointer;
+    background-color:transparent;
+    border:1px solid #808080;
+    border-radius:4px;
+}
+
+.pin-on
+{
+  background:#00D000 !important;
+  color:#000000 !important;
+}
+
+.window-channel-button 
+{
+  /*display: block !important;*/
+  padding:4px !important;
+  margin-right:4px !important;
+  margin-top:4px !important;
+}
+
+.water-on
+{
+  color:#00D000 !important;
+}
+.water-off
+{
+  color:coral !important;
+}
+
+.water-intermediate
+{
+  color:lightgray !important;
+}
+
+.popup_sensor_data {
+  margin-top:6px;
+  font-weight:bold;
+}
+
+.iot_sensor {
+  padding: 4px;
+  margin-bottom: 4px;
+  cursor: default;
+}
+
+.peity {
+  float: right;
+}
+
+.right_float {
+  float: right;
+}
+
+.sensor_data_float{
+  float:left;
+}
+
+.row:hover .row_item {
+    background-color: #E0E0E0;
+}
+
+.padding_around8px {
+  padding:8px;
+}
+
+.left_align {
+text-align:left;
+}
+
+.padding_top8px {
+  padding-top:8px;
+}
+
+.half {
+  width:50%;
+  float:left;
+  text-align:center;
+
+}
+
+.half_box {
+  padding:5px;
+}
+
+.half_right {
+  padding-right:0px;
+}
+
+.half_left {
+  padding-left:0px;
+}
+
+
+
+.big {
+  font-size:300%;
+}
+
+/* бокс отображения статистики с контроллера */
+.controller_stats {
+}
+/* бокс отображения свободной памяти*/
+.freeram {
+}
+
+/* бокс отображения времени работы*/
+.uptime {
+}
+
+
+/* класс бокса отображения информации по контроллеру */
+.controller_info_box {
+
+}
+
+.left_menu {
+  float:left;
+  width:200px;
+  padding-right:20px;
+}
+
+.content {
+  float: left;
+  width: calc(100% - 200px);
+}
+
+/* класс рисунка логотипа */
+.logo {
+  vertical-align:middle;
+  padding-right:10px;
+}
+
+/* класс отображения ошибки */
+.error {
+  padding: 6px;
+  padding-left:10px;
+}
+
+/* класс для установки курсора в виде руки */
+.pointer {
+cursor: pointer;
+}
+
+/* класс, имитирующий оформление ссылки */
+.link {
+  color:#909090;
+  text-decoration:underline;
+}
+/* класс для скрытых объектов */
+.hdn
+{
+  display: none;
+}
+
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}
+
+.button_menu_spacer {
+margin-bottom:6px;
+}
+
+/* класс пункта меню слева */
+.menuitem {
+cursor: pointer;
+/*border:1px solid #D0D0F0;
+margin-bottom:6px;*/
+padding:8px;
+}
+
+.menuitem:hover {
+
+background-color:#a0a0a0;
+color:#FFFFFF;
+
+
+}
+
+/* класс выделенного пункта меню слева */
+.menuitem_selected {
+background-color:#555;
+font-weight:bold;
+color:#FFFFFF;
+}
+
+/* класс "нет данных" от датчика */
+.no_data {
+color: #D00000;
+}
+
+/* класс "ручной режим работы" */
+.manual_mode {
+color: #D00000;
+}
+
+/* класс "автоматический режим работы" */
+.auto_mode {
+color: #00D000;
+}
+
+/* DIV-ячейка таблицы */
+.row_item {
+display: table;
+float:left;
+border:1px solid #D0D0F0;
+min-width:20px;
+padding:2px;
+}
+
+/* DIV-строка таблицы */
+.row {
+clear: left;
+}
+
+/* класс "индекс датчика" */
+.sensor_index {
+text-align:center;
+color: #808080;
+}
+
+/* класс "тип показания" */
+.type {
+font-weight: bold;
+}
+
+/* класс "имя модуля" */
+.module_name {
+font-weight:normal;
+
+}
+
+/* класс "данные с датчика" */
+.sensor_data {
+}
+
+/* класс жирного шрифта */
+.bold {
+  font-weight:bold;
+}
+/* класс главного контента страницы */
+.page_content {
+margin-left:20px;
+float:left:
+width: calc(100%-220px);
+}
+
+#WATER_CHANNELS_LIST .row .row_item:nth-child(1) {
+  width:30px;
+}
+#WATER_CHANNELS_LIST .row .row_item:nth-child(2) {
+  width:350px;
+}
+#WATER_CHANNELS_LIST .row .row_item:nth-child(3) {
+  width:100px;
+}
+#WATER_CHANNELS_LIST .row .row_item:nth-child(4) {
+  width:100px;
+}
+
+#RULES_LIST .row .row_item:nth-child(1) {
+  width:30px;
+}
+#RULES_LIST .row .row_item:nth-child(2) {
+  width:70px;
+}
+#RULES_LIST .row .row_item:nth-child(3) {
+  width:100px;
+}
+#RULES_LIST .row .row_item:nth-child(4) {
+  width:100px;
+}
+
+#RULES_LIST .row .row_item:nth-child(5) {
+  width:200px;
+}
+
+#RULES_LIST .row .row_item:nth-child(6) {
+  width:150px;
+}
+
+#RULES_LIST .row .row_item:nth-child(7) {
+  width:250px;
+}
+
+#SMS_LIST .row .row_item:nth-child(1) {
+  width:30px;
+}
+#SMS_LIST .row .row_item:nth-child(2) {
+  width:150px;
+}
+#SMS_LIST .row .row_item:nth-child(3) {
+  width:250px;
+}
+#SMS_LIST .row .row_item:nth-child(4) {
+  width:350px;
+}
+
+#RESERVATION_LIST .row .row_item:nth-child(1) {
+  width:30px;
+  height:16px;
+}
+#RESERVATION_LIST .row .row_item:nth-child(2) {
+  width:250px;
+  height:16px;
+}
+#RESERVATION_LIST .row .row_item:nth-child(3) {
+  width:450px;
+  max-height:1.2em;
+  overflow-y:auto;
+  display:inline-block;
+}
+
+#RESERVATION_LIST_HEADER .row_item:nth-child(1) {
+  width:30px;
+}
+#RESERVATION_LIST_HEADER .row_item:nth-child(2) {
+  width:250px;
+}
+#RESERVATION_LIST_HEADER .row_item:nth-child(3) {
+  width:450px;
+}
+
+
+/* ширина столбцов в списке дельт */
+#DELTA_LIST .row .row_item{
+width: 15%;
+
+}
+
+/* ширина столбцов в списке температур */
+#TEMPERATURE_LIST .row .row_item {
+width:200px;
+}
+
+/* ширина столбцов в заголовке списка температур */
+#TEMPERATURE_HEADER .row_item {
+width:200px;
+}
+
+/* ширина столбцов в списке влажностей */
+#HUMIDITY_LIST .row .row_item {
+width:200px;
+}
+
+/* ширина столбцов в заголовке списка влажностей */
+#HUMIDITY_HEADER .row_item {
+width:200px;
+}
+
+/* ширина столбцов в списке освещённостей */
+#LUMINOSITY_LIST .row .row_item {
+width:200px;
+}
+
+/* ширина столбцов в заголовке списка освещённостей */
+#LUMINOSITY_HEADER .row_item {
+width:200px;
+}
+
+/* ширина столбцов в списке влажностей почвы */
+#SOIL_LIST .row .row_item {
+width:200px;
+}
+
+/* ширина столбцов в заголовке списка влажностей почвы */
+#SOIL_HEADER .row_item {
+width:200px;
+}
+
+/* ширина столбцов в списке pH */
+#PH_LIST .row .row_item {
+width:200px;
+}
+
+/* ширина столбцов в заголовке списка pH */
+#PH_HEADER .row_item {
+width:200px;
+}
+
+
+#CC_LIST .row .row_item {
+width:300px;
+}
+
+/* ширина столбца "действия" в списках */
+#TEMPERATURE_LIST .row .actions,
+#HUMIDITY_LIST .row .actions,
+#LUMINOSITY_LIST .row .actions,
+#SOIL_LIST .row .actions,
+#PH_LIST .row .actions,
+#DELTA_LIST .row .actions,
+#CC_LIST .row .actions,
+#WATER_CHANNELS_LIST .row .actions,
+#SMS_LIST .row .actions,
+#RESERVATION_LIST .row .actions
+{
+  width: auto;
+  text-align: center;
+}
